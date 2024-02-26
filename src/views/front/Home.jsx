@@ -1,5 +1,11 @@
 import React from 'react'
+import Basicinfo from '../../components/front/Basicinfo'
 
 export default function Home() {
-    return <div>Home</div>
+    return (
+        <div>
+            <div>Home</div>
+            <Basicinfo />
+        </div>
+    )
 }

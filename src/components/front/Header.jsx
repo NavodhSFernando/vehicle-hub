@@ -7,6 +7,9 @@ export default function Header() {
             <div>Header</div>
             <NavLink to="/">Home Page</NavLink>
             <NavLink to="/account">Account</NavLink>
+            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/signup">Signup</NavLink>
+            <NavLink to="/password">Password</NavLink>
         </nav>
     )
 }
