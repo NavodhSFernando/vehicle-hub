@@ -12,7 +12,9 @@ function Basicinfo() {
                             Manage and Modify Vehicle Details for Enhanced Rental Services
                         </p>
                         <div className="flex flex-col space-y-1">
-                            <label htmlFor='name' className="text-gray-800 font-semibold">Name</label>
+                            <label htmlFor="name" className="text-gray-800 font-semibold">
+                                Name
+                            </label>
                             <input
                                 className="box-border flex flex-row items-start p-12 20 w-540 h-42 bg-white border border-gray-300 rounded-6 font-medium text-gray-500"
                                 placeholder=" K L Ranasinghe"
