@@ -10,7 +10,7 @@ export default function Home() {
         <div>
             <div>Home</div>
 <<<<<<< HEAD
-            <Basicinfo />
+           <Basicinfo />
 =======
             <VehicleCard />
 >>>>>>> ae3eb5d2baeefc8eb7c3bb45682bec1bf5a360dd
