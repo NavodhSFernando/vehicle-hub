@@ -1,13 +1,12 @@
 import React from 'react'
-import VehicleCard from '../../components/front/VehicleCard'
-import Wishlist from '../../components/front/Wishlist'
+
+import NotificationBlock from '../../components/front/NotificationBlock'
 
 export default function Home() {
     return (
         <div>
             <div>Home</div>
-            <VehicleCard />
-            <Wishlist />
+            <NotificationBlock />
         </div>
     )
 }
