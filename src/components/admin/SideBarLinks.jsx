@@ -194,6 +194,60 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 icon: <LuDot />
             }
         ]
+    },
+    {
+        key: 'user',
+        label: 'User',
+        path: '/admin/user',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all user',
+                label: 'View All User',
+                path: '/admin/user/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create user',
+                label: 'Create User',
+                path: '/admin/user/create',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'customer',
+        label: 'Customer',
+        path: '/admin/customer',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all customer',
+                label: 'View All Customer',
+                path: '/admin/customer/view',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'vehicle log',
+        label: 'Vehicle Log',
+        path: '/admin/vehiclelog',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all vehicle log',
+                label: 'View All vehicle Log',
+                path: '/admin/vehiclelog/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create vehicle log',
+                label: 'Create Vehicle Log',
+                path: '/admin/vehiclelog/create',
+                icon: <LuDot />
+            }
+        ]
     }
 ]
 
