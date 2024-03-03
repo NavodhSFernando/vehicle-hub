@@ -8,7 +8,7 @@ import LogoIcon from '../../assets/logos/VH-Icon.png'
 import LogoType from '../../assets/logos/VH-Type.png'
 
 const linkClass =
-    'flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base'
+    'flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline rounded-sm text-base'
 
 // Update Sidebar component to pass sublinks and handle toggle functionality
 export default function Sidebar() {
@@ -22,7 +22,7 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="bg-neutral-900 flex flex-col w-60 p-3 text-white">
+        <div className="bg-neutral-900 flex flex-col w-64 p-3 text-white">
             <div className="flex items-center gap-2 px-1 py-3">
                 <img src={LogoIcon} alt="logo-icon" className="w-10" />
                 <span>
@@ -77,10 +77,7 @@ function SidebarLink({ link, toggleSublinks, showSublinks }) {
         <div>
             <NavLink
                 to={link.path || '#'} // If there's no path, default to '#' to prevent navigation
-                className={classNames(
-                    pathname.startsWith(link.path) ? 'bg-neutral-700 text-white' : 'text-neutral-400',
-                    linkClass
-                )}
+                className={classNames(pathname.startsWith(link.path) ? 'text-white' : 'text-neutral-400', linkClass)}
                 onClick={handleClick} // Attach the click handler
             >
                 <span className="text-xl">{link.icon}</span>
@@ -88,7 +85,7 @@ function SidebarLink({ link, toggleSublinks, showSublinks }) {
                 {link.subLinks && <span className="ml-auto">{showSublinks ? <HiChevronUp /> : <HiChevronDown />}</span>}
             </NavLink>
             {showSublinks && link.subLinks && (
-                <div className="pl-6">
+                <div className="pl-6 pb-4">
                     {link.subLinks.map((subLink) => (
                         <SidebarSubLink key={subLink.key} subLink={subLink} />
                     ))}
@@ -106,11 +103,11 @@ function SidebarSubLink({ subLink }) {
         <NavLink
             to={subLink.path}
             className={classNames(
-                'flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline active:bg-neutral-600 rounded-sm text-base',
-                { 'bg-neutral-700 text-white': pathname === subLink.path }
+                'flex items-center gap-2 font-light px-3 py-0.5 hover:bg-neutral-700 hover:no-underline rounded-sm text-sm',
+                { 'text-white': pathname === subLink.path }
             )}
         >
-            <span className="text-xl">{subLink.icon}</span>
+            {/* <span className="text-xl">{subLink.icon}</span> */}
             {subLink.label}
         </NavLink>
     )
