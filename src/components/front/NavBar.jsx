@@ -1,83 +1,123 @@
-import React from "react";
+import React from 'react'
+import { useState } from 'react'
+import { BsBookmarkStar } from 'react-icons/bs'
+import { IoMdNotificationsOutline } from 'react-icons/io'
+import { FaRegUserCircle } from 'react-icons/fa'
+import { BsBookmarkStarFill } from 'react-icons/bs'
+import { IoNotifications } from 'react-icons/io5'
+import { FaUserCircle } from 'react-icons/fa'
+import logo from '../../assets/logos/VH-Icon.png'
+import { RxHamburgerMenu } from 'react-icons/rx'
 
 const Navbar = () => {
-  const loggedIn = false;
-  return (
-    <nav className="bg-blue-700">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-10">
-        <div className="flex lg:flex-row flex-col gap-5 lg:gap-0 items-center justify-between  ">
-          <div className="flex-shrink-0">
-            <img
-              className="block w-[78px]"
-              src={
-                "https://cdn.discordapp.com/attachments/510829749065744405/1212711934395289610/VH-Icon_1.png?ex=65f2d500&is=65e06000&hm=ebc6a43b3d87e930f678800161d0f46ac7ff01695f7212f20b2fc09f81687f9f&"
-              }
-              alt="Vehicle Hub"
-            />
-          </div>
+    const loggedIn = true
+    const [clicked, setClicked] = useState(false)
+    const handleClick = () => {
+        setClicked(!clicked)
+    }
 
-          <div className="flex-1 flex items-center justify-center">
-            <div className="flex sm:space-x-4">
-              <a
-                href="#home"
-                className="text-white px-3 py-2  font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
-              >
-                Home
-              </a>
-              <a
-                href="#vehiclefleet"
-                className="text-white px-3 py-2  font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
-              >
-                Vehicle Fleet
-              </a>
-              <a
-                href="#faq"
-                className="text-white px-3 py-2  font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
-              >
-                FAQ
-              </a>
-              <a
-                href="#contact"
-                className="text-white px-3 py-2  text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
-              >
-                Contact
-              </a>
-            </div>
-          </div>
-          {/* Sign In and Sign Up buttons */}
+    const [logged, setLogged] = useState(false)
+    const handleLogged = () => {
+        setLogged(!logged)
+    }
 
-          {!loggedIn ? (
-            <div className="flex items-center">
-              <button className="bg-blue-800 text-white px-3 py-2 rounded-md text-sm font-medium">
-                Sign In
-              </button>
-              <button className="ml-4 bg-blue-600 text-white px-3 py-2 rounded-md text-sm font-medium">
-                Sign Up
-              </button>
-            </div>
-          ) : (
-            <div className="flex gap-16">
-              <img
-                className="w-[24px]"
-                src="https://cdn.discordapp.com/attachments/510829749065744405/1212697770935451678/bookmark-star.png?ex=65f2c7cf&is=65e052cf&hm=c340e44c42849cd071aa974ec242564eaf94da0ec4411a0bb4ac2ceb51c496b3&"
-                alt=""
-              />
-              <img
-                className="w-[24px]"
-                src="https://cdn.discordapp.com/attachments/510829749065744405/1212716579574390794/notification-bell.png?ex=65f2d953&is=65e06453&hm=8f5a6a9bb9ccb0a1b9d57f012f8a3760557314a1ba486dad22778809631260a5&"
-                alt=""
-              />
-              <img
-                className="w-[24px]"
-                src="https://cdn.discordapp.com/attachments/510829749065744405/1212716579884765254/profile-2user.png?ex=65f2d953&is=65e06453&hm=8d8bfbe3725ab1357d576fffd8a689031f266295c55f01e1c41cba5ffbb402fa&"
-                alt=""
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    </nav>
-  );
-};
+    const [notification, setNotification] = useState(false)
+    const handleNotification = () => {
+        setNotification(!notification)
+    }
 
-export default Navbar;
+    const [showNav, setShowNav] = useState(false)
+    const toggleNav = () => {
+        setShowNav(!showNav)
+    }
+
+    return (
+        <nav className="sticky bg-gradient-to-b from-primary">
+            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-3">
+                <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
+                    <div className="flex-shrink-0 ">
+                        <img className="block md:w-20 w-16" src={logo} alt="Vehicle Hub" />
+                    </div>
+
+                    {/* Navigation Links */}
+                    <div className={`lg:flex lg:flex-1 ${showNav ? 'block' : 'hidden'} justify-center`}>
+                        <div className="flex sm:space-x-4">
+                            <a
+                                href="#home"
+                                className="text-secondary px-3 py-2 font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            >
+                                Home
+                            </a>
+                            <a
+                                href="#vehiclefleet"
+                                className="text-secondary px-3 py-2 font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            >
+                                Vehicle Fleet
+                            </a>
+                            <a
+                                href="#faq"
+                                className="text-secondary px-3 py-2 font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            >
+                                FAQ
+                            </a>
+                            <a
+                                href="#contact"
+                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            >
+                                Contact
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Sign In and Sign Up buttons */}
+                    {!loggedIn ? (
+                        <div className="flex items-center">
+                            <button className="border-secondary border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
+                                Sign In
+                            </button>
+                            <button className="ml-4 bg-secondary border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                Sign Up
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex gap-16">
+                            <div className="text-secondary cursor-pointer" onClick={handleClick}>
+                                {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
+                            </div>
+                            <div className="text-secondary cursor-pointer" onClick={handleNotification}>
+                                {notification ? (
+                                    <IoNotifications fontSize={24} />
+                                ) : (
+                                    <IoMdNotificationsOutline fontSize={24} />
+                                )}
+                            </div>
+                            <div className="text-secondary cursor-pointer" onClick={handleLogged}>
+                                {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
+                            </div>
+                        </div>
+                    )}
+                    {/* Hamburger Icon for Small Screens */}
+                    <div className="lg:hidden ml-auto">
+                        <button onClick={toggleNav}>
+                            <RxHamburgerMenu
+                                className="w-10 h-10 text-secondary"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth="2"
+                                    d="M4 6h16M4 12h16m-7 6h7"
+                                />
+                            </RxHamburgerMenu>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    )
+}
+
+export default Navbar

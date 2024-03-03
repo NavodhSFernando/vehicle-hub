@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Wishlist() {
     return (
-        <div className="absolute top-16 right-4 bg-white shadow-lg rounded-lg p-4">
+        <div className="absolute top-16 right-4 bg-white shadow-xl rounded-xl p-5">
             <h2 className="text-lg font-semibold mb-2">Wishlist</h2>
             <div className="space-y-4">
                 <div className="bg-gray-100 rounded p-2">

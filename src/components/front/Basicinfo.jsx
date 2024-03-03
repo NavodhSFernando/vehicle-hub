@@ -16,7 +16,7 @@ function Basicinfo() {
                                 Name
                             </label>
                             <input
-                                className="box-border flex flex-row items-start p-12 20 w-540 h-42 bg-white border border-gray-300 rounded-6 font-medium text-gray-500"
+                                className="box-border flex flex-row items-start p-12 w-80 h-1 bg-white border border-gray-300 rounded-6 font-medium text-gray-500"
                                 placeholder=" K L Ranasinghe"
                             />
                         </div>
