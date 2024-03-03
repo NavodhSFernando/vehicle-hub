@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { BsBookmarkStar } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
@@ -32,52 +33,56 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="sticky bg-gradient-to-b from-primary">
-            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-3">
+        <nav className="absolute top-0 bg-gradient-to-b from-primary w-screen">
+            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
-                    <div className="flex-shrink-0 ">
-                        <img className="block md:w-20 w-16" src={logo} alt="Vehicle Hub" />
+                    <div className="flex w-52">
+                        <img className="block md:w-16 w-12" src={logo} alt="Vehicle Hub" />
                     </div>
 
                     {/* Navigation Links */}
                     <div className={`lg:flex lg:flex-1 ${showNav ? 'block' : 'hidden'} justify-center`}>
                         <div className="flex sm:space-x-4">
-                            <a
-                                href="#home"
-                                className="text-secondary px-3 py-2 font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            <NavLink
+                                to="/contact"
+                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Home
-                            </a>
-                            <a
-                                href="#vehiclefleet"
-                                className="text-secondary px-3 py-2 font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            </NavLink>
+                            <NavLink
+                                to="/contact"
+                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Vehicle Fleet
-                            </a>
-                            <a
-                                href="#faq"
-                                className="text-secondary px-3 py-2 font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                            </NavLink>
+                            <NavLink
+                                to="/faq"
+                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 FAQ
-                            </a>
-                            <a
-                                href="#contact"
+                            </NavLink>
+                            <NavLink
+                                to="/contact"
                                 className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Contact
-                            </a>
+                            </NavLink>
                         </div>
                     </div>
 
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <button className="border-secondary border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
-                                Sign In
-                            </button>
-                            <button className="ml-4 bg-secondary border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
-                                Sign Up
-                            </button>
+                            <NavLink to="/singin">
+                                <button className="border-secondary border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
+                                    Sign In
+                                </button>
+                            </NavLink>
+                            <NavLink to="/signup">
+                                <button className="ml-4 bg-secondary border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                    Sign Up
+                                </button>
+                            </NavLink>
                         </div>
                     ) : (
                         <div className="flex gap-16">
@@ -91,9 +96,11 @@ const Navbar = () => {
                                     <IoMdNotificationsOutline fontSize={24} />
                                 )}
                             </div>
-                            <div className="text-secondary cursor-pointer" onClick={handleLogged}>
-                                {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
-                            </div>
+                            <NavLink to="/account">
+                                <div className="text-secondary cursor-pointer" onClick={handleLogged}>
+                                    {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
+                                </div>
+                            </NavLink>
                         </div>
                     )}
                     {/* Hamburger Icon for Small Screens */}

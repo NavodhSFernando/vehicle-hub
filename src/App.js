@@ -22,6 +22,8 @@ import ViewMaintenance from './views/admin/maintenance/ViewMaintenance'
 import CreateMaintenance from './views/admin/maintenance/CreateMaintenance'
 import ViewMaintenanceType from './views/admin/maintenancetype/ViewMaintenanceType'
 import CreateMaintenanceType from './views/admin/maintenancetype/CreateMaintenanceType'
+import ViewAvailability from './views/admin/availability/ViewAvailability'
+import CreateAvailability from './views/admin/availability/CreateAvailability'
 
 function App() {
     return (
@@ -42,6 +44,10 @@ function App() {
                     <Route path="reservation">
                         <Route path="view" element={<ViewReservation />} />
                         <Route path="create" element={<CreateReservation />} />
+                    </Route>
+                    <Route path="availability">
+                        <Route path="view" element={<ViewAvailability />} />
+                        <Route path="create" element={<CreateAvailability />} />
                     </Route>
                     <Route path="vehicletype">
                         <Route path="view" element={<ViewVehicleType />} />
