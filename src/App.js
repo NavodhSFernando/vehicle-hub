@@ -27,6 +27,8 @@ import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewUser from './views/admin/user/ViewUser'
 import CreateUser from './views/admin/user/CreateUser'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
+import CreateVehicleLog from './views/admin/vehiclelog/CreateVehicleLog'
+import ViewVehicleLog from './views/admin/vehiclelog/ViewVehicleLog'
 
 function App() {
     return (
@@ -84,8 +86,8 @@ function App() {
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
                     <Route path="vehiclelog">
-                        <Route path="view" element={<ViewCustomer />} />
-                        <Route path="create" element={<CreateUser />} />
+                        <Route path="view" element={<ViewVehicleLog />} />
+                        <Route path="create" element={<CreateVehicleLog />} />
                     </Route>
                 </Route>
             </Routes>
