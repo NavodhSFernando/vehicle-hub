@@ -13,6 +13,7 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -29,22 +30,66 @@ export default function CreateMaintenance() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
                 <FormField
                     control={form.control}
                     name="username"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel className="text-2xl">Username</FormLabel>
-                            <FormControl>
-                                <Input placeholder="shadcn" {...field} />
-                            </FormControl>
-                            <FormDescription>This is your public display name.</FormDescription>
-                            <FormMessage />
+                            <h1 className="flex flex-col items-start font-bold text-gray-800 text-2xl pb-3 pt-3">
+                                Create New Maintenance
+                            </h1>
+                            <hr className="pb-3" />
+                            <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
+                                <FormDescription>Basic Information</FormDescription>
+                                <div className="flex flex-col space-y-1 pt-4">
+                                    <FormLabel className="pb-3">Vehicle Maintenance ID</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="QL 9904" {...field} />
+                                </FormControl>
+
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Last Maintenance Date</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="2023/12/31" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className=" pb-3">Vehicle ID</FormLabel>
+                                </div>
+                                <Select>
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue placeholder="Select Vehicle" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="001">Light</SelectItem>
+                                        <SelectItem value="002">Dark</SelectItem>
+                                        <SelectItem value="003">System</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Maintenance Type ID</FormLabel>
+                                </div>
+                                <Select>
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue placeholder="Select Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="001">Light</SelectItem>
+                                        <SelectItem value="002">Dark</SelectItem>
+                                        <SelectItem value="003">System</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
+                                <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
+                                    Create
+                                </Button>
+                            </div>
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
             </form>
         </Form>
     )
