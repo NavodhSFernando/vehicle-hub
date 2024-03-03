@@ -7,10 +7,10 @@ import { FaTwitter } from 'react-icons/fa'
 export const Footer = () => {
     return (
         <div>
-            <footer className="bg-blue-900 text-white py-20 px-4">
+            <footer className="bg-primary py-20 px-4 text-white">
                 <div className="max-w-6xl mx-auto flex flex-wrap  justify-between">
                     <div className="w-full flex flex-col max-w-[340px]">
-                        <img className="w-[200px]" src={Logo} alt="" />
+                        <img className="w-[200px]" src={Logo} alt="Vehicle Hub Logo" />
                         <p className="mt-2 opacity-50">
                             Our vision is to provide convenience and help increase your sales business.
                         </p>
@@ -29,24 +29,26 @@ export const Footer = () => {
                             Contact
                         </a>
                     </div>
-                    <div className="mt-4 flex justify-center md:justify-end space-x-4 w-full">
-                        <p className="text-[12px] ">© 2023 SprintSphere. All Rights Reserved</p>
-                        <p>Reach us on:</p>
-                        <a href="#" className="text-white hover:text-gray-300">
-                            <span className="">
-                                <FaFacebookF color="#FBDAC6" fontSize={24} />
-                            </span>
-                        </a>
-                        <a href="#" className="text-white hover:text-gray-300">
-                            <span className="">
-                                <FaInstagram color="#FBDAC6" fontSize={24} />
-                            </span>
-                        </a>
-                        <a href="#" className="text-white hover:text-gray-300">
-                            <span className="">
-                                <FaTwitter color="#FBDAC6" fontSize={24} />
-                            </span>
-                        </a>
+                    <div className="mt-16 flex flex-row w-full">
+                        <div className="justify-start">© 2023 SprintSphere. All Rights Reserved </div>
+                        <div className="md:ml-auto justify-center space-x-4 flex">
+                            <p>Reach us on:</p>
+                            <a href="#" className="text-white hover:text-gray-300">
+                                <span className="">
+                                    <FaFacebookF color="FBDAC6" fontSize={24} />
+                                </span>
+                            </a>
+                            <a href="#" className="text-white hover:text-gray-300">
+                                <span className="">
+                                    <FaInstagram color="FBDAC6" fontSize={24} />
+                                </span>
+                            </a>
+                            <a href="#" className="text-white hover:text-gray-300">
+                                <span className="">
+                                    <FaTwitter color="FBDAC6" fontSize={24} />
+                                </span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </footer>
