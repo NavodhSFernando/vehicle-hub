@@ -1,3 +1,4 @@
+import React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -21,13 +22,12 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateVehicle() {
+export default function CreateUser() {
     const form = useForm()
 
     const onSubmit = (data) => {
         console.log(data)
     }
-
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -37,93 +37,89 @@ export default function CreateVehicle() {
                     render={({ field }) => (
                         <FormItem>
                             <h1 className="flex flex-col items-start font-bold text-gray-800 text-2xl pb-3 pt-3">
-                                Create New Vehicle
+                                Create New User
                             </h1>
                             <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
                                 <p className="text-xs text-gray-600">
-                                    Manage and Modify Vehicle Details for Enhanced Rental Services.
+                                    Onboard and Manage Team Members for Efficient Operations.
                                 </p>
                                 <div className="flex flex-col space-y-1 pt-4">
-                                    <FormLabel className="pb-3">Registration Number</FormLabel>
+                                    <FormLabel className="pb-3">Name</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="QL 9904" {...field} />
+                                    <Input placeholder="G K Ranasinghe" {...field} />
                                 </FormControl>
 
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Chassis Number</FormLabel>
+                                    <FormLabel className="pb-3">Email</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="SV30-0169266" {...field} />
+                                    <Input placeholder="ranasinghe2001@email.com" {...field} />
                                 </FormControl>
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Engine Capacity</FormLabel>
+                                    <FormLabel className="pb-3">Date of Birth</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="1800CC" {...field} />
+                                    <Input placeholder="1995.03.10" {...field} />
                                 </FormControl>
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Transmission</FormLabel>
+                                    <FormLabel className="pb-3">Phone</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="077445680653" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">NIC</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="200145604322" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className=" pb-3">Gender</FormLabel>
                                 </div>
                                 <Select>
                                     <SelectTrigger className="w-2/3">
-                                        <SelectValue placeholder="Select Transmission" />
+                                        <SelectValue placeholder="Select Option" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="001">Auto</SelectItem>
-                                        <SelectItem value="002">Manual</SelectItem>
+                                        <SelectItem value="001">Male</SelectItem>
+                                        <SelectItem value="002">Female</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Color</FormLabel>
+                                    <FormLabel className="pb-3">Department</FormLabel>
                                 </div>
-                                <FormControl>
-                                    <Input placeholder="White" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Cost Per Day</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="10000" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Mileage</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="2500KM" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3" htmlFor="picture">
-                                        Add Thumbnail
-                                    </FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input id="picture" type="file" />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3" htmlFor="picture">
-                                        Add Photos
-                                    </FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input id="picture" type="file" multiple />
-                                </FormControl>
                                 <Select>
-                                    <div className="flex flex-col space-y-1 pt-6">
-                                        <FormLabel className=" pb-3">Status</FormLabel>
-                                    </div>
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue placeholder="Select Role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="001">Management</SelectItem>
+                                        <SelectItem value="002">IT</SelectItem>
+                                        <SelectItem value="003">Finance</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Password</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input type="password" placeholder="********" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Status</FormLabel>
+                                </div>
+                                <Select>
                                     <SelectTrigger className="w-2/3">
                                         <SelectValue placeholder="Select Status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="001">Active</SelectItem>
-                                        <SelectItem value="002">Inactive</SelectItem>
+                                        <SelectItem value="001">New</SelectItem>
+                                        <SelectItem value="002">Old</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
-
                             <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
                                 <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
                                     Create

@@ -19,18 +19,30 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         label: 'Dashboard',
         path: '/admin/dashboard',
         icon: <AiOutlineHome />,
-        heading: 'Dashboard',
+        heading: 'Dashboard'
+    },
+    {
+        key: 'report',
+        label: 'Report',
+        path: '/admin/report',
+        icon: <HiOutlineDocumentText />,
         subLinks: [
             {
-                key: 'home',
-                label: 'Home',
-                path: '/admin/dashboard',
+                key: 'feedback report',
+                label: 'Feedback Report',
+                path: '/admin/report/feedbackreport',
                 icon: <LuDot />
             },
             {
-                key: 'reports',
-                label: 'Reports',
-                path: '/admin/dashboard/reports',
+                key: 'revenue report',
+                label: 'Revenue Report',
+                path: '/admin/report/revenuereport',
+                icon: <LuDot />
+            },
+            {
+                key: 'vehicle utilization report',
+                label: 'Vehicle Utilization Report',
+                path: '/admin/report/vehicleutilizationreport',
                 icon: <LuDot />
             }
         ]
@@ -51,6 +63,26 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 key: 'create reservations',
                 label: 'Create Reservations',
                 path: '/admin/reservation/create',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'availability',
+        label: 'Availability',
+        path: '/admin/availability',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all availability',
+                label: 'View All Availability',
+                path: '/admin/availability/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create availability',
+                label: 'Create Availability',
+                path: '/admin/availability/create',
                 icon: <LuDot />
             }
         ]
@@ -171,6 +203,80 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 key: 'create maintenance type',
                 label: 'Create Maintenance Type',
                 path: '/admin/maintenancetype/create',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'user',
+        label: 'User',
+        path: '/admin/user',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all user',
+                label: 'View All User',
+                path: '/admin/user/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create user',
+                label: 'Create User',
+                path: '/admin/user/create',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'customer',
+        label: 'Customer',
+        path: '/admin/customer',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all customer',
+                label: 'View All Customer',
+                path: '/admin/customer/view',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'vehicle log',
+        label: 'Vehicle Log',
+        path: '/admin/vehiclelog',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all vehicle log',
+                label: 'View All vehicle Log',
+                path: '/admin/vehiclelog/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create vehicle log',
+                label: 'Create Vehicle Log',
+                path: '/admin/vehiclelog/create',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
+        key: 'insurance',
+        label: 'Insurance',
+        path: '/admin/insurance',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all insurance',
+                label: 'View All Insurance',
+                path: '/admin/insurance/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create insurance',
+                label: 'Create Insurance',
+                path: '/admin/insurance/create',
                 icon: <LuDot />
             }
         ]

@@ -22,7 +22,7 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateMaintenanceType() {
+export default function CreateAvailability() {
     const form = useForm()
 
     const onSubmit = (data) => {
@@ -37,18 +37,36 @@ export default function CreateMaintenanceType() {
                     render={({ field }) => (
                         <FormItem>
                             <h1 className="flex flex-col items-start font-bold text-gray-800 text-2xl pb-3 pt-3">
-                                Create New Maintenance Type
+                                Create Availability
                             </h1>
                             <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
-
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Name</FormLabel>
+                                <div className="flex flex-col space-y-1 pt-4">
+                                    <FormLabel className="pb-3">Vehicle ID</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="Oil Change" {...field} />
+                                    <Input placeholder="1001" {...field} />
                                 </FormControl>
+
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Reservation ID</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="001" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className=" pb-3">Availability Status</FormLabel>
+                                </div>
+                                <Select>
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue placeholder="Available" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="001">Available</SelectItem>
+                                        <SelectItem value="002">Not Available</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
                                 <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">

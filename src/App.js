@@ -7,7 +7,6 @@ import Account from './views/front/Account'
 import Login from './views/front/Login'
 import Signup from './views/front/Signup'
 import Password from './views/front/Password'
-import Reports from './views/admin/Reports'
 import ViewReservation from './views/admin/reservation/ViewReservation'
 import CreateReservation from './views/admin/reservation/CreateReservation'
 import ViewVehicleType from './views/admin/vehicletype/ViewVehicleType'
@@ -22,6 +21,14 @@ import ViewMaintenance from './views/admin/maintenance/ViewMaintenance'
 import CreateMaintenance from './views/admin/maintenance/CreateMaintenance'
 import ViewMaintenanceType from './views/admin/maintenancetype/ViewMaintenanceType'
 import CreateMaintenanceType from './views/admin/maintenancetype/CreateMaintenanceType'
+import ViewAvailability from './views/admin/availability/ViewAvailability'
+import CreateAvailability from './views/admin/availability/CreateAvailability'
+import ViewUser from './views/admin/user/ViewUser'
+import CreateUser from './views/admin/user/CreateUser'
+import ViewCustomer from './views/admin/customer/ViewCustomer'
+import FeedbackReport from './views/admin/reports/FeedbackReport'
+import RevenueReport from './views/admin/reports/RevenueReport'
+import VehicleUtilizationReport from './views/admin/reports/VehicleUtilizationReport'
 
 function App() {
     return (
@@ -35,13 +42,19 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
                 <Route path="/admin" element={<AdminLayout />}>
-                    <Route path="dashboard">
-                        <Route index element={<Dashboard />} />
-                        <Route path="reports" element={<Reports />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="report">
+                        <Route path="feedbackreport" element={<FeedbackReport />} />
+                        <Route path="revenuereport" element={<RevenueReport />} />
+                        <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
                     </Route>
                     <Route path="reservation">
                         <Route path="view" element={<ViewReservation />} />
                         <Route path="create" element={<CreateReservation />} />
+                    </Route>
+                    <Route path="availability">
+                        <Route path="view" element={<ViewAvailability />} />
+                        <Route path="create" element={<CreateAvailability />} />
                     </Route>
                     <Route path="vehicletype">
                         <Route path="view" element={<ViewVehicleType />} />
@@ -66,6 +79,21 @@ function App() {
                     <Route path="maintenancetype">
                         <Route path="view" element={<ViewMaintenanceType />} />
                         <Route path="create" element={<CreateMaintenanceType />} />
+                    </Route>
+                    <Route path="user">
+                        <Route path="view" element={<ViewUser />} />
+                        <Route path="create" element={<CreateUser />} />
+                    </Route>
+                    <Route path="customer">
+                        <Route path="view" element={<ViewCustomer />} />
+                    </Route>
+                    <Route path="vehiclelog">
+                        <Route path="view" element={<ViewCustomer />} />
+                        <Route path="create" element={<CreateUser />} />
+                    </Route>
+                    <Route path="insurance">
+                        <Route path="view" element={<ViewCustomer />} />
+                        <Route path="create" element={<CreateUser />} />
                     </Route>
                 </Route>
             </Routes>

@@ -3,7 +3,7 @@ import { Slot } from '@radix-ui/react-slot'
 import { Controller, FormProvider, useFormContext } from 'react-hook-form'
 
 import { cn } from '../../lib/utils'
-import { Label } from '../../components/ui/label'
+import { Label } from './label'
 
 const Form = FormProvider
 
@@ -56,7 +56,14 @@ FormItem.displayName = 'FormItem'
 const FormLabel = React.forwardRef(({ className, ...props }, ref) => {
     const { error, formItemId } = useFormField()
 
-    return <Label ref={ref} className={cn(error && 'text-destructive', className)} htmlFor={formItemId} {...props} />
+    return (
+        <Label
+            ref={ref}
+            className={cn(error && 'text-destructive text-gray-800 font-normal pb-3', className)}
+            htmlFor={formItemId}
+            {...props}
+        />
+    )
 })
 FormLabel.displayName = 'FormLabel'
 
@@ -82,7 +89,10 @@ const FormDescription = React.forwardRef(({ className, ...props }, ref) => {
         <p
             ref={ref}
             id={formDescriptionId}
-            className={cn('text-[0.8rem] text-muted-foreground', className)}
+            className={cn(
+                'text-muted-foreground  flex-col font-bold  text-xl pb-3 inputText flex items-start text-gray-900 ',
+                className
+            )}
             {...props}
         />
     )
