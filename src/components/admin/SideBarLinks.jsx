@@ -260,6 +260,26 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 icon: <LuDot />
             }
         ]
+    },
+    {
+        key: 'insurance',
+        label: 'Insurance',
+        path: '/admin/insurance',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all insurance',
+                label: 'View All Insurance',
+                path: '/admin/insurance/view',
+                icon: <LuDot />
+            },
+            {
+                key: 'create insurance',
+                label: 'Create Insurance',
+                path: '/admin/insurance/create',
+                icon: <LuDot />
+            }
+        ]
     }
 ]
 
