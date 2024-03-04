@@ -19,18 +19,30 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         label: 'Dashboard',
         path: '/admin/dashboard',
         icon: <AiOutlineHome />,
-        heading: 'Dashboard',
+        heading: 'Dashboard'
+    },
+    {
+        key: 'report',
+        label: 'Report',
+        path: '/admin/report',
+        icon: <HiOutlineDocumentText />,
         subLinks: [
             {
-                key: 'home',
-                label: 'Home',
-                path: '/admin/dashboard',
+                key: 'feedback report',
+                label: 'Feedback Report',
+                path: '/admin/report/feedbackreport',
                 icon: <LuDot />
             },
             {
-                key: 'reports',
-                label: 'Reports',
-                path: '/admin/dashboard/reports',
+                key: 'revenue report',
+                label: 'Revenue Report',
+                path: '/admin/report/revenuereport',
+                icon: <LuDot />
+            },
+            {
+                key: 'vehicle utilization report',
+                label: 'Vehicle Utilization Report',
+                path: '/admin/report/vehicleutilizationreport',
                 icon: <LuDot />
             }
         ]
