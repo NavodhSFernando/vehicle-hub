@@ -21,7 +21,7 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateMaintenance() {
+export default function CreateVehicle() {
     const form = useForm()
 
     const onSubmit = (data) => {
@@ -94,17 +94,21 @@ export default function CreateMaintenance() {
                                 <FormControl>
                                     <Input placeholder="2500KM" {...field} />
                                 </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3" htmlFor="picture">
+                                        Add Thumbnail
+                                    </FormLabel>
+                                </div>
                                 <FormControl>
-                                    <div className="flex flex-col space-y-1 pt-6">
-                                        <FormLabel htmlFor="picture">Add Thumbnail</FormLabel>
-                                        <Input id="picture" type="file" />
-                                    </div>
+                                    <Input id="picture" type="file" />
                                 </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3" htmlFor="picture">
+                                        Add Photos
+                                    </FormLabel>
+                                </div>
                                 <FormControl>
-                                    <div className="flex flex-col space-y-1 pt-6">
-                                        <FormLabel htmlFor="picture">Add Photos</FormLabel>
-                                        <Input id="picture" type="file" />
-                                    </div>
+                                    <Input id="picture" type="file" multiple />
                                 </FormControl>
                                 <Select>
                                     <div className="flex flex-col space-y-1 pt-6">
