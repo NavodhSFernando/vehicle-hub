@@ -26,9 +26,9 @@ import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewUser from './views/admin/user/ViewUser'
 import CreateUser from './views/admin/user/CreateUser'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
-import FeedbackReport from './views/admin/Reports/FeedbackReport'
-import RevenueReport from './views/admin/Reports/RevenueReport'
-import VehicleUtilizationReport from './views/admin/Reports/VehicleUtilizationReport'
+import FeedbackReport from './views/admin/reports/FeedbackReport'
+import RevenueReport from './views/admin/reports/RevenueReport'
+import VehicleUtilizationReport from './views/admin/reports/VehicleUtilizationReport'
 
 function App() {
     return (
@@ -44,13 +44,13 @@ function App() {
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
-                        <Route path="view" element={<ViewReservation />} />
-                        <Route path="create" element={<CreateReservation />} />
-                    </Route>
-                    <Route path="reservation">
                         <Route path="feedbackreport" element={<FeedbackReport />} />
                         <Route path="revenuereport" element={<RevenueReport />} />
                         <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
+                    </Route>
+                    <Route path="reservation">
+                        <Route path="view" element={<ViewReservation />} />
+                        <Route path="create" element={<CreateReservation />} />
                     </Route>
                     <Route path="availability">
                         <Route path="view" element={<ViewAvailability />} />
