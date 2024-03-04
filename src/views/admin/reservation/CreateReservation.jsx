@@ -45,12 +45,6 @@ export default function CreateReservation() {
                                 <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
                                     Effortlessly Book and Manage Your Car Rentals
                                 </p>
-                                <div className="flex flex-col space-y-1 pt-4">
-                                    <FormLabel className="pb-3">Reservation Id</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="1001" {...field} />
-                                </FormControl>
                                 <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className=" pb-3">Reservation Status</FormLabel>
                                 </div>

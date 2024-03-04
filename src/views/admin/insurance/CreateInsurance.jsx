@@ -37,17 +37,11 @@ export default function CreateVehicleInsurance() {
                     render={({ field }) => (
                         <FormItem>
                             <h1 className="flex flex-col items-start font-bold text-gray-800 text-2xl pb-3 pt-3">
-                                Create New Vehicle Type
+                                Create New Insurance
                             </h1>
                             <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-4">
-                                    <FormLabel className="pb-3">Vehicle Type ID</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="1001" {...field} />
-                                </FormControl>
 
                                 <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className="pb-3">Name</FormLabel>

@@ -42,13 +42,6 @@ export default function CreateVehicleMake() {
                             <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-4">
-                                    <FormLabel className="pb-3">Vehicle Make ID</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="1001" {...field} />
-                                </FormControl>
-
                                 <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className="pb-3">Name</FormLabel>
                                 </div>
