@@ -92,7 +92,7 @@ function App() {
                         <Route path="view" element={<ViewCustomer />} />
                         <Route path="create" element={<CreateUser />} />
                     </Route>
-                    <Route path="insurance">
+                    <Route path="insurancegt">
                         <Route path="view" element={<ViewCustomer />} />
                         <Route path="create" element={<CreateUser />} />
                     </Route>
