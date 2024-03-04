@@ -40,9 +40,10 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
                 <Route path="/admin" element={<AdminLayout />}>
-                    <Route path="dashboard">
-                        <Route index element={<Dashboard />} />
-                        <Route path="reports" element={<Reports />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="report">
+                        <Route path="view" element={<ViewReservation />} />
+                        <Route path="create" element={<CreateReservation />} />
                     </Route>
                     <Route path="reservation">
                         <Route path="view" element={<ViewReservation />} />
