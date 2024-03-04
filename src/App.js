@@ -7,7 +7,6 @@ import Account from './views/front/Account'
 import Login from './views/front/Login'
 import Signup from './views/front/Signup'
 import Password from './views/front/Password'
-import Reports from './views/admin/Reports'
 import ViewReservation from './views/admin/reservation/ViewReservation'
 import CreateReservation from './views/admin/reservation/CreateReservation'
 import ViewVehicleType from './views/admin/vehicletype/ViewVehicleType'
@@ -92,7 +91,7 @@ function App() {
                         <Route path="view" element={<ViewCustomer />} />
                         <Route path="create" element={<CreateUser />} />
                     </Route>
-                    <Route path="insurancegt">
+                    <Route path="insurance">
                         <Route path="view" element={<ViewCustomer />} />
                         <Route path="create" element={<CreateUser />} />
                     </Route>
