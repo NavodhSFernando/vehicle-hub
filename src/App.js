@@ -27,8 +27,9 @@ import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewUser from './views/admin/user/ViewUser'
 import CreateUser from './views/admin/user/CreateUser'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
-import CreateVehicleLog from './views/admin/vehiclelog/CreateVehicleLog'
-import ViewVehicleLog from './views/admin/vehiclelog/ViewVehicleLog'
+import FeedbackReport from './views/admin/Reports/FeedbackReport'
+import RevenueReport from './views/admin/Reports/RevenueReport'
+import VehicleUtilizationReport from './views/admin/Reports/VehicleUtilizationReport'
 
 function App() {
     return (
@@ -48,8 +49,9 @@ function App() {
                         <Route path="create" element={<CreateReservation />} />
                     </Route>
                     <Route path="reservation">
-                        <Route path="view" element={<ViewReservation />} />
-                        <Route path="create" element={<CreateReservation />} />
+                        <Route path="feedbackreport" element={<FeedbackReport />} />
+                        <Route path="revenuereport" element={<RevenueReport />} />
+                        <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
                     </Route>
                     <Route path="availability">
                         <Route path="view" element={<ViewAvailability />} />
@@ -87,8 +89,12 @@ function App() {
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
                     <Route path="vehiclelog">
-                        <Route path="view" element={<ViewVehicleLog />} />
-                        <Route path="create" element={<CreateVehicleLog />} />
+                        <Route path="view" element={<ViewCustomer />} />
+                        <Route path="create" element={<CreateUser />} />
+                    </Route>
+                    <Route path="insurance">
+                        <Route path="view" element={<ViewCustomer />} />
+                        <Route path="create" element={<CreateUser />} />
                     </Route>
                 </Route>
             </Routes>
