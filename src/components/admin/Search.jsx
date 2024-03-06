@@ -1,11 +1,10 @@
 import React from 'react'
+import { Input } from '../ui/input'
 
 export default function Search() {
     return (
-        <>
-            <div className=" flex flex-col gap-5 bg-[#4B4B4B] py-20">
-                <input type="text" placeholder="Search" className="px-5 py-2 w-fit rounded-lg placeholder:text-sm" />
-            </div>
-        </>
+        <div className=" flex flex-col items-end gap-5 bg-white p-2">
+            <Input type="search" placeholder="Search" className="w-1/3 " />
+        </div>
     )
 }

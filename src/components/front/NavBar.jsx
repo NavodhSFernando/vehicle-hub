@@ -33,7 +33,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="absolute top-0 bg-gradient-to-b from-primary w-screen">
+        <nav className="absolute top-0 z-10 bg-gradient-to-b from-primary w-screen">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">

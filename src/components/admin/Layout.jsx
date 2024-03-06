@@ -8,9 +8,11 @@ export default function Layout() {
     return (
         <div className="flex flex-row bg-neutral-100 h-screen w-screen">
             <Sidebar />
-            <div className="p-4 flex flex-col w-full h-full overflow-y-auto">
+            <div className="flex flex-col w-full h-full overflow-y-auto">
                 <Header />
-                <Outlet />
+                <div className="p-4">
+                    <Outlet />
+                </div>
             </div>
             {/* <Footer /> */}
         </div>
