@@ -17,7 +17,7 @@ export default function Datepicker() {
                 <label htmlFor="Pick-Up-Date">
                     <p className="text-[12px] opacity-80">Pick Up Date</p>
                 </label>
-                <input type="date" className="w-fit max-w-[130px] outline-none relative " />
+                <input type="date" className="w-fit max-w-[130px] outline-none relative" />
             </div>
         </div>
     )
