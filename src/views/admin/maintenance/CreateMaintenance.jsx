@@ -1,4 +1,3 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -42,13 +41,6 @@ export default function CreateMaintenance() {
                             <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-4">
-                                    <FormLabel className="pb-3">Vehicle Maintenance ID</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="QL 9904" {...field} />
-                                </FormControl>
-
                                 <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className="pb-3">Last Maintenance Date</FormLabel>
                                 </div>

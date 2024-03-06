@@ -29,6 +29,10 @@ import ViewCustomer from './views/admin/customer/ViewCustomer'
 import FeedbackReport from './views/admin/reports/FeedbackReport'
 import RevenueReport from './views/admin/reports/RevenueReport'
 import VehicleUtilizationReport from './views/admin/reports/VehicleUtilizationReport'
+import ViewVehicleLog from './views/admin/vehiclelog/ViewVehicleLog'
+import CreateVehicleLog from './views/admin/vehiclelog/CreateVehicleLog'
+import ViewInsurance from './views/admin/insurance/ViewInsurance'
+import CreateInsurance from './views/admin/insurance/CreateInsurance'
 
 function App() {
     return (
@@ -88,12 +92,12 @@ function App() {
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
                     <Route path="vehiclelog">
-                        <Route path="view" element={<ViewCustomer />} />
-                        <Route path="create" element={<CreateUser />} />
+                        <Route path="view" element={<ViewVehicleLog />} />
+                        <Route path="create" element={<CreateVehicleLog />} />
                     </Route>
                     <Route path="insurance">
-                        <Route path="view" element={<ViewCustomer />} />
-                        <Route path="create" element={<CreateUser />} />
+                        <Route path="view" element={<ViewInsurance />} />
+                        <Route path="create" element={<CreateInsurance />} />
                     </Route>
                 </Route>
             </Routes>
