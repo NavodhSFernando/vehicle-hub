@@ -11,7 +11,7 @@ const RevenueReport = () => {
     { id: 5, type: "Balance Payment", amount: 1200, date: "2024-02-25" },
   ]);
 
-  // Filtered revenue data
+  // Filtered revenue data feedback
   const [filteredRevenueData, setFilteredRevenueData] = useState(revenueData);
 
   // Filter criteria state
