@@ -1,5 +1,5 @@
 import React from 'react'
-import IndexReservationTable from './IndexReservationTable'
+import DataTable from './DataTable'
 import { columns } from './Columns'
 
 export default function ViewReservation() {
@@ -13,13 +13,13 @@ export default function ViewReservation() {
         {
             id: '1a2b3c4d',
             amount: 200,
-            status: 'completed',
+            status: 'waiting',
             email: 'norman@example.com'
         },
         {
             id: '5e6f7g8h',
             amount: 300,
-            status: 'failed',
+            status: 'cancelled',
             email: 'obbey@example.com'
         },
         {
@@ -31,13 +31,13 @@ export default function ViewReservation() {
         {
             id: '3m4n5o6p',
             amount: 500,
-            status: 'completed',
+            status: 'confirmed',
             email: 'jeff@example.com'
         },
         {
             id: '7q8r9s0t',
             amount: 600,
-            status: 'failed',
+            status: 'cancelled',
             email: 'rob@example.com'
         },
         {
@@ -49,13 +49,13 @@ export default function ViewReservation() {
         {
             id: '5y6z7a8b',
             amount: 800,
-            status: 'completed',
+            status: 'confirmed',
             email: 'tara@example.com'
         },
         {
             id: '9c0d1e2f',
             amount: 900,
-            status: 'failed',
+            status: 'cancelled',
             email: 'sage@example.com'
         },
         {
@@ -67,8 +67,10 @@ export default function ViewReservation() {
     ]
 
     return (
-        <div className="container mx-auto py-10">
-            <IndexReservationTable columns={columns} data={data} />
-        </div>
+        <>
+            <div className="flex flex-col p-6 bg-white rounded-lg">
+                <DataTable columns={columns} data={data} />
+            </div>
+        </>
     )
 }

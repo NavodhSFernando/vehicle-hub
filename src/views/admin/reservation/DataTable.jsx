@@ -12,7 +12,7 @@ import { Input } from '../../../components/ui/input'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
-export default function IndexReservationTable({ columns, data }) {
+export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
     const [sorting, setSorting] = React.useState([])
 
@@ -42,10 +42,10 @@ export default function IndexReservationTable({ columns, data }) {
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="p-4" key={header.id}>
+                                        <TableHead className="py-1 px-5" key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -60,7 +60,7 @@ export default function IndexReservationTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell className="py-5 px-5" key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
