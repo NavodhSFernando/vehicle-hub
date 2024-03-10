@@ -92,7 +92,7 @@ const handleFilter = () => {
       <h1 className="text-3xl font-bold mb-4">Revenue Report</h1>
 
       {/* Date Range Selector */}
-      <div className="mb-4">
+      <div className="mb-4" style={{ width: "45%" }}>
         <label
           htmlFor="startDate"
           className="block text-gray-700 font-bold mb-2"
@@ -109,7 +109,7 @@ const handleFilter = () => {
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4" style={{ width: "45%" }}>
         <label htmlFor="endDate" className="block text-gray-700 font-bold mb-2">
           End Date:
         </label>
