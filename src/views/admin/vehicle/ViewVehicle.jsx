@@ -9,7 +9,6 @@ export default function ViewVehicle() {
             status: 'Active',
             registrationNumber: 'ABC123',
             chassisNumber: 'CHS123456789',
-            engineCapacity: '2000',
             costPerDay: 5000,
             color: 'Red',
             transmission: 'Auto',
@@ -21,7 +20,6 @@ export default function ViewVehicle() {
             status: 'Inactive',
             registrationNumber: 'XYZ789',
             chassisNumber: 'CHS987654321',
-            engineCapacity: '1500',
             costPerDay: 8000,
             color: 'Blue',
             transmission: 'Auto',
@@ -34,7 +32,6 @@ export default function ViewVehicle() {
             status: 'Active',
             registrationNumber: 'DEF456',
             chassisNumber: 'CHS123123123',
-            engineCapacity: '2500',
             costPerDay: 4000,
             color: 'Black',
             transmission: 'Auto',
@@ -46,7 +43,6 @@ export default function ViewVehicle() {
             status: 'Active',
             registrationNumber: 'GHI789',
             chassisNumber: 'CHS321321321',
-            engineCapacity: '1000',
             costPerDay: 7000,
             color: 'White',
             transmission: 'Auto',
@@ -58,7 +54,6 @@ export default function ViewVehicle() {
             status: 'Inactive',
             registrationNumber: 'JKL012',
             chassisNumber: 'CHS456456456',
-            engineCapacity: '3000',
             costPerDay: 3000,
             color: 'Grey',
             transmission: 'Manual',
@@ -67,10 +62,8 @@ export default function ViewVehicle() {
         }
     ]
     return (
-        <>
-            <div className="flex flex-col p-6 bg-white rounded-lg">
-                <DataTable columns={columns} data={data} />
-            </div>
-        </>
+        <div className="flex flex-col p-6 bg-white rounded-lg">
+            <DataTable columns={columns} data={data} />
+        </div>
     )
 }

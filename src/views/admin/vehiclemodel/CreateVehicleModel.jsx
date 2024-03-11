@@ -42,6 +42,12 @@ export default function CreateVehicleModel() {
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
                                 <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Model Name</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="Aqua" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className="pb-3">Year</FormLabel>
                                 </div>
                                 <FormControl>
