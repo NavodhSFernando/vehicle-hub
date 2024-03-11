@@ -9,7 +9,7 @@ import {
     getSortedRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
-
+import { Label } from '../../../components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
 export default function DataTable({ columns, data }) {
@@ -30,13 +30,25 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter emails..."
-                    value={table.getColumn('email')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
+            <div className="flex flex-row items-center my-8">
+                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
+                    <Label>Reservation Date Range</Label>
+                    <Input
+                        placeholder="Filter date range"
+                        value={table.getColumn('email')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+                        className="max-w-lg"
+                    />
+                </div>
+                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
+                    <Label>Customer Name</Label>
+                    <Input
+                        placeholder="Filter customer name"
+                        value={table.getColumn('name')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+                        className="max-w-lg"
+                    />
+                </div>
             </div>
             <div className="rounded-md border">
                 <Table>
