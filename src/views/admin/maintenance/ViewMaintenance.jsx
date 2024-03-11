@@ -6,63 +6,51 @@ export default function ViewMaintenance() {
     const data = [
         {
             id: '001',
-            lastdate: '2022/06/07',
-            vehicleid: '110',
-            type: 'oil change'
+            lastDate: '2022/06/07',
+            vehicleId: '110',
+            typeId: '01'
         },
         {
             id: '002',
-            lastdate: '2022/06/02',
-            vehicleid: '123',
-            type: 'tyre rotation'
+            lastDate: '2022/06/02',
+            vehicleId: '123',
+            typeId: '02'
         },
         {
             id: '003',
-            lastdate: '2022/06/01',
-            vehicleid: '233',
-            type: 'oil change'
+            lastDate: '2022/06/01',
+            vehicleId: '233',
+            typeId: '03'
         },
         {
             id: '004',
-            lastdate: '2022/09/07',
-            vehicleid: '100',
-            type: 'oil change'
+            lastDate: '2022/09/07',
+            vehicleId: '100',
+            typeId: '01'
         },
         {
             id: '005',
-            lastdate: '2022/01/23',
-            vehicleid: '567',
-            type: 'oil change'
+            lastDate: '2022/01/23',
+            vehicleId: '567',
+            typeId: '01'
         },
         {
             id: '006',
-            lastdate: '2022/07/07',
-            vehicleid: '111',
-            type: 'oil change'
+            lastDate: '2022/07/07',
+            vehicleId: '111',
+            typeId: '02'
         },
         {
             id: '007',
-            lastdate: '2022/07/03',
-            vehicleid: '222',
-            type: 'oil change'
+            lastDate: '2022/07/03',
+            vehicleId: '222',
+            typeId: '03'
         },
         {
             id: '008',
-            lastdate: '2022/06/09',
-            vehicleid: '333',
-            type: 'oil change'
-        },
-        {
-            id: '009',
-            lastdate: '2022/06/10',
-            vehicleid: '444',
-            type: 'oil change'
-        },
-        {
-            id: '010',
-            lastdate: '2022/06/28',
-            vehicleid: '555',
-            type: 'oil change'
+            lastDate: '2022/06/09',
+            vehicleId: '333',
+            typeId: '02'
         }
     ]
 
