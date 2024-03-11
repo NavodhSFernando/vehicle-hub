@@ -1,5 +1,4 @@
 import React from 'react'
-import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 
@@ -14,16 +13,8 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'typeId',
-        header: 'Maintenance Type ID'
-    },
-    {
-        accessorKey: 'lastDate',
-        header: 'Last Maintenance Date'
-    },
-    {
-        accessorKey: 'vehicleId',
-        header: 'Vehicle ID'
+        accessorKey: 'name',
+        header: 'Name'
     },
     {
         accessorKey: 'actions',

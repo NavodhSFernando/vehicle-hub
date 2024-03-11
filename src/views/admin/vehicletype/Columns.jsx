@@ -14,16 +14,35 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'typeId',
-        header: 'Maintenance Type ID'
+        accessorKey: 'type',
+        header: 'Type'
     },
     {
-        accessorKey: 'lastDate',
-        header: 'Last Maintenance Date'
-    },
-    {
-        accessorKey: 'vehicleId',
-        header: 'Vehicle ID'
+        accessorKey: 'depositAmount',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Deposit Amount</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
+        cell: ({ row }) => {
+            const depositAmount = parseFloat(row.getValue('depositAmount'))
+
+            const formatted = new Intl.NumberFormat('lkr', {
+                style: 'currency',
+                currency: 'LKR'
+            }).format(depositAmount)
+
+            return <div className="font-normal">{formatted}</div>
+        }
     },
     {
         accessorKey: 'actions',

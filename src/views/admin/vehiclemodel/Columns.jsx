@@ -1,5 +1,4 @@
 import React from 'react'
-import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 
@@ -14,16 +13,30 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'typeId',
-        header: 'Maintenance Type ID'
+        accessorKey: 'model',
+        header: 'Model'
     },
     {
-        accessorKey: 'lastDate',
-        header: 'Last Maintenance Date'
+        accessorKey: 'year',
+        header: 'Year'
     },
     {
-        accessorKey: 'vehicleId',
-        header: 'Vehicle ID'
+        accessorKey: 'engineCapacity',
+        header: 'Engine Capacity',
+        cell: ({ row }) => {
+            const engineCapacity = row.getValue('engineCapacity')
+            const formattedEngineCapacity = `${engineCapacity}cc`
+
+            return <div className="font-normal">{formattedEngineCapacity}</div>
+        }
+    },
+    {
+        accessorKey: 'seatingCapacity',
+        header: 'Seating Capacity'
+    },
+    {
+        accessorKey: 'fuelType',
+        header: 'Fuel Type'
     },
     {
         accessorKey: 'actions',

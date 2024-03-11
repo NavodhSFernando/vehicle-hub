@@ -66,16 +66,6 @@ export const columns = [
         header: 'Chassis Number'
     },
     {
-        accessorKey: 'engineCapacity',
-        header: 'Engine Capacity',
-        cell: ({ row }) => {
-            const engineCapacity = row.getValue('engineCapacity')
-            const formattedEngineCapacity = `${engineCapacity}cc`
-
-            return <div className="font-normal">{formattedEngineCapacity}</div>
-        }
-    },
-    {
         accessorKey: 'costPerDay',
         header: ({ column }) => {
             return (

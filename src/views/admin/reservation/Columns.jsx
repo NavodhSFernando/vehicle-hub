@@ -5,11 +5,42 @@ import { GrEdit, GrTrash } from 'react-icons/gr'
 export const columns = [
     {
         accessorKey: 'id',
-        header: 'ID',
+        header: 'Reservation ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('id'))
-
+            const value = row.getValue('id') // Assuming ID does not need parseFloat
             return <div className="font-medium">{'#' + value}</div>
+        }
+    },
+    {
+        accessorKey: 'name',
+        header: 'Customer Name'
+    },
+    {
+        accessorKey: 'email',
+        header: 'Customer Email'
+    },
+    {
+        accessorKey: 'phone',
+        header: 'Customer Phone'
+    },
+    {
+        accessorKey: 'pickUpDate',
+        header: 'Pick up Date',
+        cell: ({ row }) => {
+            const value = row.getValue('pickUpDate')
+            // Format the date as needed, assuming it's in ISO format for simplicity
+            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            return <div>{formattedDate}</div>
+        }
+    },
+    {
+        accessorKey: 'dropOffDate',
+        header: 'Drop off Date',
+        cell: ({ row }) => {
+            const value = row.getValue('dropOffDate')
+            // Format the date as needed, assuming it's in ISO format for simplicity
+            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            return <div>{formattedDate}</div>
         }
     },
     {
@@ -28,7 +59,6 @@ export const columns = [
                 </div>
             )
         },
-
         cell: ({ row }) => {
             const status = row.getValue('status')
             let color = ''
@@ -59,50 +89,14 @@ export const columns = [
 
             return (
                 <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
-                    {/* <div className="mx-auto">{text}</div> */}
                     {text}
                 </div>
             )
         }
     },
     {
-        accessorKey: 'email',
-        header: 'Email'
-    },
-    {
-        accessorKey: 'amount',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center bg-yell">
-                    <div>Amount</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
-        cell: ({ row }) => {
-            const amount = parseFloat(row.getValue('amount'))
-
-            // Format the amount as a dollar amount
-            const formatted = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            }).format(amount)
-
-            return <div className="font-normal">{formatted}</div>
-        }
-    },
-    {
         accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
-
+        header: 'Actions',
         cell: () => {
             return (
                 <div className="flex items-center justify-end gap-2">

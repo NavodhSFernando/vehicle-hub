@@ -58,12 +58,6 @@ export default function CreateVehicle() {
                                     <Input placeholder="SV30-0169266" {...field} />
                                 </FormControl>
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Engine Capacity</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="1800CC" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className=" pb-3">Transmission</FormLabel>
                                 </div>
                                 <Select>

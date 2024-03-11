@@ -30,6 +30,14 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
+            <div className="flex items-center py-4">
+                <Input
+                    placeholder="Filter Registration Number..."
+                    value={table.getColumn('registrationNumber')?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn('registrationNumber')?.setFilterValue(event.target.value)}
+                    className="max-w-sm"
+                />
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

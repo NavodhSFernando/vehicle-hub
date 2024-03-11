@@ -5,64 +5,49 @@ import { columns } from './Columns'
 export default function ViewReservation() {
     const data = [
         {
-            id: '728ed52f',
-            amount: 100,
-            status: 'pending',
-            email: 'mobley@example.com'
+            id: '1001',
+            name: 'John Doe',
+            email: 'johndoe@example.com',
+            phone: '123-456-7890',
+            pickUpDate: '2024-03-20',
+            dropOffDate: '2024-03-25',
+            status: 'confirmed'
         },
         {
-            id: '1a2b3c4d',
-            amount: 200,
-            status: 'waiting',
-            email: 'norman@example.com'
+            id: '1002',
+            name: 'Jane Smith',
+            email: 'janesmith@example.com',
+            phone: '098-765-4321',
+            pickUpDate: '2024-04-10',
+            dropOffDate: '2024-04-15',
+            status: 'pending'
         },
         {
-            id: '5e6f7g8h',
-            amount: 300,
-            status: 'cancelled',
-            email: 'obbey@example.com'
+            id: '1003',
+            name: 'Michael Brown',
+            email: 'michaelbrown@example.com',
+            phone: '555-666-7777',
+            pickUpDate: '2024-05-05',
+            dropOffDate: '2024-05-10',
+            status: 'waiting'
         },
         {
-            id: '9i0j1k2l',
-            amount: 400,
-            status: 'pending',
-            email: 'peter@example.com'
+            id: '1004',
+            name: 'Emily Johnson',
+            email: 'emilyjohnson@example.com',
+            phone: '222-333-4444',
+            pickUpDate: '2024-06-15',
+            dropOffDate: '2024-06-20',
+            status: 'cancelled'
         },
         {
-            id: '3m4n5o6p',
-            amount: 500,
-            status: 'confirmed',
-            email: 'jeff@example.com'
-        },
-        {
-            id: '7q8r9s0t',
-            amount: 600,
-            status: 'cancelled',
-            email: 'rob@example.com'
-        },
-        {
-            id: '1u2v3w4x',
-            amount: 700,
-            status: 'pending',
-            email: 'sally@example.com'
-        },
-        {
-            id: '5y6z7a8b',
-            amount: 800,
-            status: 'confirmed',
-            email: 'tara@example.com'
-        },
-        {
-            id: '9c0d1e2f',
-            amount: 900,
-            status: 'cancelled',
-            email: 'sage@example.com'
-        },
-        {
-            id: '3g4h5i6j',
-            amount: 1000,
-            status: 'pending',
-            email: 'victor@example.com'
+            id: '1005',
+            name: 'David Wilson',
+            email: 'davidwilson@example.com',
+            phone: '777-888-9999',
+            pickUpDate: '2024-07-25',
+            dropOffDate: '2024-07-30',
+            status: 'confirmed'
         }
     ]
 
