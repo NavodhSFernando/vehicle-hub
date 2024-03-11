@@ -11,7 +11,7 @@ const RevenueReport = () => {
     { id: 5, type: "Balance Payment", amount: 1200, date: "2024-02-25" },
   ]);
 
-  // Filtered revenue data
+  // Filtered revenue data feedback
   const [filteredRevenueData, setFilteredRevenueData] = useState(revenueData);
 
   // Filter criteria state
@@ -21,20 +21,13 @@ const RevenueReport = () => {
 // Function to handle filtering
 const handleFilter = () => {
   let filteredData = revenueData;
-
-  // Apply date range filter
-  if (startDate !== "" && endDate !== "") {
-    filteredData = filteredData.filter(
-      (revenue) => revenue.date >= startDate && revenue.date <= endDate
-    );
-  } else if (startDate !== "") { // Apply start date filter
-    filteredData = filteredData.filter(
-      (revenue) => revenue.date <= startDate
-    );
-  } else if (endDate !== "") { // Apply end date filter
-    filteredData = filteredData.filter(
-      (revenue) => revenue.date <= endDate
-    );
+  
+  if (startDate && endDate) {
+    filteredData = revenueData.filter(revenue => revenue.date >= startDate && revenue.date <= endDate);
+  } else if (startDate) {
+    filteredData = revenueData.filter(revenue => revenue.date >= startDate);
+  } else if (endDate) {
+    filteredData = revenueData.filter(revenue => revenue.date <= endDate);
   }
 
   setFilteredRevenueData(filteredData);
@@ -91,14 +84,8 @@ const handleFilter = () => {
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold mb-4">Revenue Report</h1>
 
-      {/* Date Range Selector */}
-      <div className="mb-4">
-        <label
-          htmlFor="startDate"
-          className="block text-gray-700 font-bold mb-2"
-        >
-          Start Date:
-        </label>
+      <div className="mb-4" style={{ width: "45%" }}>
+        <label htmlFor="startDate" className="block text-gray-700 font-bold mb-2">Start Date:</label>
         <input
           type="date"
           id="startDate"
@@ -109,10 +96,8 @@ const handleFilter = () => {
         />
       </div>
 
-      <div className="mb-4">
-        <label htmlFor="endDate" className="block text-gray-700 font-bold mb-2">
-          End Date:
-        </label>
+      <div className="mb-4" style={{ width: "45%" }}>
+        <label htmlFor="endDate" className="block text-gray-700 font-bold mb-2">End Date:</label>
         <input
           type="date"
           id="endDate"
@@ -123,17 +108,12 @@ const handleFilter = () => {
         />
       </div>
 
-      {/* Filter Button */}
       <div className="mb-4">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          onClick={handleFilter}
-        >
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" onClick={handleFilter}>
           Filter
         </button>
       </div>
 
-      {/* Revenue Breakdown */}
       <div className="mb-4">
         <h2 className="text-xl font-bold mb-2">Revenue Breakdown</h2>
         <table className="w-full border-collapse border rounded-md">
@@ -145,7 +125,6 @@ const handleFilter = () => {
             </tr>
           </thead>
           <tbody>
-            {/* Render filtered revenue data */}
             {filteredRevenueData.map((revenue) => (
               <tr key={revenue.id}>
                 <td className="px-4 py-2">{revenue.type}</td>
@@ -153,7 +132,6 @@ const handleFilter = () => {
                 <td className="px-4 py-2">{revenue.date}</td>
               </tr>
             ))}
-            {/* Display total row */}
             <tr>
               <td className="px-4 py-2 font-bold">Total</td>
               <td className="px-4 py-2 font-bold">{getTotalAmount()}</td>
@@ -163,26 +141,17 @@ const handleFilter = () => {
         </table>
       </div>
 
-      {/* Export and Print buttons */}
       <div className="flex justify-center mt-4 space-x-4 export-print-buttons">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-          onClick={handleExportPDF}
-        >
+        <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600" onClick={handleExportPDF}>
           Export to PDF
         </button>
-        <button
-          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-          onClick={handlePrint}
-        >
+        <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" onClick={handlePrint}>
           Print
         </button>
       </div>
 
-      {/* CSS for print media */}
       <style jsx>{`
         @media print {
-          /* Hide export and print buttons */
           .export-print-buttons {
             display: none;
           }
