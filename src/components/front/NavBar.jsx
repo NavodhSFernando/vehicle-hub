@@ -9,8 +9,13 @@ import { IoNotifications } from 'react-icons/io5'
 import { FaUserCircle } from 'react-icons/fa'
 import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
+import NotificationDropdown from './NotificationDropDown'
 
 const Navbar = () => {
+    const [isDropdownOpen] = useState(true)
+    const handleNavigate = () => {
+        console.log('Navigating to all notifications view')
+    }
     const loggedIn = true
     const [clicked, setClicked] = useState(false)
     const handleClick = () => {
@@ -91,7 +96,11 @@ const Navbar = () => {
                             </div>
                             <div className="text-secondary cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
-                                    <IoNotifications fontSize={24} />
+                                    <NotificationDropdown
+                                        isOpen={isDropdownOpen}
+                                        setIsOpen={() => {}}
+                                        onNavigate={handleNavigate}
+                                    />
                                 ) : (
                                     <IoMdNotificationsOutline fontSize={24} />
                                 )}
