@@ -45,7 +45,7 @@ export default function CreateVehicleLog() {
                                     <FormLabel className="pb-3">Reservation ID</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="25000km" {...field} />
+                                    <Input placeholder="001" {...field} />
                                 </FormControl>
                                 <div className="flex flex-col space-y-1 pt-6">
                                     <FormLabel className="pb-3">End Milage</FormLabel>
