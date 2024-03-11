@@ -35,6 +35,8 @@ import ViewInsurance from './views/admin/insurance/ViewInsurance'
 import CreateInsurance from './views/admin/insurance/CreateInsurance'
 import Ongoingrentalssingle from './views/front/Ongoingrentalssingle'
 import Rentalhistorysingle from './views/front/Rentalhistorysingle'
+import Feedbackform from './views/front/Feedbackform'
+import NotificationCenter from './views/front/NotificationCenter'
 
 function App() {
     return (
@@ -42,13 +44,18 @@ function App() {
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
                     <Route index element={<Home />} />
-                    <Route path="account" element={<Account />} />
+                    <Route path="account" element={<Account />}>
+                        <Route path="ongoingrentalssingle" element={<Ongoingrentalssingle />} />
+                        <Route path="rentalhistorysingle" element={<Rentalhistorysingle />} />
+                        <Route path="notificationcenter" element={<NotificationCenter />} />
+                    </Route>
                 </Route>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
                 <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                 <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
+                <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
