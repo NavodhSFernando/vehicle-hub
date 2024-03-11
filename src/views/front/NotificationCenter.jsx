@@ -32,22 +32,15 @@ const notifications = [
     // ... add other notifications here
 ]
 
-function App() {
+export default function NotificationCenter() {
     return (
         <div className="flex justify-center items-start pt-10">
             <div className="w-full max-w-lg max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
-                <NotificationCenter />
+                <h2 className="text-xl font-semibold mb-4">Notifications</h2>
+                {notifications.map((notification) => (
+                    <NotificationCard key={notification.id} {...notification} />
+                ))}
             </div>
-        </div>
-    )
-}
-function NotificationCenter() {
-    return (
-        <div>
-            <h2 className="text-xl font-semibold mb-4">Notifications</h2>
-            {notifications.map((notification) => (
-                <NotificationCard key={notification.id} {...notification} />
-            ))}
         </div>
     )
 }
@@ -61,5 +54,3 @@ function NotificationCard({ title, description, time }) {
         </div>
     )
 }
-
-export default App

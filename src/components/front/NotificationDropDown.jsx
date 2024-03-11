@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 // Sample notifications data - might want to pass this as a prop as well
 const sampleNotifications = [
@@ -35,15 +36,17 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                     </div>
                 ))}
                 {/* 'View all' button */}
-                <button
-                    onClick={() => {
-                        onNavigate() // This should be a function passed as a prop for navigation
-                        setIsOpen(false)
-                    }}
-                    className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-gray-50"
-                >
-                    View all notifications
-                </button>
+                <Link to={'/account/notificationscenter'}>
+                    <button
+                        onClick={() => {
+                            onNavigate() // This should be a function passed as a prop for navigation
+                            setIsOpen(false)
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-gray-50"
+                    >
+                        View all notifications
+                    </button>
+                </Link>
             </div>
         )
     )
