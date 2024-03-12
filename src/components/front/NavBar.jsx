@@ -96,11 +96,14 @@ const Navbar = () => {
                             </div>
                             <div className="text-secondary cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
-                                    <NotificationDropdown
-                                        isOpen={isDropdownOpen}
-                                        setIsOpen={() => {}}
-                                        onNavigate={handleNavigate}
-                                    />
+                                    <>
+                                        <IoNotifications fontSize={24} />
+                                        <NotificationDropdown
+                                            isOpen={isDropdownOpen}
+                                            setIsOpen={() => {}}
+                                            onNavigate={handleNavigate}
+                                        />
+                                    </>
                                 ) : (
                                     <IoMdNotificationsOutline fontSize={24} />
                                 )}
