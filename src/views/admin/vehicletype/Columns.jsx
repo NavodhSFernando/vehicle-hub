@@ -21,7 +21,7 @@ export const columns = [
         accessorKey: 'depositAmount',
         header: ({ column }) => {
             return (
-                <div className="flex items-center bg-yell">
+                <div className="flex items-center w-fit">
                     <div>Deposit Amount</div>
                     <Button
                         variant="ghost"
@@ -46,7 +46,9 @@ export const columns = [
     },
     {
         accessorKey: 'actions',
-        header: 'Actions',
+        header: () => {
+            return <div className="text-end">Actions</div>
+        },
         cell: () => {
             return (
                 <div className="flex items-center justify-end gap-2">

@@ -51,11 +51,11 @@ export const columns = [
             switch (status) {
                 case 'yes':
                     color = 'bg-green-500'
-                    text = 'Yes'
+                    text = 'Active'
                     break
                 case 'no':
                     color = 'bg-red-500'
-                    text = 'No'
+                    text = 'Inactive'
                     break
                 default:
                     color = 'bg-gray-500'
