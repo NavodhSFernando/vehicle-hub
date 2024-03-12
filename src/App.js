@@ -23,8 +23,8 @@ import ViewMaintenanceType from './views/admin/maintenancetype/ViewMaintenanceTy
 import CreateMaintenanceType from './views/admin/maintenancetype/CreateMaintenanceType'
 import ViewAvailability from './views/admin/availability/ViewAvailability'
 import CreateAvailability from './views/admin/availability/CreateAvailability'
-import ViewUser from './views/admin/user/ViewUser'
-import CreateUser from './views/admin/user/CreateUser'
+import ViewEmployee from './views/admin/employee/ViewEmployee'
+import CreateEmployee from './views/admin/employee/CreateEmployee'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
 import FeedbackReport from './views/admin/reports/FeedbackReport'
 import RevenueReport from './views/admin/reports/RevenueReport'
@@ -95,9 +95,9 @@ function App() {
                         <Route path="view" element={<ViewMaintenanceType />} />
                         <Route path="create" element={<CreateMaintenanceType />} />
                     </Route>
-                    <Route path="user">
-                        <Route path="view" element={<ViewUser />} />
-                        <Route path="create" element={<CreateUser />} />
+                    <Route path="employee">
+                        <Route path="view" element={<ViewEmployee />} />
+                        <Route path="create" element={<CreateEmployee />} />
                     </Route>
                     <Route path="customer">
                         <Route path="view" element={<ViewCustomer />} />
