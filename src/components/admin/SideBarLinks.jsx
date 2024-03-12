@@ -208,21 +208,21 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
-        key: 'user',
-        label: 'User',
-        path: '/admin/user',
+        key: 'employee',
+        label: 'Employee',
+        path: '/admin/employee',
         icon: <RiStackLine />,
         subLinks: [
             {
-                key: 'view all user',
-                label: 'View All User',
-                path: '/admin/user/view',
+                key: 'view all employee',
+                label: 'View All Employee',
+                path: '/admin/employee/view',
                 icon: <LuDot />
             },
             {
-                key: 'create user',
-                label: 'Create User',
-                path: '/admin/user/create',
+                key: 'create employee',
+                label: 'Create Employee',
+                path: '/admin/employee/create',
                 icon: <LuDot />
             }
         ]
