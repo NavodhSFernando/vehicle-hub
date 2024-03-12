@@ -36,10 +36,6 @@ export default function CreateAvailability() {
                     name="username"
                     render={({ field }) => (
                         <FormItem>
-                            <h1 className="flex flex-col items-start font-bold text-gray-800 text-2xl pb-3 pt-3">
-                                Create Availability
-                            </h1>
-                            <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
                                 <div className="flex flex-col space-y-1 pt-4">
