@@ -5,7 +5,7 @@ import { GrEdit, GrTrash } from 'react-icons/gr'
 export const columns = [
     {
         accessorKey: 'id',
-        header: 'Reservation ID',
+        header: 'ID',
         cell: ({ row }) => {
             const value = parseFloat(row.getValue('id'))
 
@@ -13,7 +13,15 @@ export const columns = [
         }
     },
     {
+        accessorKey: 'reservationId',
+        header: 'Reservation ID'
+    },
+    {
         accessorKey: 'endmilage',
         header: 'End Milage'
+    },
+    {
+        accessorKey: 'vehicleStatus',
+        header: 'Vehicle Status'
     }
 ]

@@ -53,6 +53,18 @@ export default function CreateVehicleLog() {
                                 <FormControl>
                                     <Input placeholder="25000km" {...field} />
                                 </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className=" pb-3">Status</FormLabel>
+                                </div>
+                                <Select>
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue placeholder="Select Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="001">Active</SelectItem>
+                                        <SelectItem value="002">Inactive</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
                                 <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">

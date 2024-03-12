@@ -6,23 +6,33 @@ export default function ViewUser() {
     const data = [
         {
             id: '001',
-            endmilage: '25000km'
+            reservationId: '001',
+            endmilage: '4560km',
+            vehicleStatus: 'Active'
         },
         {
-            id: '001',
-            endmilage: '25000km'
+            id: '002',
+            reservationId: '002',
+            endmilage: '25000km',
+            vehicleStatus: 'Inactive'
         },
         {
-            id: '001',
-            endmilage: '25000km'
+            id: '003',
+            reservationId: '003',
+            endmilage: '23200km',
+            vehicleStatus: 'Active'
         },
         {
-            id: '001',
-            endmilage: '25000km'
+            id: '004',
+            reservationId: '004',
+            endmilage: '2400km',
+            vehicleStatus: 'Active'
         },
         {
-            id: '001',
-            endmilage: '25000km'
+            id: '005',
+            reservationId: '005',
+            endmilage: '12000km',
+            vehicleStatus: 'Active'
         }
     ]
 
