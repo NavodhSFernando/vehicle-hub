@@ -3,7 +3,7 @@ import React from 'react'
 export default function FeedbackForm() {
     return (
         <div className="flex items-center justify-center w-full min-h-screen bg-gray-300">
-            <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-auto pt-10 pb-10 pl-14 pr-20">
+            <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-auto pt-10 pb-10 pl-20 pr-20">
                 {/* For demonstration purposes, the close button is just a console log. */}
                 <button
                     onClick={() => console.log('Close the form')}
