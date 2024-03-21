@@ -37,6 +37,7 @@ import Ongoingrentalssingle from './views/front/Ongoingrentalssingle'
 import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
 
 function App() {
     return (
@@ -59,7 +60,7 @@ function App() {
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
-                        <Route path="feedbackreport" element={<FeedbackReport />} />
+                        <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<RevenueReport />} />
                         <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
                     </Route>
