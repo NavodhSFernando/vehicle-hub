@@ -7,7 +7,9 @@ export default function Layout() {
     return (
         <>
             <NavBar />
-            <Outlet />
+            <div className="flex flex-col w-screen h-screen overflow-y-auto">
+                <Outlet />
+            </div>
             <Footer />
         </>
     )
