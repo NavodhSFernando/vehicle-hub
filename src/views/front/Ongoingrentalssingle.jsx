@@ -9,7 +9,7 @@ function Ongoingrentalssingle() {
         setRating(value)
     }
     return (
-        <div className="relative w-full min-h-screen bg-gray-300  flex-col flex justify-center items-center">
+        <div className="relative w-full min-h-screen bg-gray-300 flex-col flex justify-center items-center">
             <div className="flex flex-col w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl bg-white rounded-xl shadow-lg mt-8 mb-1 ">
                 <div className="m-20">
                     <h3 className="pb-6 text-l text-gray-950 font-semibold">Rental Summary</h3>
