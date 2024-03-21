@@ -31,7 +31,7 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="flex flex-col items-center my-8">
+            <div className="flex flex-row items-center my-8">
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
                     <Label>Reservation Date Range</Label>
                     <Input
@@ -51,15 +51,9 @@ export default function DataTable({ columns, data }) {
                         className="max-w-lg"
                     />
                 </div>
-                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>ID</Label>
-                    <Input
-                        placeholder="Filter by ID"
-                        value={table.getColumn('id')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('id')?.setFilterValue(event.target.value)}
-                        className="max-w-lg"
-                    />
                 </div>
+                <div className="flex flex-row items-center my-8">
+                
 
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
                     <Label>Vehicle</Label>
