@@ -34,9 +34,10 @@ export default function DataTable({ columns, data }) {
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
                     <Label>Reservation Date Range</Label>
                     <Input
+                        type="date"
                         placeholder="Filter date range"
-                        value={table.getColumn('email')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+                        value={table.getColumn('pickUpDate')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('pickUpDate')?.setFilterValue(event.target.value)}
                         className="max-w-lg"
                     />
                 </div>
