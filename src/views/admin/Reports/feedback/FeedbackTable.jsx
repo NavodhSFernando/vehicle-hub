@@ -1,5 +1,5 @@
+// DataTable Component
 import React from 'react'
-
 import {
     ColumnDef,
     flexRender,
@@ -11,34 +11,63 @@ import {
 import { Input } from '../../../../components/ui/input'
 import { Label } from '../../../../components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../components/ui/table'
-import { date } from 'zod'
 
 export default function DataTable({ columns, data }) {
-    const [columnFilters, setColumnFilters] = React.useState([])
-    const [sorting, setSorting] = React.useState([])
+    const [startDate, setStartDate] = React.useState('')
+    const [endDate, setEndDate] = React.useState('')
 
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        onSortingChange: setSorting,
-        getSortedRowModel: getSortedRowModel(),
-        state: {
-            sorting
-        }
+        getSortedRowModel: getSortedRowModel()
     })
+
+    const handleStartDateChange = (event) => {
+        setStartDate(event.target.value)
+    }
+
+    const handleEndDateChange = (event) => {
+        setEndDate(event.target.value)
+    }
+
+    const filterDataByDateRange = (date) => {
+        if (!startDate || !endDate) return true // If either start date or end date is not set, don't filter
+        const selectedDate = new Date(date)
+        const filterStartDate = new Date(startDate)
+        const filterEndDate = new Date(endDate)
+        return selectedDate >= filterStartDate && selectedDate <= filterEndDate
+    }
 
     return (
         <div>
             <div className="flex flex-row items-center my-8">
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Reservation Date Range</Label>
+                    <Label>Start Date</Label>
+                    <Input type="date" value={startDate} onChange={handleStartDateChange} className="max-w-lg" />
+                </div>
+                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
+                    <Label>End Date</Label>
+                    <Input type="date" value={endDate} onChange={handleEndDateChange} className="max-w-lg" />
+                </div>
+            </div>
+            <div>
+                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
+                    <Label>Vehicle</Label>
                     <Input
-                        type="date"
-                        placeholder="Filter date range"
-                        value={table.getColumn('date')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('date')?.setFilterValue(event.target.value)}
+                        placeholder="Filter Vehicle name"
+                        value={table.getColumn('vehicle')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('vehicle')?.setFilterValue(event.target.value)}
+                        className="max-w-lg"
+                    />
+                </div>
+                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
+                    <Label>Rating</Label>
+                    <Input
+                        placeholder="Enter Rating No"
+                        value={table.getColumn('rating')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('rating')?.setFilterValue(event.target.value)}
                         className="max-w-lg"
                     />
                 </div>
@@ -51,51 +80,28 @@ export default function DataTable({ columns, data }) {
                         className="max-w-lg"
                     />
                 </div>
-                </div>
-                <div className="flex flex-row items-center my-8">
-                
-
-                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Vehicle</Label>
-                    <Input
-                        placeholder="Filter Vehicle name"
-                        value={table.getColumn('vehicle')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('vehicle')?.setFilterValue(event.target.value)}
-                        className="max-w-lg"
-                    />
-                </div>
-
-                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Rating</Label>
-                    <Input
-                        placeholder="Enter Rating No"
-                        value={table.getColumn('rating')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('rating')?.setFilterValue(event.target.value)}
-                        className="max-w-lg"
-                    />
-                </div>
             </div>
-
+            
             <div className="rounded-md border" id="table-container">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(header.column.columnDef.header, header.getContext())}
-                                        </TableHead>
-                                    )
-                                })}
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead className="py-1 px-5" key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
+                        {table
+                            .getRowModel()
+                            .rows?.filter((row) => filterDataByDateRange(row.original.date))
+                            .map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell className="py-5 px-5" key={cell.id}>
@@ -103,14 +109,7 @@ export default function DataTable({ columns, data }) {
                                         </TableCell>
                                     ))}
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
+                            ))}
                     </TableBody>
                 </Table>
             </div>

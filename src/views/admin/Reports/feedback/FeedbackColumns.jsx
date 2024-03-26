@@ -1,4 +1,3 @@
-// FeedbackColumns.js
 import React from 'react';
 import { FaUpDown, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { Button } from '../../../../components/ui/button';
@@ -31,5 +30,4 @@ export const feedbackColumns = [
     accessorKey: 'vehicle',
     header: 'Vehicle',
   },
-  
 ];
