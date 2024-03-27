@@ -20,7 +20,7 @@ export default function ViewRevenueReport() {
     }
 
     function downloadPDF() {
-        const input = document.getElementById('feedback-report-container') // Ensure this targets the table specifically
+        const input = document.getElementById('reveune-report-container') // Ensure this targets the table specifically
         html2canvas(input).then((canvas) => {
             const imgData = canvas.toDataURL('image/png')
             const pdf = new jsPDF({
@@ -30,7 +30,7 @@ export default function ViewRevenueReport() {
             const pdfWidth = pdf.internal.pageSize.getWidth()
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-            pdf.save('feedback-report.pdf')
+            pdf.save('reveune-report.pdf')
         })
     }
 
@@ -38,7 +38,7 @@ export default function ViewRevenueReport() {
         <>
             <div className="flex flex-col p-6 bg-white rounded-lg">
                 {/* Ensure the container ID is correct for the PDF capture */}
-                <div id="feedback-report-container">
+                <div id="reveune-report-container">
                     <RevenueTable columns={revenueColumns} data={revenueData} />
                 </div>
                 <div className="flex mt-4">
