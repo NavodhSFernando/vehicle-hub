@@ -39,6 +39,7 @@ import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
 import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
                     <Route path="report">
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<ViewRevenueReport />} />
-                        <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
+                        <Route path="vehicleutilizationreport" element={<ViewVehicleUtilizationReport />} />
                     </Route>
                     <Route path="reservation">
                         <Route path="view" element={<ViewReservation />} />
