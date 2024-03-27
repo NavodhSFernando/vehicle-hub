@@ -38,6 +38,7 @@ import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
 
 
 function App() {
@@ -62,7 +63,7 @@ function App() {
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
-                        <Route path="revenuereport" element={<RevenueReport />} />
+                        <Route path="revenuereport" element={<ViewRevenueReport />} />
                         <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
                     </Route>
                     <Route path="reservation">
