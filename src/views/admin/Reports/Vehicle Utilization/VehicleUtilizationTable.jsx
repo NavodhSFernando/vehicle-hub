@@ -63,7 +63,7 @@ export default function DataTable({ columns, data }) {
                     />
                 </div>
             </div>
-            
+
             <div className="rounded-md border" id="table-container">
                 <Table>
                     <TableHeader>
@@ -82,7 +82,7 @@ export default function DataTable({ columns, data }) {
                     <TableBody>
                         {table
                             .getRowModel()
-                            .rows?.filter((row) => filterDataByDateRange(row.original.date))
+                            .rows?.filter((row) => filterDataByDateRange(row.original.startDate)) // Corrected 'date' to 'startDate'
                             .map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
