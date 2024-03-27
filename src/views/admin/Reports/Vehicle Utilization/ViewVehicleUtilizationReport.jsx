@@ -6,7 +6,12 @@ import html2canvas from 'html2canvas'
 
 export default function ViewVehicleUtilizationReport() {
     const utilizationData = [
-        
+        { vehicleNo: 'ABC123', startDate: '2024-03-01', endDate: '2024-03-05', mileage: 300, reservationId: 'RES001' },
+        { vehicleNo: 'XYZ789', startDate: '2024-03-02', endDate: '2024-03-06', mileage: 250, reservationId: 'RES002' },
+        { vehicleNo: 'DEF456', startDate: '2024-03-03', endDate: '2024-03-07', mileage: 400, reservationId: 'RES003' },
+        { vehicleNo: 'GHI789', startDate: '2024-03-04', endDate: '2024-03-08', mileage: 350, reservationId: 'RES004' },
+        { vehicleNo: 'JKL012', startDate: '2024-03-05', endDate: '2024-03-09', mileage: 280, reservationId: 'RES005' },
+        { vehicleNo: 'MNO345', startDate: '2024-03-06', endDate: '2024-03-10', mileage: 320, reservationId: 'RES006' }
     ]
 
     function handlePrint() {
