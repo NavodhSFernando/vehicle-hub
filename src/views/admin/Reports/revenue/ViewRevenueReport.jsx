@@ -6,8 +6,14 @@ import html2canvas from 'html2canvas'
 
 export default function ViewRevenueReport() {
     const revenueData = [
-        
-    ]
+        { id: 1, type: 'Balance Payment', amount: 1000, date: new Date(2024, 2, 15) },
+        { id: 2, type: 'Deposit Payment', amount: 1500, date: new Date(2024, 2, 16) },
+        { id: 3, type: 'Balance Payment', amount: 800, date: new Date(2024, 2, 17) },
+        { id: 4, type: 'Deposit Payment', amount: 2000, date: new Date(2024, 2, 18) },
+        { id: 5, type: 'Balance Payment', amount: 1200, date: new Date(2024, 2, 19) },
+        { id: 6, type: 'Deposit Payment', amount: 1700, date: new Date(2024, 2, 20) },
+        // Add more data as needed
+    ];
 
     function handlePrint() {
         window.print()
