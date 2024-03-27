@@ -1,5 +1,4 @@
-// DataTable Component
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import {
     ColumnDef,
     flexRender,
@@ -7,14 +6,15 @@ import {
     useReactTable,
     getFilteredRowModel,
     getSortedRowModel
-} from '@tanstack/react-table'
-import { Input } from '../../../../components/ui/input'
-import { Label } from '../../../../components/ui/label'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../components/ui/table'
+} from '@tanstack/react-table';
+import { Input } from '../../../../components/ui/input';
+import { Label } from '../../../../components/ui/label';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../../components/ui/table';
 
 export default function DataTable({ columns, data }) {
-    const [startDate, setStartDate] = React.useState('')
-    const [endDate, setEndDate] = React.useState('')
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [totalRevenue, setTotalRevenue] = useState(0);
 
     const table = useReactTable({
         data,
@@ -22,23 +22,35 @@ export default function DataTable({ columns, data }) {
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel()
-    })
+    });
+
+    useEffect(() => {
+        // Calculate total revenue whenever data or date range changes
+        let total = 0;
+        data.forEach((item) => {
+            const date = new Date(item.date);
+            if ((!startDate || !endDate || (date >= new Date(startDate) && date <= new Date(endDate)))) {
+                total += item.amount;
+            }
+        });
+        setTotalRevenue(total);
+    }, [data, startDate, endDate]);
 
     const handleStartDateChange = (event) => {
-        setStartDate(event.target.value)
-    }
+        setStartDate(event.target.value);
+    };
 
     const handleEndDateChange = (event) => {
-        setEndDate(event.target.value)
-    }
+        setEndDate(event.target.value);
+    };
 
     const filterDataByDateRange = (date) => {
-        if (!startDate || !endDate) return true // If either start date or end date is not set, don't filter
-        const selectedDate = new Date(date)
-        const filterStartDate = new Date(startDate)
-        const filterEndDate = new Date(endDate)
-        return selectedDate >= filterStartDate && selectedDate <= filterEndDate
-    }
+        if (!startDate || !endDate) return true;
+        const selectedDate = new Date(date);
+        const filterStartDate = new Date(startDate);
+        const filterEndDate = new Date(endDate);
+        return selectedDate >= filterStartDate && selectedDate <= filterEndDate;
+    };
 
     return (
         <div>
@@ -52,7 +64,6 @@ export default function DataTable({ columns, data }) {
                     <Input type="date" value={endDate} onChange={handleEndDateChange} className="max-w-lg" />
                 </div>
             </div>
-            
             
             <div className="rounded-md border" id="table-container">
                 <Table>
@@ -83,8 +94,13 @@ export default function DataTable({ columns, data }) {
                                 </TableRow>
                             ))}
                     </TableBody>
+                    <tfoot>
+                        <TableRow>
+                            <TableCell colSpan={columns.length}>Total Revenue: ${totalRevenue}</TableCell>
+                        </TableRow>
+                    </tfoot>
                 </Table>
             </div>
         </div>
-    )
+    );
 }

@@ -20,18 +20,24 @@ export default function ViewRevenueReport() {
     }
 
     function downloadPDF() {
-        const input = document.getElementById('reveune-report-container') // Ensure this targets the table specifically
-        html2canvas(input).then((canvas) => {
-            const imgData = canvas.toDataURL('image/png')
+        const input = document.getElementById('reveune-report-table'); // Target only the table
+        const title = document.getElementById('report-heading').innerText; // Get the report heading
+
+        html2canvas(input, { scrollY: -window.scrollY }).then((canvas) => { // Ensure capturing the entire table
+            const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF({
                 orientation: 'landscape'
-            })
-            const imgProps = pdf.getImageProperties(imgData)
-            const pdfWidth = pdf.internal.pageSize.getWidth()
-            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-            pdf.save('reveune-report.pdf')
-        })
+            });
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+            // Add title to the PDF
+            pdf.text(title, 10, 10);
+
+            pdf.save('reveune-report.pdf');
+        });
     }
 
     return (
@@ -39,7 +45,10 @@ export default function ViewRevenueReport() {
             <div className="flex flex-col p-6 bg-white rounded-lg">
                 {/* Ensure the container ID is correct for the PDF capture */}
                 <div id="reveune-report-container">
-                    <RevenueTable columns={revenueColumns} data={revenueData} />
+                    <h2 id="report-heading">Revenue Report</h2> {/* Add the report heading */}
+                    <div id="reveune-report-table">
+                        <RevenueTable columns={revenueColumns} data={revenueData} />
+                    </div>
                 </div>
                 <div className="flex mt-4">
                     <button
@@ -57,5 +66,5 @@ export default function ViewRevenueReport() {
                 </div>
             </div>
         </>
-    )
+    );
 }
