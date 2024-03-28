@@ -29,7 +29,7 @@ export default function ViewVehicleUtilizationReport() {
             const pdfWidth = pdf.internal.pageSize.getWidth()
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-            pdf.save('feedback-report.pdf')
+            pdf.save('vehicle_Utilization-report.pdf')
         })
     }
 
