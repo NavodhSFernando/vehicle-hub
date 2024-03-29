@@ -10,6 +10,8 @@ import { FaUserCircle } from 'react-icons/fa'
 import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
+import WishlistDropdown from './WishlistDropDown'
+import NotificationCenter from '../../views/front/NotificationCenter'
 
 const Navbar = () => {
     const [isDropdownOpen] = useState(true)
@@ -92,8 +94,20 @@ const Navbar = () => {
                     ) : (
                         <div className="flex gap-16">
                             <div className="text-secondary cursor-pointer" onClick={handleClick}>
-                                {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
+                                {clicked ? (
+                                    <>
+                                        <BsBookmarkStarFill fontSize={24} />
+                                        <WishlistDropdown
+                                            isOpen={isDropdownOpen}
+                                            setIsOpen={() => {}}
+                                            onNavigate={handleNavigate}
+                                        />
+                                    </>
+                                ) : (
+                                    <BsBookmarkStar fontSize={24} />
+                                )}
                             </div>
+
                             <div className="text-secondary cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
                                     <>
@@ -108,7 +122,7 @@ const Navbar = () => {
                                     <IoMdNotificationsOutline fontSize={24} />
                                 )}
                             </div>
-                            <NavLink to="/account">
+                            <NavLink to="/account/notificationcenter">
                                 <div className="text-secondary cursor-pointer" onClick={handleLogged}>
                                     {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
                                 </div>

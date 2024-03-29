@@ -1,4 +1,5 @@
 import React from 'react'
+import NotificationCenter from '../../views/front/NotificationCenter'
 import { Link } from 'react-router-dom'
 
 // Sample notifications data - might want to pass this as a prop as well
@@ -37,7 +38,7 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                     </div>
                 ))}
                 {/* 'View all' button */}
-                <Link to={'account/notificationcenter'}>
+                <Link to={'notificationcent'}>
                     <button
                         onClick={() => {
                             onNavigate() // This should be a function passed as a prop for navigation
