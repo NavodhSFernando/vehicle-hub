@@ -36,7 +36,7 @@ export default function BookNowCard({ key, name, type, year, transmission, capac
                     <p className="text-sm opacity-50">{year}</p>
                 </span>
                 <span className="flex gap-1 items-center">
-                    <RiSteering2Fill fontSize={20} style={{ stroke: '#90A3BF' }} />
+                    <RiSteering2Fill fontSize={20} style={{ color: '#90A3BF' }} />
                     <p className="text-sm opacity-50">{transmission}</p>
                 </span>
                 <span className="flex gap-1 items-center">

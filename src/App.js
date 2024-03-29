@@ -37,6 +37,11 @@ import Ongoingrentalssingle from './views/front/Ongoingrentalssingle'
 import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
+import VehicleFleetSingle from './components/front/VehicleFleetingle/VehicleFleetSingle'
+import VehicleFleet from './components/front/VehicleFleet'
+import OngoingRental from './views/front/OngoingRental/ViewOngoingRental'
+import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
+import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
 
 function App() {
     return (
@@ -50,6 +55,10 @@ function App() {
                         <Route path="notificationcenter" element={<NotificationCenter />} />
                     </Route>
                 </Route>
+                <Route path="/ViewRentalHistory" element={<ViewRentalHistory />} />
+                <Route path="/ViewOngoingRental" element={<ViewOngoingRental />} />
+                <Route path="/vehiclefleetsingle" element={<VehicleFleetSingle />} />
+                <Route path="/vehiclefleet" element={<VehicleFleet />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />

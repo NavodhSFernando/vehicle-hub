@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs'
 import { CiCalendar } from 'react-icons/ci'
 import { FaRegClock } from 'react-icons/fa'
+import { Button } from '../../ui/button'
 
 export default function VehicleFleetSingle() {
     const [clicked, setClicked] = useState(false)
@@ -32,20 +33,19 @@ export default function VehicleFleetSingle() {
                 </div>
             </div>
             <div className="flex flex-col">
-                <h1 className="text-blue-400 text-xs">SPECIFICATION</h1>
+                <h1 className="text-blue-400 text-sm font-bold">SPECIFICATION</h1>
                 {specifications.map((spec, index) => (
                     <div key={index} className="flex justify-between pb-2">
-                        <span className="flex gap-1 items-center text-gray-500">
+                        <span className="flex gap-1 items-center text-gray-500 ">
                             {spec.label}
-                            <p className="text-sm opacity-50 text-blue-900">{spec.value}</p>
+                            <p className="text-sm opacity-50 text-blue-900 font-bold">{spec.value}</p>
                         </span>
                     </div>
                 ))}
                 <div className="mt-10">
                     <div className="flex flex-col">
-                        <h1 className="text-blue-400 text-xs">RENTAL INFO</h1>
+                        <h1 className="text-blue-400 text-sm font-bold">RENTAL INFO</h1>
                         <div className="flex flex-col gap-4">
-                            {/* Pick-up Info Block */}
                             <div className="flex items-center gap-2 p-2 shadow-lg rounded-md">
                                 <CiCalendar strokeWidth={1} fontSize={24} className="text-[#283280]" />
                                 <div className="flex flex-col w-fit">
@@ -55,7 +55,6 @@ export default function VehicleFleetSingle() {
                                     <p>10 June 2023</p>
                                 </div>
 
-                                {/* Vertical Line Separator */}
                                 <div className="bg-gray-300 w-px h-6 mx-2"></div>
 
                                 <FaRegClock strokeWidth={1} fontSize={22} className="text-[#283280]" />
@@ -67,7 +66,6 @@ export default function VehicleFleetSingle() {
                                 </div>
                             </div>
 
-                            {/* Drop-off Info Block - On a new line */}
                             <div className="flex items-center gap-2 p-2 shadow-lg rounded-md">
                                 <CiCalendar strokeWidth={1} fontSize={24} className="text-[#283280]" />
                                 <div className="flex flex-col w-fit">
@@ -77,7 +75,6 @@ export default function VehicleFleetSingle() {
                                     <p>10 June 2023</p>
                                 </div>
 
-                                {/* Vertical Line Separator */}
                                 <div className="bg-gray-300 w-px h-6 mx-2"></div>
 
                                 <FaRegClock strokeWidth={1} fontSize={22} className="text-[#283280]" />
@@ -92,12 +89,20 @@ export default function VehicleFleetSingle() {
                     </div>
                     <div className="mt-10">
                         <div className="flex flex-col">
-                            <h1 className="text-blue-400 text-xs">RATES</h1>
+                            <h1 className="text-blue-400 text-sm font-bold">RATES</h1>
                             <div className="flex gap-4">
                                 <h1 className="text-blue-950 font-bold text-2xl">Rs 10,000.00/</h1>
                                 <h1 className="text-gray-500 mt-2 font-bold">day</h1>
                             </div>
                             <hr className="mt-3 border-t-1 border-black" />
+                            <br></br>
+                            <div className="bg-white text-blue-950  font-bold p-4 rounded-xl border-2 border-blue-950 w-24 h-15 m-0 ">
+                                100 KM
+                            </div>
+                            <br></br>
+                            <div className="bg-white text-blue-950 font-bold p-4 rounded-xl border-2 border-blue-950 w-24 h-15 ">
+                                RS 120
+                            </div>
                         </div>
                     </div>
                 </div>
