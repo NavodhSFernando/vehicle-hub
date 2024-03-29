@@ -55,8 +55,8 @@ const FilterCard = () => {
 
     return (
         <div
-            className="relative flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow"
-            style={{ width: '357px', height: '489px', top: '158px', left: '250px' }}
+            className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow"
+            style={{ width: '357px', height: '489px' }}
         >
             {/* Vehicle Type Dropdown */}
             <div className="mb-4 flex flex-col items-start gap-7">

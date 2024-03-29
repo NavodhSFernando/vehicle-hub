@@ -36,9 +36,9 @@ export default function NotificationCenter() {
     // This is the main container for the notifications center. It centers the child div on the page
     // and starts the content at the top. There is padding at the top to push the content down.
     return (
-        <div className="flex justify-center items-start pt-20 pb-10">
+        <div className="flex justify-center items-start pb-10">
             {/* A scrollable div container that will contain the notifications. */}
-            <div className="w-full max-w-lg max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
+            <div className="w-full max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
                 <h2 className="text-xl font-semibold mb-4">Notifications</h2>
                 {/* Mapping through the notifications array to render each notification. */}
                 {/* The NotificationCard component is called for each notification, passing the notification details as props. */}
@@ -55,7 +55,7 @@ export default function NotificationCenter() {
 function NotificationCard({ title, description, time }) {
     return (
         // Each notification card has a light gray background, padding, shadow for depth, rounded corners, and a bottom margin.
-        <div className="bg-gray-100 p-4 shadow rounded-lg mb-4">
+        <div className="bg-gray-100 p-4 shadow rounded-lg mb-4 mx-20">
             <div className="font-bold text-lg">{title}</div>
             <div className="text-gray-700">{description}</div>
             {/* styled to be less prominent than the title */}

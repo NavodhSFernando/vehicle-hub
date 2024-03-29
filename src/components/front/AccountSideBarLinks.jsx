@@ -2,7 +2,7 @@ export const ACCOUNT_SIDEBAR_LINKS = [
     {
         key: 'account details',
         label: 'Account Details',
-        path: '/account/accountdetails'
+        path: '/account/viewprofile'
     },
     {
         key: 'ongoing rentals',
@@ -22,7 +22,7 @@ export const ACCOUNT_SIDEBAR_LINKS = [
     {
         key: 'notifications',
         label: 'Notifications',
-        path: '/account/notifications'
+        path: '/account/notificationcenter'
     },
     {
         key: 'log out',
