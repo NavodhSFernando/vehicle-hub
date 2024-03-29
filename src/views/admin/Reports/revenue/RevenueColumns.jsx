@@ -2,32 +2,23 @@ import React from 'react';
 import { FaUpDown, FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { Button } from '../../../../components/ui/button';
 
-export const feedbackColumns = [
+export const revenueColumns = [
   {
     accessorKey: 'id',
-    header: 'Feedback ID',
+    header: 'Revenue ID',
     cell: ({ row }) => <div className="font-medium">{'#' + row.original.id}</div>,
   },
   {
-    accessorKey: 'content',
-    header: 'Content',
+    accessorKey: 'type',
+    header: 'Type',
   },
   {
-    accessorKey: 'rating',
-    header: 'Rating',
-    cell: ({ row }) => <div>{'⭐'.repeat(row.original.rating)}</div>, // Display stars based on rating value
+    accessorKey: 'amount',
+    header: 'Amount',
   },
   {
     accessorKey: 'date',
     header: 'Date',
     cell: ({ row }) => <div>{new Date(row.original.date).toLocaleDateString()}</div>,
-  },
-  {
-    accessorKey: 'customer',
-    header: 'Customer',
-  },
-  {
-    accessorKey: 'vehicle',
-    header: 'Vehicle',
   },
 ];

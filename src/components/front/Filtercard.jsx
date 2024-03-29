@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-//Arrays for vehicleTypes, vehicleMakes, and vehicleCapacities
+// Predefined arrays containing options for vehicle types, makes, and capacities.
+
 const vehicleTypes = [
     { id: 'all', name: 'All Vehicle Types' },
     { id: 'sedan', name: 'Sedan' },
@@ -27,11 +28,15 @@ const vehicleCapacities = [
 ]
 
 const FilterCard = () => {
+    // State hooks for each filter category and max price, initialized with default values.
+    //  State is used here to keep track of the user's selections and to react to changes.
     const [vehicleType, setVehicleType] = useState('all')
     const [vehicleMake, setVehicleMake] = useState('all')
     const [vehicleCapacity, setVehicleCapacity] = useState('all')
     const [maxPrice, setMaxPrice] = useState(10000)
 
+    // Event handlers for each filter category. These update the state when the user selects a new option.
+    // The 'event' object provides access to the new value of the input element.
     const handleTypeChange = (event) => {
         setVehicleType(event.target.value)
     }

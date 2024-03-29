@@ -54,34 +54,16 @@ export default function DataTable({ columns, data }) {
             </div>
             <div>
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Vehicle</Label>
+                    <Label>Vehicle No</Label>
                     <Input
-                        placeholder="Filter Vehicle name"
-                        value={table.getColumn('vehicle')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('vehicle')?.setFilterValue(event.target.value)}
-                        className="max-w-lg"
-                    />
-                </div>
-                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Rating</Label>
-                    <Input
-                        placeholder="Enter Rating No"
-                        value={table.getColumn('rating')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('rating')?.setFilterValue(event.target.value)}
-                        className="max-w-lg"
-                    />
-                </div>
-                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Customer Name</Label>
-                    <Input
-                        placeholder="Filter customer name"
-                        value={table.getColumn('customer')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('customer')?.setFilterValue(event.target.value)}
+                        placeholder="Enter Vehicle Number"
+                        value={table.getColumn('vehicleNo')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('vehicleNo')?.setFilterValue(event.target.value)}
                         className="max-w-lg"
                     />
                 </div>
             </div>
-            
+
             <div className="rounded-md border" id="table-container">
                 <Table>
                     <TableHeader>
@@ -100,7 +82,7 @@ export default function DataTable({ columns, data }) {
                     <TableBody>
                         {table
                             .getRowModel()
-                            .rows?.filter((row) => filterDataByDateRange(row.original.date))
+                            .rows?.filter((row) => filterDataByDateRange(row.original.startDate)) // Corrected 'date' to 'startDate'
                             .map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (

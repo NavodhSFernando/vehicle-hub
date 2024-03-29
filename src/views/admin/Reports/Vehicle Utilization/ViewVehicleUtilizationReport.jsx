@@ -1,52 +1,17 @@
 import React from 'react'
-import FeedbackTable from './FeedbackTable'
-import { feedbackColumns } from './FeedbackColumns'
+import VehicleUtilizationTable from './VehicleUtilizationTable'
+import { vehicleUtilizationColumns } from './VehicleUtilizationColumns'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 
-export default function ViewFeedbackReport() {
-    const feedbackData = [
-        {
-            id: 1,
-            content: 'Great service!',
-            rating: 3.5,
-            date: '2024-03-20',
-            customer: 'John Doe',
-            vehicle: 'Car'
-        },
-        {
-            id: 2,
-            content: 'The wait time was longer than expected.',
-            rating: 2,
-            date: '2024-03-18',
-            customer: 'Jane Smith',
-            vehicle: 'Car'
-        },
-        {
-            id: 3,
-            content: 'Friendly staff and clean facilities.',
-            rating: 4.5,
-            date: '2024-03-15',
-            customer: 'Michael Brown',
-            vehicle: 'Motorcycle'
-        },
-        {
-            id: 4,
-            content: 'Excellent work on the repair, but a bit pricey.',
-            rating: 4,
-            date: '2024-03-10',
-            customer: 'Linda Garcia',
-            vehicle: 'Truck'
-        },
-        {
-            id: 5,
-            content: 'Very satisfied with the service.',
-            rating: 5,
-            date: '2024-03-08',
-            customer: 'Robert Johnson',
-            vehicle: 'Convertible'
-        }
-        // Add more feedback items as needed
+export default function ViewVehicleUtilizationReport() {
+    const utilizationData = [
+        { vehicleNo: 'ABC123', startDate: '2024-03-01', endDate: '2024-03-05', mileage: 300, reservationId: 'RES001' },
+        { vehicleNo: 'XYZ789', startDate: '2024-03-02', endDate: '2024-03-06', mileage: 250, reservationId: 'RES002' },
+        { vehicleNo: 'DEF456', startDate: '2024-03-03', endDate: '2024-03-07', mileage: 400, reservationId: 'RES003' },
+        { vehicleNo: 'GHI789', startDate: '2024-03-04', endDate: '2024-03-08', mileage: 350, reservationId: 'RES004' },
+        { vehicleNo: 'JKL012', startDate: '2024-03-05', endDate: '2024-03-09', mileage: 280, reservationId: 'RES005' },
+        { vehicleNo: 'MNO345', startDate: '2024-03-06', endDate: '2024-03-10', mileage: 320, reservationId: 'RES006' }
     ]
 
     function handlePrint() {
@@ -64,7 +29,7 @@ export default function ViewFeedbackReport() {
             const pdfWidth = pdf.internal.pageSize.getWidth()
             const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-            pdf.save('feedback-report.pdf')
+            pdf.save('vehicle_Utilization-report.pdf')
         })
     }
 
@@ -73,7 +38,7 @@ export default function ViewFeedbackReport() {
             <div className="flex flex-col p-6 bg-white rounded-lg">
                 {/* Ensure the container ID is correct for the PDF capture */}
                 <div id="feedback-report-container">
-                    <FeedbackTable columns={feedbackColumns} data={feedbackData} />
+                    <VehicleUtilizationTable columns={vehicleUtilizationColumns} data={utilizationData} />
                 </div>
                 <div className="flex mt-4">
                     <button
