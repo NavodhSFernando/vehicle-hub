@@ -36,7 +36,7 @@ export default function NotificationCenter() {
     // This is the main container for the notifications center. It centers the child div on the page
     // and starts the content at the top. There is padding at the top to push the content down.
     return (
-        <div className="flex justify-center items-start pt-10">
+        <div className="flex justify-center items-start pt-20 pb-10">
             {/* A scrollable div container that will contain the notifications. */}
             <div className="w-full max-w-lg max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
                 <h2 className="text-xl font-semibold mb-4">Notifications</h2>
