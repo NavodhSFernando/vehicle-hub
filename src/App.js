@@ -37,6 +37,7 @@ import Ongoingrentalssingle from './views/front/Ongoingrentalssingle'
 import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
+import Viewprofile from './views/front/Viewprofile'
 
 function App() {
     return (
@@ -53,6 +54,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
+                <Route path="/viewprofile" element={<Viewprofile />} />
                 <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                 <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
