@@ -38,6 +38,12 @@ import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import Viewprofile from './views/front/Viewprofile'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+
+import VehicleFleet from './components/front/VehicleFleet'
+import VehicleFleetSingle from './components/front/VehicleFleetingle/VehicleFleetSingle'
 
 function App() {
     return (
@@ -45,6 +51,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
                     <Route index element={<Home />} />
+                    <Route path="/vehiclefleet" element={<VehicleFleet />} />
+                    <Route path="/vehiclefleet/:slug" element={<VehicleFleetSingle />} />
                     <Route path="account" element={<Account />}>
                         <Route path="ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                         <Route path="rentalhistorysingle" element={<Rentalhistorysingle />} />
@@ -57,13 +65,14 @@ function App() {
                 <Route path="/viewprofile" element={<Viewprofile />} />
                 <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                 <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
+
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
-                        <Route path="feedbackreport" element={<FeedbackReport />} />
-                        <Route path="revenuereport" element={<RevenueReport />} />
-                        <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
+                        <Route path="feedbackreport" element={<ViewFeedbackReport />} />
+                        <Route path="revenuereport" element={<ViewRevenueReport />} />
+                        <Route path="vehicleutilizationreport" element={<ViewVehicleUtilizationReport />} />
                     </Route>
                     <Route path="reservation">
                         <Route path="view" element={<ViewReservation />} />

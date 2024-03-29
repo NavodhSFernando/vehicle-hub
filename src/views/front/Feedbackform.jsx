@@ -1,150 +1,104 @@
 import React from 'react'
 
-export default function Feedbackform() {
+// The FeedbackForm component is a form for users to provide feedback on their vehicle rental experience.
+export default function FeedbackForm() {
     return (
-        <div>
-            <div className="relative w-full min-h-screen bg-gray-300 flex justify-center items-center">
-                <div className="flex flex-col w-full max-w-md bg-white rounded-xl shadow-lg absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2">
-                    <form action="post" className=" space-y-2 border-2border-neutral-100 px-8 py-3">
-                        <h2 className="font-bold text-gray-900 text-xl mt-12 mb-1 ">Please Provide your Feedback</h2>
-                        <p className="font-semibold text-gray-500 text-xs mt-1 mb-1">
-                            Your feedback is greatly valued as it gives us the opportunity to serve you better.
-                        </p>
-                        <div className="flex flex-col space-y-1 ">
-                            <label htmlFor="name" className="text-gray-800 font-semibold ">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                className="p-2 bg-white border border-gray-300 rounded-lg text-s text-gray-500"
-                                placeholder="Alex Fernando"
-                            />
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="designation" className="text-gray-800 font-semibold ">
-                                Designation
-                            </label>
-                            <input
-                                type="text"
-                                required
-                                className="p-2 bg-white border border-gray-300 rounded-lg text-s text-gray-500"
-                                placeholder="A12345670"
-                            />
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="vehicle rating" className="text-gray-800 font-semibold ">
-                                Vehicle Rating
-                            </label>
-                            <ul className="flex justify-center">
-                                <li>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1.5"
-                                        stroke="currentColor"
-                                        className="mr-1 h-5 w-5 text-warning"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                                        />
-                                    </svg>
-                                </li>
-                                <li>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1.5"
-                                        stroke="currentColor"
-                                        className="mr-1 h-5 w-5 text-warning"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                                        />
-                                    </svg>
-                                </li>
-                                <li>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1.5"
-                                        stroke="currentColor"
-                                        className="mr-1 h-5 w-5 text-warning"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                                        />
-                                    </svg>
-                                </li>
-                                <li>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1.5"
-                                        stroke="currentColor"
-                                        className="mr-1 h-5 w-5 text-warning"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                                        />
-                                    </svg>
-                                </li>
-                                <li>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth="1.5"
-                                        stroke="currentColor"
-                                        className="mr-1 h-5 w-5 text-warning"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
-                                        />
-                                    </svg>
-                                </li>
-                            </ul>
-                            {/* <input type="" required className="" /> */}
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="vehicle review" className="text-gray-800 font-semibold ">
-                                Vehicle Review
-                            </label>
-                            <input
-                                type="text"
-                                className="p-2  h-20 bg-white border border-gray-300 rounded-lg text-s text-gray-500"
-                                placeholder="Efficient Toyota Aqua: Economical, compact, and eco-friendly hybrid."
-                            />
-                        </div>
-                        <div className="flex flex-col space-y-1">
-                            <label htmlFor="service review" className="text-gray-800 font-semibold ">
-                                Service Review
-                            </label>
-                            <input
-                                type="text"
-                                className="p-2 h-20 bg-white border border-gray-300 rounded-lg text-s text-gray-500"
-                                placeholder="Service: Exceptional, reliable, and efficient for Toyota Aqua car rental."
-                            />
-                        </div>
-                        <button className="bg-blue-800 hover:bg-blue-500 text-white font-semibold rounded py-2 px-4">
+        // The form is centered on the page with a flex container and occupies the full width of the screen.
+        //The gray background is applied to the entire viewport.
+        <div className="flex items-center justify-center w-full min-h-screen bg-gray-300">
+            {/* The white form container with rounded corners, shadow, and maximum width set to 2xl. */}
+            {/* Padding is applied inside the form container. */}
+            <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-auto pt-10 pb-10 pl-20 pr-20">
+                {/* A close button is positioned absolutely in the top right corner of the form. */}
+                {/* On click, it logs a message to the console. */}
+                <button
+                    onClick={() => console.log('Close the form')}
+                    className="absolute top-0 right-0 mt-4 mr-4 text-gray-400 hover:text-gray-500"
+                >
+                    {/* The '×' character is styled to be large and gray, changing on hover. */}
+                    <span className="text-2xl">×</span>
+                </button>
+                {/* Heading and subheading for the form. */}
+                <div className="mb-4">
+                    {/* The title of the form is bold and larger than other text. */}
+                    <h2 className="text-2xl font-bold text-gray-900">Please Provide your Feedback</h2>
+                    {/* A short description below the title, in smaller text. */}
+                    <p className="text-sm text-gray-500">
+                        Your feedback is greatly valued as it gives us the opportunity to serve you better.
+                    </p>
+                </div>
+                {/* The form tag with POST method indicating how data will be sent to the server. */}
+                <form action="#" method="POST">
+                    {/* Input field for the user's name. */}
+                    {/* Labels are associated with input fields using the 'for' attribute, which must be 'htmlFor' in JSX. */}
+                    <div className="mb-4">
+                        <label htmlFor="name" className="block text-gray-700 font-semibold mb-2">
+                            Name
+                        </label>
+                        <input
+                            id="name"
+                            type="text"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
+                            placeholder="Alex Fernando"
+                            required
+                        />
+                    </div>
+                    {/* Input field for the user's designation. */}
+                    <div className="mb-4">
+                        <label htmlFor="designation" className="block text-gray-700 font-semibold mb-2">
+                            Designation
+                        </label>
+                        <input
+                            id="designation"
+                            type="text"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
+                            placeholder="A12345670"
+                            required
+                        />
+                    </div>
+                    {/* Placeholder for star rating component for vehicle rating. */}
+                    {/* This section is currently empty and should be filled with a star rating component. */}
+                    <div className="mb-4">
+                        <label htmlFor="vehicleRating" className="block text-gray-700 font-semibold mb-2">
+                            Vehicle Rating
+                        </label>
+                        {/* Star rating component */}
+                    </div>
+                    {/* Textarea for the user's vehicle review. */}
+                    <div className="mb-4">
+                        <label htmlFor="vehicleReview" className="block text-gray-700 font-semibold mb-2">
+                            Vehicle Review
+                        </label>
+                        <textarea
+                            id="vehicleReview"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
+                            placeholder="'Efficient Toyota Aqua: Economical, compact, and eco-friendly hybrid.'"
+                            required
+                        />
+                    </div>
+                    {/* Textarea for the user's service review. */}
+                    <div className="mb-8">
+                        <label htmlFor="serviceReview" className="block text-gray-700 font-semibold mb-2">
+                            Service Review
+                        </label>
+                        <textarea
+                            id="serviceReview"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
+                            placeholder="'Service: Exceptional, reliable, and efficient for Toyota Aqua car rental.'"
+                            required
+                        />
+                    </div>
+                    {/* Submit button for the form. */}
+                    {/* The button is styled with background color, hover effect, padding, and transition for smooth color change. */}
+                    <div className="mb-4">
+                        <button
+                            type="submit"
+                            className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300"
+                        >
                             Submit
                         </button>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     )

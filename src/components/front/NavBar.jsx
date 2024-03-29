@@ -38,7 +38,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="absolute top-0 z-10 bg-gradient-to-b from-primary w-screen">
+        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary w-screen">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -49,7 +49,7 @@ const Navbar = () => {
                     <div className={`lg:flex lg:flex-1 ${showNav ? 'block' : 'hidden'} justify-center`}>
                         <div className="flex sm:space-x-4">
                             <NavLink
-                                to="/contact"
+                                to="/"
                                 className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Home
