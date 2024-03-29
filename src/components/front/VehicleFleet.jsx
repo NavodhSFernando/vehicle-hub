@@ -25,13 +25,46 @@ const data = [
         transmission: 'Manual',
         capacity: '6 Persons',
         price: '15 000'
+    },
+    {
+        key: '002',
+        name: 'Toyota prius',
+        type: 'SUV',
+        imageSrc: Aqua, // Fix here
+        imageAlt: 'Toyota Aqua',
+        year: '2017',
+        transmission: 'Manual',
+        capacity: '6 Persons',
+        price: '15 000'
+    },
+    {
+        key: '002',
+        name: 'Toyota prius',
+        type: 'SUV',
+        imageSrc: Aqua, // Fix here
+        imageAlt: 'Toyota Aqua',
+        year: '2017',
+        transmission: 'Manual',
+        capacity: '6 Persons',
+        price: '15 000'
+    },
+    {
+        key: '002',
+        name: 'Toyota prius',
+        type: 'SUV',
+        imageSrc: Aqua, // Fix here
+        imageAlt: 'Toyota Aqua',
+        year: '2017',
+        transmission: 'Manual',
+        capacity: '6 Persons',
+        price: '15 000'
     }
     // More Data...
 ]
 
 export default function VehicleFleet() {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-primary">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-primary py-20">
             <BookingStrip2 />
             <div className="flex flex-col mt-10 w-full max-w-screen-lg">
                 <div className="grid grid-rows-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-6">

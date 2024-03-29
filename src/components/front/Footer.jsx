@@ -19,7 +19,7 @@ export const Footer = () => {
     return (
         <div>
             <footer
-                className={`absolute bottom-0 z-10 w-screen px-4 text-white ${isHomePage ? 'bg-transparent py-10' : 'bg-primary py-20'}`}
+                className={`bottom-0 inset-x-0 z-20 w-screen px-4 text-white ${isHomePage ? 'bg-transparent py-10 absolute' : 'bg-primary py-20 relative'}`}
             >
                 <div className="max-w-6xl mx-auto flex flex-wrap justify-between">
                     <div className={`${isHomePage ? 'hidden' : 'block'}`}>

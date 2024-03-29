@@ -10,6 +10,8 @@ import { FaUserCircle } from 'react-icons/fa'
 import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
+import WishlistDropdown from './WishlistDropDown'
+import NotificationCenter from '../../views/front/NotificationCenter'
 
 const Navbar = () => {
     const [isDropdownOpen] = useState(true)
@@ -38,7 +40,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="absolute top-0 z-10 bg-gradient-to-b from-primary w-screen">
+        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary w-screen">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -49,7 +51,7 @@ const Navbar = () => {
                     <div className={`lg:flex lg:flex-1 ${showNav ? 'block' : 'hidden'} justify-center`}>
                         <div className="flex sm:space-x-4">
                             <NavLink
-                                to="/contact"
+                                to="/"
                                 className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Home
@@ -92,8 +94,20 @@ const Navbar = () => {
                     ) : (
                         <div className="flex gap-16">
                             <div className="text-secondary cursor-pointer" onClick={handleClick}>
-                                {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
+                                {clicked ? (
+                                    <>
+                                        <BsBookmarkStarFill fontSize={24} />
+                                        <WishlistDropdown
+                                            isOpen={isDropdownOpen}
+                                            setIsOpen={() => {}}
+                                            onNavigate={handleNavigate}
+                                        />
+                                    </>
+                                ) : (
+                                    <BsBookmarkStar fontSize={24} />
+                                )}
                             </div>
+
                             <div className="text-secondary cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
                                     <>
@@ -108,7 +122,7 @@ const Navbar = () => {
                                     <IoMdNotificationsOutline fontSize={24} />
                                 )}
                             </div>
-                            <NavLink to="/account">
+                            <NavLink to="/account/notificationcenter">
                                 <div className="text-secondary cursor-pointer" onClick={handleLogged}>
                                     {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
                                 </div>

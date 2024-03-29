@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import aqua from '../../assets/vehicles/aqua.png'
+import { Button } from '../../components/ui/button'
 
 function Ongoingrentalssingle() {
     const [rating, setRating] = useState(0)
@@ -9,9 +10,9 @@ function Ongoingrentalssingle() {
         setRating(value)
     }
     return (
-        <div className="relative w-full min-h-screen bg-gray-300  flex-col flex justify-center items-center">
-            <div className="flex flex-col w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl bg-white rounded-xl shadow-lg mt-8 mb-1 ">
-                <div className="m-20">
+        <>
+            <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
+                <div className="my-16 lg:mx-36">
                     <h3 className="pb-6 text-l text-gray-950 font-semibold">Rental Summary</h3>
                     <div className="pb-8 flex items-center">
                         <img src={aqua} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
@@ -35,8 +36,7 @@ function Ongoingrentalssingle() {
                             </div>
                         </div>
                     </div>
-                    <div></div>
-                    <hr />
+                    <hr className="pb-3 border-t-2 border-stone-200 mx-5" />
                     <div className="pt-8 flex justify-between">
                         <p className="text-gray-500">Reservation ID </p>
                         <p className="font-semibold"> R001</p>
@@ -70,8 +70,8 @@ function Ongoingrentalssingle() {
                 </div>
             </div>
 
-            <div className="flex flex-col w-full max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl bg-white rounded-xl shadow-lg mt-3 mb-8">
-                <div className="mr-20 ml-20 mt-10 mb-10">
+            <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mt-3 mb-8">
+                <div className="mr-20 ml-20 my-10 lg:mx-36">
                     <p className="text-xs text-gray-500 flex items-start pb-3">
                         Please refer to the Reservation Policy for further details
                     </p>
@@ -79,9 +79,9 @@ function Ongoingrentalssingle() {
                         *Reservation Cancellation made three(3) days or less prior to arrival date are non-refundable
                     </p>
                     <hr className="pb-3" />
-                    <button className="bg-red-600 rounded-md font-semibold text-gray-50 text-xs p-2">
+                    <Button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
                         Cancel Reservation
-                    </button>
+                    </Button>
                     <div className="flex items-start">
                         <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
                             Feel free to contact
@@ -95,7 +95,7 @@ function Ongoingrentalssingle() {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

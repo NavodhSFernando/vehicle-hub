@@ -1,16 +1,16 @@
-import Footer from '../../components/front/Footer'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
-import Navbar from '../../components/front/NavBar'
+import AccountSidebar from '../../components/front/AccountSidebar'
 
 export default function Account() {
     return (
-        <div className="flex flex-col w-full h-full overflow-y-auto">
-            <Navbar />
-            <div className="p-4">
-                <Outlet />
+        <>
+            <div className="flex flex-row">
+                <AccountSidebar />
+                <div className="flex flex-col w-3/4 h-full overflow-y-auto p-4">
+                    <Outlet />
+                </div>
             </div>
-            <Footer />
-        </div>
+        </>
     )
 }
