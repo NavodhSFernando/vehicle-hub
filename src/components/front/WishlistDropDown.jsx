@@ -29,7 +29,7 @@ const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
     return (
         // The dropdown menu
         isOpen && (
-            <div className="absolute top-5 right-10 mt-12 py-2 w-64 h-auto bg-white rounded-lg shadow-xl z-20">
+            <div className="absolute top-5 right-35 mt-12 py-2 w-64 h-auto bg-white rounded-lg shadow-xl z-20">
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Wish List</h3>
                 </div>
