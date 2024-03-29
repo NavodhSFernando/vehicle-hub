@@ -18,7 +18,8 @@ const sampleNotifications = [
     // ... more notifications
 ]
 
-// NotificationDropdown component
+// NotificationDropdown component:takes in props that control the dropdown is open,
+// function to set open state and a navigation function.
 const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
     return (
         // The dropdown menu
@@ -27,7 +28,7 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Notification</h3>
                 </div>
-                {/* List of notifications */}
+                {/* List of notifications : Mapping from the sampleNotifications array.*/}
                 {sampleNotifications.slice(0, 2).map((notification) => (
                     <div key={notification.id} className="px-4 py-3 border-t border-gray-100">
                         <p className="text-bold text-gray-900">{notification.title}</p>
