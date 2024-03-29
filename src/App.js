@@ -26,9 +26,6 @@ import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewEmployee from './views/admin/employee/ViewEmployee'
 import CreateEmployee from './views/admin/employee/CreateEmployee'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
-import FeedbackReport from './views/admin/reports/FeedbackReport'
-import RevenueReport from './views/admin/reports/RevenueReport'
-import VehicleUtilizationReport from './views/admin/reports/VehicleUtilizationReport'
 import ViewVehicleLog from './views/admin/vehiclelog/ViewVehicleLog'
 import CreateVehicleLog from './views/admin/vehiclelog/CreateVehicleLog'
 import ViewInsurance from './views/admin/insurance/ViewInsurance'
@@ -40,7 +37,6 @@ import NotificationCenter from './views/front/NotificationCenter'
 import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
 import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
 import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
-
 import VehicleFleet from './components/front/VehicleFleet'
 import VehicleFleetSingle from './components/front/VehicleFleetingle/VehicleFleetSingle'
 
@@ -48,11 +44,12 @@ function App() {
     return (
         <Router>
             <Routes>
+                {/* Front Routes */}
                 <Route path="/" element={<FrontLayout />}>
                     <Route index element={<Home />} />
                     <Route path="/vehiclefleet" element={<VehicleFleet />} />
                     <Route path="/vehiclefleet/:slug" element={<VehicleFleetSingle />} />
-                    <Route path="account" element={<Account />}>
+                    <Route path="/account" element={<Account />}>
                         <Route path="ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                         <Route path="rentalhistorysingle" element={<Rentalhistorysingle />} />
                         <Route path="notificationcenter" element={<NotificationCenter />} />
@@ -63,8 +60,9 @@ function App() {
                 <Route path="/password" element={<Password />} />
                 <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                 <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
-
                 <Route path="/feedbackform" element={<Feedbackform />} />
+
+                {/* Admin Routes */}
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
