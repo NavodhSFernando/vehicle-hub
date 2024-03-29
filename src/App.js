@@ -34,6 +34,7 @@ import Ongoingrentalssingle from './views/front/Ongoingrentalssingle'
 import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
+import Viewprofile from './views/front/Viewprofile'
 import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
 import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
 import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
@@ -58,6 +59,7 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
+                <Route path="/viewprofile" element={<Viewprofile />} />
                 <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                 <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
