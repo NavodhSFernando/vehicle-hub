@@ -4,74 +4,44 @@ import { GrEdit, GrTrash } from 'react-icons/gr'
 
 export const columns = [
     {
-        accessorKey: 'id',
-        header: 'Reservation ID',
+        accessorKey: 'date',
+        header: 'Date',
         cell: ({ row }) => {
-            const value = row.getValue('id') // Assuming ID does not need parseFloat
-            return <div className="font-medium">{'#' + value}</div>
-        }
-    },
-    {
-        accessorKey: 'modelName',
-        header: 'Model Name'
-    },
-    {
-        accessorKey: 'pickUpDate',
-        header: 'Pick up Date',
-        cell: ({ row }) => {
-            const value = row.getValue('pickUpDate')
+            const value = row.getValue('date'); // Change 'pickUpDate' to 'date'
             // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
-            return <div>{formattedDate}</div>
+            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value));
+            return <div>{formattedDate}</div>;
         }
     },
+    
     {
-        accessorKey: 'dropOffDate',
-        header: 'Drop off Date',
-        cell: ({ row }) => {
-            const value = row.getValue('dropOffDate')
-            // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
-            return <div>{formattedDate}</div>
-        }
+        accessorKey: 'amount',
+        header: 'Amount'
+    },
+    {
+        accessorKey: 'invoice',
+        header: 'Invoice'
     },
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
+        header: 'Status',
         cell: ({ row }) => {
             const status = row.getValue('status')
             let color = ''
             let text = ''
 
             switch (status) {
-                case 'waiting':
+                case 'due':
                     color = 'bg-yellow-500'
-                    text = 'Waiting'
+                    text = 'Due'
                     break
-                case 'pending':
-                    color = 'bg-blue-500'
-                    text = 'Pending'
-                    break
-                case 'confirmed':
+                case 'paid':
                     color = 'bg-green-500'
-                    text = 'Confirmed'
+                    text = 'Paid'
                     break
-                case 'cancelled':
+                case 'not paid':
                     color = 'bg-red-500'
-                    text = 'Cancelled'
+                    text = 'Not Paid'
                     break
                 default:
                     color = 'bg-gray-500'
@@ -82,6 +52,36 @@ export const columns = [
             return (
                 <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
                     {text}
+                </div>
+            )
+        }
+    },
+    {
+        accessorKey: 'actions',
+        header: '',
+        cell: ({ row }) => {
+            const status = row.getValue('status')
+
+            return (
+                <div className="flex gap-2">
+                    {status === 'due' && (
+                        <>
+                            <Button variant="ghost">View</Button>
+                            <Button variant="ghost">Download PDF</Button>
+                        </>
+                    )}
+                    {status === 'paid' && (
+                        <>
+                            <Button variant="ghost">View</Button>
+                            <Button variant="ghost">Download PDF</Button>
+                        </>
+                    )}
+                    {status === 'not paid' && (
+                        <>
+                            <Button variant="ghost">Pay Now</Button>
+                            <Button variant="ghost">Download PDF</Button>
+                        </>
+                    )}
                 </div>
             )
         }

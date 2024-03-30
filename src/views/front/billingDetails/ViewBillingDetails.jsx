@@ -5,40 +5,24 @@ import { columns } from './Columns'
 export default function ViewBillingDetails() {
     const data = [
         {
-            id: '1001',
-            modelName: 'Toyota Aqua',
-            pickUpDate: '2024-03-20',
-            dropOffDate: '2024-03-25',
-            status: 'confirmed'
+            date: '2024-03-20',
+            amount: 100,
+            invoice: 'INV001',
+            status: 'paid'
         },
         {
-            id: '1002',
-            modelName: 'Toyota Prius',
-            pickUpDate: '2024-04-10',
-            dropOffDate: '2024-04-15',
-            status: 'pending'
+            date: '2024-04-10',
+            amount: 200,
+            invoice: 'INV002',
+            status: 'due'
         },
         {
-            id: '1003',
-            modelName: 'Toyota Axio',
-            pickUpDate: '2024-05-05',
-            dropOffDate: '2024-05-10',
-            status: 'waiting'
+            date: '2024-05-05',
+            amount: 150,
+            invoice: 'INV003',
+            status: 'not paid'
         },
-        {
-            id: '1004',
-            modelName: 'Toyota Corolla',
-            pickUpDate: '2024-06-15',
-            dropOffDate: '2024-06-20',
-            status: 'cancelled'
-        },
-        {
-            id: '1005',
-            modelName: 'Toyota Vitz',
-            pickUpDate: '2024-07-25',
-            dropOffDate: '2024-07-30',
-            status: 'confirmed'
-        }
+        // Add more data objects as needed
     ]
 
     return (
