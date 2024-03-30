@@ -66,20 +66,20 @@ export const columns = [
                 <div className="flex gap-2">
                     {status === 'due' && (
                         <>
-                            <Button variant="ghost">View</Button>
-                            <Button variant="ghost">Download PDF</Button>
+                            <Button variant="ghost" className="border border-gray-500">View</Button>
+                            <Button variant="ghost" className="border border-gray-500">Download PDF</Button>
                         </>
                     )}
                     {status === 'paid' && (
                         <>
-                            <Button variant="ghost">View</Button>
-                            <Button variant="ghost">Download PDF</Button>
+                            <Button variant="ghost" className="border border-gray-500">View</Button>
+                            <Button variant="ghost" className="border border-gray-500">Download PDF</Button>
                         </>
                     )}
                     {status === 'not paid' && (
                         <>
-                            <Button variant="ghost">Pay Now</Button>
-                            <Button variant="ghost">Download PDF</Button>
+                            <Button variant="ghost" className="border border-gray-500">Pay Now</Button>
+                            <Button variant="ghost" className="border border-gray-500">Download PDF</Button>
                         </>
                     )}
                 </div>

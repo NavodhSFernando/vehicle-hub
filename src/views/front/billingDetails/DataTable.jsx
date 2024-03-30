@@ -30,6 +30,17 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
+            <div className="flex flex-row items-center my-8">
+                <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
+                    <Label></Label>
+                    <Input
+                        placeholder="Search"
+                        value={table.getColumn('invoice')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('invoice')?.setFilterValue(event.target.value)}
+                        className="max-w-lg"
+                    />
+                </div>
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
