@@ -3,7 +3,7 @@ import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs'
 import { CiCalendar } from 'react-icons/ci'
 import { FaRegClock } from 'react-icons/fa'
 
-export default function VehicleFleetSingle() {
+export default function RequestVehicle() {
     const [clicked, setClicked] = useState(false)
     const handleClick = () => {
         setClicked(!clicked)
