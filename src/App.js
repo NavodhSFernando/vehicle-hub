@@ -38,6 +38,7 @@ import VehicleFleetSingle from './views/front/VehicleFleetSingle'
 import VehicleFleet from './components/front/VehicleFleet'
 import OngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
+import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
 import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
 import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
@@ -58,6 +59,7 @@ function App() {
                         <Route path="/account/notificationcenter" element={<NotificationCenter />} />
                         <Route path="/account/viewRentalHistory" element={<ViewRentalHistory />} />
                         <Route path="/account/viewOngoingRental" element={<ViewOngoingRental />} />
+                        <Route path="/account/viewBillingDetails" element={<ViewBillingDetails />} />
                         <Route path="/account/viewprofile" element={<Viewprofile />} />
                     </Route>
                 </Route>
