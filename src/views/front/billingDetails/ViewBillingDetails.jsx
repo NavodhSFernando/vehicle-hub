@@ -20,6 +20,24 @@ export default function ViewBillingDetails() {
             date: '2024-05-05',
             amount: 150,
             invoice: 'INV003',
+            status: 'paid'
+        },
+        {
+            date: '2024-05-05',
+            amount: 150,
+            invoice: 'INV004',
+            status: 'due'
+        },
+        {
+            date: '2024-05-05',
+            amount: 150,
+            invoice: 'INV005',
+            status: 'paid'
+        },
+        {
+            date: '2024-05-05',
+            amount: 150,
+            invoice: 'INV006',
             status: 'not paid'
         },
         // Add more data objects as needed
