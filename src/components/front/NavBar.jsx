@@ -52,25 +52,28 @@ const Navbar = () => {
                         <div className="flex sm:space-x-4">
                             <NavLink
                                 to="/"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                Home
+                                 Home
+                               
                             </NavLink>
                             <NavLink
                                 to="/contact"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                Vehicle Fleet
+                                 Vehicle Fleet
+                                
                             </NavLink>
                             <NavLink
                                 to="/faq"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                FAQ
+                                FAQ 
+                               
                             </NavLink>
                             <NavLink
                                 to="/contact"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Contact
                             </NavLink>
@@ -81,22 +84,22 @@ const Navbar = () => {
                     {!loggedIn ? (
                         <div className="flex items-center">
                             <NavLink to="/singin">
-                                <button className="border-secondary border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="border-yellowtheme border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign In
                                 </button>
                             </NavLink>
                             <NavLink to="/signup">
-                                <button className="ml-4 bg-secondary border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="ml-4 bg-yellowtheme border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign Up
                                 </button>
                             </NavLink>
                         </div>
                     ) : (
                         <div className="flex gap-16">
-                            <div className="text-secondary cursor-pointer" onClick={handleClick}>
+                            <div className="text-yellowtheme cursor-pointer" onClick={handleClick}>
                                 {clicked ? (
                                     <>
-                                        <BsBookmarkStarFill fontSize={24} />
+                                        <BsBookmarkStarFill fontSize={24}  />
                                         <WishlistDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
@@ -108,10 +111,10 @@ const Navbar = () => {
                                 )}
                             </div>
 
-                            <div className="text-secondary cursor-pointer" onClick={handleNotification}>
+                            <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
                                     <>
-                                        <IoNotifications fontSize={24} />
+                                        <IoNotifications fontSize={28} />
                                         <NotificationDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
@@ -119,11 +122,11 @@ const Navbar = () => {
                                         />
                                     </>
                                 ) : (
-                                    <IoMdNotificationsOutline fontSize={24} />
+                                    <IoMdNotificationsOutline fontSize={28} />
                                 )}
                             </div>
                             <NavLink to="/account/notificationcenter">
-                                <div className="text-secondary cursor-pointer" onClick={handleLogged}>
+                                <div className="text-yellowtheme cursor-pointer" onClick={handleLogged}>
                                     {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
                                 </div>
                             </NavLink>
@@ -133,7 +136,7 @@ const Navbar = () => {
                     <div className="lg:hidden ml-auto">
                         <button onClick={toggleNav}>
                             <RxHamburgerMenu
-                                className="w-10 h-10 text-secondary"
+                                className="w-10 h-10 text-yellowtheme"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
