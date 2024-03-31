@@ -14,6 +14,8 @@ module.exports = {
         },
         extend: {
             colors: {
+                yellowtheme:'#fbdac6',
+                Paginationbluecolor:'#624cf8',
                 border: 'hsl(var(--border))',
                 input: 'hsl(var(--input))',
                 ring: 'hsl(var(--ring))',
