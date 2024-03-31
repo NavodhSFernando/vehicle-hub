@@ -30,7 +30,7 @@ function DashboardStatsGrid() {
             <strong className="text-xl text-gray-700 font-semibold">
               342
             </strong>
-            <span className="text-sm text-green-500 pl-2">-343</span>
+            <span className="text-sm text-green-500 pl-2">+123</span>
           </div>
         </div>
       </BoxWrapper>
@@ -46,7 +46,7 @@ function DashboardStatsGrid() {
             <strong className="text-xl text-gray-700 font-semibold">
               12313
             </strong>
-            <span className="text-sm text-red-500 pl-2">-30</span>
+            <span className="text-sm text-green-500 pl-2">+45</span>
           </div>
         </div>
       </BoxWrapper>
@@ -60,7 +60,7 @@ function DashboardStatsGrid() {
             <strong className="text-xl text-gray-700 font-semibold">
               16432
             </strong>
-            <span className="text-sm text-red-500 pl-2">-43</span>
+            <span className="text-sm text-green-500 pl-2">+43</span>
           </div>
         </div>
       </BoxWrapper>
