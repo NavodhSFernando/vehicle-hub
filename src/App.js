@@ -23,12 +23,28 @@ import ViewMaintenanceType from './views/admin/maintenancetype/ViewMaintenanceTy
 import CreateMaintenanceType from './views/admin/maintenancetype/CreateMaintenanceType'
 import ViewAvailability from './views/admin/availability/ViewAvailability'
 import CreateAvailability from './views/admin/availability/CreateAvailability'
-import ViewUser from './views/admin/user/ViewUser'
-import CreateUser from './views/admin/user/CreateUser'
+import ViewEmployee from './views/admin/employee/ViewEmployee'
+import CreateEmployee from './views/admin/employee/CreateEmployee'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
-import FeedbackReport from './views/admin/reports/FeedbackReport'
-import RevenueReport from './views/admin/reports/RevenueReport'
-import VehicleUtilizationReport from './views/admin/reports/VehicleUtilizationReport'
+import ViewVehicleLog from './views/admin/vehiclelog/ViewVehicleLog'
+import CreateVehicleLog from './views/admin/vehiclelog/CreateVehicleLog'
+import ViewInsurance from './views/admin/insurance/ViewInsurance'
+import CreateInsurance from './views/admin/insurance/CreateInsurance'
+import Ongoingrentalssingle from './views/front/Ongoingrentalssingle'
+import Rentalhistorysingle from './views/front/Rentalhistorysingle'
+import Feedbackform from './views/front/Feedbackform'
+import NotificationCenter from './views/front/NotificationCenter'
+import VehicleFleetSingle from './views/front/VehicleFleetSingle'
+import VehicleFleet from './components/front/VehicleFleet'
+import OngoingRental from './views/front/OngoingRental/ViewOngoingRental'
+import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
+import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
+import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import Viewprofile from './views/front/Viewprofile'
+import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 
 function App() {
     return (
@@ -36,17 +52,33 @@ function App() {
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
                     <Route index element={<Home />} />
-                    <Route path="account" element={<Account />} />
+                    <Route path="/vehiclefleet" element={<VehicleFleet />} />
+                    <Route path="/vehiclefleet/:slug" element={<VehicleFleetSingle />} />
+                    <Route path="/account" element={<Account />}>
+                        <Route path="/account/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
+                        <Route path="/account/rentalhistorysingle" element={<Rentalhistorysingle />} />
+                        <Route path="/account/notificationcenter" element={<NotificationCenter />} />
+                        <Route path="/account/viewRentalHistory" element={<ViewRentalHistory />} />
+                        <Route path="/account/viewOngoingRental" element={<ViewOngoingRental />} />
+                        <Route path="/account/viewBillingDetails" element={<ViewBillingDetails />} />
+                        <Route path="/account/viewprofile" element={<Viewprofile />} />
+                    </Route>
+                    <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
                 </Route>
+
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
+                <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
+                <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
+
+                <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
-                        <Route path="feedbackreport" element={<FeedbackReport />} />
-                        <Route path="revenuereport" element={<RevenueReport />} />
-                        <Route path="vehicleutilizationreport" element={<VehicleUtilizationReport />} />
+                        <Route path="feedbackreport" element={<ViewFeedbackReport />} />
+                        <Route path="revenuereport" element={<ViewRevenueReport />} />
+                        <Route path="vehicleutilizationreport" element={<ViewVehicleUtilizationReport />} />
                     </Route>
                     <Route path="reservation">
                         <Route path="view" element={<ViewReservation />} />
@@ -80,20 +112,20 @@ function App() {
                         <Route path="view" element={<ViewMaintenanceType />} />
                         <Route path="create" element={<CreateMaintenanceType />} />
                     </Route>
-                    <Route path="user">
-                        <Route path="view" element={<ViewUser />} />
-                        <Route path="create" element={<CreateUser />} />
+                    <Route path="employee">
+                        <Route path="view" element={<ViewEmployee />} />
+                        <Route path="create" element={<CreateEmployee />} />
                     </Route>
                     <Route path="customer">
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
                     <Route path="vehiclelog">
-                        <Route path="view" element={<ViewCustomer />} />
-                        <Route path="create" element={<CreateUser />} />
+                        <Route path="view" element={<ViewVehicleLog />} />
+                        <Route path="create" element={<CreateVehicleLog />} />
                     </Route>
                     <Route path="insurance">
-                        <Route path="view" element={<ViewCustomer />} />
-                        <Route path="create" element={<CreateUser />} />
+                        <Route path="view" element={<ViewInsurance />} />
+                        <Route path="create" element={<CreateInsurance />} />
                     </Route>
                 </Route>
             </Routes>

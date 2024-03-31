@@ -1,5 +1,4 @@
 import React from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -14,7 +13,6 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -22,7 +20,7 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateVehicleInsurance() {
+export default function CreateInsurance() {
     const form = useForm()
 
     const onSubmit = (data) => {
@@ -36,24 +34,32 @@ export default function CreateVehicleInsurance() {
                     name="username"
                     render={({ field }) => (
                         <FormItem>
-                            <h1 className="flex flex-col items-start font-bold text-gray-800 text-2xl pb-3 pt-3">
-                                Create New Insurance
-                            </h1>
-                            <hr className="pb-3" />
                             <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                                 <FormDescription>Basic Information</FormDescription>
 
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Name</FormLabel>
+                                    <FormLabel className="pb-3">Insurance No</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="SUV" {...field} />
+                                    <Input placeholder="K/00/0000000/000/P" {...field} />
                                 </FormControl>
                                 <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Deposit Amount</FormLabel>
+                                    <FormLabel className="pb-3">Insurance Expiry Date</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input placeholder="25000LKR" {...field} />
+                                    <Input placeholder="2023/12/31" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Vehicle Id</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="001" {...field} />
+                                </FormControl>
+                                <div className="flex flex-col space-y-1 pt-6">
+                                    <FormLabel className="pb-3">Status</FormLabel>
+                                </div>
+                                <FormControl>
+                                    <Input placeholder="Yes" {...field} />
                                 </FormControl>
                             </div>
                             <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">

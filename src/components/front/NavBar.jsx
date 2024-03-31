@@ -9,8 +9,15 @@ import { IoNotifications } from 'react-icons/io5'
 import { FaUserCircle } from 'react-icons/fa'
 import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
+import NotificationDropdown from './NotificationDropDown'
+import WishlistDropdown from './WishlistDropDown'
+import NotificationCenter from '../../views/front/NotificationCenter'
 
 const Navbar = () => {
+    const [isDropdownOpen] = useState(true)
+    const handleNavigate = () => {
+        console.log('Navigating to all notifications view')
+    }
     const loggedIn = true
     const [clicked, setClicked] = useState(false)
     const handleClick = () => {
@@ -33,7 +40,7 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="absolute top-0 bg-gradient-to-b from-primary w-screen">
+        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary w-screen">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -44,26 +51,29 @@ const Navbar = () => {
                     <div className={`lg:flex lg:flex-1 ${showNav ? 'block' : 'hidden'} justify-center`}>
                         <div className="flex sm:space-x-4">
                             <NavLink
-                                to="/contact"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                to="/"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                Home
+                                 Home
+                               
                             </NavLink>
                             <NavLink
                                 to="/contact"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                Vehicle Fleet
+                                 Vehicle Fleet
+                                
                             </NavLink>
                             <NavLink
                                 to="/faq"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                FAQ
+                                FAQ 
+                               
                             </NavLink>
                             <NavLink
                                 to="/contact"
-                                className="text-secondary px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Contact
                             </NavLink>
@@ -74,30 +84,49 @@ const Navbar = () => {
                     {!loggedIn ? (
                         <div className="flex items-center">
                             <NavLink to="/singin">
-                                <button className="border-secondary border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="border-yellowtheme border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign In
                                 </button>
                             </NavLink>
                             <NavLink to="/signup">
-                                <button className="ml-4 bg-secondary border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="ml-4 bg-yellowtheme border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign Up
                                 </button>
                             </NavLink>
                         </div>
                     ) : (
                         <div className="flex gap-16">
-                            <div className="text-secondary cursor-pointer" onClick={handleClick}>
-                                {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
-                            </div>
-                            <div className="text-secondary cursor-pointer" onClick={handleNotification}>
-                                {notification ? (
-                                    <IoNotifications fontSize={24} />
+                            <div className="text-yellowtheme cursor-pointer" onClick={handleClick}>
+                                {clicked ? (
+                                    <>
+                                        <BsBookmarkStarFill fontSize={24}  />
+                                        <WishlistDropdown
+                                            isOpen={isDropdownOpen}
+                                            setIsOpen={() => {}}
+                                            onNavigate={handleNavigate}
+                                        />
+                                    </>
                                 ) : (
-                                    <IoMdNotificationsOutline fontSize={24} />
+                                    <BsBookmarkStar fontSize={24} />
                                 )}
                             </div>
-                            <NavLink to="/account">
-                                <div className="text-secondary cursor-pointer" onClick={handleLogged}>
+
+                            <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
+                                {notification ? (
+                                    <>
+                                        <IoNotifications fontSize={28} />
+                                        <NotificationDropdown
+                                            isOpen={isDropdownOpen}
+                                            setIsOpen={() => {}}
+                                            onNavigate={handleNavigate}
+                                        />
+                                    </>
+                                ) : (
+                                    <IoMdNotificationsOutline fontSize={28} />
+                                )}
+                            </div>
+                            <NavLink to="/account/notificationcenter">
+                                <div className="text-yellowtheme cursor-pointer" onClick={handleLogged}>
                                     {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
                                 </div>
                             </NavLink>
@@ -107,7 +136,7 @@ const Navbar = () => {
                     <div className="lg:hidden ml-auto">
                         <button onClick={toggleNav}>
                             <RxHamburgerMenu
-                                className="w-10 h-10 text-secondary"
+                                className="w-10 h-10 text-yellowtheme"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
