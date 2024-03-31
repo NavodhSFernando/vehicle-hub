@@ -22,7 +22,7 @@ export default function VehicleFleetSingle() {
 
     return (
         <div className="flex">
-            <div className="flex gap-4">
+            <div className="flex gap-10">
                 <div className="flex flex-col w-1/2">
                     <ImageShowCase />
                     <CheckList />

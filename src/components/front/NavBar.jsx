@@ -54,22 +54,19 @@ const Navbar = () => {
                                 to="/"
                                 className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                 Home
-                               
+                                Home
                             </NavLink>
                             <NavLink
-                                to="/contact"
+                                to="/vehiclefleet"
                                 className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                 Vehicle Fleet
-                                
+                                Vehicle Fleet
                             </NavLink>
                             <NavLink
                                 to="/faq"
                                 className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                FAQ 
-                               
+                                FAQ
                             </NavLink>
                             <NavLink
                                 to="/contact"
@@ -99,7 +96,7 @@ const Navbar = () => {
                             <div className="text-yellowtheme cursor-pointer" onClick={handleClick}>
                                 {clicked ? (
                                     <>
-                                        <BsBookmarkStarFill fontSize={24}  />
+                                        <BsBookmarkStarFill fontSize={24} />
                                         <WishlistDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
