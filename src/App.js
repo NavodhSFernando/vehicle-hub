@@ -44,6 +44,7 @@ import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackRepor
 import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
 import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
+import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 
 function App() {
     return (
@@ -62,6 +63,7 @@ function App() {
                         <Route path="/account/viewBillingDetails" element={<ViewBillingDetails />} />
                         <Route path="/account/viewprofile" element={<Viewprofile />} />
                     </Route>
+                    <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
                 </Route>
 
                 <Route path="/login" element={<Login />} />

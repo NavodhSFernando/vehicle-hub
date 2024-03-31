@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import jsPDF from "jspdf";
 
 const FeedbackReport = () => {
-  // Dummy feedback data
+  // Dummy feedback dat
   const [feedbackData] = useState([
     {
       id: 1,

@@ -7,7 +7,7 @@ export default function Home() {
         <div>
             <div className="relative h-screen">
                 <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${Image})` }}></div>
-                <div className="absolute inset-0 flex justify-center items-center">
+                <div className="absolute inset-0 flex justify-center items-center mt-96 ">
                     <BookingStrip />
                 </div>
             </div>
