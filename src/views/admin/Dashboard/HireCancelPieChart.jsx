@@ -22,7 +22,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     )
 }
 
-export default function BuyerProfilePieChart() {
+export default function HireCancelPieChart() {
     return (
         <div className="w-[20rem] h-[28rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col">
             <strong className="text-gray-700 font-medium">Hire vs Cancel</strong>
