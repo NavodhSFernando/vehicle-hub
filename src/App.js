@@ -45,6 +45,8 @@ import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
 import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
+import FaqPage from './views/front/FaqPage'
+import ContactUs from './views/front/ContactUs'
 
 function App() {
     return (
@@ -58,12 +60,14 @@ function App() {
                         <Route path="/account/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                         <Route path="/account/rentalhistorysingle" element={<Rentalhistorysingle />} />
                         <Route path="/account/notificationcenter" element={<NotificationCenter />} />
-                        <Route path="/account/viewRentalHistory" element={<ViewRentalHistory />} />
-                        <Route path="/account/viewOngoingRental" element={<ViewOngoingRental />} />
-                        <Route path="/account/viewBillingDetails" element={<ViewBillingDetails />} />
+                        <Route path="/account/viewrentalhistory" element={<ViewRentalHistory />} />
+                        <Route path="/account/viewongoingrental" element={<ViewOngoingRental />} />
+                        <Route path="/account/viewbillingdetails" element={<ViewBillingDetails />} />
                         <Route path="/account/viewprofile" element={<Viewprofile />} />
                     </Route>
                     <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
+                    <Route path="/faq" element={<FaqPage />} />
+                    <Route path="/contact" element={<ContactUs />} />
                 </Route>
 
                 <Route path="/login" element={<Login />} />

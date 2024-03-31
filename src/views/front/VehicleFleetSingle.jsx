@@ -22,12 +22,11 @@ export default function VehicleFleetSingle() {
 
     return (
         <div className="flex">
-            <div className="flex flex-col w-1/2">
-                <ImageShowCase />
-                <CheckList />
-            </div>
-            <div className="flex gap-4">
-                <div className="flex flex-col w-1/2"></div>
+            <div className="flex gap-10">
+                <div className="flex flex-col w-1/2">
+                    <ImageShowCase />
+                    <CheckList />
+                </div>
                 <div className="flex flex-col w-1/2">
                     <Detailcar
                         vehicle={vehicle.name}
