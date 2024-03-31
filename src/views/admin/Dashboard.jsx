@@ -1,6 +1,6 @@
 import React from 'react'
 import DashboardStatsGrid from './Dashboard/DashboardStatsGrid'
-import TransactionChart from './Dashboard/TransactionChart'
+import CustomerFeedbackChart from './Dashboard/CustomerFeedbackChart'
 import BuyerProfilePieChart from './Dashboard/BuyerProfilePieChart'
 
 export default function Dashboard() {
@@ -9,7 +9,7 @@ export default function Dashboard() {
             <DashboardStatsGrid />
 
             <div className="flex flex-row gap-4 w-full">
-                <TransactionChart />
+                <CustomerFeedbackChart />
                 <BuyerProfilePieChart /> 
             </div>
         </div>
