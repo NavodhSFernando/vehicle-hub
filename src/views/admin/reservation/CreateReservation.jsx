@@ -14,6 +14,7 @@ import {
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -22,10 +23,19 @@ const formSchema = z.object({
 })
 
 export default function CreateReservation() {
-    const form = useForm()
+    // 1. Define your form.
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: ''
+        }
+    })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    // 2. Define a submit handler.
+    function onSubmit(values) {
+        // Do something with the form values.
+        // This will be type-safe and validated.
+        console.log(values)
     }
     return (
         <Form {...form}>
