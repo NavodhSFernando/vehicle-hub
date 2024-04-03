@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
     name: z.string().min(3, {
-        message: 'Username must be at least 2 characters.'
+        message: 'Username must be at least 3 characters.'
     }),
     depAmount: z.number().gte(3000, {
         message: 'Deposit Amount must be at least Rs.3000'
@@ -27,11 +27,7 @@ const formSchema = z.object({
 export default function CreateVehicleType() {
     // 1. Define your form.
     const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            name: '',
-            depAmount: 0
-        }
+        resolver: zodResolver(formSchema)
     })
 
     // 2. Define a submit handler.
