@@ -19,8 +19,10 @@ import { Input } from '../../components/ui/input'
 export const Login = () => {
     const form = useForm()
 
-    const onSubmit = (data) => {
-        console.log(data)
+    function onSubmit(values) {
+        // Do something with the form values.
+        // This will be type-safe and validated.
+        console.log(values)
     }
     return (
         <div>
@@ -45,12 +47,21 @@ export const Login = () => {
                                                 <input
                                                     id="email"
                                                     type="email"
-                                                    autoComplete="email"
+                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                                    title="Please enter a valid email address"
                                                     required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
                                                 />
                                             </FormControl>
                                         </div>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
                                         <div className="flex flex-col space-y-1">
                                             <FormLabel htmlFor="password" className="text-gray-800">
                                                 Password
@@ -65,51 +76,49 @@ export const Login = () => {
                                                 />
                                             </FormControl>
                                         </div>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center">
-                                                <FormControl>
-                                                    <input type="checkbox" id="remember" className="h-4 w-4" />
-                                                </FormControl>
-                                                <FormLabel htmlFor="remember-me" className="ml-2 text-gray-800">
-                                                    Remember me
-                                                </FormLabel>
-                                                <br></br>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <Button
-                                                type="submit"
-                                                className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
-                                            >
-                                                Sign in
-                                            </Button>
-                                        </div>
-                                        <div className="flex justify-center items-center">
-                                            <div className="w-16 h-0 border border-gray-400 order-1"></div>
-                                            <div className="font-medium text-xs text-center leading-14 text-gray-400 flex-none order-1 mx-3">
-                                                Or
-                                            </div>
-                                            <div className="w-16 h-0 border border-gray-400 order-1"></div>
-                                        </div>
-                                        <div className="flex justify-center items-center">
-                                            <img
-                                                src={ggl}
-                                                alt="My Image"
-                                                className="w-7 h-10 rounded-full shadow-lg mr-10"
-                                            />
-                                            <img src={fb} alt="My Image" className="w-7 h-10 rounded-full shadow-lg" />
-                                        </div>
-                                        <div className="flex pt-7">
-                                            <div className="text-indigo-600 font-bold text-left text-1xl mr-4">
-                                                Create An Account
-                                            </div>
-                                            <div className="text-gray-800 font-semibold text-right text-1xl">
-                                                Forgot Password
-                                            </div>
-                                        </div>
                                     </FormItem>
                                 )}
                             />
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <FormControl>
+                                        <input type="checkbox" id="remember" className="h-4 w-4" />
+                                    </FormControl>
+                                    <FormLabel htmlFor="remember-me" className="ml-2 text-gray-800">
+                                        Remember me
+                                    </FormLabel>
+                                    <br></br>
+                                </div>
+                            </div>
+                            <div>
+                                <Button
+                                    type="submit"
+                                    className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
+                                >
+                                    Sign in
+                                </Button>
+                            </div>
+                            <div className="flex justify-center items-center">
+                                <div className="w-16 h-0 border border-gray-400 order-1"></div>
+                                <div className="font-medium text-xs text-center leading-14 text-gray-400 flex-none order-1 mx-3">
+                                    Or
+                                </div>
+                                <div className="w-16 h-0 border border-gray-400 order-1"></div>
+                            </div>
+                            <div className="flex justify-center items-center">
+                                <a href="">
+                                    <img src={ggl} alt="My Image" className="w-7 h-10 rounded-full shadow-lg mr-10" />
+                                </a>
+                                <a href="">
+                                    <img src={fb} alt="My Image" className="w-7 h-10 rounded-full shadow-lg" />
+                                </a>
+                            </div>
+                            <div className="flex pt-7">
+                                <div className="text-indigo-600 font-bold text-left text-1xl mr-4">
+                                    Create An Account
+                                </div>
+                                <div className="text-gray-800 font-semibold text-right text-1xl">Forgot Password</div>
+                            </div>
                         </form>
                     </Form>
                 </div>

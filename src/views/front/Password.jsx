@@ -17,8 +17,10 @@ import { Input } from '../../components/ui/input'
 export const Password = () => {
     const form = useForm()
 
-    const onSubmit = (data) => {
-        console.log(data)
+    function onSubmit(values) {
+        // Do something with the form values.
+        // This will be type-safe and validated.
+        console.log(values)
     }
     return (
         <div>
@@ -56,35 +58,32 @@ export const Password = () => {
                                                 />
                                             </FormControl>
                                         </div>
-                                        <div className="pt-3 pb-3">
-                                            <Button
-                                                type="submit"
-                                                className="w-full py-3 font-semibold text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md  hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
-                                            >
-                                                Reset Password
-                                            </Button>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center">
-                                                <FormControl>
-                                                    <input type="checkbox" id="confirm" className="h-4 w-4" />
-                                                </FormControl>
-                                                <FormLabel
-                                                    htmlFor="confirm"
-                                                    className="ml-2 text-gray-800 text-justify"
-                                                >
-                                                    Remember Me
-                                                </FormLabel>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex pt-4">
-                                            <div className="text-gray-800 text-justify ">Don't have an account?</div>
-                                            <div className="text-indigo-600 text-justify ">Sign Up</div>
-                                        </div>
                                     </FormItem>
                                 )}
                             />
+                            <div className="pt-3 pb-3">
+                                <Button
+                                    type="submit"
+                                    className="w-full py-3 font-semibold text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md  hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
+                                >
+                                    Reset Password
+                                </Button>
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <FormControl>
+                                        <input type="checkbox" id="confirm" className="h-4 w-4" />
+                                    </FormControl>
+                                    <FormLabel htmlFor="confirm" className="ml-2 text-gray-800 text-justify">
+                                        Remember Me
+                                    </FormLabel>
+                                </div>
+                            </div>
+
+                            <div className="flex pt-4">
+                                <div className="text-gray-800 text-justify ">Don't have an account?</div>
+                                <div className="text-indigo-600 text-justify ">Sign Up</div>
+                            </div>
                         </form>
                     </Form>
                 </div>
