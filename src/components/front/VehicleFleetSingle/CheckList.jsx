@@ -98,7 +98,7 @@ export default function CheckList() {
                         <Checkbox checked={item.value} id={item.name} className="rounded" />
                         <label
                             htmlFor={item.name}
-                            className="text-sm font-medium leading-none rounded-lg peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                             {item.name}
                         </label>
