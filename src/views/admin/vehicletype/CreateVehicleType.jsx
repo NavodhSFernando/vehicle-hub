@@ -27,7 +27,11 @@ const formSchema = z.object({
 export default function CreateVehicleType() {
     // 1. Define your form.
     const form = useForm({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            depAmount: 0
+        }
     })
 
     // 2. Define a submit handler.

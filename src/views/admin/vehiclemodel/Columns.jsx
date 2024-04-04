@@ -39,6 +39,10 @@ export const columns = [
         header: 'Fuel Type'
     },
     {
+        accessorKey: 'vehicleMake.Name',
+        header: 'Vehicle Make'
+    },
+    {
         accessorKey: 'actions',
         header: () => {
             return <div className="text-end">Actions</div>

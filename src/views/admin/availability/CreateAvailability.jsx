@@ -17,61 +17,86 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: 'Username must be at least 2 characters.'
+    reservationId: z.number().refine((reservationId) => validRegIds.includes(reservationId), {
+        message: 'Invalid Reservation ID'
+    }),
+    status: z.string({
+        required_error: 'Please select a vehicle make'
     })
 })
 
-export default function CreateAvailability() {
-    const form = useForm()
+const validRegIds = [1001, 1002, 1003, 1004]
 
-    const onSubmit = (data) => {
-        console.log(data)
+export default function CreateAvailability() {
+    // 1. Define your form.
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            reservationId: 0
+        }
+    })
+
+    // 2. Define a submit handler.
+    function onSubmit(values) {
+        // Do something with the form values.
+        // This will be type-safe and validated.
+        console.log(values)
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
+            >
+                <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="reservationId"
                     render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                                <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-4">
-                                    <FormLabel className="pb-3">Vehicle ID</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="1001" {...field} />
-                                </FormControl>
-
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Reservation ID</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="001" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className=" pb-3">Availability Status</FormLabel>
-                                </div>
-                                <Select>
-                                    <SelectTrigger className="w-2/3">
-                                        <SelectValue placeholder="Available" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="001">Available</SelectItem>
-                                        <SelectItem value="002">Not Available</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                                <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                                    Create
-                                </Button>
-                            </div>
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Reservation ID</FormLabel>
+                            <FormControl>
+                                <Input
+                                    className="w-full"
+                                    {...field}
+                                    {...{
+                                        onChange: (e) => {
+                                            // Convert the input value to a number before setting it.
+                                            field.onChange(parseFloat(e.target.value))
+                                        }
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="status"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Availability Status</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Status" />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    <SelectItem value="available">Available</SelectItem>
+                                    <SelectItem value="not available">Not Available</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
+                </div>
             </form>
         </Form>
     )

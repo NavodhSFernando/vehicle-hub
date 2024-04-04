@@ -51,7 +51,7 @@ export default function CreateVehicleLog() {
                     name="reservationId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Registration ID</FormLabel>
+                            <FormLabel className="pb-3 w-full">Reservation ID</FormLabel>
                             <FormControl>
                                 <Input
                                     className="w-full"
