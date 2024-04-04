@@ -14,16 +14,20 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'typeId',
-        header: 'Maintenance Type ID'
-    },
-    {
-        accessorKey: 'lastDate',
-        header: 'Last Maintenance Date'
+        accessorKey: 'maintenanceDate',
+        header: 'Maintenance Date'
     },
     {
         accessorKey: 'vehicleId',
         header: 'Vehicle ID'
+    },
+    {
+        accessorKey: 'type',
+        header: 'Maintenance Type'
+    },
+    {
+        accessorKey: 'description',
+        header: 'Description'
     },
     {
         accessorKey: 'actions',

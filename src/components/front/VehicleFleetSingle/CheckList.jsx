@@ -91,7 +91,7 @@ export default function CheckList() {
         alignItems: 'center'
     }
     return (
-        <div className="max-w-[500px_auto] h-[368px] w-full rounded-e-lg bg-white p-20 flex flex-col ml-6 mt-0 ">
+        <div className="max-w-[500px_auto] h-[368px] w-full rounded-b-lg bg-white p-20 flex flex-col ml-6 mt-0 ">
             <div style={gridStyle}>
                 {data.map((item, index) => (
                     <div className="flex items-center space-x-2" key={index}>

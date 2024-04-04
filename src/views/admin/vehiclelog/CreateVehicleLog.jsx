@@ -30,7 +30,13 @@ const formSchema = z.object({
 export default function CreateVehicleLog() {
     // 1. Define your form.
     const form = useForm({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            reservationId: 0,
+            endMileage: 0,
+            penalty: 0,
+            description: ''
+        }
     })
 
     // 2. Define a submit handler.
