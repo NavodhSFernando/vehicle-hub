@@ -91,14 +91,14 @@ export default function CheckList() {
         alignItems: 'center'
     }
     return (
-        <div className="max-w-[500px_auto] h-[368px] w-full rounded-e-lg bg-white p-20 flex flex-col ml-6 mt-0 ">
+        <div className="max-w-[500px_auto] h-[368px] w-full rounded-b-lg bg-white p-20 flex flex-col ml-6 mt-0 ">
             <div style={gridStyle}>
                 {data.map((item, index) => (
                     <div className="flex items-center space-x-2" key={index}>
                         <Checkbox checked={item.value} id={item.name} className="rounded" />
                         <label
                             htmlFor={item.name}
-                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            className="text-sm font-medium leading-none rounded-lg peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                         >
                             {item.name}
                         </label>
