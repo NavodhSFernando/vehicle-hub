@@ -13,51 +13,77 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const MAX_FILE_SIZE = 10000000
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: 'Username must be at least 2 characters.'
-    })
+    name: z.string().min(3, {
+        message: 'Name must be at least 3 characters.'
+    }),
+    logo: z
+        .any()
+        .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 10MB.`)
+        .refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+            'Only .jpg, .jpeg, .png and .webp formats are supported.'
+        )
 })
 
 export default function CreateVehicleMake() {
-    const form = useForm()
+    // 1. Define your form.
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: ''
+        }
+    })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    // 2. Define a submit handler.
+    function onSubmit(values) {
+        // Do something with the form values.
+        // This will be type-safe and validated.
+        console.log(values)
     }
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
+            >
+                <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="name"
                     render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                                <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Name</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="Honda" {...field} />
-                                </FormControl>
-                                <div className="grid w-full max-w-sm items-center gap-3">
-                                    <FormLabel className="pt-3" htmlFor="logo">
-                                        Logo
-                                    </FormLabel>
-                                    <Input id="logo" type="file" />
-                                </div>
-                            </div>
-                            <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                                <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                                    Create
-                                </Button>
-                            </div>
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Name</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Honda" className="w-full" {...field} />
+                            </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="logo"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Logo</FormLabel>
+                            <FormControl>
+                                <Input type="file" className="w-full" {...field} {...{}} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
+                </div>
             </form>
         </Form>
     )

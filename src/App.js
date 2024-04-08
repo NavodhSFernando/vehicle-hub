@@ -19,8 +19,6 @@ import ViewVehicle from './views/admin/vehicle/ViewVehicle'
 import CreateVehicle from './views/admin/vehicle/CreateVehicle'
 import ViewMaintenance from './views/admin/maintenance/ViewMaintenance'
 import CreateMaintenance from './views/admin/maintenance/CreateMaintenance'
-import ViewMaintenanceType from './views/admin/maintenancetype/ViewMaintenanceType'
-import CreateMaintenanceType from './views/admin/maintenancetype/CreateMaintenanceType'
 import ViewAvailability from './views/admin/availability/ViewAvailability'
 import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewEmployee from './views/admin/employee/ViewEmployee'
@@ -111,10 +109,6 @@ function App() {
                     <Route path="maintenance">
                         <Route path="view" element={<ViewMaintenance />} />
                         <Route path="create" element={<CreateMaintenance />} />
-                    </Route>
-                    <Route path="maintenancetype">
-                        <Route path="view" element={<ViewMaintenanceType />} />
-                        <Route path="create" element={<CreateMaintenanceType />} />
                     </Route>
                     <Route path="employee">
                         <Route path="view" element={<ViewEmployee />} />
