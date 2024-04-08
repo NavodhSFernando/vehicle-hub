@@ -188,26 +188,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
-        key: 'maintenance type',
-        label: 'Maintenance Type',
-        path: '/admin/maintenancetype',
-        icon: <RiStackLine />,
-        subLinks: [
-            {
-                key: 'view all maintenance type',
-                label: 'View All Maintenance Type',
-                path: '/admin/maintenancetype/view',
-                icon: <LuDot />
-            },
-            {
-                key: 'create maintenance type',
-                label: 'Create Maintenance Type',
-                path: '/admin/maintenancetype/create',
-                icon: <LuDot />
-            }
-        ]
-    },
-    {
         key: 'employee',
         label: 'Employee',
         path: '/admin/employee',
