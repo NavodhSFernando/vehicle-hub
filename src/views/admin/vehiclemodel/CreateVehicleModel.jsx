@@ -179,7 +179,7 @@ export default function CreateVehicleModel() {
                                 </FormControl>
                                 <SelectContent>
                                     <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesal">Diesal</SelectItem>
+                                    <SelectItem value="diesal">Diesel</SelectItem>
                                     <SelectItem value="hybrid">Hybrid</SelectItem>
                                     <SelectItem value="electric">Electric</SelectItem>
                                 </SelectContent>

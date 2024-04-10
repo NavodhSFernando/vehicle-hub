@@ -7,32 +7,27 @@ export default function ViewInsurance() {
         {
             no: '001',
             expiry: '2022/01/23',
-            id: '111',
-            status: 'yes'
+            id: '111'
         },
         {
             no: '002',
             expiry: '2022/07/03',
-            id: '123',
-            status: 'no'
+            id: '123'
         },
         {
             no: '003',
             expiry: '2022/09/09',
-            id: '344',
-            status: 'no'
+            id: '344'
         },
         {
             no: '004',
             expiry: '2022/02/01',
-            id: '888',
-            status: 'yes'
+            id: '888'
         },
         {
             no: '005',
             expiry: '2022/05/25',
-            id: '777',
-            status: 'yes'
+            id: '777'
         }
     ]
 
