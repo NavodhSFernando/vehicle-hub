@@ -17,8 +17,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
-    name: z.string().min(8, {
-        message: 'Name must be at least 8 characters.'
+    email: z.string().email({
+        message: 'Invalid email address.'
+    }),
+    dob: z.string().regex(/^\d{4}\.\d{2}\.\d{2}$/, {
+        message: 'Date of birth must be in YYYY.MM.DD format.'
+    }),
+    phone: z.string().regex(/^\d{10}$/, {
+        message: 'Phone number must be 10 digits long.'
+    }),
+    nic: z.string().regex(/^\d{12}$/, {
+        message: 'NIC number must be 12 digits long.'
+    }),
+    password: z.string().min(8, {
+        message: 'Password must be at least 8 characters long.'
     })
 })
 
