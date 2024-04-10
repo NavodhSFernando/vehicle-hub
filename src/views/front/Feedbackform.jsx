@@ -13,13 +13,29 @@ import {
     FormMessage
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const formSchema = z.object({
+    username: z.string().min(2, {
+        message: 'Username must be at least 2 characters.'
+    })
+})
 
 // The FeedbackForm component is a form for users to provide feedback on their vehicle rental experience.
 export default function FeedbackForm() {
-    const form = useForm()
+    // 1. Define your form.
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: ''
+        }
+    })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    // 2. Define a submit handler.
+    function onSubmit(values) {
+        // Do something with the form values.
+        // This will be type-safe and validated.
+        console.log(values)
     }
     return (
         // The form is centered on the page with a flex container and occupies the full width of the screen.
@@ -53,7 +69,7 @@ export default function FeedbackForm() {
                         {/* Labels are associated with input fields using the 'for' attribute, which must be 'htmlFor' in JSX. */}
                         <FormField
                             control={form.control}
-                            name="username"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
                                     <div className="mb-4">
@@ -70,7 +86,16 @@ export default function FeedbackForm() {
                                             />
                                         </FormControl>
                                     </div>
-                                    {/* Input field for the user's designation. */}
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Input field for the user's designation. */}
+                        <FormField
+                            control={form.control}
+                            name="designation"
+                            render={({ field }) => (
+                                <FormItem>
                                     <div className="mb-4">
                                         <FormLabel
                                             htmlFor="designation"
@@ -88,18 +113,26 @@ export default function FeedbackForm() {
                                             />
                                         </FormControl>
                                     </div>
-                                    {/* Placeholder for star rating component for vehicle rating. */}
-                                    {/* This section is currently empty and should be filled with a star rating component. */}
-                                    <div className="mb-4">
-                                        <FormLabel
-                                            htmlFor="vehicleRating"
-                                            className="block text-gray-700 font-semibold mb-8"
-                                        >
-                                            Vehicle Rating
-                                        </FormLabel>
-                                        {/* Star rating component */}
-                                    </div>
-                                    {/* Textarea for the user's vehicle review. */}
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Placeholder for star rating component for vehicle rating. */}
+                        {/* This section is currently empty and should be filled with a star rating component. */}
+
+                        <div className="mb-4">
+                            <FormLabel htmlFor="vehicleRating" className="block text-gray-700 font-semibold mb-8">
+                                Vehicle Rating
+                            </FormLabel>
+                            {/* Star rating component */}
+                        </div>
+                        {/* Textarea for the user's vehicle review. */}
+
+                        <FormField
+                            control={form.control}
+                            name="vehicle review"
+                            render={({ field }) => (
+                                <FormItem>
                                     <div className="mb-4">
                                         <FormLabel
                                             htmlFor="vehicleReview"
@@ -116,7 +149,16 @@ export default function FeedbackForm() {
                                             />
                                         </FormControl>
                                     </div>
-                                    {/* Textarea for the user's service review. */}
+                                </FormItem>
+                            )}
+                        />
+
+                        {/* Textarea for the user's service review. */}
+                        <FormField
+                            control={form.control}
+                            name="service review"
+                            render={({ field }) => (
+                                <FormItem>
                                     <div className="mb-8">
                                         <FormLabel
                                             htmlFor="serviceReview"
@@ -133,19 +175,20 @@ export default function FeedbackForm() {
                                             />
                                         </FormControl>
                                     </div>
-                                    {/* Submit button for the form. */}
-                                    {/* The button is styled with background color, hover effect, padding, and transition for smooth color change. */}
-                                    <div className="mb-4">
-                                        <Button
-                                            type="submit"
-                                            className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300 mt-4"
-                                        >
-                                            Submit
-                                        </Button>
-                                    </div>
                                 </FormItem>
                             )}
                         />
+
+                        {/* Submit button for the form. */}
+                        {/* The button is styled with background color, hover effect, padding, and transition for smooth color change. */}
+                        <div className="mb-4">
+                            <Button
+                                type="submit"
+                                className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300 mt-4"
+                            >
+                                Submit
+                            </Button>
+                        </div>
                     </form>
                 </Form>
             </div>
