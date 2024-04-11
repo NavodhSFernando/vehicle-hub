@@ -57,7 +57,9 @@ export default function CreateReservation() {
             chassisNo: '',
             color: '',
             costPerDay: 0,
-            mileage: 0
+            mileage: 0,
+            thumbnail: '',
+            images: []
         }
     })
 
@@ -144,6 +146,7 @@ export default function CreateReservation() {
                             <FormLabel className="pb-3 w-full">Cost Per Day</FormLabel>
                             <FormControl>
                                 <Input
+                                    type="number"
                                     placeholder="10000"
                                     className="w-full"
                                     {...field}
@@ -167,6 +170,7 @@ export default function CreateReservation() {
                             <FormLabel className="pb-3 w-full">Mileage</FormLabel>
                             <FormControl>
                                 <Input
+                                    type="number"
                                     placeholder="2500KM"
                                     className="w-full"
                                     {...field}

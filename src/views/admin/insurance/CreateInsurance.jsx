@@ -13,63 +13,107 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const validVehicleIds = [1001, 1002, 1003, 1004]
+
+const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: 'Username must be at least 2 characters.'
+    insuranceNo: z.string().min(9, 'Insurance No is required'),
+    insuranceExpiryDate: z.string().regex(dateRegex, {
+        message: 'Insurance expiry date is required'
+    }),
+    vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
+        message: 'Invalid Vehicle ID'
     })
 })
 
 export default function CreateInsurance() {
-    const form = useForm()
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            insuranceNo: '',
+            insuranceExpiryDate: '',
+            vehicleId: 0
+        }
+    })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    function onSubmit(values) {
+        console.log(values)
     }
+
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
+            >
+                <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="insuranceNo"
                     render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                                <FormDescription>Basic Information</FormDescription>
-
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Insurance No</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="K/00/0000000/000/P" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Insurance Expiry Date</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="2023/12/31" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Vehicle Id</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="001" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Status</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="Yes" {...field} />
-                                </FormControl>
-                            </div>
-                            <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                                <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                                    Create
-                                </Button>
-                            </div>
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Insurance No</FormLabel>
+                            <FormControl>
+                                <Input className="w-full" {...field} />
+                            </FormControl>
+                            <FormMessage />
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name="insuranceExpiryDate"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Insurance Expiry Date</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="date"
+                                    className="w-full"
+                                    {...field}
+                                    {...{
+                                        onChange: (e) => {
+                                            const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
+                                            field.onChange(dateValue) // Pass the string directly to your form's state
+                                        }
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="vehicleId"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="text"
+                                    className="w-full"
+                                    {...field}
+                                    {...{
+                                        onChange: (e) => {
+                                            // Convert the input value to a number before setting it.
+                                            field.onChange(parseFloat(e.target.value))
+                                        }
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
+                </div>
             </form>
         </Form>
     )
