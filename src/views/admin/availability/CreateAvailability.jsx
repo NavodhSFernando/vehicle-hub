@@ -1,4 +1,4 @@
-import React from 'react'
+import { React, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -42,6 +42,10 @@ export default function CreateAvailability() {
         // This will be type-safe and validated.
         console.log(values)
     }
+
+    const [reservationId, setReservationId] = useState('')
+    const [status, setStatus] = useState('')
+
     return (
         <Form {...form}>
             <form
@@ -59,11 +63,11 @@ export default function CreateAvailability() {
                                 <Input
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    value={reservationId}
+                                    onChange={(e) => {
+                                        const val = parseFloat(e.target.value)
+                                        field.onChange(val)
+                                        setReservationId(val) // Update the local state
                                     }}
                                 />
                             </FormControl>
@@ -77,7 +81,14 @@ export default function CreateAvailability() {
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Availability Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                    setStatus(value) // Update the local state
+                                }}
+                                value={status}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Status" />
