@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -45,6 +46,12 @@ export default function CreateVehicleLog() {
         // This will be type-safe and validated.
         console.log(values)
     }
+
+    const [reservationId, setReservationId] = useState(0)
+    const [endMileage, setEndMileage] = useState(0)
+    const [penalty, setPenalty] = useState(0)
+    const [description, setDescription] = useState('')
+
     return (
         <Form {...form}>
             <form
@@ -61,11 +68,13 @@ export default function CreateVehicleLog() {
                             <FormControl>
                                 <Input
                                     className="w-full"
+                                    value={reservationId}
                                     {...field}
                                     {...{
                                         onChange: (e) => {
                                             // Convert the input value to a number before setting it.
                                             field.onChange(parseFloat(e.target.value))
+                                            setReservationId(parseFloat(e.target.value))
                                         }
                                     }}
                                 />
@@ -84,11 +93,11 @@ export default function CreateVehicleLog() {
                                 <Input
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    value={endMileage}
+                                    onChange={(e) => {
+                                        // Convert the input value to a number before setting it.
+                                        field.onChange(parseFloat(e.target.value))
+                                        setEndMileage(parseFloat(e.target.value))
                                     }}
                                 />
                             </FormControl>
@@ -106,11 +115,11 @@ export default function CreateVehicleLog() {
                                 <Input
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    value={penalty}
+                                    onChange={(e) => {
+                                        // Convert the input value to a number before setting it.
+                                        field.onChange(parseFloat(e.target.value))
+                                        setPenalty(parseFloat(e.target.value))
                                     }}
                                 />
                             </FormControl>
@@ -129,6 +138,11 @@ export default function CreateVehicleLog() {
                                     placeholder="Explain any damages caused by the user."
                                     className="resize-none w-full h-20"
                                     {...field}
+                                    value={description}
+                                    onChange={(e) => {
+                                        setDescription(e.target.value)
+                                        field.onChange(e.target.value)
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage />

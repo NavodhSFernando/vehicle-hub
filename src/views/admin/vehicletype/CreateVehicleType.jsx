@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -40,6 +41,10 @@ export default function CreateVehicleType() {
         // This will be type-safe and validated.
         console.log(values)
     }
+
+    const [name, setName] = useState('')
+    const [depAmount, setDepAmount] = useState(0)
+
     return (
         <Form {...form}>
             <form
@@ -54,7 +59,16 @@ export default function CreateVehicleType() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="" className="w-full" {...field} />
+                                <Input
+                                    placeholder=""
+                                    className="w-full"
+                                    value={name}
+                                    {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                        setName(e.target.value)
+                                    }}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -70,10 +84,12 @@ export default function CreateVehicleType() {
                                 <Input
                                     className="w-full"
                                     {...field}
+                                    value={depAmount}
                                     {...{
                                         onChange: (e) => {
                                             // Convert the input value to a number before setting it.
                                             field.onChange(parseFloat(e.target.value))
+                                            setDepAmount(parseFloat(e.target.value))
                                         }
                                     }}
                                 />

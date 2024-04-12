@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -57,7 +58,14 @@ export default function CreateMaintenance() {
         // Do something with the form values.
         // This will be type-safe and validated.
         console.log(values)
+        console.log('Maintenance Type:', values.maintenanceType)
     }
+
+    const [maintenanceDate, setMaintenanceDate] = useState('')
+    const [vehicleId, setVehicleId] = useState('')
+    const [maintenanceType, setMaintenanceType] = useState('')
+    const [description, setDescription] = useState('')
+
     return (
         <Form {...form}>
             <form
@@ -75,12 +83,12 @@ export default function CreateMaintenance() {
                                 <Input
                                     type="date"
                                     className="w-full"
+                                    value={maintenanceDate}
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
-                                            field.onChange(dateValue) // Pass the string directly to your form's state
-                                        }
+                                    onChange={(e) => {
+                                        const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
+                                        field.onChange(dateValue) // Pass the string directly to your form's state
+                                        setMaintenanceDate(dateValue) // Update the local state
                                     }}
                                 />
                             </FormControl>
@@ -98,12 +106,12 @@ export default function CreateMaintenance() {
                             <FormControl>
                                 <Input
                                     className="w-full"
+                                    value={vehicleId}
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    onChange={(e) => {
+                                        // Convert the input value to a number before setting it.
+                                        field.onChange(parseFloat(e.target.value))
+                                        setVehicleId(e.target.value)
                                     }}
                                 />
                             </FormControl>
@@ -117,10 +125,17 @@ export default function CreateMaintenance() {
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Maintenance Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                    setMaintenanceType(value) // Update the local state
+                                }}
+                                value={maintenanceType}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select Maintenance T" />
+                                        <SelectValue placeholder="Select Maintenance Type" />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -146,7 +161,12 @@ export default function CreateMaintenance() {
                                 <Textarea
                                     placeholder="Explain any damages caused by the user."
                                     className="resize-none w-full h-20"
+                                    value={description}
                                     {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                        setDescription(e.target.value)
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage />
