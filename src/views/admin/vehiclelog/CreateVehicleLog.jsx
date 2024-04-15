@@ -45,6 +45,7 @@ export default function CreateVehicleLog() {
         // This will be type-safe and validated.
         console.log(values)
     }
+
     return (
         <Form {...form}>
             <form
@@ -84,11 +85,9 @@ export default function CreateVehicleLog() {
                                 <Input
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    onChange={(e) => {
+                                        // Convert the input value to a number before setting it.
+                                        field.onChange(parseFloat(e.target.value))
                                     }}
                                 />
                             </FormControl>
@@ -106,11 +105,9 @@ export default function CreateVehicleLog() {
                                 <Input
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    onChange={(e) => {
+                                        // Convert the input value to a number before setting it.
+                                        field.onChange(parseFloat(e.target.value))
                                     }}
                                 />
                             </FormControl>
@@ -129,6 +126,9 @@ export default function CreateVehicleLog() {
                                     placeholder="Explain any damages caused by the user."
                                     className="resize-none w-full h-20"
                                     {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage />

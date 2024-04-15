@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 
 const formSchema = z.object({
     name: z.string().min(3, {
-        message: 'Username must be at least 3 characters.'
+        message: 'Name must be at least 3 characters.'
     }),
     depAmount: z.number().gte(3000, {
         message: 'Deposit Amount must be at least Rs.3000'
@@ -40,6 +40,7 @@ export default function CreateVehicleType() {
         // This will be type-safe and validated.
         console.log(values)
     }
+
     return (
         <Form {...form}>
             <form
@@ -54,7 +55,14 @@ export default function CreateVehicleType() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="" className="w-full" {...field} />
+                                <Input
+                                    placeholder=""
+                                    className="w-full"
+                                    {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

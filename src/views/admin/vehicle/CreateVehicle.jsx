@@ -1,3 +1,4 @@
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -25,31 +26,27 @@ const formSchema = z.object({
             regNoPattern,
             'Registration number must be in the format XX 9999, where X is any uppercase letter and 9 is any digit.'
         ),
-    chassisNo: z.string({
-        required_error: 'Chassis number is required'
-    }),
-    maintenanceType: z.string({
-        required_error: 'Maintenance type is required'
-    }),
-    color: z.string({
-        required_error: 'Color is required'
-    }),
+    chassisNo: z.string().min(9, 'Chassis number should be at least 9 characters long.'),
+    color: z.string().min(1, 'Color is required'),
     costPerDay: z
         .number()
-        .int()
-        .min(3000, {
-            message: 'Cost per day must be at least 3000'
-        })
-        .max(10000, {
-            message: 'Cost per day must be no more than 10000'
-        }),
-    mileage: z.number().int().min(0, {
-        message: 'Mileage must be more than 0'
-    })
+        .int('Cost per day must be an integer')
+        .min(3000, 'Cost per day must be at least 3000')
+        .max(10000, 'Cost per day must be no more than 10000'),
+    mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
+    transmission: z.string().min(1, { message: 'Transmission type is required' }),
+    status: z.string().min(1, { message: 'Status is required' }),
+    thumbnail: z
+        .any()
+        .refine((thumbnail) => thumbnail?.length === 1, 'File is required.')
+        .refine((thumbnail) => thumbnail[0]?.size <= 3000000, 'Max file size is 3MB')
+    // images: z
+    //     .any()
+    //     .refine((images) => images?.length === 1, 'File is required.')
+    //     .refine((images) => images[0]?.size <= 3000000, 'Max file size is 3MB')
 })
 
-export default function CreateReservation() {
-    // 1. Define your form.
+export default function CreateVehicle() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -58,15 +55,18 @@ export default function CreateReservation() {
             color: '',
             costPerDay: 0,
             mileage: 0,
-            thumbnail: '',
-            images: []
+            thumbnail: 0
+            // images: []
         }
     })
 
-    // 2. Define a submit handler.
+    const fileRef = form.register('thumbnail', { required: true })
+
+    // const filesRef = form.register('images', {
+    //     required: 'You must select at least one file'
+    // })
+
     function onSubmit(values) {
-        // Do something with the form values.
-        // This will be type-safe and validated.
         console.log(values)
     }
 
@@ -85,7 +85,14 @@ export default function CreateReservation() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Registration Number</FormLabel>
                             <FormControl>
-                                <Input placeholder="QL 9904" className="w-full" {...field} />
+                                <Input
+                                    placeholder="QL 9904"
+                                    className="w-full"
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -98,7 +105,14 @@ export default function CreateReservation() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Chassis Number</FormLabel>
                             <FormControl>
-                                <Input placeholder="SV30-0169266" className="w-full" {...field} />
+                                <Input
+                                    placeholder="SV30-0169266"
+                                    className="w-full"
+                                    {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -110,7 +124,12 @@ export default function CreateReservation() {
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Transmission</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Transmission" />
@@ -132,7 +151,14 @@ export default function CreateReservation() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Color</FormLabel>
                             <FormControl>
-                                <Input placeholder="White" className="w-full" {...field} />
+                                <Input
+                                    placeholder="White"
+                                    className="w-full"
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -146,16 +172,9 @@ export default function CreateReservation() {
                             <FormLabel className="pb-3 w-full">Cost Per Day</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number"
-                                    placeholder="10000"
+                                    type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
-                                    {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
-                                    }}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -170,16 +189,9 @@ export default function CreateReservation() {
                             <FormLabel className="pb-3 w-full">Mileage</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number"
-                                    placeholder="2500KM"
+                                    type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
-                                    {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
-                                    }}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -195,34 +207,71 @@ export default function CreateReservation() {
                                 Add Thumbnail
                             </FormLabel>
                             <FormControl>
-                                <Input type="file" className="w-full" {...field} {...{}} />
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    {...fileRef}
+                                    onChange={(e) => {
+                                        // Get the file from the input
+                                        const thumbnail = e.target.files[0]
+                                        if (thumbnail) {
+                                            field.onChange(thumbnail.name) // Update the form state with the file name if file is selected
+                                        } else {
+                                            field.onChange('') // Clear the form state if no file is selected
+                                        }
+                                    }}
+                                    {...{}}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-                <FormField
+                {/* <FormField
                     control={form.control}
                     name="images"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel htmlFor="picture" className="pb-3 w-full">
-                                Add photos
+                            <FormLabel htmlFor="images" className="pb-3 w-full">
+                                Add Images
                             </FormLabel>
                             <FormControl>
-                                <Input type="file" multiple className="w-full" {...field} {...{}} />
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    multiple
+                                    {...filesRef}
+                                    onChange={(e) => {
+                                        // Get the files from the input, convert FileList to an array
+                                        const files = Array.from(e.target.files)
+                                        if (files.length > 0) {
+                                            // Update the form state with the array of selected files
+                                            field.onChange(files)
+                                        } else {
+                                            // Clear the form state if no files are selected
+                                            field.onChange([])
+                                        }
+                                    }}
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
-                />
+                /> */}
+
                 <FormField
                     control={form.control}
-                    name="Status"
+                    name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Status" />

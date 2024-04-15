@@ -69,7 +69,7 @@ export default function CreateVehicleModel() {
             name: '',
             year: new Date().getFullYear(), // Current year as default
             engineCapacity: 600, // Default engine capacity
-            seatingCapacity: 2 // Default seating capacity
+            seatingCapacity: 4 // Default seating capacity
         }
     })
 
@@ -79,6 +79,7 @@ export default function CreateVehicleModel() {
         // This will be type-safe and validated.
         console.log(values)
     }
+
     return (
         <Form {...form}>
             <form
@@ -93,7 +94,14 @@ export default function CreateVehicleModel() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Model Name</FormLabel>
                             <FormControl>
-                                <Input placeholder="" className="w-full" {...field} />
+                                <Input
+                                    placeholder=""
+                                    className="w-full"
+                                    {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -171,7 +179,12 @@ export default function CreateVehicleModel() {
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Fuel</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Fuel Type" />
@@ -194,7 +207,12 @@ export default function CreateVehicleModel() {
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Vehicle Make</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select Vehicle Make" />

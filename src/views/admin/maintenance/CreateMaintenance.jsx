@@ -57,7 +57,9 @@ export default function CreateMaintenance() {
         // Do something with the form values.
         // This will be type-safe and validated.
         console.log(values)
+        console.log('Maintenance Type:', values.maintenanceType)
     }
+
     return (
         <Form {...form}>
             <form
@@ -76,11 +78,9 @@ export default function CreateMaintenance() {
                                     type="date"
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
-                                            field.onChange(dateValue) // Pass the string directly to your form's state
-                                        }
+                                    onChange={(e) => {
+                                        const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
+                                        field.onChange(dateValue) // Pass the string directly to your form's state
                                     }}
                                 />
                             </FormControl>
@@ -98,12 +98,9 @@ export default function CreateMaintenance() {
                             <FormControl>
                                 <Input
                                     className="w-full"
-                                    {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
+                                    onChange={(e) => {
+                                        // Convert the input value to a number before setting it.
+                                        field.onChange(parseFloat(e.target.value))
                                     }}
                                 />
                             </FormControl>
@@ -117,10 +114,15 @@ export default function CreateMaintenance() {
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Maintenance Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                                onValueChange={(value) => {
+                                    field.onChange(value)
+                                }}
+                                defaultValue={field.value}
+                            >
                                 <FormControl>
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select Maintenance T" />
+                                        <SelectValue placeholder="Select Maintenance Type" />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -147,6 +149,9 @@ export default function CreateMaintenance() {
                                     placeholder="Explain any damages caused by the user."
                                     className="resize-none w-full h-20"
                                     {...field}
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage />

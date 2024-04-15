@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -20,7 +21,7 @@ const validVehicleIds = [1001, 1002, 1003, 1004]
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const formSchema = z.object({
-    insuranceNo: z.string().min(9, 'Insurance No is required'),
+    insuranceNo: z.string().min(9, 'Insurance No should be at least 9 characters long'),
     insuranceExpiryDate: z.string().regex(dateRegex, {
         message: 'Insurance expiry date is required'
     }),
@@ -57,7 +58,13 @@ export default function CreateInsurance() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Insurance No</FormLabel>
                             <FormControl>
-                                <Input className="w-full" {...field} />
+                                <Input
+                                    className="w-full"
+                                    onChange={(e) => {
+                                        field.onChange(e.target.value)
+                                    }}
+                                    {...field}
+                                />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -73,13 +80,11 @@ export default function CreateInsurance() {
                                 <Input
                                     type="date"
                                     className="w-full"
-                                    {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
-                                            field.onChange(dateValue) // Pass the string directly to your form's state
-                                        }
+                                    onChange={(e) => {
+                                        const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
+                                        field.onChange(dateValue) // Pass the string directly to your form's state
                                     }}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -94,15 +99,9 @@ export default function CreateInsurance() {
                             <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     className="w-full"
-                                    {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
-                                    }}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
                             <FormMessage />
