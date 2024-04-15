@@ -1,7 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -81,13 +80,6 @@ export default function CreateVehicleModel() {
         console.log(values)
     }
 
-    const [name, setName] = useState('')
-    const [year, setYear] = useState(currentYear)
-    const [engineCapacity, setEngineCapacity] = useState(600)
-    const [seatingCapacity, setSeatingCapacity] = useState(2)
-    const [fuel, setFuel] = useState('')
-    const [vehicleMake, setVehicleMake] = useState('')
-
     return (
         <Form {...form}>
             <form
@@ -105,11 +97,9 @@ export default function CreateVehicleModel() {
                                 <Input
                                     placeholder=""
                                     className="w-full"
-                                    value={name}
                                     {...field}
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
-                                        setName(e.target.value)
                                     }}
                                 />
                             </FormControl>
@@ -126,13 +116,11 @@ export default function CreateVehicleModel() {
                             <FormControl>
                                 <Input
                                     className="w-full"
-                                    value={year}
                                     {...field}
                                     {...{
                                         onChange: (e) => {
                                             // Convert the input value to a number before setting it.
                                             field.onChange(parseFloat(e.target.value))
-                                            setYear(parseFloat(e.target.value))
                                         }
                                     }}
                                 />
@@ -150,13 +138,11 @@ export default function CreateVehicleModel() {
                             <FormControl>
                                 <Input
                                     className="w-full"
-                                    value={engineCapacity}
                                     {...field}
                                     {...{
                                         onChange: (e) => {
                                             // Convert the input value to a number before setting it.
                                             field.onChange(parseFloat(e.target.value))
-                                            setEngineCapacity(parseFloat(e.target.value))
                                         }
                                     }}
                                 />
@@ -174,13 +160,11 @@ export default function CreateVehicleModel() {
                             <FormControl>
                                 <Input
                                     className="w-full"
-                                    value={seatingCapacity}
                                     {...field}
                                     {...{
                                         onChange: (e) => {
                                             // Convert the input value to a number before setting it.
                                             field.onChange(parseFloat(e.target.value))
-                                            setSeatingCapacity(parseFloat(e.target.value))
                                         }
                                     }}
                                 />
@@ -198,9 +182,7 @@ export default function CreateVehicleModel() {
                             <Select
                                 onValueChange={(value) => {
                                     field.onChange(value)
-                                    setFuel(value) // Update the local state
                                 }}
-                                value={fuel}
                                 defaultValue={field.value}
                             >
                                 <FormControl>
@@ -228,9 +210,7 @@ export default function CreateVehicleModel() {
                             <Select
                                 onValueChange={(value) => {
                                     field.onChange(value)
-                                    setVehicleMake(value) // Update the local state
                                 }}
-                                value={vehicleMake}
                                 defaultValue={field.value}
                             >
                                 <FormControl>

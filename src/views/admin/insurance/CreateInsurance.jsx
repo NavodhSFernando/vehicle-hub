@@ -44,10 +44,6 @@ export default function CreateInsurance() {
         console.log(values)
     }
 
-    const [insuranceNo, setInsuranceNo] = useState('')
-    const [insuranceExpiryDate, setInsuranceExpiryDate] = useState('')
-    const [vehicleId, setVehicleId] = useState('')
-
     return (
         <Form {...form}>
             <form
@@ -64,10 +60,8 @@ export default function CreateInsurance() {
                             <FormControl>
                                 <Input
                                     className="w-full"
-                                    value={insuranceNo}
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
-                                        setInsuranceNo(e.target.value)
                                     }}
                                     {...field}
                                 />
@@ -86,11 +80,9 @@ export default function CreateInsurance() {
                                 <Input
                                     type="date"
                                     className="w-full"
-                                    value={insuranceExpiryDate}
                                     onChange={(e) => {
                                         const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
                                         field.onChange(dateValue) // Pass the string directly to your form's state
-                                        setInsuranceExpiryDate(dateValue) // Update the local state
                                     }}
                                     {...field}
                                 />
@@ -107,15 +99,9 @@ export default function CreateInsurance() {
                             <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     className="w-full"
-                                    value={vehicleId}
-                                    onChange={(e) => {
-                                        // Convert the input value to a number before setting it.
-                                        field.onChange(parseFloat(e.target.value))
-                                        setVehicleId(e.target.value)
-                                    }}
-                                    {...field}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
                             <FormMessage />
