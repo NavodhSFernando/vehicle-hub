@@ -62,7 +62,6 @@ export default function CreateAvailability() {
                             <FormControl>
                                 <Input
                                     className="w-full"
-                                    {...field}
                                     value={reservationId}
                                     onChange={(e) => {
                                         const val = parseFloat(e.target.value)
