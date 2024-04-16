@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
+import { useNavigate } from 'react-router-dom'
 
 export const columns = [
     {
@@ -17,14 +18,34 @@ export const columns = [
         header: 'Name'
     },
     {
+        accessorKey: 'logo',
+        header: 'Logo',
+        cell: ({ row }) => {
+            const value = row.getValue('logo')
+
+            return (
+                <div className="flex items-center gap-2">
+                    <img src={value} alt="logo" className="w-8 h-8 object-cover rounded-full" />
+                    <span>{value}</span>
+                </div>
+            )
+        }
+    },
+    {
         accessorKey: 'actions',
         header: () => {
             return <div className="text-end">Actions</div>
         },
-        cell: () => {
+        cell: ({ row }) => {
+            const id = row.getValue('id') // Assuming 'id' is the unique identifier for each row
+
             return (
                 <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
+                    <Button
+                        variant="ghost"
+                        className="p-0"
+                        onClick={() => useNavigate(`/admin/vehiclemake/edit/${id}`)}
+                    >
                         <GrEdit fontSize={24} className="mr-1" />
                     </Button>
                     <Button variant="ghost" className="p-0">

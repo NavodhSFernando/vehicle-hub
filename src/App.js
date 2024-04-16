@@ -45,6 +45,7 @@ import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
 import ContactUs from './views/front/ContactUs'
+import EditVehicleMake from './views/admin/vehiclemake/EditVehicleMake'
 
 function App() {
     return (
@@ -95,6 +96,7 @@ function App() {
                         <Route path="create" element={<CreateVehicleType />} />
                     </Route>
                     <Route path="vehiclemake">
+                        <Route path="/admin/vehiclemake/edit/:vehicleMakeId" element={<EditVehicleMake />} />
                         <Route path="view" element={<ViewVehicleMake />} />
                         <Route path="create" element={<CreateVehicleMake />} />
                     </Route>
