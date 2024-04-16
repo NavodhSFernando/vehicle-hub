@@ -33,7 +33,7 @@ const FilterCard = () => {
     const [vehicleType, setVehicleType] = useState('all')
     const [vehicleMake, setVehicleMake] = useState('all')
     const [vehicleCapacity, setVehicleCapacity] = useState('all')
-    const [maxPrice, setMaxPrice] = useState(10000)
+    const [maxPrice, setMaxPrice] = useState(0)
 
     // Event handlers for each filter category. These update the state when the user selects a new option.
     // The 'event' object provides access to the new value of the input element.
@@ -163,9 +163,12 @@ const FilterCard = () => {
                             value={maxPrice}
                             onChange={handlePriceChange}
                             className="absolute w-full h-3 bg-transparent appearance-none cursor-pointer"
+                            style={{ zIndex: maxPrice > 0 ? 1 : 0 }}
                         />
-                        {/* Slider Thumb */}
-                        <div className="absolute w-5 h-5 bg-blue-800 rounded-full left-[calc((maxPrice / 10000 * 100) - 0.625rem)] top-[-0.375rem] border-4 border-white"></div>
+                        <div
+                            className="absolute h-3 bg-blue-500 rounded-full"
+                            style={{ width: `${(maxPrice / 10000) * 100}%` }}
+                        ></div>
                     </div>
                     <p
                         className="text-lg font-semibold text-right text-gray-500"
