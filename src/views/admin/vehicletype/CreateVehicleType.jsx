@@ -1,7 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -14,6 +13,7 @@ import {
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -25,8 +25,12 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleType() {
-    // 1. Define your form.
-    const form = useForm({
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
@@ -34,59 +38,57 @@ export default function CreateVehicleType() {
         }
     })
 
-    // 2. Define a submit handler.
-    function onSubmit(values) {
-        // Do something with the form values.
-        // This will be type-safe and validated.
-        console.log(values)
+    //Submit handler
+    const handleSave = async (data) => {
+        const url = 'http://localhost:5062/api/VehicleType'
+        try {
+            const formData = {
+                Name: data.name,
+                DepositAmount: data.depAmount
+            }
+
+            const result = await axios.post(url, formData)
+            console.log(result)
+            reset()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
-        <Form {...form}>
+        <Form {...control}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(handleSave)}
                 className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
             >
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="name"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Name</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder=""
-                                    className="w-full"
-                                    {...field}
-                                    onChange={(e) => {
-                                        field.onChange(e.target.value)
-                                    }}
-                                />
+                                <Input className="w-full" {...field} />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.name && errors.name.message}</FormMessage>
                         </FormItem>
                     )}
                 />
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="depAmount"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Deposit Amount</FormLabel>
                             <FormControl>
                                 <Input
+                                    type="number"
                                     className="w-full"
-                                    {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
-                                    }}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.logo && errors.logo.message}</FormMessage>
                         </FormItem>
                     )}
                 />
