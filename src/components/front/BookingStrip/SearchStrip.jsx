@@ -1,5 +1,5 @@
 import React from 'react'
-//import Search from '../../../assets/Icons/search.svg'
+import Search from '../../../assets/Icons/search.svg'
 
 export default function SearchStrip() {
     return (
@@ -11,7 +11,7 @@ export default function SearchStrip() {
                     placeholder="Search something here"
                 />
                 <button className="flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]">
-                    {/* <img src={Search}></img> */}
+                    <img src={Search}></img>
                     Search
                 </button>
             </div>
