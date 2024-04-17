@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react' // import useState
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -29,7 +29,7 @@ const formSchema = z.object({
 
 export default function EditVehicleMake() {
     const { vehicleMakeId } = useParams() // Access route parameter
-    const fileInputRef = useRef(null)
+    const fileInputRef = useRef('')
     const {
         control,
         handleSubmit,
@@ -37,7 +37,10 @@ export default function EditVehicleMake() {
         setValue,
         formState: { errors }
     } = useForm({
-        resolver: zodResolver(formSchema)
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: ''
+        }
     })
 
     // Fetch vehicle make data
@@ -46,9 +49,11 @@ export default function EditVehicleMake() {
             const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
             try {
                 const { data } = await axios.get(url)
+                console.log(data.name)
+                console.log(data.logo)
                 reset({
-                    name: data.Name,
-                    logo: data.Logo
+                    name: data.name,
+                    logo: data.logo
                 })
             } catch (error) {
                 console.error('Failed to fetch vehicle make', error)
