@@ -14,6 +14,15 @@ export default function TimePicker() {
             <div className="flex flex-col w-fit">
                 <input type="time" className="w-fit max-w-[120px] outline-none relative " placeholder="10:00:00" />
             </div>
+            <style>
+                {`
+                    input[type="time"]::-webkit-calendar-picker-indicator {
+                        opacity: 0;
+                        width: 100%;
+                        position: absolute;
+                    }                      
+                `}
+            </style>
         </div>
     )
 }
