@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 const faqs = [
     {
@@ -23,43 +23,26 @@ const faqs = [
     }
 ]
 
-export function FAQ() {
-    const [activeIndex, setActiveIndex] = useState(null)
-
-    const toggleFAQ = (index) => {
-        setActiveIndex(activeIndex === index ? null : index)
-    }
-
+export default function Faq() {
     return (
-        <div className="py-16 min-h-screen bg-white">
-            <div className="container mx-auto sm:w-3/4 md:w-2/3 lg:w-1/2">
-                <h2 className="text-center text-3xl mb-10 font-bold">Frequently Asked Questions</h2>
-
-                <div className="space-y-4">
+        <>
+            <div className="flex flex-col justify-center items-center p-[30px] bg-gradient-to-b from-blue-900 to-white">
+                <div className="text-[50px] font-[700]">Frequently Asked Questions</div>
+                <div className="w-[1000px] text-center mt-[30px] text-white">
+                    Welcome to our FAQ page, where we've compiled answers to commonly asked questions to provide you
+                    with quick and helpful information. Whether you're curious about our reservation process, payment
+                    methods, or rental policies, you'll find all the answers you need right here. If you can't find what
+                    you're looking for, feel free to reach out to our friendly customer support team for assistance.
+                </div>
+                <div className="mt-[30px] flex flex-col gap-[20px]">
                     {faqs.map((faq, index) => (
-                        <div
-                            key={index}
-                            className={`p-4 border rounded-lg ${
-                                index === activeIndex ? 'border-blue-500' : 'border-gray-300'
-                            }`}
-                        >
-                            <h3
-                                className={`text-lg font-medium ${
-                                    index === activeIndex ? 'text-blue-500' : 'text-gray-700'
-                                }`}
-                                onClick={() => toggleFAQ(index)}
-                            >
-                                {faq.question}
-                                <span className="float-right">{index === activeIndex ? '-' : '+'}</span>
-                            </h3>
-                            <div className={`${index === activeIndex ? 'block' : 'hidden'} mt-2 text-gray-600`}>
-                                <p>{faq.answer}</p>
-                            </div>
+                        <div key={index} className="bg-white p-4 rounded-md shadow-md">
+                            <div className="font-semibold">{faq.question}</div>
+                            <div>{faq.answer}</div>
                         </div>
                     ))}
                 </div>
             </div>
-        </div>
+        </>
     )
 }
-export default FAQ
