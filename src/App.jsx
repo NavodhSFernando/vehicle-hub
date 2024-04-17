@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import TitleComponent from './components/ui/TitleComponent'
 import AdminLayout from './components/admin/Layout'
 import FrontLayout from './components/front/Layout'
 import Dashboard from './views/admin/Dashboard'
@@ -53,8 +54,22 @@ function App() {
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
                     <Route index element={<Home />} />
-                    <Route path="/vehiclefleet" element={<VehicleFleet />} />
-                    <Route path="/vehiclefleet/:slug" element={<VehicleFleetSingle />} />
+                    <Route
+                        path="/vehiclefleet"
+                        element={
+                            <TitleComponent title="Vehicle Fleet">
+                                <VehicleFleet />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="/vehiclefleet/:slug"
+                        element={
+                            <TitleComponent title="Vehicle Fleet">
+                                <VehicleFleetSingle />
+                            </TitleComponent>
+                        }
+                    />
                     <Route path="/account" element={<Account />}>
                         <Route path="/account/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                         <Route path="/account/rentalhistorysingle" element={<Rentalhistorysingle />} />
