@@ -155,7 +155,7 @@ const FilterCard = () => {
                         Price
                     </p>
                     {/* Increase width of the slider container */}
-                    <div className="relative w-full h-3 bg-pink-200 rounded-full" style={{ width: '300px' }}>
+                    <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '300px' }}>
                         <input
                             type="range"
                             min="0"
@@ -166,9 +166,21 @@ const FilterCard = () => {
                             style={{ zIndex: maxPrice > 0 ? 1 : 0 }}
                         />
                         <div
-                            className="absolute h-3 bg-blue-500 rounded-full"
+                            className="absolute h-3 bg-[#283280] rounded-full"
                             style={{ width: `${(maxPrice / 10000) * 100}%` }}
                         ></div>
+                        <style jsx>{`
+                            input[type='range']::-webkit-slider-thumb {
+                                -webkit-appearance: none;
+                                appearance: none;
+                                width: 20px;
+                                height: 20px;
+                                background-color: #283280;
+                                border-radius: 50%;
+                                border: 4px solid #ffffff;
+                                cursor: pointer;
+                            }
+                        `}</style>
                     </div>
                     <p
                         className="text-lg font-semibold text-right text-gray-500"
