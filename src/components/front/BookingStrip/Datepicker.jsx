@@ -1,25 +1,37 @@
-'use client'
-import React from 'react'
+import React, { useState } from 'react'
+import { CiCalendar } from 'react-icons/ci'
 
-export default function Datepicker({ date }) {
+import { format } from 'date-fns'
+import { Calendar as CalendarIcon } from 'lucide-react'
+
+import { cn } from '../../../lib/utils'
+import { Button } from '../../../components/ui/button'
+import { Calendar } from '../../../components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover'
+
+export default function Datepicker() {
+    const [date, setDate] = React.useState()
+
     return (
         <div className="flex gap-2 items-center ">
-            <img
-                className="w-[25px] h-[25px]"
-                src="https://cdn.discordapp.com/attachments/510829749065744405/1212675542550192178/Vector.png?ex=66179d1b&is=6605281b&hm=fea40004a4f7a5b5e79a13729d89285e037065917cf3657060616887653080f4&"
-                alt=""
-            />
-            <div className="flex flex-col w-fit ">
-                <label htmlFor="Pick-Up-Date">
-                    <p className="text-[12px] opacity-80">Pick Up Date</p>
-                </label>
-                <input
-                    disabled={date ? true : false}
-                    type="date"
-                    className="w-fit max-w-[130px] dateInput outline-none relative "
-                    value={'2024-03-30'}
-                />
-            </div>
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button variant={'outline'} className={cn('w-[180px] justify-start text-left', 'custom-button')}>
+                        <CalendarIcon className="mr-2 h-6 w-6" style={{ color: '#283280' }} />
+                        {date ? format(date, 'PPP') : <div className="font-[500]">Pick-Up Date</div>}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                    <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                </PopoverContent>
+            </Popover>
+
+            <style>{`
+                .custom-button {
+                    border: none; /* Remove the border */
+                    outline: none; /* Remove the outline */
+                }
+            `}</style>
         </div>
     )
 }
