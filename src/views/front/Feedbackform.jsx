@@ -1,25 +1,61 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { Button } from '../../components/ui/button'
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage
-} from '../../components/ui/form'
-import { Input } from '../../components/ui/input'
-import StarRating from '../../components/ui/StarRating'
+import axios from 'axios'
+import { FaStar } from 'react-icons/fa6'
 
 export default function FeedbackForm() {
-    const form = useForm()
+    //star icon size
+    const [iconSize, setIconSize] = useState(window.innerWidth <= 768 ? 15 : 30)
 
-    const onSubmit = (data) => {
-        console.log(data)
+    const [value, setValue] = useState(0)
+
+    const handleRatingChange = (newValue) => {
+        setValue(newValue)
     }
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control
+    } = useForm()
+
+    const onSubmit = async (data) => {
+        try {
+            console.log('feedback frm data')
+            console.log(data)
+
+            const FeedbackRequest = {
+                Designation: data.designation,
+                RatingNo: parseInt(data.rating), // Convert rating to integer if needed
+                Service_Review: data.serviceReview,
+                Vehicle_Review: data.vehicleReview,
+                ReservationId: 1
+            }
+
+            // Now send feedbackData to the server
+            const response = await axios.post('http://localhost:47367/api/Feedback', FeedbackRequest)
+            console.log('Feedback submitted successfully:', response.data)
+            alert('Feedback submitted successfully.')
+        } catch (error) {
+            console.error('Error submitting feedback:', error)
+            alert('Error submitting feedback')
+        }
+    }
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIconSize(window.innerWidth <= 768 ? 15 : 30)
+        }
+
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
+
     return (
         <div className="flex items-center justify-center w-full min-h-screen bg-gray-300 pb-4 pt-4">
             <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-auto pt-10 pb-10 pl-20 pr-20">
@@ -29,115 +65,102 @@ export default function FeedbackForm() {
                 >
                     <span className="text-2xl">×</span>
                 </button>
-
                 <div className="mb-4">
                     <h2 className="text-2xl font-bold text-gray-900">Please Provide your Feedback</h2>
-
                     <p className="text-sm text-gray-500">
                         Your feedback is greatly valued as it gives us the opportunity to serve you better.
                     </p>
                 </div>
-
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="username"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="mb-4">
-                                        <FormLabel htmlFor="name" className="block text-gray-700 font-semibold mb-2">
-                                            Name
-                                        </FormLabel>
-                                        <FormControl>
-                                            <input
-                                                id="name"
-                                                type="text"
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
-                                                placeholder="Alex Fernando"
-                                                required
-                                            />
-                                        </FormControl>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <FormLabel
-                                            htmlFor="designation"
-                                            className="block text-gray-700 font-semibold mb-2"
-                                        >
-                                            Designation
-                                        </FormLabel>
-                                        <FormControl>
-                                            <input
-                                                id="designation"
-                                                type="text"
-                                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 mb-3"
-                                                placeholder="A12345670"
-                                                required
-                                            />
-                                        </FormControl>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <FormLabel
-                                            htmlFor="vehicleRating"
-                                            className="block text-gray-700 font-semibold mb-2"
-                                        >
-                                            Vehicle Rating
-                                        </FormLabel>
-
-                                        <FormControl>
-                                            <StarRating />
-                                        </FormControl>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <FormLabel
-                                            htmlFor="vehicleReview"
-                                            className="block text-gray-700 font-semibold mb-2"
-                                        >
-                                            Vehicle Review
-                                        </FormLabel>
-                                        <FormControl>
-                                            <textarea
-                                                id="vehicleReview"
-                                                className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500 mb-4"
-                                                placeholder="'Efficient Toyota Aqua: Economical, compact, and eco-friendly hybrid.'"
-                                                required
-                                            />
-                                        </FormControl>
-                                    </div>
-
-                                    <div className="mb-8">
-                                        <FormLabel
-                                            htmlFor="serviceReview"
-                                            className="block text-gray-700 font-semibold mb-2"
-                                        >
-                                            Service Review
-                                        </FormLabel>
-                                        <FormControl>
-                                            <textarea
-                                                id="serviceReview"
-                                                className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500"
-                                                placeholder="'Service: Exceptional, reliable, and efficient for Toyota Aqua car rental.'"
-                                                required
-                                            />
-                                        </FormControl>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <Button
-                                            type="submit"
-                                            className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300 mt-4"
-                                        >
-                                            Submit
-                                        </Button>
-                                    </div>
-                                </FormItem>
-                            )}
+                <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+                    <div className="mb-4">
+                        <label htmlFor="name" className="block text-gray-700 font-semibold mb-2">
+                            Name
+                        </label>
+                        <input
+                            {...register('username')}
+                            id="name"
+                            type="text"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
+                            placeholder="Alex Fernando"
+                            required
                         />
-                    </form>
-                </Form>
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="designation" className="block text-gray-700 font-semibold mb-2">
+                            Designation
+                        </label>
+                        <input
+                            {...register('designation')}
+                            id="designation"
+                            type="text"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 mb-3"
+                            placeholder="A12345670"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="vehicleRating" className="block text-gray-700 font-semibold mb-2">
+                            Vehicle Rating
+                        </label>
+                        <div className="flex gap-[10px] mb-6">
+                            {[...Array(5)].map((_, index) => {
+                                const ratingValue = index + 1
+                                return (
+                                    <label key={index} className="flex">
+                                        <input
+                                            {...register('rating')}
+                                            type="radio"
+                                            name="rating"
+                                            value={ratingValue}
+                                            checked={ratingValue === value}
+                                            onChange={() => handleRatingChange(ratingValue)}
+                                            style={{
+                                                position: 'absolute',
+                                                opacity: 0,
+                                                width: '1px',
+                                                height: '1px',
+                                                overflow: 'hidden'
+                                            }}
+                                        />
+                                        <FaStar size={iconSize} color={ratingValue <= value ? '#fcee4e' : '#bfbebb'} />
+                                    </label>
+                                )
+                            })}
+                        </div>
+                    </div>
+                    <div className="mb-4">
+                        <label htmlFor="vehicleReview" className="block text-gray-700 font-semibold mb-2">
+                            Vehicle Review
+                        </label>
+                        <textarea
+                            {...register('vehicleReview')}
+                            id="vehicleReview"
+                            className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500 mb-4"
+                            placeholder="'Efficient Toyota Aqua: Economical, compact, and eco-friendly hybrid.'"
+                            required
+                        />
+                    </div>
+                    <div className="mb-8">
+                        <label htmlFor="serviceReview" className="block text-gray-700 font-semibold mb-2">
+                            Service Review
+                        </label>
+                        <textarea
+                            {...register('serviceReview')}
+                            id="serviceReview"
+                            className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500"
+                            placeholder="'Service: Exceptional, reliable, and efficient for Toyota Aqua car rental.'"
+                            required
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <Button
+                            type="submit"
+                            className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300 mt-4"
+                        >
+                            Submit
+                        </Button>
+                    </div>
+                </form>
             </div>
         </div>
     )
