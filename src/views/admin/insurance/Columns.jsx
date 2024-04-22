@@ -1,23 +1,34 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
+import { format, parseISO } from 'date-fns'
 
 export const columns = [
     {
-        accessorKey: 'no',
-        header: 'Insurance No',
+        accessorKey: 'id',
+        header: 'ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('no'))
+            const value = parseFloat(row.getValue('id'))
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{'#' + value}</div>
         }
     },
     {
-        accessorKey: 'expiry',
-        header: 'Insurance Expiry Date'
+        accessorKey: 'insuranceNo',
+        header: 'InsuranceNo'
     },
     {
-        accessorKey: 'id',
+        accessorKey: 'expiryDate',
+        header: 'Expiry Date',
+        cell: ({ row }) => {
+            const value = row.getValue('expiryDate')
+            const formattedDate = value ? format(parseISO(value), 'yyyy-MM-dd') : ''
+
+            return <div className="font-medium">{formattedDate}</div>
+        }
+    },
+    {
+        accessorKey: 'vehicleId',
         header: 'Vehicle ID',
         cell: ({ row }) => {
             const value = parseFloat(row.getValue('id'))

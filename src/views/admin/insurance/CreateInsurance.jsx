@@ -14,14 +14,15 @@ import {
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 
-const validVehicleIds = [1001, 1002, 1003, 1004]
+const validVehicleIds = [1]
 
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const formSchema = z.object({
     insuranceNo: z.string().min(9, 'Insurance No should be at least 9 characters long'),
-    insuranceExpiryDate: z.string().regex(dateRegex, {
+    expiryDate: z.string().regex(dateRegex, {
         message: 'Insurance expiry date is required'
     }),
     vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
@@ -30,34 +31,55 @@ const formSchema = z.object({
 })
 
 export default function CreateInsurance() {
-    const form = useForm({
+    const {
+        control,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors }
+    } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             insuranceNo: '',
-            insuranceExpiryDate: '',
+            expiryDate: '',
             vehicleId: 0
         }
     })
 
-    function onSubmit(values) {
-        console.log(values)
+    //Submit handler
+    const handleSave = async (data) => {
+        const url = 'http://localhost:5062/api/VehicleInsurance'
+        try {
+            const formData = {
+                InsuranceNo: data.insuranceNo,
+                ExpiryDate: data.expiryDate,
+                VehicleId: data.vehicleId
+            }
+
+            const result = await axios.post(url, formData)
+            console.log(result)
+            reset()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
-        <Form {...form}>
+        <Form {...control}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(handleSave)}
                 className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
             >
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="insuranceNo"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Insurance No</FormLabel>
                             <FormControl>
                                 <Input
+                                    type="text"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
@@ -70,8 +92,8 @@ export default function CreateInsurance() {
                     )}
                 />
                 <FormField
-                    control={form.control}
-                    name="insuranceExpiryDate"
+                    control={control}
+                    name="expiryDate"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Insurance Expiry Date</FormLabel>
@@ -91,7 +113,7 @@ export default function CreateInsurance() {
                     )}
                 />
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="vehicleId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
