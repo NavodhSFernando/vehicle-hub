@@ -64,7 +64,7 @@ export default function CreateVehicleType() {
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={control}
-                    name="name"
+                    name="type"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Name</FormLabel>
