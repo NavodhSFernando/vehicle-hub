@@ -3,6 +3,26 @@ import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 
+// Define a component to encapsulate the action buttons
+const ActionButtons = ({ vehicleMakeId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button
+                variant="ghost"
+                className="p-0"
+                onClick={() => navigate(`/admin/vehiclemake/edit/${vehicleMakeId}`)}
+            >
+                <GrEdit fontSize={24} className="mr-1" />
+            </Button>
+            <Button variant="ghost" className="p-0">
+                <GrTrash fontSize={24} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
+
 export const columns = [
     {
         accessorKey: 'id',
@@ -33,26 +53,7 @@ export const columns = [
     },
     {
         accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
-        cell: ({ row }) => {
-            const id = row.getValue('id') // Assuming 'id' is the unique identifier for each row
-
-            return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button
-                        variant="ghost"
-                        className="p-0"
-                        onClick={() => useNavigate(`/admin/vehiclemake/edit/${id}`)}
-                    >
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
-            )
-        }
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons vehicleMakeId={row.getValue('id')} />
     }
 ]
