@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ggl from '../../assets/Icons/ggl.svg'
 import fb from '../../assets/Icons/fb.svg'
 import { useForm } from 'react-hook-form'
@@ -15,15 +15,55 @@ import {
     FormMessage
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
+
+// File validation Schema
+const formSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmpassword: z.string().min(8)
+})
 
 export const Signup = () => {
-    const form = useForm()
+    const [error, setError] = useState('')
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors },
+        register
+    } = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: '',
+            password: '',
+            confirmpassword: ''
+        }
+    })
 
-    function onSubmit(values) {
-        // Do something with the form values.
-        // This will be type-safe and validated.
-        console.log(values)
+    // Submit handler
+    const onSubmit = async (data) => {
+        try {
+            if (data.password !== data.confirmpassword) {
+                setError('Password and confirm password must match.')
+                return
+            }
+            const result = await axios.post('http://localhost:5062/api/CustomerAuth/register', {
+                email: data.email,
+                password: data.password,
+                confirmPassword: data.confirmpassword
+            })
+
+            console.log(result.data) // Log the server response
+            reset() // Reset the form after successful submission
+        } catch (error) {
+            console.error('Error:', error)
+            // Handle form submission errors here
+            setError('Registration failed. Please try again.')
+        }
     }
+
     return (
         <div>
             <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
@@ -35,10 +75,10 @@ export const Signup = () => {
                     </h1>
                     <p className="text-xs text-gray-600 text-center mb-2">Please enter your user information.</p>
 
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+                    <Form {...control}>
+                        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
                             <FormField
-                                control={form.control}
+                                control={control}
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
@@ -50,20 +90,18 @@ export const Signup = () => {
                                                 <input
                                                     id="email"
                                                     type="email"
-                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                                    title="Please enter a valid email address"
-                                                    required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    {...register('email')}
                                                 />
                                             </FormControl>
                                         </div>
-                                        <FormMessage />
+                                        <FormMessage>{errors.email && errors.email.message}</FormMessage>
                                     </FormItem>
                                 )}
                             />
 
                             <FormField
-                                control={form.control}
+                                control={control}
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
@@ -75,19 +113,19 @@ export const Signup = () => {
                                                 <input
                                                     id="password"
                                                     type="password"
-                                                    autoComplete="current-password"
                                                     required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    {...register('password')}
                                                 />
                                             </FormControl>
                                         </div>
-                                        <FormMessage />
+                                        <FormMessage>{errors.password && errors.password.message}</FormMessage>
                                     </FormItem>
                                 )}
                             />
                             <FormField
-                                control={form.control}
-                                name="password"
+                                control={control}
+                                name="confirmpassword"
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="flex flex-col space-y-1 pt-3">
@@ -101,13 +139,13 @@ export const Signup = () => {
                                                 <input
                                                     id="confirmpassword"
                                                     type="password"
-                                                    autoComplete="current-password"
                                                     required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    {...register('confirmpassword')}
                                                 />
                                             </FormControl>
                                         </div>
-                                        <FormMessage />
+                                        <FormMessage>{error}</FormMessage>
                                     </FormItem>
                                 )}
                             />
