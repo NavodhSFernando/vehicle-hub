@@ -116,6 +116,7 @@ function App() {
                         <Route path="view" element={<ViewEmployee />} />
                         <Route path="create" element={<CreateEmployee />} />
                     </Route>
+                    
                     <Route path="customer">
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
