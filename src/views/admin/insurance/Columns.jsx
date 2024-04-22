@@ -25,6 +25,10 @@ export const columns = [
             return <div className="font-medium">{value}</div>
         }
     },
+    {
+        accessorKey: 'status',
+        header: 'Status'
+    },
 
     {
         accessorKey: 'actions',
