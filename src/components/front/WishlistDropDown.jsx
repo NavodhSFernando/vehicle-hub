@@ -1,59 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import aqua from '../../assets/vehicles/aqua.png'
 
-// Sample wishlist data - might want to pass this as a prop as well
-const sampleWishlist = [
-    {
-        id: 'w1',
-        name: 'Toyota Aqua',
-        year: '2016',
-        type: 'Hybrid',
-        capacity: '4 Person',
-        price: 'Rs 10,000/ day',
-        imgSrc: aqua
-    },
-    {
-        id: 'w2',
-        name: 'Toyota C-HR',
-        year: '2020',
-        type: 'Hybrid',
-        capacity: '4 Person',
-        price: 'Rs 16,000/ day',
-        imgSrc: aqua
-    },
-    {
-        id: 'w3',
-        name: 'Toyota C-HR',
-        year: '2020',
-        type: 'Hybrid',
-        capacity: '4 Person',
-        price: 'Rs 16,000/ day',
-        imgSrc: aqua
-    },
-    {
-        id: 'w4',
-        name: 'Toyota C-HR',
-        year: '2020',
-        type: 'Hybrid',
-        capacity: '4 Person',
-        price: 'Rs 16,000/ day',
-        imgSrc: aqua
-    },
-    {
-        id: 'w5',
-        name: 'Toyota C-HR',
-        year: '2020',
-        type: 'Hybrid',
-        capacity: '4 Person',
-        price: 'Rs 16,000/ day',
-        imgSrc: aqua
-    }
-    // ... more wishlist items
-]
-// WishlistDropdown component
-// WishlistDropdown component
 const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
+    const [wishlistItems, setWishlistItems] = useState([])
+
+    useEffect(() => {
+        const storedWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
+        setWishlistItems(storedWishlistItems)
+    }, [])
+
+    const handleRemoveFromWishlist = (itemName) => {
+        const updatedWishlistItems = wishlistItems.filter((item) => item.name !== itemName)
+        setWishlistItems(updatedWishlistItems)
+        localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems))
+    }
+
     return (
         // The dropdown menu
         isOpen && (
@@ -65,33 +26,22 @@ const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                 {/* Scrollable list container */}
                 <div className="overflow-y-auto wishlist-scrollbar" style={{ maxHeight: '17rem' }}>
                     {/* List of wishlist items */}
-                    {sampleWishlist.slice(0, 4).map(
-                        (
-                            item // changed to show only 3 items
-                        ) => (
-                            <div key={item.id} className="flex items-center px-[20px] py-3 border-t border-gray-100">
-                                <img
-                                    className="w-[50px] h-full scale-x-[-1] mt-2 p-1"
-                                    src={item.imgSrc}
-                                    alt={item.name}
-                                />
-                                <div className="flex-grow px-2 ml-[30px]">
-                                    <p className="font-bold text-gray-600">{item.name}</p>
-                                    <p className="text-sm text-gray-600">{`${item.year} | ${item.type} | ${item.capacity}`}</p>
-                                    <p className="text-sm text-gray-900 mt-[10px]">{item.price}</p>
-                                </div>
-                                <button
-                                    className="text-gray-400 hover:text-gray-500"
-                                    onClick={() => {
-                                        // Implement the function to remove the item from wishlist here
-                                        console.log(`Remove ${item.name}`)
-                                    }}
-                                >
-                                    ×
-                                </button>
+                    {wishlistItems.map((item) => (
+                        <div key={item.id} className="flex items-center px-[20px] py-3 border-t border-gray-100">
+                            <img className="w-[50px] h-full scale-x-[-1] mt-2 p-1" src={aqua} alt={item.name} />
+                            <div className="flex-grow px-2 ml-[30px]">
+                                <p className="font-bold text-gray-600">{item.name}</p>
+                                <p className="text-sm text-gray-600">{`${item.year} | ${item.type} | ${item.capacity}`}</p>
+                                <p className="text-sm text-gray-900 mt-[10px]">{item.price}</p>
                             </div>
-                        )
-                    )}
+                            <button
+                                className="text-gray-400 hover:text-gray-500"
+                                onClick={() => handleRemoveFromWishlist(item.name)}
+                            >
+                                ×
+                            </button>
+                        </div>
+                    ))}
                 </div>
                 <style>
                     {`
@@ -107,7 +57,6 @@ const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                         }
                         .wishlist-scrollbar::-webkit-scrollbar-thumb:hover {
                             background: #553;
-
                         }
                         .wishlist-scrollbar {
                             -ms-overflow-style: none; /* IE and Edge */
