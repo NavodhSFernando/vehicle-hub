@@ -35,7 +35,6 @@ export default function CreateInsurance() {
         control,
         handleSubmit,
         reset,
-        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -87,7 +86,7 @@ export default function CreateInsurance() {
                                     {...field}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.insuranceNo && errors.insuranceNo.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -108,7 +107,7 @@ export default function CreateInsurance() {
                                     {...field}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.expiryDate && errors.expiryDate.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -125,7 +124,7 @@ export default function CreateInsurance() {
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
                     )}
                 />
