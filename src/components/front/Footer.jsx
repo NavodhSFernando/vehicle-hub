@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Logo from '../../assets/logos/VH-Type.png'
 import { FaInstagram } from 'react-icons/fa6'
 import { FaFacebookF } from 'react-icons/fa'
@@ -30,18 +30,18 @@ export const Footer = () => {
                             </p>
                         </div>
                         <div className="flex flex-wrap flex-col sm:flex-row sm:justify-end md:w-auto mt-3 gap-6">
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            <Link to="/" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 Home
-                            </a>
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            </Link>
+                            <Link to="/vehiclefleet" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 Vehicle Fleet
-                            </a>
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            </Link>
+                            <Link to="/faq" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 FAQ
-                            </a>
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            </Link>
+                            <Link to="/contact" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 Contact
-                            </a>
+                            </Link>
                         </div>
                     </div>
 
