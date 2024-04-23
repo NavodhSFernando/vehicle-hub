@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import axios from 'axios'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -17,11 +18,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 
-const validVehicleIds = [1001, 1002, 1003, 1004]
+const validVehicleIds = [1]
 
 const currentDate = new Date().toISOString().split('T')[0]
 
-const dateRegex = /^\d{4}-\d{2}-\d{2}$/ // Regex to validate yyyy-mm-dd format
+//const dateRegex = /^\d{4}-\d{2}-\d{2}$/ // Regex to validate yyyy-mm-dd format
 
 const formSchema = z.object({
     maintenanceDate: z
@@ -35,16 +36,21 @@ const formSchema = z.object({
     vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
         message: 'Invalid Vehicle ID'
     }),
-    description: z.string({
-        message: 'Maintenance Type is required'
-    }),
     maintenanceType: z.string({
+        required_error: 'Maintenance Type is required'
+    }),
+    description: z.string({
         message: 'Maintenance Type is required'
     })
 })
 
 export default function CreateMaintenance() {
-    const form = useForm({
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             maintenanceDate: '',
@@ -53,22 +59,34 @@ export default function CreateMaintenance() {
         }
     })
 
-    function onSubmit(values) {
-        // Do something with the form values.
-        // This will be type-safe and validated.
-        console.log(values)
-        console.log('Maintenance Type:', values.maintenanceType)
+    //Submit handler
+    const handleSave = async (data) => {
+        const url = 'http://localhost:5062/api/VehicleMaintenance'
+        try {
+            const formData = {
+                Date: data.maintenanceDate,
+                VehicleId: data.vehicleId,
+                Description: data.description,
+                Type: data.maintenanceType
+            }
+
+            const result = await axios.post(url, formData)
+            console.log(result)
+            reset()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
-        <Form {...form}>
+        <Form {...control}>
             <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(handleSave)}
                 className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
             >
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="maintenanceDate"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
@@ -84,32 +102,30 @@ export default function CreateMaintenance() {
                                     }}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.maintenanceDate && errors.maintenanceDate.message}</FormMessage>
                         </FormItem>
                     )}
                 />
 
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="vehicleId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle ID</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
                             <FormControl>
                                 <Input
+                                    type="number"
                                     className="w-full"
-                                    onChange={(e) => {
-                                        // Convert the input value to a number before setting it.
-                                        field.onChange(parseFloat(e.target.value))
-                                    }}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
                     )}
                 />
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="maintenanceType"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
@@ -118,7 +134,7 @@ export default function CreateMaintenance() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                defaultValue={field.value}
+                                //defaultValue={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -134,12 +150,12 @@ export default function CreateMaintenance() {
                                     <SelectItem value="replacements">Replacements</SelectItem>
                                 </SelectContent>
                             </Select>
-                            <FormMessage />
+                            <FormMessage>{errors.maintenanceType && errors.maintenanceType.message}</FormMessage>
                         </FormItem>
                     )}
                 />
                 <FormField
-                    control={form.control}
+                    control={control}
                     name="description"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
@@ -154,7 +170,7 @@ export default function CreateMaintenance() {
                                     }}
                                 />
                             </FormControl>
-                            <FormMessage />
+                            <FormMessage>{errors.description && errors.description.message}</FormMessage>
                         </FormItem>
                     )}
                 />
