@@ -15,7 +15,7 @@ export default function BookNowCard({ key, name, type, year, transmission, capac
     }
 
     return (
-        <div className="w-72 flex flex-col p-5 shadow-xl rounded-xl bg-white">
+        <div className="w-80 flex flex-col p-5 shadow-xl rounded-xl bg-white">
             <div className="flex justify-between pb-12 align-top">
                 <div className="flex flex-col">
                     <h1 className="text-xl font-bold">{name}</h1>

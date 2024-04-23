@@ -89,7 +89,7 @@ export default function VehicleFleet() {
                     <div className="mt-[20px]">
                         <BookingStrip2 />
                     </div>
-                    <div className="flex flex-row flex-wrap justify-between mt-[50px] gap-[30px]">
+                    <div className="flex flex-row flex-wrap justify-between mt-10 gap-5">
                         {data.map(
                             (
                                 vehicle // Changed variable name to avoid conflict with 'data' object
