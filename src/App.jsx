@@ -48,6 +48,8 @@ import FaqPage from './views/front/FaqPage'
 import ContactUs from './views/front/ContactUs'
 import EditVehicleMake from './views/admin/vehiclemake/EditVehicleMake'
 import EditVehicle from './views/admin/vehicle/EditVehicle'
+import EditInsurance from './views/admin/insurance/EditInsurance'
+import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 
 function App() {
     return (
@@ -254,6 +256,14 @@ function App() {
                     </Route>
                     <Route path="maintenance">
                         <Route
+                            path="/admin/maintenance/edit/:maintenanceId"
+                            element={
+                                <TitleComponent title="Edit Maintenance">
+                                    <EditMaintenance />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
                             path="view"
                             element={
                                 <TitleComponent title="View Maintenances">
@@ -297,6 +307,14 @@ function App() {
                         />
                     </Route>
                     <Route path="insurance">
+                        <Route
+                            path="/admin/insurance/edit/:insuranceId"
+                            element={
+                                <TitleComponent title="Edit Insurance">
+                                    <EditInsurance />
+                                </TitleComponent>
+                            }
+                        />
                         <Route
                             path="view"
                             element={

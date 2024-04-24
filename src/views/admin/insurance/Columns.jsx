@@ -2,6 +2,22 @@ import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
+import { useNavigate } from 'react-router-dom'
+
+const ActionButtons = ({ insuranceId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/insurance/edit/${insuranceId}`)}>
+                <GrEdit fontSize={24} className="mr-1" />
+            </Button>
+            <Button variant="ghost" className="p-0">
+                <GrTrash fontSize={24} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
@@ -31,7 +47,7 @@ export const columns = [
         accessorKey: 'vehicleId',
         header: 'Vehicle ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('id'))
+            const value = parseFloat(row.getValue('vehicleId'))
 
             return <div className="font-medium">{value}</div>
         }
@@ -40,24 +56,9 @@ export const columns = [
         accessorKey: 'status',
         header: 'Status'
     },
-
     {
         accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
-
-        cell: () => {
-            return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
-            )
-        }
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons insuranceId={row.getValue('id')} />
     }
 ]
