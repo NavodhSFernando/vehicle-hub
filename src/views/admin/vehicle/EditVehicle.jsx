@@ -82,19 +82,20 @@ export default function EditVehicle() {
             const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
             try {
                 const { data } = await axios.get(url)
-                console.log(data.regNo)
+                console.log(data.registrationNumber)
                 console.log(data.chassisNo)
-                console.log(data.color)
+                console.log(data.colour)
                 console.log(data.mileage)
                 console.log(data.costPerDay)
                 console.log(data.transmission)
                 console.log(data.vehicleTypeId)
                 console.log(data.vehicleModelId)
                 console.log(data.employeeId)
+                console.log(data)
                 reset({
-                    regNo: data.regNo,
+                    regNo: data.registrationNumber,
                     chassisNo: data.chassisNo,
-                    color: data.color,
+                    color: data.colour,
                     mileage: data.mileage,
                     costPerDay: data.costPerDay,
                     transmission: data.transmission,
@@ -113,15 +114,15 @@ export default function EditVehicle() {
         const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
         try {
             const formData = {
-                regNo: data.regNo,
-                chassisNo: data.chassisNo,
-                color: data.color,
-                mileage: data.mileage,
-                costPerDay: data.costPerDay,
-                transmission: data.transmission,
-                vehicleTypeId: data.vehicleTypeId,
-                vehicleModelId: data.vehicleModelId,
-                employeeId: data.employeeId
+                RegistrationNumber: data.regNo,
+                ChassisNo: data.chassisNo,
+                Colour: data.color,
+                Mileage: data.mileage,
+                CostPerDay: data.costPerDay,
+                Transmission: data.transmission,
+                VehicleTypeId: data.vehicleTypeId,
+                VehicleModelId: data.vehicleModelId,
+                EmployeeId: data.employeeId
             }
 
             const result = await axios.put(url, formData)
@@ -148,7 +149,6 @@ export default function EditVehicle() {
                             <FormLabel className="pb-3 w-full">Registration Number</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="QL 9904"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
@@ -168,7 +168,6 @@ export default function EditVehicle() {
                             <FormLabel className="pb-3 w-full">Chassis Number</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="SV30-0169266"
                                     className="w-full"
                                     {...field}
                                     onChange={(e) => {
@@ -190,6 +189,7 @@ export default function EditVehicle() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
+                                {...field}
                                 defaultValue={field.value}
                             >
                                 <FormControl>
@@ -214,7 +214,6 @@ export default function EditVehicle() {
                             <FormLabel className="pb-3 w-full">Color</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="White"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
@@ -236,7 +235,11 @@ export default function EditVehicle() {
                                 <Input
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
+                                    onChange={(e) => {
+                                        const number = parseInt(e.target.value) // This is the input string in "yyyy-MM-dd"
+                                        field.onChange(number) // Pass the string directly to your form's state
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage>{errors.costPerDay && errors.costPerDay.message}</FormMessage>
@@ -254,6 +257,7 @@ export default function EditVehicle() {
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
@@ -271,6 +275,7 @@ export default function EditVehicle() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleTypeId && errors.vehicleTypeId.message}</FormMessage>
@@ -288,6 +293,7 @@ export default function EditVehicle() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleModelId && errors.vehicleModelId.message}</FormMessage>
@@ -305,6 +311,7 @@ export default function EditVehicle() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.employeeId && errors.employeeId.message}</FormMessage>

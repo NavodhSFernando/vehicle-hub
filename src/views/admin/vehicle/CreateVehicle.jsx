@@ -81,7 +81,7 @@ export default function CreateVehicle() {
                 ChassisNo: data.chassisNo,
                 Colour: data.color,
                 Mileage: data.mileage,
-                CostPerDay: data.CostPerDay,
+                CostPerDay: data.costPerDay,
                 Transmission: data.transmission,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
@@ -111,7 +111,6 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Registration Number</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="QL 9904"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)

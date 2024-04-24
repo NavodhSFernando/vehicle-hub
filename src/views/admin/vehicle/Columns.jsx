@@ -35,7 +35,7 @@ export const columns = [
         header: 'Registration Number'
     },
     {
-        accessorKey: 'chassisNumber',
+        accessorKey: 'chassisNo',
         header: 'Chassis Number'
     },
     {
@@ -67,7 +67,7 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'color',
+        accessorKey: 'colour',
         header: 'Color'
     },
     {
