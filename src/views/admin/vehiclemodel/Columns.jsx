@@ -1,6 +1,27 @@
 import React from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
+import { useNavigate } from 'react-router-dom'
+
+// Define a component to encapsulate the action buttons
+const ActionButtons = ({ vehicleModelId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button
+                variant="ghost"
+                className="p-0"
+                onClick={() => navigate(`/admin/vehiclemodel/edit/${vehicleModelId}`)}
+            >
+                <GrEdit fontSize={24} className="mr-1" />
+            </Button>
+            <Button variant="ghost" className="p-0">
+                <GrTrash fontSize={24} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
@@ -39,25 +60,12 @@ export const columns = [
         header: 'Fuel Type'
     },
     {
-        accessorKey: 'vehicleMake.Name',
+        accessorKey: 'vehicleMakeId',
         header: 'Vehicle Make'
     },
     {
         accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
-        cell: () => {
-            return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
-            )
-        }
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons vehicleModelId={row.getValue('id')} />
     }
 ]

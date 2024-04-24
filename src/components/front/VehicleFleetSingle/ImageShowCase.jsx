@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import { Slide } from 'react-slideshow-image'
 import 'react-slideshow-image/dist/styles.css'
 
+import vitz from '../../../assets/vehicles/vitz.jpg'
+import vitzinterior from '../../../assets/vehicles/vitzinterior.jpg'
+import vitsseats from '../../../assets/vehicles/vitzseats.jpg'
+
 export default function ImageShowCase() {
-    const images = [
-        'https://cdn.discordapp.com/attachments/510829749065744405/1213122972315816007/Car.png?ex=66193dcf&is=6606c8cf&hm=508c782f04a5aeb8f23f093e83378dbe0e3050e26166f274b0b5972a08ce2548&',
-        'https://cdn.discordapp.com/attachments/510829749065744405/1213119457686331432/View_2.png?ex=66193a89&is=6606c589&hm=279e097ef4fd4451961e3f33d7961c8279bced114e387b41ff1ce9dfb2732a19&',
-        'https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80'
-    ]
+    const images = [vitz, vitzinterior, vitsseats]
 
     const [currentImage, setCurrentImage] = useState(images[0])
     return (
@@ -16,7 +16,7 @@ export default function ImageShowCase() {
             <div className="w-full sm:max-w-[550px] max-w-[300px] justify-self-center items-center p-10">
                 <Slide slidesToScroll={1} slidesToShow={3} cssClass="objects-center" autoplay={false}>
                     {images.map((image, index) => (
-                        <button onClick={() => setCurrentImage(image)}>
+                        <button onClick={() => setCurrentImage(image)} className={currentImage === image && 'border-8'}>
                             <img key={index} className="rounded-lg" src={image} alt="" />
                         </button>
                     ))}

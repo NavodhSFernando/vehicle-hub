@@ -1,7 +1,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { number, z } from 'zod'
 import axios from 'axios'
+import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -64,7 +66,7 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateVehicleModel() {
+export default function EditVehicleModel() {
     // 1. Define your form.
     const {
         control,
@@ -83,9 +85,32 @@ export default function CreateVehicleModel() {
         }
     })
 
-    //Submit handler
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/VehicleModel/${vehicleModelId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.name)
+                console.log(data.year)
+                console.log(data.engineCapacity)
+                console.log(data.seatingCapacity)
+                console.log(data.vehicleMakeId)
+                reset({
+                    name: data.name,
+                    year: data.year,
+                    engineCapacity: data.engineCapacity,
+                    seatingCapacity: data.seatingCapacity,
+                    vehicleMakeId: data.vehicleMakeId
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle model', error)
+            }
+        }
+        fetchData()
+    }, [vehicleModeId, reset])
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleModel'
+        const url = `http://localhost:5062/api/VehicleModel/${vehicleModeId}`
         try {
             const formData = {
                 Name: data.name,
@@ -95,13 +120,14 @@ export default function CreateVehicleModel() {
                 VehicleMakeId: data.vehicleMakeId
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
-            console.log(error)
+            console.error('Failed to update vehicle make', error)
         }
     }
+
     return (
         <Form {...control}>
             <form
@@ -137,14 +163,10 @@ export default function CreateVehicleModel() {
                             <FormLabel className="pb-3 w-full">Year</FormLabel>
                             <FormControl>
                                 <Input
+                                    type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
                                     {...field}
-                                    {...{
-                                        onChange: (e) => {
-                                            // Convert the input value to a number before setting it.
-                                            field.onChange(parseFloat(e.target.value))
-                                        }
-                                    }}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -161,6 +183,7 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -178,6 +201,7 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -221,12 +245,13 @@ export default function CreateVehicleModel() {
                             <FormLabel className="pb-3 w-full">Vehicle Make Id</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number"
+                                    type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.vehicleMakeId && errors.vehicleMakeId.message}</FormMessage>
+                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
                     )}
                 />

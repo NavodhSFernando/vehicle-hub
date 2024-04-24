@@ -47,6 +47,10 @@ import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
 import ContactUs from './views/front/ContactUs'
 import EditVehicleMake from './views/admin/vehiclemake/EditVehicleMake'
+import EditVehicle from './views/admin/vehicle/EditVehicle'
+import EditInsurance from './views/admin/insurance/EditInsurance'
+import EditMaintenance from './views/admin/maintenance/EditMaintenance'
+import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
 //import EditVehicle from './views/admin/vehicle/EditVehicle'
 
@@ -167,6 +171,14 @@ function App() {
                     </Route>
                     <Route path="vehicletype">
                         <Route
+                            path="/admin/vehicletype/edit/:vehicleTypeId"
+                            element={
+                                <TitleComponent title="Edit Vehicle Type">
+                                    <EditVehicleType />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
                             path="view"
                             element={
                                 <TitleComponent title="View Vehicle Types">
@@ -251,6 +263,14 @@ function App() {
                     </Route>
                     <Route path="maintenance">
                         <Route
+                            path="/admin/maintenance/edit/:maintenanceId"
+                            element={
+                                <TitleComponent title="Edit Maintenance">
+                                    <EditMaintenance />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
                             path="view"
                             element={
                                 <TitleComponent title="View Maintenances">
@@ -302,6 +322,14 @@ function App() {
                         />
                     </Route>
                     <Route path="insurance">
+                        <Route
+                            path="/admin/insurance/edit/:insuranceId"
+                            element={
+                                <TitleComponent title="Edit Insurance">
+                                    <EditInsurance />
+                                </TitleComponent>
+                            }
+                        />
                         <Route
                             path="view"
                             element={
