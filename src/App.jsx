@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import TitleComponent from './components/ui/TitleComponent'
 import AdminLayout from './components/admin/Layout'
 import FrontLayout from './components/front/Layout'
 import Dashboard from './views/admin/Dashboard'
@@ -19,8 +20,6 @@ import ViewVehicle from './views/admin/vehicle/ViewVehicle'
 import CreateVehicle from './views/admin/vehicle/CreateVehicle'
 import ViewMaintenance from './views/admin/maintenance/ViewMaintenance'
 import CreateMaintenance from './views/admin/maintenance/CreateMaintenance'
-import ViewMaintenanceType from './views/admin/maintenancetype/ViewMaintenanceType'
-import CreateMaintenanceType from './views/admin/maintenancetype/CreateMaintenanceType'
 import ViewAvailability from './views/admin/availability/ViewAvailability'
 import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewEmployee from './views/admin/employee/ViewEmployee'
@@ -45,6 +44,9 @@ import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
 import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
+import FaqPage from './views/front/FaqPage'
+import ContactUs from './views/front/ContactUs'
+import EditVehicleMake from './views/admin/vehiclemake/EditVehicleMake'
 
 function App() {
     return (
@@ -52,18 +54,34 @@ function App() {
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
                     <Route index element={<Home />} />
-                    <Route path="/vehiclefleet" element={<VehicleFleet />} />
-                    <Route path="/vehiclefleet/:slug" element={<VehicleFleetSingle />} />
+                    <Route
+                        path="/vehiclefleet"
+                        element={
+                            <TitleComponent title="Vehicle Fleet">
+                                <VehicleFleet />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="/vehiclefleet/:slug"
+                        element={
+                            <TitleComponent title="Vehicle Fleet">
+                                <VehicleFleetSingle />
+                            </TitleComponent>
+                        }
+                    />
                     <Route path="/account" element={<Account />}>
                         <Route path="/account/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
                         <Route path="/account/rentalhistorysingle" element={<Rentalhistorysingle />} />
                         <Route path="/account/notificationcenter" element={<NotificationCenter />} />
-                        <Route path="/account/viewRentalHistory" element={<ViewRentalHistory />} />
-                        <Route path="/account/viewOngoingRental" element={<ViewOngoingRental />} />
-                        <Route path="/account/viewBillingDetails" element={<ViewBillingDetails />} />
+                        <Route path="/account/viewrentalhistory" element={<ViewRentalHistory />} />
+                        <Route path="/account/viewongoingrental" element={<ViewOngoingRental />} />
+                        <Route path="/account/viewbillingdetails" element={<ViewBillingDetails />} />
                         <Route path="/account/viewprofile" element={<Viewprofile />} />
                     </Route>
                     <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
+                    <Route path="/faq" element={<FaqPage />} />
+                    <Route path="/contact" element={<ContactUs />} />
                 </Route>
 
                 <Route path="/login" element={<Login />} />
@@ -93,6 +111,7 @@ function App() {
                         <Route path="create" element={<CreateVehicleType />} />
                     </Route>
                     <Route path="vehiclemake">
+                        <Route path="/admin/vehiclemake/edit/:vehicleMakeId" element={<EditVehicleMake />} />
                         <Route path="view" element={<ViewVehicleMake />} />
                         <Route path="create" element={<CreateVehicleMake />} />
                     </Route>
@@ -107,10 +126,6 @@ function App() {
                     <Route path="maintenance">
                         <Route path="view" element={<ViewMaintenance />} />
                         <Route path="create" element={<CreateMaintenance />} />
-                    </Route>
-                    <Route path="maintenancetype">
-                        <Route path="view" element={<ViewMaintenanceType />} />
-                        <Route path="create" element={<CreateMaintenanceType />} />
                     </Route>
                     <Route path="employee">
                         <Route path="view" element={<ViewEmployee />} />

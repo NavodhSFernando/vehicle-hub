@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react' // import useState
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '../../../components/ui/button'
@@ -16,42 +17,72 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 
 const formSchema = z.object({
-    name: z.string().min(3, {
-        message: 'Name must be at least 3 characters.'
-    }),
-    depAmount: z.number().gte(3000, {
-        message: 'Deposit Amount must be at least Rs.3000'
-    })
+    name: z.string().min(3, 'Name must be at least 3 characters.'),
+    logo: z
+        .any()
+        .refine((file) => file?.length == 1, 'File is required.')
+        .refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
+        .refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
+            message: 'Invalid file type'
+        })
 })
 
-export default function CreateVehicleType() {
+export default function EditVehicleMake() {
+    const { vehicleMakeId } = useParams() // Access route parameter
+    const fileInputRef = useRef('')
     const {
         control,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: '',
-            depAmount: 0
+            name: ''
         }
     })
 
-    //Submit handler
+    // Fetch vehicle make data
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.name)
+                console.log(data.logo)
+                reset({
+                    name: data.name,
+                    logo: data.logo
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle make', error)
+            }
+        }
+        fetchData()
+    }, [vehicleMakeId, reset])
+
+    const handleFileChange = (e) => {
+        const files = e.target.files
+        setValue('logo', files, { shouldValidate: true })
+    }
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleType'
+        const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
         try {
             const formData = {
                 Name: data.name,
-                DepositAmount: data.depAmount
+                Logo: data.logo[0].name // Handle file data appropriately for your backend
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
+            if (fileInputRef.current) {
+                fileInputRef.current.value = ''
+            }
         } catch (error) {
-            console.log(error)
+            console.error('Failed to update vehicle make', error)
         }
     }
 
@@ -61,10 +92,10 @@ export default function CreateVehicleType() {
                 onSubmit={handleSubmit(handleSave)}
                 className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
             >
-                <FormDescription>Basic Information</FormDescription>
+                <FormDescription>Edit Basic Information</FormDescription>
                 <FormField
                     control={control}
-                    name="type"
+                    name="name"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Name</FormLabel>
@@ -77,16 +108,12 @@ export default function CreateVehicleType() {
                 />
                 <FormField
                     control={control}
-                    name="depAmount"
+                    name="logo"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Deposit Amount</FormLabel>
+                            <FormLabel className="pb-3 w-full">Logo</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
+                                <Input type="file" className="w-full" ref={fileInputRef} onChange={handleFileChange} />
                             </FormControl>
                             <FormMessage>{errors.logo && errors.logo.message}</FormMessage>
                         </FormItem>
@@ -94,7 +121,7 @@ export default function CreateVehicleType() {
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>

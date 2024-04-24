@@ -1,23 +1,34 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
+import { format, parseISO } from 'date-fns'
 
 export const columns = [
     {
-        accessorKey: 'no',
-        header: 'Insurance No',
+        accessorKey: 'id',
+        header: 'ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('no'))
+            const value = parseFloat(row.getValue('id'))
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{'#' + value}</div>
         }
     },
     {
-        accessorKey: 'expiry',
-        header: 'Insurance Expiry Date'
+        accessorKey: 'insuranceNo',
+        header: 'InsuranceNo'
     },
     {
-        accessorKey: 'id',
+        accessorKey: 'expiryDate',
+        header: 'Expiry Date',
+        cell: ({ row }) => {
+            const value = row.getValue('expiryDate')
+            const formattedDate = value ? format(parseISO(value), 'yyyy-MM-dd') : ''
+
+            return <div className="font-medium">{formattedDate}</div>
+        }
+    },
+    {
+        accessorKey: 'vehicleId',
         header: 'Vehicle ID',
         cell: ({ row }) => {
             const value = parseFloat(row.getValue('id'))
@@ -25,51 +36,9 @@ export const columns = [
             return <div className="font-medium">{value}</div>
         }
     },
-
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
-
-        cell: ({ row }) => {
-            const status = row.getValue('status')
-            let color = ''
-            let text = ''
-
-            switch (status) {
-                case 'yes':
-                    color = 'bg-green-500'
-                    text = 'Active'
-                    break
-                case 'no':
-                    color = 'bg-red-500'
-                    text = 'Inactive'
-                    break
-                default:
-                    color = 'bg-gray-500'
-                    text = 'Unknown'
-                    break
-            }
-
-            return (
-                <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
-                    {/* <div className="mx-auto">{text}</div> */}
-                    {text}
-                </div>
-            )
-        }
+        header: 'Status'
     },
 
     {

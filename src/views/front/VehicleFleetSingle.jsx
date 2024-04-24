@@ -2,6 +2,7 @@ import RequestVehicle from '../../components/front/RequestVehicle'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import Detailcar from '../../components/front/VehicleFleetSingle/Detailcar'
+import FeedBack from '../../components/front/VehicleFleetSingle/FeedBack'
 
 export default function VehicleFleetSingle() {
     const { slug } = useParams()
@@ -19,8 +20,9 @@ export default function VehicleFleetSingle() {
     }
 
     return (
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col">
             <div className="flex flex-col w-1/2"></div>
+            <FeedBack />
             <div className="flex flex-col w-1/2">
                 <Detailcar
                     vehicle={vehicle.name}

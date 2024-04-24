@@ -14,7 +14,7 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'type',
+        accessorKey: 'name',
         header: 'Type'
     },
     {
