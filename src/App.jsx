@@ -47,6 +47,7 @@ import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
 import ContactUs from './views/front/ContactUs'
 import EditVehicleMake from './views/admin/vehiclemake/EditVehicleMake'
+import EditVehicle from './views/admin/vehicle/EditVehicle'
 
 function App() {
     return (
@@ -71,11 +72,39 @@ function App() {
                         }
                     />
                     <Route path="/account" element={<Account />}>
-                        <Route path="/account/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
-                        <Route path="/account/rentalhistorysingle" element={<Rentalhistorysingle />} />
+                        <Route
+                            path="/account/ongoingrentalssingle"
+                            element={
+                                <TitleComponent title="Ongoing Rentals">
+                                    <Ongoingrentalssingle />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="/account/rentalhistorysingle"
+                            element={
+                                <TitleComponent title="Rental History">
+                                    <Rentalhistorysingle />
+                                </TitleComponent>
+                            }
+                        />
                         <Route path="/account/notificationcenter" element={<NotificationCenter />} />
-                        <Route path="/account/viewrentalhistory" element={<ViewRentalHistory />} />
-                        <Route path="/account/viewongoingrental" element={<ViewOngoingRental />} />
+                        <Route
+                            path="/account/viewrentalhistory"
+                            element={
+                                <TitleComponent title="Rental History">
+                                    <ViewRentalHistory />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="/account/viewongoingrental"
+                            element={
+                                <TitleComponent title="Ongoing Rentals">
+                                    <ViewOngoingRental />
+                                </TitleComponent>
+                            }
+                        />
                         <Route path="/account/viewbillingdetails" element={<ViewBillingDetails />} />
                         <Route path="/account/viewprofile" element={<Viewprofile />} />
                     </Route>
@@ -87,8 +116,22 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
-                <Route path="/ongoingrentalssingle" element={<Ongoingrentalssingle />} />
-                <Route path="/rentalhistorysingle" element={<Rentalhistorysingle />} />
+                <Route
+                    path="/ongoingrentalssingle"
+                    element={
+                        <TitleComponent title="Ongoing Rentals">
+                            <Ongoingrentalssingle />
+                        </TitleComponent>
+                    }
+                />
+                <Route
+                    path="/rentalhistorysingle"
+                    element={
+                        <TitleComponent title="Rental History">
+                            <Rentalhistorysingle />
+                        </TitleComponent>
+                    }
+                />
 
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/admin" element={<AdminLayout />}>
@@ -98,50 +141,178 @@ function App() {
                         <Route path="revenuereport" element={<ViewRevenueReport />} />
                         <Route path="vehicleutilizationreport" element={<ViewVehicleUtilizationReport />} />
                     </Route>
+
                     <Route path="reservation">
-                        <Route path="view" element={<ViewReservation />} />
-                        <Route path="create" element={<CreateReservation />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="View Reservation">
+                                    <ViewReservation />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Reservation">
+                                    <CreateReservation />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="availability">
                         <Route path="view" element={<ViewAvailability />} />
                         <Route path="create" element={<CreateAvailability />} />
                     </Route>
                     <Route path="vehicletype">
-                        <Route path="view" element={<ViewVehicleType />} />
-                        <Route path="create" element={<CreateVehicleType />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="View Vehicle Types">
+                                    <ViewVehicleType />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Vehicle Types">
+                                    <CreateVehicleType />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="vehiclemake">
-                        <Route path="/admin/vehiclemake/edit/:vehicleMakeId" element={<EditVehicleMake />} />
-                        <Route path="view" element={<ViewVehicleMake />} />
-                        <Route path="create" element={<CreateVehicleMake />} />
+                        <Route
+                            path="/admin/vehiclemake/edit/:vehicleMakeId"
+                            element={
+                                <TitleComponent title="Edit Vehicle Make">
+                                    <EditVehicleMake />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="View Vehicle Make">
+                                    <ViewVehicleMake />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Vehicle Make">
+                                    <CreateVehicleMake />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="vehiclemodel">
-                        <Route path="view" element={<ViewVehicleModel />} />
-                        <Route path="create" element={<CreateVehicleModel />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="View Vehicle Model">
+                                    <ViewVehicleModel />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Vehicle Model">
+                                    <CreateVehicleModel />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="vehicle">
-                        <Route path="view" element={<ViewVehicle />} />
-                        <Route path="create" element={<CreateVehicle />} />
+                        <Route
+                            path="/admin/vehicle/edit/:vehicleId"
+                            element={
+                                <TitleComponent title="Edit Vehicle">
+                                    <EditVehicle />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="View Vehicle">
+                                    <ViewVehicle />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Vehicle">
+                                    <CreateVehicle />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="maintenance">
-                        <Route path="view" element={<ViewMaintenance />} />
-                        <Route path="create" element={<CreateMaintenance />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="View Maintenances">
+                                    <ViewMaintenance />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Maintenance">
+                                    <CreateMaintenance />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="employee">
                         <Route path="view" element={<ViewEmployee />} />
                         <Route path="create" element={<CreateEmployee />} />
                     </Route>
-                    
+
                     <Route path="customer">
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
                     <Route path="vehiclelog">
-                        <Route path="view" element={<ViewVehicleLog />} />
-                        <Route path="create" element={<CreateVehicleLog />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="Vehicle Log">
+                                    <ViewVehicleLog />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Vehicle Log">
+                                    <CreateVehicleLog />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="insurance">
-                        <Route path="view" element={<ViewInsurance />} />
-                        <Route path="create" element={<CreateInsurance />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="Vehicle Insurance">
+                                    <ViewInsurance />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Insurance">
+                                    <CreateInsurance />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                 </Route>
             </Routes>
