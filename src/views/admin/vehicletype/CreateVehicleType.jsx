@@ -19,7 +19,7 @@ const formSchema = z.object({
     name: z.string().min(3, {
         message: 'Name must be at least 3 characters.'
     }),
-    depAmount: z.number().gte(3000, {
+    depositAmount: z.number().gte(3000, {
         message: 'Deposit Amount must be at least Rs.3000'
     })
 })
@@ -34,7 +34,7 @@ export default function CreateVehicleType() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            depAmount: 0
+            depositAmount: 0
         }
     })
 
@@ -44,7 +44,7 @@ export default function CreateVehicleType() {
         try {
             const formData = {
                 Name: data.name,
-                DepositAmount: data.depAmount
+                DepositAmount: data.depositAmount
             }
 
             const result = await axios.post(url, formData)
@@ -64,20 +64,20 @@ export default function CreateVehicleType() {
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={control}
-                    name="type"
+                    name="name"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Name</FormLabel>
+                            <FormLabel className="pb-3 w-full">Type Name</FormLabel>
                             <FormControl>
                                 <Input className="w-full" {...field} />
                             </FormControl>
-                            <FormMessage>{errors.name && errors.name.message}</FormMessage>
+                            <FormMessage>{errors.type && errors.type.message}</FormMessage>
                         </FormItem>
                     )}
                 />
                 <FormField
                     control={control}
-                    name="depAmount"
+                    name="depositAmount"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Deposit Amount</FormLabel>
@@ -88,7 +88,7 @@ export default function CreateVehicleType() {
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.logo && errors.logo.message}</FormMessage>
+                            <FormMessage>{errors.depositAmount && errors.depositAmount.message}</FormMessage>
                         </FormItem>
                     )}
                 />
