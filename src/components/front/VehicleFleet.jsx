@@ -10,7 +10,7 @@ const data = [
         key: '001',
         name: 'Toyota aqua',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
         transmission: 'Manual',
@@ -21,7 +21,7 @@ const data = [
         key: '002',
         name: 'Toyota prius',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
         transmission: 'Manual',
@@ -32,7 +32,7 @@ const data = [
         key: '002',
         name: 'Toyota prius',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
         transmission: 'Manual',
@@ -43,7 +43,7 @@ const data = [
         key: '002',
         name: 'Toyota prius',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
         transmission: 'Manual',
@@ -54,7 +54,7 @@ const data = [
         key: '002',
         name: 'Toyota prius',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
         transmission: 'Manual',
@@ -65,14 +65,13 @@ const data = [
         key: '002',
         name: 'Toyota prius',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
         transmission: 'Manual',
         capacity: '6 Persons',
         price: '15 000'
     }
-    // More Data...
 ]
 
 export default function VehicleFleet() {
@@ -90,23 +89,19 @@ export default function VehicleFleet() {
                         <BookingStrip2 />
                     </div>
                     <div className="flex flex-row flex-wrap justify-between mt-10 gap-5">
-                        {data.map(
-                            (
-                                vehicle // Changed variable name to avoid conflict with 'data' object
-                            ) => (
-                                <BookNowCard
-                                    key={vehicle.key} // Fixed key
-                                    name={vehicle.name}
-                                    type={vehicle.type}
-                                    imageSrc={vehicle.imageSrc}
-                                    imageAlt={vehicle.imageAlt}
-                                    year={vehicle.year}
-                                    transmission={vehicle.transmission}
-                                    capacity={vehicle.capacity}
-                                    price={vehicle.price}
-                                />
-                            )
-                        )}
+                        {data.map((vehicle) => (
+                            <BookNowCard
+                                key={vehicle.key}
+                                name={vehicle.name}
+                                type={vehicle.type}
+                                imageSrc={vehicle.imageSrc}
+                                imageAlt={vehicle.imageAlt}
+                                year={vehicle.year}
+                                transmission={vehicle.transmission}
+                                capacity={vehicle.capacity}
+                                price={vehicle.price}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
