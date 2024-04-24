@@ -1,4 +1,6 @@
 import React from 'react'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -53,7 +55,8 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateVehicle() {
+export default function EditVehicle() {
+    const { vehicleId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -73,28 +76,62 @@ export default function CreateVehicle() {
             employeeId: 0
         }
     })
+    // Fetch vehicle data
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.regNo)
+                console.log(data.chassisNo)
+                console.log(data.color)
+                console.log(data.mileage)
+                console.log(data.costPerDay)
+                console.log(data.transmission)
+                console.log(data.vehicleTypeId)
+                console.log(data.vehicleModelId)
+                console.log(data.employeeId)
+                reset({
+                    regNo: data.regNo,
+                    chassisNo: data.chassisNo,
+                    color: data.color,
+                    mileage: data.mileage,
+                    costPerDay: data.costPerDay,
+                    transmission: data.transmission,
+                    vehicleTypeId: data.vehicleTypeId,
+                    vehicleModelId: data.vehicleModelId,
+                    employeeId: data.employeeId
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle make', error)
+            }
+        }
+        fetchData()
+    }, [vehicleId, reset])
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/Vehicle'
+        const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
         try {
             const formData = {
-                RegistrationNumber: data.regNo,
-                ChassisNo: data.chassisNo,
-                Colour: data.color,
-                Mileage: data.mileage,
-                CostPerDay: data.CostPerDay,
-                Transmission: data.transmission,
-                VehicleTypeId: data.vehicleTypeId,
-                VehicleModelId: data.vehicleModelId,
-                EmployeeId: data.employeeId
+                regNo: data.regNo,
+                chassisNo: data.chassisNo,
+                color: data.color,
+                mileage: data.mileage,
+                costPerDay: data.costPerDay,
+                transmission: data.transmission,
+                vehicleTypeId: data.vehicleTypeId,
+                vehicleModelId: data.vehicleModelId,
+                employeeId: data.employeeId
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
-            console.log(error)
+            console.error('Failed to update vehicle make', error)
         }
     }
+
     return (
         <Form {...control}>
             <form
