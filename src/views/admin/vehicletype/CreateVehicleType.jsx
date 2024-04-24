@@ -1,7 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -13,50 +12,91 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: 'Username must be at least 2 characters.'
+    name: z.string().min(3, {
+        message: 'Name must be at least 3 characters.'
+    }),
+    depositAmount: z.number().gte(3000, {
+        message: 'Deposit Amount must be at least Rs.3000'
     })
 })
 
 export default function CreateVehicleType() {
-    const form = useForm()
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            depositAmount: 0
+        }
+    })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    //Submit handler
+    const handleSave = async (data) => {
+        const url = 'http://localhost:5062/api/VehicleType'
+        try {
+            const formData = {
+                Name: data.name,
+                DepositAmount: data.depositAmount
+            }
+
+            const result = await axios.post(url, formData)
+            console.log(result)
+            reset()
+        } catch (error) {
+            console.log(error)
+        }
     }
+
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+        <Form {...control}>
+            <form
+                onSubmit={handleSubmit(handleSave)}
+                className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
+            >
+                <FormDescription>Basic Information</FormDescription>
                 <FormField
-                    control={form.control}
-                    name="username"
+                    control={control}
+                    name="name"
                     render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                                <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Name</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="SUV" {...field} />
-                                </FormControl>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Deposit Amount</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="25000LKR" {...field} />
-                                </FormControl>
-                            </div>
-                            <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                                <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                                    Create
-                                </Button>
-                            </div>
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Type Name</FormLabel>
+                            <FormControl>
+                                <Input className="w-full" {...field} />
+                            </FormControl>
+                            <FormMessage>{errors.type && errors.type.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={control}
+                    name="depositAmount"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Deposit Amount</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    className="w-full"
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.depositAmount && errors.depositAmount.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
+                </div>
             </form>
         </Form>
     )

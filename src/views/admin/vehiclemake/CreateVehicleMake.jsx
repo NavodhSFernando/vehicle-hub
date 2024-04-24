@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -13,51 +12,103 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 
+// File validation Schema
 const formSchema = z.object({
-    username: z.string().min(2, {
-        message: 'Username must be at least 2 characters.'
-    })
+    name: z.string().min(3, 'Name must be at least 3 characters.'),
+    logo: z
+        .any()
+        .refine((file) => file?.length == 1, 'File is required.')
+        .refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
+        .refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
+            message: 'Invalid file type'
+        })
 })
 
+// Main function component
 export default function CreateVehicleMake() {
-    const form = useForm()
+    const fileInputRef = useRef('')
+    const {
+        control,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: '',
+            logo: ''
+        }
+    })
 
-    const onSubmit = (data) => {
-        console.log(data)
+    // File change handler
+    const handleFileChange = (e) => {
+        const files = e.target.files
+        setValue('logo', files, { shouldValidate: true })
     }
+
+    //Submit handler
+    const handleSave = async (data) => {
+        const url = 'http://localhost:5062/api/VehicleMake'
+        try {
+            const formData = {
+                Name: data.name,
+                Logo: data.logo[0].name
+            }
+
+            const result = await axios.post(url, formData)
+            console.log(result)
+            reset()
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '' // This clears the file input field
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+        <Form {...control}>
+            <form
+                onSubmit={handleSubmit(handleSave)}
+                className="w-full space-y-4 flex flex-col items-start p-6 bg-white rounded-lg pb-6"
+            >
+                <FormDescription>Basic Information</FormDescription>
                 <FormField
-                    control={form.control}
-                    name="username"
+                    control={control}
+                    name="name"
                     render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                                <FormDescription>Basic Information</FormDescription>
-                                <div className="flex flex-col space-y-1 pt-6">
-                                    <FormLabel className="pb-3">Name</FormLabel>
-                                </div>
-                                <FormControl>
-                                    <Input placeholder="Honda" {...field} />
-                                </FormControl>
-                                <div className="grid w-full max-w-sm items-center gap-3">
-                                    <FormLabel className="pt-3" htmlFor="logo">
-                                        Logo
-                                    </FormLabel>
-                                    <Input id="logo" type="file" />
-                                </div>
-                            </div>
-                            <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                                <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                                    Create
-                                </Button>
-                            </div>
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Name</FormLabel>
+                            <FormControl>
+                                <Input className="w-full" {...field} />
+                            </FormControl>
+                            <FormMessage>{errors.name && errors.name.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={control}
+                    name="logo"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Logo</FormLabel>
+                            <FormControl>
+                                <Input type="file" className="w-full" ref={fileInputRef} onChange={handleFileChange} />
+                            </FormControl>
+                            <FormMessage>{errors.logo && errors.logo.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+
+                <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
+                </div>
             </form>
         </Form>
     )

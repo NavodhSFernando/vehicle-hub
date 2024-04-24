@@ -7,17 +7,17 @@ export const ACCOUNT_SIDEBAR_LINKS = [
     {
         key: 'ongoing rentals',
         label: 'Ongoing Rentals',
-        path: '/account/ongoingrentals'
+        path: '/account/viewongoingrental'
     },
     {
         key: 'rental history',
         label: 'Rental History',
-        path: '/account/rentalhistory'
+        path: '/account/viewrentalhistory'
     },
     {
         key: 'billing details',
         label: 'Billing Details',
-        path: '/account/billingdetails'
+        path: '/account/viewbillingdetails'
     },
     {
         key: 'notifications',

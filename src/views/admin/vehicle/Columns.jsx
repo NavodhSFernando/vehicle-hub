@@ -1,6 +1,24 @@
+import React from 'react'
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
+import { useNavigate } from 'react-router-dom'
+
+// Define a component to encapsulate the action buttons
+const ActionButtons = ({ vehicleId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/vehicle/edit/${vehicleId}`)}>
+                <GrEdit fontSize={24} className="mr-1" />
+            </Button>
+            <Button variant="ghost" className="p-0">
+                <GrTrash fontSize={24} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
@@ -13,56 +31,11 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
-
-        cell: ({ row }) => {
-            const status = row.getValue('status')
-            let color = ''
-            let text = ''
-
-            switch (status) {
-                case 'Active':
-                    color = 'bg-green-500'
-                    text = 'Active'
-                    break
-                case 'Inactive':
-                    color = 'bg-red-500'
-                    text = 'Inactive'
-                    break
-                default:
-                    color = 'bg-gray-500'
-                    text = 'Unknown'
-                    break
-            }
-
-            return (
-                <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
-                    {/* <div className="mx-auto">{text}</div> */}
-                    {text}
-                </div>
-            )
-        }
-    },
-    {
         accessorKey: 'registrationNumber',
         header: 'Registration Number'
     },
     {
-        accessorKey: 'chassisNumber',
+        accessorKey: 'chassisNo',
         header: 'Chassis Number'
     },
     {
@@ -94,7 +67,7 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'color',
+        accessorKey: 'colour',
         header: 'Color'
     },
     {
@@ -118,22 +91,35 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
+        accessorKey: 'vehicleTypeId',
+        header: 'Vehicle Type ID',
+        cell: ({ row }) => {
+            const value = parseFloat(row.getValue('vehicleTypeId'))
 
-        cell: () => {
-            return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
-            )
+            return <div className="font-medium">{value}</div>
         }
+    },
+    {
+        accessorKey: 'vehicleModelId',
+        header: 'Vehicle Model ID',
+        cell: ({ row }) => {
+            const value = parseFloat(row.getValue('vehicleModelId'))
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
+        accessorKey: 'employeeId',
+        header: 'Employee ID',
+        cell: ({ row }) => {
+            const value = parseFloat(row.getValue('employeeId'))
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
+        accessorKey: 'actions',
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons vehicleId={row.getValue('id')} />
     }
 ]

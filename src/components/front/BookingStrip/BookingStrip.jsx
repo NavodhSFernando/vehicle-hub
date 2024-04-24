@@ -5,32 +5,20 @@ import SearchButton from './SearchButton'
 
 export default function BookingStrip() {
     return (
-        <div className="flex  items-center justify-center ">
-            <div className="min-[1300px]:overflow-x-auto px-20 shadow-lg bg-white rounded-lg min-[1300px]:rounded-full">
-                <ul className="flex min-[1300px]:flex-row flex-col gap-5  py-5">
-                    <li className="min-[1350px]:pr-10">
-                        <label htmlFor="Pick-Up-Date">
-                            <p className="text-[12px] opacity-80 pl-8">Pick Up Date</p>
-                        </label>
-                        <Datepicker />
+        <div className="flex items-center justify-center">
+            <div className="min-[1300px]:overflow-x-auto px-[20px] shadow-lg bg-white rounded-lg min-[1300px]:rounded-full">
+                <ul className="flex items-center justify-center min-[1300px]:flex-row flex-col gap-1 py-[15px]">
+                    <li className="min-[1350px]:pr-10 flex flex-col justify-center">
+                        <Datepicker datepicketrtext="Pick-up Date" />
                     </li>
                     <li className="min-[1300px]:px-10 border-l-[1px] border-slate-400">
-                         <label htmlFor="Pick-Up-Time">
-                            <p className="text-[12px] opacity-80 pl-7">Pick Up Time</p>
-                        </label>
-                        <TimePicker />
+                        <TimePicker timepickertext="Pick-up Time" />
                     </li>
                     <li className="min-[1300px]:px-10 border-l-[1px] border-slate-400">
-                        <label htmlFor="Drop-off-Date">
-                            <p className="text-[12px] opacity-80 pl-8">Drop off Date</p>
-                        </label>
-                        <Datepicker />
+                        <Datepicker datepicketrtext="Return Date" />
                     </li>
                     <li className="min-[1300px]:px-10 border-l-[1px] border-slate-400">
-                        <label htmlFor="Drop-off-time">
-                            <p className="text-[12px] opacity-80 pl-7">Drop off Time</p>
-                        </label>
-                        <TimePicker />
+                        <TimePicker timepickertext="Return Time" />
                     </li>
                     <li className="min-[1300px]:pl-10">
                         <SearchButton />

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BsBookmarkStar } from 'react-icons/bs'
 import { BsBookmarkStarFill } from 'react-icons/bs'
 import { useState } from 'react'
@@ -10,24 +10,56 @@ import { RiSteering2Fill } from 'react-icons/ri'
 export default function BookNowCard({ key, name, type, year, transmission, capacity, imageSrc, imageAlt, price }) {
     const [clicked, setClicked] = useState(false)
 
+    useEffect(() => {
+        // Check if the item is already in the wishlist in localStorage
+        const existingWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
+        const index = existingWishlistItems.findIndex((item) => item.name === name)
+        if (index !== -1) {
+            setClicked(true)
+        }
+    }, [name])
+
     const handleClick = () => {
-        setClicked(!clicked)
+        const vehicleDetails = {
+            name: name,
+            type: type,
+            year: year,
+            transmission: transmission,
+            capacity: capacity,
+            imageSrc: imageSrc,
+            imageAlt: imageAlt,
+            price: price
+        }
+        const existingWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
+
+        const index = existingWishlistItems.findIndex((item) => item.name === name)
+        if (index === -1) {
+            existingWishlistItems.push(vehicleDetails)
+            setClicked(true)
+        } else {
+            existingWishlistItems.splice(index, 1)
+            setClicked(false)
+        }
+
+        localStorage.setItem('wishlistItems', JSON.stringify(existingWishlistItems))
     }
 
     return (
-        <div className="w-[300px] flex flex-col p-5 shadow-xl rounded-xl bg-white">
+        <div className="w-[317px] flex flex-col p-5 shadow-xl rounded-xl bg-white">
             <div className="flex justify-between pb-12 align-top">
                 <div className="flex flex-col">
                     <h1 className="text-xl font-bold">{name}</h1>
                     <p className="text-base opacity-50 font-semibold">{type}</p>
                 </div>
-                <div className="mt-1">
-                    {clicked ? (
+                {clicked ? (
+                    <button>
                         <BsBookmarkStarFill fontSize={24} onClick={handleClick} />
-                    ) : (
+                    </button>
+                ) : (
+                    <button>
                         <BsBookmarkStar fontSize={24} onClick={handleClick} />
-                    )}
-                </div>
+                    </button>
+                )}
             </div>
             <img className="w-full booknowimage pb-12 scale-x-[-1]" src={imageSrc} alt={imageAlt} />
             <div className="flex justify-between pb-8">

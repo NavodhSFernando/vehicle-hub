@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Logo from '../../assets/logos/VH-Type.png'
 import { FaInstagram } from 'react-icons/fa6'
 import { FaFacebookF } from 'react-icons/fa'
@@ -19,29 +19,29 @@ export const Footer = () => {
     return (
         <div>
             <footer
-                className={`bottom-0 inset-x-0 z-20 w-screen px-4 text-white ${isHomePage ? 'bg-transparent py-10 absolute' : 'bg-primary py-20 relative'}`}
+                className={`bottom-0 inset-x-0 z-20 px-4 text-white ${isHomePage ? 'bg-transparent py-10 absolute' : 'bg-primary py-20 relative'}`}
             >
-                <div className="max-w-6xl mx-auto flex flex-wrap justify-between">
-                    <div className={`${isHomePage ? 'hidden' : 'block'}`}>
-                        <div className="w-full flex flex-col max-w-[340px]">
+                <div className="w-[1224px] mx-auto flex flex-col justify-center">
+                    <div className={`flex justify-between ${isHomePage ? 'hidden' : 'block'}`}>
+                        <div className="flex flex-col">
                             <img className="w-[200px]" src={Logo} alt="Vehicle Hub Logo" />
-                            <p className="mt-2 opacity-50">
+                            <p className="mt-2 opacity-50 w-[307px]">
                                 Our vision is to provide convenience and help increase your sales business.
                             </p>
                         </div>
-                        <div className="flex flex-wrap flex-col sm:flex-row sm:justify-end w-full md:w-auto mt-3 gap-6">
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                        <div className="flex flex-wrap flex-col sm:flex-row sm:justify-end md:w-auto mt-3 gap-6">
+                            <Link to="/" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 Home
-                            </a>
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            </Link>
+                            <Link to="/vehiclefleet" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 Vehicle Fleet
-                            </a>
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            </Link>
+                            <Link to="/faq" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 FAQ
-                            </a>
-                            <a href="#" className="text-white sm:px-4 py-2 hover:text-gray-300">
+                            </Link>
+                            <Link to="/contact" className="text-white sm:px-4 py-2 hover:text-gray-300">
                                 Contact
-                            </a>
+                            </Link>
                         </div>
                     </div>
 

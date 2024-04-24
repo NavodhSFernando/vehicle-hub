@@ -14,6 +14,12 @@ import WishlistDropdown from './WishlistDropDown'
 import NotificationCenter from '../../views/front/NotificationCenter'
 
 const Navbar = () => {
+    const [wishlistDropdownOpen, setWishlistDropdownOpen] = useState(true)
+
+    const closeWishlistDropdown = () => {
+        setWishlistDropdownOpen(false)
+    }
+
     const [isDropdownOpen] = useState(true)
     const handleNavigate = () => {
         console.log('Navigating to all notifications view')
@@ -52,28 +58,25 @@ const Navbar = () => {
                         <div className="flex sm:space-x-4">
                             <NavLink
                                 to="/"
-                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                 Home
-                               
+                                Home
                             </NavLink>
                             <NavLink
-                                to="/contact"
-                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                to="/vehiclefleet"
+                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                 Vehicle Fleet
-                                
+                                Vehicle Fleet
                             </NavLink>
                             <NavLink
                                 to="/faq"
-                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
-                                FAQ 
-                               
+                                FAQ
                             </NavLink>
                             <NavLink
                                 to="/contact"
-                                className="text-yellowtheme px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
                             >
                                 Contact
                             </NavLink>
@@ -99,7 +102,7 @@ const Navbar = () => {
                             <div className="text-yellowtheme cursor-pointer" onClick={handleClick}>
                                 {clicked ? (
                                     <>
-                                        <BsBookmarkStarFill fontSize={24}  />
+                                        <BsBookmarkStarFill fontSize={28} style={{ color: '#FBDAC6' }} />
                                         <WishlistDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
@@ -107,14 +110,14 @@ const Navbar = () => {
                                         />
                                     </>
                                 ) : (
-                                    <BsBookmarkStar fontSize={24} />
+                                    <BsBookmarkStar fontSize={28} style={{ color: '#FBDAC6' }} />
                                 )}
                             </div>
 
                             <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
                                     <>
-                                        <IoNotifications fontSize={28} />
+                                        <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
                                         <NotificationDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
@@ -122,12 +125,16 @@ const Navbar = () => {
                                         />
                                     </>
                                 ) : (
-                                    <IoMdNotificationsOutline fontSize={28} />
+                                    <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
                                 )}
                             </div>
                             <NavLink to="/account/notificationcenter">
                                 <div className="text-yellowtheme cursor-pointer" onClick={handleLogged}>
-                                    {logged ? <FaUserCircle fontSize={24} /> : <FaRegUserCircle fontSize={24} />}
+                                    {logged ? (
+                                        <FaUserCircle fontSize={24} style={{ color: '#FBDAC6' }} />
+                                    ) : (
+                                        <FaRegUserCircle style={{ color: '#FBDAC6' }} fontSize={24} />
+                                    )}
                                 </div>
                             </NavLink>
                         </div>
@@ -140,12 +147,14 @@ const Navbar = () => {
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
+                                style={{ color: '#FBDAC6' }}
                             >
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     strokeWidth="2"
                                     d="M4 6h16M4 12h16m-7 6h7"
+                                    style={{ color: '#FBDAC6' }}
                                 />
                             </RxHamburgerMenu>
                         </button>
