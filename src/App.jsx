@@ -47,7 +47,8 @@ import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
 import ContactUs from './views/front/ContactUs'
 import EditVehicleMake from './views/admin/vehiclemake/EditVehicleMake'
-import EditVehicle from './views/admin/vehicle/EditVehicle'
+import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
+//import EditVehicle from './views/admin/vehicle/EditVehicle'
 
 function App() {
     return (
@@ -229,11 +230,7 @@ function App() {
                     <Route path="vehicle">
                         <Route
                             path="/admin/vehicle/edit/:vehicleId"
-                            element={
-                                <TitleComponent title="Edit Vehicle">
-                                    <EditVehicle />
-                                </TitleComponent>
-                            }
+                            element={<TitleComponent title="Edit Vehicle">{/* <EditVehicle /> */}</TitleComponent>}
                         />
                         <Route
                             path="view"
@@ -279,6 +276,14 @@ function App() {
                         <Route path="view" element={<ViewCustomer />} />
                     </Route>
                     <Route path="vehiclelog">
+                        <Route
+                            path="/admin/vehiclelog/edit/:vehicleLogId"
+                            element={
+                                <TitleComponent title="Edit Vehicle Log">
+                                    <EditVehicleLog />
+                                </TitleComponent>
+                            }
+                        />
                         <Route
                             path="view"
                             element={
