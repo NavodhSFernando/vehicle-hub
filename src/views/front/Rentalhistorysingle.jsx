@@ -8,6 +8,22 @@ function Ongoingrentalssingle() {
     const handleStarClick = (value) => {
         setRating(value)
     }
+
+    const rentalData = {
+        reservationId: 'R001',
+        name: 'Alex Fernando',
+        pickupDate: '21.12.2023',
+        pickupTime: '10.30 AM',
+        dropOffDate: '02.01.2024',
+        dropOffTime: '11.00 AM',
+        depositAmount: '-Rs 5000.00',
+        extraMileageCharge: 'Rs 960.00',
+        damageFees: 'Rs 0.00',
+        rentalCharge: 'Rs 10,000.00',
+        totalAmount: 'LKR 5960.00',
+        vehicleName: 'Toyota Aqua'
+    }
+
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
             <div className="my-16 lg:mx-36">
@@ -15,7 +31,7 @@ function Ongoingrentalssingle() {
                 <div className="pb-8 flex items-center">
                     <img src={aqua} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
                     <div className="flex flex-col">
-                        <h1 className="text-2xl font-semibold text-gray-950 mb-1">Toyota Aqua</h1>
+                        <h1 className="text-2xl font-semibold text-gray-950 mb-1">{rentalData.vehicleName}</h1>
                         <div className="flex items-center">
                             {[...Array(5)].map((_, index) => (
                                 <svg
@@ -38,52 +54,52 @@ function Ongoingrentalssingle() {
 
                 <div className="pt-8 flex justify-between">
                     <p className="text-gray-500">Reservation ID </p>
-                    <p className="font-semibold"> R001</p>
+                    <p className="font-semibold">{rentalData.reservationId}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Name</p>
-                    <p className="font-semibold"> Alex Fernando</p>
+                    <p className="font-semibold">{rentalData.name}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Pick-Up Date </p>
-                    <p className="font-semibold"> 21.12.2023</p>
+                    <p className="font-semibold">{rentalData.pickupDate}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Pick-Up Time</p>
-                    <p className="font-semibold"> 10.30 AM</p>
+                    <p className="font-semibold">{rentalData.pickupTime}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Drop-Off Date</p>
-                    <p className="font-semibold">02.01.2024</p>
+                    <p className="font-semibold">{rentalData.dropOffDate}</p>
+                </div>
+                <div className="pt-3 flex justify-between">
+                    <p className="text-gray-500">Drop-Off Time</p>
+                    <p className="font-semibold">{rentalData.dropOffTime}</p>
                 </div>
                 <div className="pt-3 flex justify-between pb-8">
-                    <p className="text-gray-500">Drop-Off Time</p>
-                    <p className="font-semibold">11.00 AM</p>
+                    <p className="text-gray-500">Deposit Amount</p>
+                    <p className="font-semibold">{rentalData.depositAmount}</p>
                 </div>
                 <hr className="pb-3 border-t-2 border-stone-200" />
 
                 <div className="pt-8 flex justify-between">
-                    <p className="text-gray-500">Deposit Amount</p>
-                    <p className="font-semibold"> -Rs 5000.00</p>
-                </div>
-                <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Extra Mileage Charge(per km)</p>
-                    <p className="font-semibold"> Rs 960.00</p>
+                    <p className="font-semibold">{rentalData.extraMileageCharge}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Damage Fees</p>
-                    <p className="font-semibold">Rs 0.00</p>
+                    <p className="font-semibold">{rentalData.damageFees}</p>
                 </div>
                 <div className="pt-3 flex justify-between pb-8">
                     <p className="text-gray-500">Rental Charge</p>
-                    <p className="font-semibold">Rs 10,000.00</p>
+                    <p className="font-semibold">{rentalData.rentalCharge}</p>
                 </div>
 
                 <hr className="pb-3 border-t-2 border-stone-200" />
 
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-950 font-bold text-xl">Total Amount</p>
-                    <p className="font-semibold text-3xl">LKR 5960.00</p>
+                    <p className="font-semibold text-3xl">{rentalData.totalAmount}</p>
                 </div>
                 <div className="text-gray-500 text-xs">
                     <p>Overall price including additions </p>
