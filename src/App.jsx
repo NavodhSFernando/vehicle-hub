@@ -35,7 +35,6 @@ import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import VehicleFleetSingle from './views/front/VehicleFleetSingle'
 import VehicleFleet from './components/front/VehicleFleet'
-import OngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
@@ -52,7 +51,6 @@ import EditInsurance from './views/admin/insurance/EditInsurance'
 import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
-//import EditVehicle from './views/admin/vehicle/EditVehicle'
 
 function App() {
     return (
@@ -242,7 +240,7 @@ function App() {
                     <Route path="vehicle">
                         <Route
                             path="/admin/vehicle/edit/:vehicleId"
-                            element={<TitleComponent title="Edit Vehicle">{/* <EditVehicle /> */}</TitleComponent>}
+                            element={<TitleComponent title="Edit Vehicle">{<EditVehicle />}</TitleComponent>}
                         />
                         <Route
                             path="view"
