@@ -1,56 +1,55 @@
 import React, { useState } from 'react'
-// Predefined arrays containing options for vehicle types, makes, and capacities.
 
 const vehicleTypes = [
     { id: 'all', name: 'All Vehicle Types' },
-    { id: 'sedan', name: 'Sedan' },
-    { id: 'suv', name: 'SUV' }
+    { id: 'Sedan', name: 'Sedan' },
+    { id: 'SUV', name: 'SUV' }
     // ...more types
 ]
 
 const vehicleMakes = [
     { id: 'all', name: 'All Vehicle Makes' },
-    { id: 'toyota', name: 'Toyota' },
-    { id: 'nizan', name: 'Nizan' },
-    { id: 'honda', name: 'Honda' },
-    { id: 'mazda', name: 'mazda' },
-    { id: 'bmw', name: 'BMW' },
-    { id: 'audi', name: 'Audi' }
+    { id: 'Toyota', name: 'Toyota' },
+    { id: 'Nizan', name: 'Nizan' },
+    { id: 'Honda', name: 'Honda' },
+    { id: 'Mazda', name: 'Mazda' },
+    { id: 'BMW', name: 'BMW' },
+    { id: 'Audi', name: 'Audi' }
     // ...more makes
 ]
 
 const vehicleCapacities = [
-    { id: 'all', name: 'All Vehicle Makes' },
-    { id: '3', name: '3 Person' },
-    { id: '4', name: '4 Person' },
-    { id: '6', name: '6 Person' }
+    { id: 'all', name: 'All Vehicle Capacities' },
+    { id: '3 Persons', name: '3 Persons' },
+    { id: '4 Persons', name: '4 Persons' },
+    { id: '6 Persons', name: '6 Persons' }
     // ...more capacities
 ]
 
-const FilterCard = () => {
-    // State hooks for each filter category and max price, initialized with default values.
-    //  State is used here to keep track of the user's selections and to react to changes.
+const FilterCard = ({ onFilterChange }) => {
     const [vehicleType, setVehicleType] = useState('all')
     const [vehicleMake, setVehicleMake] = useState('all')
     const [vehicleCapacity, setVehicleCapacity] = useState('all')
     const [maxPrice, setMaxPrice] = useState(0)
 
-    // Event handlers for each filter category. These update the state when the user selects a new option.
-    // The 'event' object provides access to the new value of the input element.
     const handleTypeChange = (event) => {
         setVehicleType(event.target.value)
+        onFilterChange({ vehicleType: event.target.value })
     }
 
     const handleMakeChange = (event) => {
         setVehicleMake(event.target.value)
+        onFilterChange({ vehicleMake: event.target.value })
     }
 
     const handleCapacityChange = (event) => {
         setVehicleCapacity(event.target.value)
+        onFilterChange({ vehicleCapacity: event.target.value })
     }
 
     const handlePriceChange = (event) => {
         setMaxPrice(event.target.value)
+        onFilterChange({ maxPrice: event.target.value })
     }
 
     return (
@@ -58,7 +57,6 @@ const FilterCard = () => {
             className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow"
             style={{ width: '357px', height: '489px' }}
         >
-            {/* Vehicle Type Dropdown */}
             <div className="mb-4 flex flex-col items-start gap-7">
                 <label className="block w-full">
                     <p
@@ -82,13 +80,11 @@ const FilterCard = () => {
                                     {type.name}
                                 </option>
                             ))}
-                            6
                         </select>
                     </div>
                 </label>
             </div>
 
-            {/* Vehicle Make Dropdown */}
             <div className="mb-4 flex flex-col items-start gap-7">
                 <label className="block w-full">
                     <p
@@ -117,7 +113,6 @@ const FilterCard = () => {
                 </label>
             </div>
 
-            {/* Vehicle Capacity Dropdown */}
             <div className="mb-4 flex flex-col items-start gap-7">
                 <label className="block w-full">
                     <p
@@ -146,7 +141,6 @@ const FilterCard = () => {
                 </label>
             </div>
 
-            {/* Price Slider */}
             <div className="mb-4 flex flex-col items-start gap-3">
                 <label className="block w-full">
                     <p
@@ -155,7 +149,6 @@ const FilterCard = () => {
                     >
                         Price
                     </p>
-                    {/* Increase width of the slider container */}
                     <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '300px' }}>
                         <input
                             type="range"
@@ -166,26 +159,11 @@ const FilterCard = () => {
                             className="absolute w-full h-3 bg-transparent appearance-none cursor-pointer"
                             style={{ zIndex: maxPrice > 0 ? 1 : 0 }}
                         />
-                        {/* Colored bar indicating selected price range */}
                         <div
                             className="absolute h-3 bg-[#283280] rounded-full"
                             style={{ width: `${(maxPrice / 10000) * 100}%` }}
                         ></div>
-                        {/* Custom styling for the slider thumb */}
-                        <style jsx>{`
-                            input[type='range']::-webkit-slider-thumb {
-                                -webkit-appearance: none;
-                                appearance: none;
-                                width: 20px;
-                                height: 20px;
-                                background-color: #283280;
-                                border-radius: 50%;
-                                border: 4px solid #ffffff;
-                                cursor: pointer;
-                            }
-                        `}</style>
                     </div>
-                    {/* Display maximum price value */}
                     <p
                         className="text-lg font-semibold text-right text-gray-500"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
