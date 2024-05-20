@@ -51,11 +51,13 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                 <div className="overflow-y-auto wishlist-scrollbar" style={{ maxHeight: '17rem' }}>
                     {sampleNotifications.map((notification) => (
                         <div className="flex justify-between items-center px-[30px] ">
+                            {/* Individual notification item */}
                             <div key={notification.id} className="px-4 py-3 border-t border-gray-100 w-[265px]">
                                 <p className="text-bold text-gray-900">{notification.title}</p>
                                 <p className="text-sm text-gray-600">{notification.description}</p>
                                 <p className="text-xs text-gray-400">{notification.time}</p>
                             </div>
+                            {/* Button to remove notification */}
                             <button
                                 className="text-gray-400 hover:text-gray-500"
                                 onClick={() => {

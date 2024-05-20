@@ -82,6 +82,7 @@ const FilterCard = () => {
                                     {type.name}
                                 </option>
                             ))}
+                            6
                         </select>
                     </div>
                 </label>
@@ -165,10 +166,12 @@ const FilterCard = () => {
                             className="absolute w-full h-3 bg-transparent appearance-none cursor-pointer"
                             style={{ zIndex: maxPrice > 0 ? 1 : 0 }}
                         />
+                        {/* Colored bar indicating selected price range */}
                         <div
                             className="absolute h-3 bg-[#283280] rounded-full"
                             style={{ width: `${(maxPrice / 10000) * 100}%` }}
                         ></div>
+                        {/* Custom styling for the slider thumb */}
                         <style jsx>{`
                             input[type='range']::-webkit-slider-thumb {
                                 -webkit-appearance: none;
@@ -182,6 +185,7 @@ const FilterCard = () => {
                             }
                         `}</style>
                     </div>
+                    {/* Display maximum price value */}
                     <p
                         className="text-lg font-semibold text-right text-gray-500"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
