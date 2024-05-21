@@ -19,6 +19,7 @@ import { Textarea } from '../../../components/ui/textarea'
 
 const validReservationIds = [4]
 
+// Define the schema for form validation using zod
 const formSchema = z.object({
     reservationId: z.number().refine((reservationId) => validReservationIds.includes(reservationId), {
         message: 'Invalid Vehicle ID'
@@ -30,6 +31,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleLog() {
+    // Initialize useForm with zodResolver for schema validation
     const {
         control,
         handleSubmit,
@@ -46,6 +48,7 @@ export default function CreateVehicleLog() {
         }
     })
 
+    // Function to handle form submission
     const handleSave = async (data) => {
         const url = 'http://localhost:5062/api/VehicleLog'
         try {
@@ -57,8 +60,10 @@ export default function CreateVehicleLog() {
                 ExtraDays: data.extraDays
             }
 
+            // POST request to the server with form data
             const result = await axios.post(url, formData)
             console.log(result)
+            // Reset form fields after submission
             reset()
         } catch (error) {
             console.log(error)
