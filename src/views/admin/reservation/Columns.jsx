@@ -1,6 +1,6 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrEdit, GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 
 export const columns = [
     {
@@ -65,19 +65,27 @@ export const columns = [
             let text = ''
 
             switch (status) {
-                case 'waiting':
+                case 'Waiting':
                     color = 'bg-yellow-500'
                     text = 'Waiting'
                     break
-                case 'pending':
+                case 'Pending':
                     color = 'bg-blue-500'
                     text = 'Pending'
                     break
-                case 'confirmed':
+                case 'Confirmed':
                     color = 'bg-green-500'
                     text = 'Confirmed'
                     break
-                case 'cancelled':
+                case 'Ongoing':
+                    color = 'bg-purple-500'
+                    text = 'Ongoing'
+                    break
+                case 'Ended':
+                    color = 'bg-orange-500'
+                    text = 'Ended'
+                    break
+                case 'Cancelled':
                     color = 'bg-red-500'
                     text = 'Cancelled'
                     break
@@ -99,9 +107,21 @@ export const columns = [
         header: () => {
             return <div className="text-end">Actions</div>
         },
-        cell: () => {
+        cell: ({ row }) => {
+            const status = row.getValue('status')
+
             return (
                 <div className="flex items-center justify-end gap-2">
+                    {status === 'Confirmed' && (
+                        <Button variant="ghost" className="p-0">
+                            <GrPlay fontSize={20} className="mr-1" />
+                        </Button>
+                    )}
+                    {status === 'Ongoing' && (
+                        <Button variant="ghost" className="p-0">
+                            <GrStop fontSize={20} className="mr-1" />
+                        </Button>
+                    )}
                     <Button variant="ghost" className="p-0">
                         <GrEdit fontSize={24} className="mr-1" />
                     </Button>

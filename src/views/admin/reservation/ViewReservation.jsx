@@ -11,7 +11,7 @@ export default function ViewReservation() {
             phone: '123-456-7890',
             pickUpDate: '2024-03-20',
             dropOffDate: '2024-03-25',
-            status: 'confirmed'
+            status: 'Confirmed'
         },
         {
             id: '1002',
@@ -20,7 +20,7 @@ export default function ViewReservation() {
             phone: '098-765-4321',
             pickUpDate: '2024-04-10',
             dropOffDate: '2024-04-15',
-            status: 'pending'
+            status: 'Pending'
         },
         {
             id: '1003',
@@ -29,7 +29,7 @@ export default function ViewReservation() {
             phone: '555-666-7777',
             pickUpDate: '2024-05-05',
             dropOffDate: '2024-05-10',
-            status: 'waiting'
+            status: 'Waiting'
         },
         {
             id: '1004',
@@ -38,7 +38,7 @@ export default function ViewReservation() {
             phone: '222-333-4444',
             pickUpDate: '2024-06-15',
             dropOffDate: '2024-06-20',
-            status: 'cancelled'
+            status: 'Cancelled'
         },
         {
             id: '1005',
@@ -47,7 +47,7 @@ export default function ViewReservation() {
             phone: '777-888-9999',
             pickUpDate: '2024-07-25',
             dropOffDate: '2024-07-30',
-            status: 'confirmed'
+            status: 'Ongoing'
         }
     ]
 
