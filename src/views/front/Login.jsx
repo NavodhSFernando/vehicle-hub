@@ -1,8 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import ggl from '../../assets/Icons/ggl.svg'
 import fb from '../../assets/Icons/fb.svg'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import axios from 'axios'
 
 import { Button } from '../../components/ui/button'
 import {
@@ -16,27 +19,56 @@ import {
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
 
-export const Login = () => {
-    const form = useForm()
+const formSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8)
+})
 
-    function onSubmit(values) {
-        // Do something with the form values.
-        // This will be type-safe and validated.
-        console.log(values)
+export const Login = () => {
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+        register
+    } = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
+    })
+    const navigate = useNavigate()
+
+    const onSubmit = async (data) => {
+        try {
+            // Make a POST request to backend API endpoint
+            const response = await axios.post('http://localhost:5062/api/CustomerAuth/login', data)
+
+            // Handle successful login
+            console.log('Login successful:', response.data)
+
+            // Redirect to the home page
+            navigate('/VehicleFleetSingle')
+        } catch (error) {
+            // Handle login error
+            console.error('Login failed:', error)
+        }
     }
     return (
         <div>
             <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
                 <div className="bg-gray-200 "></div>
 
-                <div className="flex justify flex-col  items-center w-full md:w-auto bg-white rounded-xl shadow-lg absolute left-[calc(50% - 373px/2 - 0.5px)] top-[calc(50% - 605.97px/2 + 36.5px)] md:left-auto md:right-auto p-8">
-                    <h2 className="text-2xl font-bold text-gray-600 mt-6 pb-1">Customer Login</h2>
-                    <p className="text-sm font-inter text-gray-600 pb-4">Please enter your user information.</p>
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+                <div className="w-full md:w-auto bg-white rounded-xl shadow-lg p-8">
+                    <h2 className="text-2xl font-bold text-gray-600 mt-6 pb-1 text-center">Customer Login</h2>
+                    <p className="text-sm font-inter text-gray-600 pb-4 text-center">
+                        Please enter your user information.
+                    </p>
+                    <Form {...control}>
+                        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
                             <FormField
-                                control={form.control}
-                                name="username"
+                                control={control}
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="flex flex-col space-y-2">
@@ -47,10 +79,8 @@ export const Login = () => {
                                                 <input
                                                     id="email"
                                                     type="email"
-                                                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                                                    title="Please enter a valid email address"
-                                                    required
-                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    {...register('email', { required: true })}
+                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                 />
                                             </FormControl>
                                         </div>
@@ -58,7 +88,7 @@ export const Login = () => {
                                 )}
                             />
                             <FormField
-                                control={form.control}
+                                control={control}
                                 name="password"
                                 render={({ field }) => (
                                     <FormItem>
@@ -70,9 +100,9 @@ export const Login = () => {
                                                 <input
                                                     id="password"
                                                     type="password"
-                                                    autoComplete="current-password"
                                                     required
-                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    {...register('password', { required: true })}
+                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                 />
                                             </FormControl>
                                         </div>
@@ -113,11 +143,13 @@ export const Login = () => {
                                     <img src={fb} alt="My Image" className="w-7 h-10 rounded-full shadow-lg" />
                                 </a>
                             </div>
-                            <div className="flex pt-7">
+                            <div className="flex pt-4">
                                 <div className="text-indigo-600 font-bold text-left text-1xl mr-4">
-                                    Create An Account
+                                    <a href="">Create An Account</a>
                                 </div>
-                                <div className="text-gray-800 font-semibold text-right text-1xl">Forgot Password</div>
+                                <div className="text-gray-800 font-semibold text-right text-1xl">
+                                    <a href="">Forgot Password?</a>
+                                </div>
                             </div>
                         </form>
                     </Form>
