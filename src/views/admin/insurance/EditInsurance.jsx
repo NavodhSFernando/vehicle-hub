@@ -1,6 +1,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import { useEffect } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -14,7 +17,6 @@ import {
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import axios from 'axios'
 
 const validVehicleIds = [1, 7]
 
@@ -30,7 +32,8 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateInsurance() {
+export default function EditInsurance() {
+    const { insuranceId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -45,9 +48,30 @@ export default function CreateInsurance() {
         }
     })
 
-    //Submit handler
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.insuranceNo)
+                console.log(data.expiryDate)
+                console.log(data.vehicleId)
+                console.log(data)
+
+                reset({
+                    insuranceNo: data.insuranceNo,
+                    expiryDate: data.expiryDate,
+                    vehicleId: data.vehicleId
+                })
+            } catch (error) {
+                console.error('Failed to fetch insurance', error)
+            }
+        }
+        fetchData()
+    }, [insuranceId, reset])
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleInsurance'
+        const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
         try {
             const formData = {
                 InsuranceNo: data.insuranceNo,
@@ -55,11 +79,11 @@ export default function CreateInsurance() {
                 VehicleId: data.vehicleId
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
-            console.log(error)
+            console.error('Failed to update vehicle Insurance', error)
         }
     }
 
@@ -122,6 +146,7 @@ export default function CreateInsurance() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>

@@ -1,7 +1,9 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
+import { useEffect } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -29,7 +31,8 @@ const formSchema = z.object({
     extraDays: z.number().min(0).optional()
 })
 
-export default function CreateVehicleLog() {
+export default function EditVehicleLog() {
+    const { vehicleLogId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -45,9 +48,33 @@ export default function CreateVehicleLog() {
             extraDays: 0
         }
     })
+    // Fetch vehicle Log data
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.reservationId)
+                console.log(data.endMileage)
+                console.log(data.penalty)
+                console.log(data.description)
+                console.log(data.extraDays)
+                reset({
+                    reservationId: data.reservationId,
+                    endMileage: data.endMileage,
+                    penalty: data.penalty,
+                    description: data.description,
+                    extraDays: data.extraDays
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle Logs', error)
+            }
+        }
+        fetchData()
+    }, [vehicleLogId, reset])
 
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleLog'
+        const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
         try {
             const formData = {
                 ReservationId: data.reservationId,
@@ -57,11 +84,11 @@ export default function CreateVehicleLog() {
                 ExtraDays: data.extraDays
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
-            console.log(error)
+            console.log('Failed to update vehicle Log', error)
         }
     }
 
@@ -82,6 +109,7 @@ export default function CreateVehicleLog() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -99,6 +127,7 @@ export default function CreateVehicleLog() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -116,6 +145,7 @@ export default function CreateVehicleLog() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -153,6 +183,7 @@ export default function CreateVehicleLog() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>

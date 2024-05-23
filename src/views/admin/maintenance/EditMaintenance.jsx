@@ -1,7 +1,9 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { date, z } from 'zod'
+import { z } from 'zod'
 import axios from 'axios'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -45,7 +47,8 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateMaintenance() {
+export default function EditMaintenance() {
+    const { maintenanceId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -55,27 +58,50 @@ export default function CreateMaintenance() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             date: '',
-            vehicleId: 0,
-            description: ''
+            description: '',
+            vehicleId: 0
         }
     })
 
-    //Submit handler
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.date)
+                console.log(data.description)
+                console.log(data.type)
+                console.log(data.vehicleId)
+                console.log(data)
+
+                reset({
+                    date: data.date,
+                    description: data.description,
+                    maintenanceType: data.type,
+                    vehicleId: data.vehicleId
+                })
+            } catch (error) {
+                console.error('Failed to fetch maintenance', error)
+            }
+        }
+        fetchData()
+    }, [maintenanceId, reset])
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleMaintenance'
+        const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
         try {
             const formData = {
                 Date: data.date,
-                VehicleId: data.vehicleId,
                 Description: data.description,
-                Type: data.type
+                Type: data.type,
+                VehicleId: data.vehicleId
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
-            console.log(error)
+            console.error('Failed to update vehicle maintenance', error)
         }
     }
 
@@ -96,11 +122,11 @@ export default function CreateMaintenance() {
                                 <Input
                                     type="date"
                                     className="w-full"
-                                    {...field}
                                     onChange={(e) => {
                                         const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
                                         field.onChange(dateValue) // Pass the string directly to your form's state
                                     }}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.maintenanceDate && errors.maintenanceDate.message}</FormMessage>
@@ -118,6 +144,7 @@ export default function CreateMaintenance() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    {...field}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -135,7 +162,8 @@ export default function CreateMaintenance() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                //defaultValue={field.value}
+                                {...field}
+                                defaultValue={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -151,7 +179,7 @@ export default function CreateMaintenance() {
                                     <SelectItem value="replacements">Replacements</SelectItem>
                                 </SelectContent>
                             </Select>
-                            <FormMessage>{errors.maintenanceType && errors.maintenanceType.message}</FormMessage>
+                            <FormMessage>{errors.type && errors.type.message}</FormMessage>
                         </FormItem>
                     )}
                 />

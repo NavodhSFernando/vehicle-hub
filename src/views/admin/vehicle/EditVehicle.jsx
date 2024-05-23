@@ -1,4 +1,6 @@
 import React from 'react'
+import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -53,7 +55,8 @@ const formSchema = z.object({
     })
 })
 
-export default function CreateVehicle() {
+export default function EditVehicle() {
+    const { vehicleId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -73,8 +76,42 @@ export default function CreateVehicle() {
             employeeId: 0
         }
     })
+    // Fetch vehicle data
+    useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data.registrationNumber)
+                console.log(data.chassisNo)
+                console.log(data.colour)
+                console.log(data.mileage)
+                console.log(data.costPerDay)
+                console.log(data.transmission)
+                console.log(data.vehicleTypeId)
+                console.log(data.vehicleModelId)
+                console.log(data.employeeId)
+                console.log(data)
+                reset({
+                    regNo: data.registrationNumber,
+                    chassisNo: data.chassisNo,
+                    color: data.colour,
+                    mileage: data.mileage,
+                    costPerDay: data.costPerDay,
+                    transmission: data.transmission,
+                    vehicleTypeId: data.vehicleTypeId,
+                    vehicleModelId: data.vehicleModelId,
+                    employeeId: data.employeeId
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle make', error)
+            }
+        }
+        fetchData()
+    }, [vehicleId, reset])
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/Vehicle'
+        const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
         try {
             const formData = {
                 RegistrationNumber: data.regNo,
@@ -88,13 +125,14 @@ export default function CreateVehicle() {
                 EmployeeId: data.employeeId
             }
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
-            console.log(error)
+            console.error('Failed to update vehicle make', error)
         }
     }
+
     return (
         <Form {...control}>
             <form
@@ -130,7 +168,6 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Chassis Number</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="SV30-0169266"
                                     className="w-full"
                                     {...field}
                                     onChange={(e) => {
@@ -152,6 +189,7 @@ export default function CreateVehicle() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
+                                {...field}
                                 defaultValue={field.value}
                             >
                                 <FormControl>
@@ -176,7 +214,6 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Color</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="White"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
@@ -198,7 +235,11 @@ export default function CreateVehicle() {
                                 <Input
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
+                                    onChange={(e) => {
+                                        const number = parseInt(e.target.value) // This is the input string in "yyyy-MM-dd"
+                                        field.onChange(number) // Pass the string directly to your form's state
+                                    }}
                                 />
                             </FormControl>
                             <FormMessage>{errors.costPerDay && errors.costPerDay.message}</FormMessage>
@@ -216,6 +257,7 @@ export default function CreateVehicle() {
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
@@ -233,6 +275,7 @@ export default function CreateVehicle() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleTypeId && errors.vehicleTypeId.message}</FormMessage>
@@ -250,6 +293,7 @@ export default function CreateVehicle() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleModelId && errors.vehicleModelId.message}</FormMessage>
@@ -267,6 +311,7 @@ export default function CreateVehicle() {
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
+                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.employeeId && errors.employeeId.message}</FormMessage>

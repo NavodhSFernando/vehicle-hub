@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import BookNowCard from './BookNowCard'
 import BookingStrip2 from './BookingStrip/BookingStrip2'
 import SearchStrip from './BookingStrip/SearchStrip'
@@ -10,136 +10,162 @@ const data = [
         key: '001',
         name: 'Toyota aqua',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
+        make: 'Nizan',
         transmission: 'Manual',
-        capacity: '6 Persons',
-        price: '15 000'
+        capacity: '4 Persons',
+        price: '15000'
     },
     {
         key: '002',
         name: 'Toyota prius',
-        type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        type: 'Sedan',
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
+        make: 'Toyota',
         transmission: 'Manual',
         capacity: '6 Persons',
-        price: '15 000'
+        price: '15000'
     },
     {
-        key: '002',
+        key: '003',
         name: 'Toyota prius',
         type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
+        make: 'Toyota',
         transmission: 'Manual',
-        capacity: '6 Persons',
-        price: '15 000'
+        capacity: '3 Persons',
+        price: '15000'
     },
     {
-        key: '002',
+        key: '004',
         name: 'Toyota prius',
-        type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        type: 'Sedan',
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
+        make: 'Toyota',
         transmission: 'Manual',
         capacity: '6 Persons',
-        price: '15 000'
+        price: '15000'
     },
     {
-        key: '002',
+        key: '005',
         name: 'Toyota prius',
-        type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        type: 'Sedan',
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
+        make: 'Toyota',
         transmission: 'Manual',
-        capacity: '6 Persons',
-        price: '15 000'
+        capacity: '4 Persons',
+        price: '9000'
     },
     {
-        key: '002',
+        key: '006',
         name: 'Toyota prius',
-        type: 'SUV',
-        imageSrc: Aqua, // Fix here
+        type: 'Sedan',
+        imageSrc: Aqua,
         imageAlt: 'Toyota Aqua',
         year: '2017',
+        make: 'Toyota',
         transmission: 'Manual',
-        capacity: '6 Persons',
-        price: '15 000'
+        capacity: '4 Persons',
+        price: '6000'
     }
-    // More Data...
 ]
 
-export default function VehicleFleet() {
+const VehicleFleet = () => {
+    const [filters, setFilters] = useState({
+        vehicleType: 'all',
+        vehicleMake: 'all',
+        vehicleCapacity: 'all',
+        maxPrice: 0
+    })
+
+    const [keyword, setKeyword] = useState('')
+
+    const [filteredData, setFilteredData] = useState([])
+
+    const handleFilterChange = (newFilters) => {
+        setFilters({ ...filters, ...newFilters })
+    }
+
+    const handleSearch = (searchQuery) => {
+        setKeyword(searchQuery)
+        console.log(searchQuery)
+        const updatedFilteredData = data.filter((vehicle) =>
+            vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        setFilteredData(updatedFilteredData)
+    }
+
+    useEffect(() => {
+        const updatedFilteredData = data.filter((vehicle) => {
+            console.log('Vehicle:', vehicle)
+            console.log('Filters:', filters)
+
+            if (filters.vehicleType !== 'all' && vehicle.type !== filters.vehicleType) {
+                console.log('Filtered out due to vehicle type')
+                return false
+            }
+
+            if (filters.vehicleMake !== 'all' && vehicle.make !== filters.vehicleMake) {
+                console.log('Filtered out due to vehicle make')
+                return false
+            }
+
+            if (filters.vehicleCapacity !== 'all' && vehicle.capacity !== filters.vehicleCapacity) {
+                console.log('Filtered out due to vehicle capacity')
+                return false
+            }
+
+            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.price) > parseInt(filters.maxPrice)) {
+                console.log('Filtered out due to price')
+                return false
+            }
+
+            return true
+        })
+
+        setFilteredData(updatedFilteredData)
+    }, [filters])
+
     return (
         <div>
             <div className="flex flex-row justify-center gap-[30px]">
                 <div>
-                    <FilterCard />
+                    <FilterCard onFilterChange={handleFilterChange} />
                 </div>
                 <div className="flex-col">
-                    <div>
-                        <SearchStrip />
-                    </div>
+                    <SearchStrip onSearch={handleSearch} />
                     <div className="mt-[20px]">
                         <BookingStrip2 />
                     </div>
-                    <div className="flex flex-row flex-wrap justify-between mt-[50px] gap-[30px]">
-                        {data.map(
-                            (
-                                vehicle // Changed variable name to avoid conflict with 'data' object
-                            ) => (
-                                <BookNowCard
-                                    key={vehicle.key} // Fixed key
-                                    name={vehicle.name}
-                                    type={vehicle.type}
-                                    imageSrc={vehicle.imageSrc}
-                                    imageAlt={vehicle.imageAlt}
-                                    year={vehicle.year}
-                                    transmission={vehicle.transmission}
-                                    capacity={vehicle.capacity}
-                                    price={vehicle.price}
-                                />
-                            )
-                        )}
+                    <div className="flex flex-row flex-wrap justify-between mt-10 gap-5">
+                        {filteredData.map((vehicle) => (
+                            <BookNowCard
+                                key={vehicle.key}
+                                name={vehicle.name}
+                                type={vehicle.type}
+                                imageSrc={vehicle.imageSrc}
+                                imageAlt={vehicle.imageAlt}
+                                year={vehicle.year}
+                                transmission={vehicle.transmission}
+                                capacity={vehicle.capacity}
+                                price={vehicle.price}
+                            />
+                        ))}
                     </div>
                 </div>
             </div>
         </div>
-
-        // <div className="flex w-full">
-        //     <div className="flex w-1/4">
-        //         <FilterCard />
-        //     </div>
-        //     <div className="flex flex-col w-3/4 items-center justify-center">
-        //         <BookingStrip2 />
-        //         <div className="flex flex-col mt-10 w-full max-w-screen-lg">
-        //             <div className="grid grid-rows-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-6">
-        //                 {data.map(
-        //                     (
-        //                         vehicle // Changed variable name to avoid conflict with 'data' object
-        //                     ) => (
-        //                         <BookNowCard
-        //                             key={vehicle.key} // Fixed key
-        //                             name={vehicle.name}
-        //                             type={vehicle.type}
-        //                             imageSrc={vehicle.imageSrc}
-        //                             imageAlt={vehicle.imageAlt}
-        //                             year={vehicle.year}
-        //                             transmission={vehicle.transmission}
-        //                             capacity={vehicle.capacity}
-        //                             price={vehicle.price}
-        //                         />
-        //                     )
-        //                 )}
-        //             </div>
-        //         </div>
-        //     </div>
-        // </div>
     )
 }
+
+export default VehicleFleet

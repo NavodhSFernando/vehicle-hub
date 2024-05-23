@@ -9,6 +9,19 @@ function Ongoingrentalssingle() {
     const handleStarClick = (value) => {
         setRating(value)
     }
+
+    // Example JSON object
+    const rentalData = {
+        reservationId: 'R001',
+        name: 'Alex Fernando',
+        vehicleName: 'Toyota Aqua',
+        pickupDate: '21.12.2023',
+        pickupTime: '10.30 AM',
+        dropOffDate: '02.01.2024',
+        dropOffTime: '11.00 AM',
+        reservationStatus: 'Pending'
+    }
+
     return (
         <>
             <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
@@ -17,7 +30,7 @@ function Ongoingrentalssingle() {
                     <div className="pb-8 flex items-center">
                         <img src={aqua} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
                         <div className="flex flex-col">
-                            <h1 className="text-2xl font-semibold text-gray-950 mb-1">Toyota Aqua</h1>
+                            <h1 className="text-2xl font-semibold text-gray-950 mb-1">{rentalData.vehicleName}</h1>
                             <div className="flex items-center">
                                 {[...Array(5)].map((_, index) => (
                                     <svg
@@ -39,32 +52,32 @@ function Ongoingrentalssingle() {
                     <hr className="pb-3 border-t-2 border-stone-200 mx-5" />
                     <div className="pt-8 flex justify-between">
                         <p className="text-gray-500">Reservation ID </p>
-                        <p className="font-semibold"> R001</p>
+                        <p className="font-semibold">{rentalData.reservationId}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Name</p>
-                        <p className="font-semibold"> Alex Fernando</p>
+                        <p className="font-semibold">{rentalData.name}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Pick-Up Date </p>
-                        <p className="font-semibold"> 21.12.2023</p>
+                        <p className="font-semibold">{rentalData.pickupDate}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Pick-Up Time</p>
-                        <p className="font-semibold"> 10.30 AM</p>
+                        <p className="font-semibold">{rentalData.pickupTime}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Drop-Off Date</p>
-                        <p className="font-semibold">02.01.2024</p>
+                        <p className="font-semibold">{rentalData.dropOffDate}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Drop-Off Time</p>
-                        <p className="font-semibold">11.00 AM</p>
+                        <p className="font-semibold">{rentalData.dropOffTime}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Reservation Status </p>
                         <button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
-                            Pending
+                            {rentalData.reservationStatus}
                         </button>
                     </div>
                 </div>
