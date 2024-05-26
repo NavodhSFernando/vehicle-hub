@@ -4,8 +4,9 @@ import aqua from '../../assets/vehicles/aqua.png'
 import { Button } from '../../components/ui/button'
 
 function Ongoingrentalssingle() {
-    const [rating, setRating] = useState(0)
+    const [rating, setRating] = useState(0) // State for tracking the star rating
 
+    // Function to handle star click and update the rating state
     const handleStarClick = (value) => {
         setRating(value)
     }

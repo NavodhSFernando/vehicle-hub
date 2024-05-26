@@ -9,7 +9,7 @@ import Login from './views/front/Login'
 import Signup from './views/front/Signup'
 import Password from './views/front/Password'
 import ViewReservation from './views/admin/reservation/ViewReservation'
-import CreateReservation from './views/admin/reservation/CreateReservation'
+import CreateReservation from './views/admin/reservation/EditReservation'
 import ViewVehicleType from './views/admin/vehicletype/ViewVehicleType'
 import CreateVehicleType from './views/admin/vehicletype/CreateVehicleType'
 import ViewVehicleMake from './views/admin/vehiclemake/ViewVehicleMake'
@@ -311,7 +311,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/vehiclelog/create/:customerReservationId"
                             element={
                                 <TitleComponent title="Create Vehicle Log">
                                     <CreateVehicleLog />

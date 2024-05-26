@@ -36,8 +36,8 @@ export default function DataTable({ columns, data }) {
                     <Input
                         type="date"
                         placeholder="Filter date range"
-                        value={table.getColumn('pickUpDate')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('pickUpDate')?.setFilterValue(event.target.value)}
+                        value={table.getColumn('startDate')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('startDate')?.setFilterValue(event.target.value)}
                         className="max-w-lg"
                     />
                 </div>
