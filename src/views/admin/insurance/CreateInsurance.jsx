@@ -57,9 +57,9 @@ export default function CreateInsurance() {
 
             const result = await axios.post(url, formData)
             console.log(result)
-            reset()
+            reset() // Reset form after successful submission
         } catch (error) {
-            console.log(error)
+            console.log(error) // Log error if submission fails
         }
     }
 

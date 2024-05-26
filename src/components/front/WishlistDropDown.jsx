@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import aqua from '../../assets/vehicles/aqua.png'
 
 const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
+    // State to manage wishlist items
     const [wishlistItems, setWishlistItems] = useState([])
 
     useEffect(() => {

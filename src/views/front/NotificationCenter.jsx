@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-// A constant array of notification objects that contains details for each notification.
+import React, { useState } from 'react'
+//constant array of notification objects contains details for each notification.
 const notifications = [
     {
         id: 'n1',
@@ -32,26 +32,19 @@ const notifications = [
     // ... add other notifications here
 ]
 
-
-
-
-
 // Constants for pagination
-const NOTIFICATIONS_PER_PAGE = 3;
+const NOTIFICATIONS_PER_PAGE = 3
 
 export default function NotificationCenter() {
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1)
 
     // Calculate the index of the first and last notification on the current page
-    const indexOfLastNotification = currentPage * NOTIFICATIONS_PER_PAGE;
-    const indexOfFirstNotification = indexOfLastNotification - NOTIFICATIONS_PER_PAGE;
-    const currentNotifications = notifications.slice(
-        indexOfFirstNotification,
-        indexOfLastNotification
-    );
+    const indexOfLastNotification = currentPage * NOTIFICATIONS_PER_PAGE
+    const indexOfFirstNotification = indexOfLastNotification - NOTIFICATIONS_PER_PAGE
+    const currentNotifications = notifications.slice(indexOfFirstNotification, indexOfLastNotification)
 
     // Function to change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
     return (
         <div className="flex justify-center items-start pb-10">
@@ -68,31 +61,35 @@ export default function NotificationCenter() {
                 />
             </div>
         </div>
-    );
+    )
 }
 function Pagination({ totalNotifications, notificationsPerPage, paginate, currentPage }) {
-    const pageNumbers = [];
+    const pageNumbers = []
 
     for (let i = 1; i <= Math.ceil(totalNotifications / notificationsPerPage); i++) {
-        pageNumbers.push(i);
+        pageNumbers.push(i)
     }
 
     return (
         <div className="flex justify-center items-center pt-4 space-x-1">
             <button
                 className={`px-4 py-2 border rounded shadow ${
-                    currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
+                    currentPage === 1
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
                 }`}
                 disabled={currentPage === 1}
                 onClick={() => paginate(currentPage - 1)}
             >
                 Prev
             </button>
-            {pageNumbers.map(number => (
+            {pageNumbers.map((number) => (
                 <button
                     key={number}
                     className={`px-4 py-2 border rounded shadow ${
-                        currentPage === number ? 'bg-Paginationbluecolor text-white' : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
+                        currentPage === number
+                            ? 'bg-Paginationbluecolor text-white'
+                            : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
                     }`}
                     onClick={() => paginate(number)}
                 >
@@ -101,7 +98,9 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
             ))}
             <button
                 className={`px-4 py-2 border rounded shadow ${
-                    currentPage === pageNumbers.length ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
+                    currentPage === pageNumbers.length
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
                 }`}
                 disabled={currentPage === pageNumbers.length}
                 onClick={() => paginate(currentPage + 1)}
@@ -109,9 +108,8 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
                 Next
             </button>
         </div>
-    );
+    )
 }
-
 
 // The NotificationCard is a presentational component that renders the UI for an individual notification.
 // It takes 'title', 'description', and 'time' as props, which are deconstructed from the notification object.
