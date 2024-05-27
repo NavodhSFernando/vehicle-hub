@@ -61,7 +61,7 @@ export default function EditInsurance() {
                 reset({
                     insuranceNo: data.insuranceNo,
                     expiryDate: data.expiryDate,
-                    vehicleId: data.vehicleId
+                    vehicleId: data.vehicle.id
                 })
             } catch (error) {
                 console.error('Failed to fetch insurance', error)

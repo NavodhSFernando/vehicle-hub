@@ -16,7 +16,7 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 
-const validVehicleIds = [1, 7]
+const validVehicleIds = [1, 7, 5]
 
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 

@@ -48,7 +48,8 @@ export const columns = [
         accessorKey: 'vehicleId',
         header: 'Vehicle ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleId'))
+            const vehicleId = row.original.vehicle.id
+            const value = parseFloat(vehicleId)
 
             return <div className="font-medium">{value}</div>
         }
