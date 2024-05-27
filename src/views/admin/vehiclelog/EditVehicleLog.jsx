@@ -59,6 +59,7 @@ export default function EditVehicleLog() {
                 console.log(data.penalty)
                 console.log(data.description)
                 console.log(data.extraDays)
+                // Reset form with fetched data
                 reset({
                     reservationId: data.reservationId,
                     endMileage: data.endMileage,
@@ -73,6 +74,7 @@ export default function EditVehicleLog() {
         fetchData()
     }, [vehicleLogId, reset])
 
+    // Function to handle form submission
     const handleSave = async (data) => {
         const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
         try {
@@ -84,6 +86,7 @@ export default function EditVehicleLog() {
                 ExtraDays: data.extraDays
             }
 
+            // PUT request to the server with form data
             const result = await axios.put(url, formData)
             console.log(result)
             reset()
