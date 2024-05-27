@@ -19,14 +19,19 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 
 // File validation Schema
-const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
-    confirmpassword: z.string().min(8)
-})
+const formSchema = z
+    .object({
+        email: z.string().email(),
+        password: z.string().min(8),
+        confirmpassword: z.string()
+    })
+
+    .refine((data) => data.password === data.confirmpassword, {
+        message: "Passwords don't match",
+        path: ['confirmpassword'] // path of error
+    })
 
 export const Signup = () => {
-    const [error, setError] = useState('')
     const {
         control,
         handleSubmit,
@@ -44,35 +49,21 @@ export const Signup = () => {
 
     // Submit handler
     const onSubmit = async (data) => {
-        try {
-            if (data.password !== data.confirmpassword) {
-                setError('Password and confirm password must match.')
-                return
-            }
-            const result = await axios.post('http://localhost:5062/api/CustomerAuth/register', {
-                email: data.email,
-                password: data.password,
-                confirmPassword: data.confirmpassword
-            })
+        console.log(data)
+        const result = await axios.post('http://localhost:5062/api/CustomerAuth/register', {
+            email: data.email,
+            password: data.password
+        })
 
-            console.log(result.data) // Log the server response
-            reset() // Reset the form after successful submission
-        } catch (error) {
-            console.error('Error:', error)
-            // Handle form submission errors here
-            setError('Registration failed. Please try again.')
-        }
+        console.log(result.data) // Log the server response
+        reset() // Reset the form after successful submission
     }
 
     return (
         <div>
-            <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
-                {/* <div className="bg-gray-200 "></div> */}
-                <div className="flex flex-col items-center w-full md:w-auto bg-white rounded-xl shadow-lg absolute left-[calc(50% - 373px/2 - 0.5px)] top-[calc(50% - 605.97px/2 + 36.5px)] md:left-auto md:right-auto p-7 ">
-                    <h1 className="text-2xl font-inter font-bold text-gray-700 mt-4 mb-1 text-justify">
-                        {' '}
-                        Customer Sign up
-                    </h1>
+            <div className="flex justify-center items-center h-screen bg-gray-300">
+                <div className="w-full md:w-auto bg-white rounded-xl shadow-lg p-7">
+                    <h1 className="text-2xl font-bold text-gray-700 mt-4 mb-1 text-center"> Customer Sign up</h1>
                     <p className="text-xs text-gray-600 text-center mb-2">Please enter your user information.</p>
 
                     <Form {...control}>
@@ -90,7 +81,7 @@ export const Signup = () => {
                                                 <input
                                                     id="email"
                                                     type="email"
-                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                     {...register('email')}
                                                 />
                                             </FormControl>
@@ -114,7 +105,7 @@ export const Signup = () => {
                                                     id="password"
                                                     type="password"
                                                     required
-                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                     {...register('password')}
                                                 />
                                             </FormControl>
@@ -140,12 +131,14 @@ export const Signup = () => {
                                                     id="confirmpassword"
                                                     type="password"
                                                     required
-                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                     {...register('confirmpassword')}
                                                 />
                                             </FormControl>
                                         </div>
-                                        <FormMessage>{error}</FormMessage>
+                                        <FormMessage>
+                                            {errors.confirmpassword && errors.confirmpassword.message}
+                                        </FormMessage>
                                     </FormItem>
                                 )}
                             />
@@ -154,7 +147,6 @@ export const Signup = () => {
                                 <label htmlFor="confirm" className="ml-2 text-gray-800">
                                     By creating this account, you agree the
                                     <div className="text-indigo-600 cursor-pointer font-semibold">
-                                        {' '}
                                         terms and conditions.
                                     </div>
                                 </label>
@@ -191,7 +183,9 @@ export const Signup = () => {
                                 </a>
                             </div>
                             <div className="flex justify-center pt-4">
-                                <div className="text-indigo-600 cursor-pointer mr-3 mb-4">Already member? Login?</div>
+                                <div className="text-indigo-600 cursor-pointer mr-3 mb-4">
+                                    <a href="">Already member? Login?</a>
+                                </div>
                             </div>
                         </form>
                     </Form>

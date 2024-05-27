@@ -13,7 +13,7 @@ import { Input } from '../../../components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
 export default function DataTable({ columns, data }) {
-    const [columnFilters, setColumnFilters] = React.useState([])
+    //const [columnFilters, setColumnFilters] = React.useState([])
     const [sorting, setSorting] = React.useState([])
 
     const table = useReactTable({

@@ -9,7 +9,7 @@ export default function FeedbackForm() {
     const [iconSize, setIconSize] = useState(window.innerWidth <= 768 ? 15 : 30)
 
     const [value, setValue] = useState(0)
-
+    // Updates the value state when a user selects a rating
     const handleRatingChange = (newValue) => {
         setValue(newValue)
     }
@@ -34,7 +34,7 @@ export default function FeedbackForm() {
                 ReservationId: 1
             }
 
-            // Now send feedbackData to the server
+            // Now sending feedbackData to the server
             const response = await axios.post('http://localhost:47367/api/Feedback', FeedbackRequest)
             console.log('Feedback submitted successfully:', response.data)
             alert('Feedback submitted successfully.')

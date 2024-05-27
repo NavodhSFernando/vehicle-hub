@@ -9,7 +9,7 @@ import Login from './views/front/Login'
 import Signup from './views/front/Signup'
 import Password from './views/front/Password'
 import ViewReservation from './views/admin/reservation/ViewReservation'
-import CreateReservation from './views/admin/reservation/CreateReservation'
+import CreateReservation from './views/admin/reservation/EditReservation'
 import ViewVehicleType from './views/admin/vehicletype/ViewVehicleType'
 import CreateVehicleType from './views/admin/vehicletype/CreateVehicleType'
 import ViewVehicleMake from './views/admin/vehiclemake/ViewVehicleMake'
@@ -35,7 +35,6 @@ import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import VehicleFleetSingle from './views/front/VehicleFleetSingle'
 import VehicleFleet from './components/front/VehicleFleet'
-import OngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
@@ -52,7 +51,6 @@ import EditInsurance from './views/admin/insurance/EditInsurance'
 import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
-//import EditVehicle from './views/admin/vehicle/EditVehicle'
 
 function App() {
     return (
@@ -242,7 +240,7 @@ function App() {
                     <Route path="vehicle">
                         <Route
                             path="/admin/vehicle/edit/:vehicleId"
-                            element={<TitleComponent title="Edit Vehicle">{/* <EditVehicle /> */}</TitleComponent>}
+                            element={<TitleComponent title="Edit Vehicle">{<EditVehicle />}</TitleComponent>}
                         />
                         <Route
                             path="view"
@@ -313,7 +311,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/vehiclelog/create/:customerReservationId"
                             element={
                                 <TitleComponent title="Create Vehicle Log">
                                     <CreateVehicleLog />

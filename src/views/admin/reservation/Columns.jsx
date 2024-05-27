@@ -1,6 +1,53 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrEdit, GrTrash, GrStop, GrPlay } from 'react-icons/gr'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+
+const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
+    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}`
+    try {
+        // POST request to the server with form data
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// Define a component to encapsulate the action buttons
+const ActionButtons = ({ customerReservationId, status, refetchReservation }) => {
+    const navigate = useNavigate()
+    return (
+        <div className="flex items-center justify-end gap-2">
+            {status === 'Confirmed' && (
+                <Button
+                    variant="ghost"
+                    className="p-0"
+                    onClick={() => BeginReservation({ customerReservationId, refetchReservation })}
+                >
+                    <GrPlay fontSize={20} className="mr-1" />
+                </Button>
+            )}
+            {status === 'Ongoing' && (
+                <Button
+                    variant="ghost"
+                    className="p-0"
+                    onClick={() => navigate(`/admin/vehiclelog/create/${customerReservationId}`)}
+                >
+                    <GrStop fontSize={20} className="mr-1" />
+                </Button>
+            )}
+            <Button variant="ghost" className="p-0" onClick={() => console.log('buuruwa')}>
+                <GrEdit fontSize={24} className="mr-1" />
+            </Button>
+            <Button variant="ghost" className="p-0">
+                <GrTrash fontSize={24} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
@@ -24,23 +71,55 @@ export const columns = [
         header: 'Customer Phone'
     },
     {
-        accessorKey: 'pickUpDate',
+        accessorKey: 'regNo',
+        header: 'Registration No.'
+    },
+    {
+        accessorKey: 'startDate',
         header: 'Pick up Date',
         cell: ({ row }) => {
-            const value = row.getValue('pickUpDate')
-            // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            const value = row.getValue('startDate')
+            let formattedDate = 'Invalid Date'
+            if (value) {
+                try {
+                    formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+                } catch (e) {
+                    console.error('Invalid start date:', value)
+                }
+            }
             return <div>{formattedDate}</div>
         }
     },
     {
-        accessorKey: 'dropOffDate',
+        accessorKey: 'endDate',
         header: 'Drop off Date',
         cell: ({ row }) => {
-            const value = row.getValue('dropOffDate')
-            // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            const value = row.getValue('endDate')
+            let formattedDate = 'Invalid Date'
+            if (value) {
+                try {
+                    formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+                } catch (e) {
+                    console.error('Invalid end date:', value)
+                }
+            }
             return <div>{formattedDate}</div>
+        }
+    },
+    {
+        accessorKey: 'startTime',
+        header: 'Start Time',
+        cell: ({ row }) => {
+            const value = row.getValue('startTime')
+            return <div>{value || 'Invalid Time'}</div>
+        }
+    },
+    {
+        accessorKey: 'endTime',
+        header: 'End Time',
+        cell: ({ row }) => {
+            const value = row.getValue('endTime')
+            return <div>{value || 'Invalid Time'}</div>
         }
     },
     {
@@ -65,19 +144,31 @@ export const columns = [
             let text = ''
 
             switch (status) {
-                case 'waiting':
+                case 'Waiting':
                     color = 'bg-yellow-500'
                     text = 'Waiting'
                     break
-                case 'pending':
+                case 'Pending':
                     color = 'bg-blue-500'
                     text = 'Pending'
                     break
-                case 'confirmed':
+                case 'Confirmed':
                     color = 'bg-green-500'
                     text = 'Confirmed'
                     break
-                case 'cancelled':
+                case 'Ongoing':
+                    color = 'bg-purple-500'
+                    text = 'Ongoing'
+                    break
+                case 'Ended':
+                    color = 'bg-orange-500'
+                    text = 'Ended'
+                    break
+                case 'Completed':
+                    color = 'bg-green-700'
+                    text = 'Completed'
+                    break
+                case 'Cancelled':
                     color = 'bg-red-500'
                     text = 'Cancelled'
                     break
@@ -96,19 +187,15 @@ export const columns = [
     },
     {
         accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
-        cell: () => {
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row, column }) => {
+            const refetchReservation = column.columnDef.refetchReservation
             return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
+                <ActionButtons
+                    customerReservationId={row.getValue('id')}
+                    status={row.getValue('status')}
+                    refetchReservation={refetchReservation}
+                />
             )
         }
     }

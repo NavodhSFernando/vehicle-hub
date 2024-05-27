@@ -1,16 +1,33 @@
 import { React, useState } from 'react'
-import Datepicker from './Datepicker'
-import TimePicker from './TimePicker'
 import { Checkbox } from '../../ui/checkbox'
 import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs'
 import { Button } from '../../ui/button'
+import { FaStar } from 'react-icons/fa'
 
-export default function Detailcar({ vehicle, transmission, capacity, engine, mileage, fuel, year, colour, rate }) {
-    const [rating, setRating] = useState(0)
-
-    const handleStarClick = (value) => {
-        setRating(value)
-    }
+export default function Detailcar({
+    vehicle,
+    transmission,
+    capacity,
+    engine,
+    mileage,
+    fuel,
+    year,
+    colour,
+    rate,
+    sdate,
+    stime,
+    edate,
+    etime
+}) {
+    const reviewData = [
+        {
+            name: 'Alex Fernando',
+            position: 'CEO at Bukalapak',
+            date: '2 Jun 2023',
+            rating: 3,
+            comment: 'The vehicle looks good and runs good. Very economical.'
+        }
+    ]
 
     const [clicked, setClicked] = useState(false)
 
@@ -24,18 +41,8 @@ export default function Detailcar({ vehicle, transmission, capacity, engine, mil
                 <div className="flex flex-col">
                     <h1 className="text-2xl font-semibold text-gray-950 mb-1">{vehicle}</h1>
                     <div className="flex items-center">
-                        {[...Array(5)].map((_, index) => (
-                            <svg
-                                key={index}
-                                xmlns="http://www.w3.org/2000/svg"
-                                className={`h-4 w-4 border-gray-700 rounded-full fill-current ${index < rating ? 'text-yellow-400' : 'text-gray-100'}`}
-                                viewBox="0 0 24 24"
-                                onClick={() => handleStarClick(index + 1)}
-                            >
-                                <path d="M0 0h24v24H0z" fill="none" />
-                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                <path d="M0 0h24v24H0z" fill="none" />
-                            </svg>
+                        {[...Array(5)].map((_, starIndex) => (
+                            <FaStar key={starIndex} color={starIndex < reviewData.rating ? 'yellow' : 'grey'} />
                         ))}
                         <p className="text-gray-500 text-xs">10+ Reviewer</p>
                     </div>
@@ -89,14 +96,26 @@ export default function Detailcar({ vehicle, transmission, capacity, engine, mil
             {/* Rental info */}
             <div className="w-full pb-14">
                 <p className="text-sm text-slate-500 uppercase ">Rental Info</p>
-                <div className="p-2 max-w-[460px] shadow-lg flex flex-col gap-4">
-                    <div className="w-full flex justify-around py-2">
-                        <Datepicker />
-                        <TimePicker />
+                <div className="p-2 flex gap-10">
+                    <div className="flex flex-col gap-1 w-1/2">
+                        <div className="flex w-full">
+                            <p className="text-lg text-slate-500 w-3/5">Start Date</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{sdate}</p>
+                        </div>
+                        <div className="flex w-full">
+                            <p className="text-lg text-slate-500 w-3/5">Start Time</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{stime}</p>
+                        </div>
                     </div>
-                    <div className="w-full flex justify-around py-2">
-                        <Datepicker />
-                        <TimePicker />
+                    <div className="flex flex-col gap-1 w-1/2">
+                        <div className="flex w-full">
+                            <p className="text-lg text-slate-500 w-2/5">End Date</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{edate}</p>
+                        </div>
+                        <div className="flex w-full">
+                            <p className="text-lg text-slate-500 w-2/5">End Time</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{etime}</p>
+                        </div>
                     </div>
                 </div>
             </div>

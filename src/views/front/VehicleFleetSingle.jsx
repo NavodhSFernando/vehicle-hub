@@ -9,7 +9,7 @@ import ImageShowCase from '../../components/front/VehicleFleetSingle/ImageShowCa
 export default function VehicleFleetSingle() {
     const { slug } = useParams()
 
-    const vehicle = {
+    const reservation = {
         name: 'Toyota Aqua',
         transmission: 'Manual',
         capacity: '6 Person',
@@ -18,7 +18,11 @@ export default function VehicleFleetSingle() {
         fuel: 'Petrol',
         year: '2017',
         colour: 'White',
-        rate: '15 000'
+        rate: '15 000',
+        sdate: '12/12/2024',
+        stime: '12:00 PM',
+        edate: '12/13/2024',
+        etime: '12:00 PM'
     }
 
     return (
@@ -30,15 +34,19 @@ export default function VehicleFleetSingle() {
             </div>
             <div className="flex flex-col w-1/2">
                 <Detailcar
-                    vehicle={vehicle.name}
-                    transmission={vehicle.transmission}
-                    capacity={vehicle.capacity}
-                    engine={vehicle.engine}
-                    mileage={vehicle.mileage}
-                    fuel={vehicle.fuel}
-                    year={vehicle.year}
-                    colour={vehicle.colour}
-                    rate={vehicle.rate}
+                    vehicle={reservation.name}
+                    transmission={reservation.transmission}
+                    capacity={reservation.capacity}
+                    engine={reservation.engine}
+                    mileage={reservation.mileage}
+                    fuel={reservation.fuel}
+                    year={reservation.year}
+                    colour={reservation.colour}
+                    rate={reservation.rate}
+                    sdate={reservation.sdate}
+                    stime={reservation.stime}
+                    edate={reservation.edate}
+                    etime={reservation.etime}
                 />
             </div>
         </div>
