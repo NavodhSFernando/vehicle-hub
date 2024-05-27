@@ -99,9 +99,9 @@ export default function EditVehicle() {
                     mileage: data.mileage,
                     costPerDay: data.costPerDay,
                     transmission: data.transmission,
-                    vehicleTypeId: data.vehicleTypeId,
-                    vehicleModelId: data.vehicleModelId,
-                    employeeId: data.employeeId
+                    vehicleTypeId: data.vehicleType.id,
+                    vehicleModelId: data.vehicleModel.id,
+                    employeeId: data.employee.id
                 })
             } catch (error) {
                 console.error('Failed to fetch vehicle make', error)

@@ -87,14 +87,16 @@ export const columns = [
             const mileage = row.getValue('mileage')
             const formattedMileage = `${mileage} KM`
 
-            return <div className="font-normal">{formattedMileage}</div>
+            return <div className="font-medium">{formattedMileage}</div>
         }
     },
     {
         accessorKey: 'vehicleTypeId',
         header: 'Vehicle Type ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleTypeId'))
+            // Extract the vehicleType.id correctly
+            const vehicleTypeId = row.original.vehicleType.id
+            const value = parseFloat(vehicleTypeId)
 
             return <div className="font-medium">{value}</div>
         }
@@ -103,7 +105,8 @@ export const columns = [
         accessorKey: 'vehicleModelId',
         header: 'Vehicle Model ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleModelId'))
+            const vehicleModelId = row.original.vehicleModel.id
+            const value = parseFloat(vehicleModelId)
 
             return <div className="font-medium">{value}</div>
         }
@@ -112,7 +115,8 @@ export const columns = [
         accessorKey: 'employeeId',
         header: 'Employee ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('employeeId'))
+            const employeeId = row.original.employee.id
+            const value = parseFloat(employeeId)
 
             return <div className="font-medium">{value}</div>
         }
