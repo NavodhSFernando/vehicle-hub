@@ -19,7 +19,6 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
-import { type } from '@testing-library/user-event/dist/type'
 
 const validVehicleIds = [1]
 
@@ -77,8 +76,8 @@ export default function EditMaintenance() {
                 reset({
                     date: data.date,
                     description: data.description,
-                    maintenanceType: data.type,
-                    vehicleId: data.vehicleId
+                    type: data.type,
+                    vehicleId: data.vehicle.id
                 })
             } catch (error) {
                 console.error('Failed to fetch maintenance', error)
@@ -163,7 +162,7 @@ export default function EditMaintenance() {
                                     field.onChange(value)
                                 }}
                                 {...field}
-                                defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>

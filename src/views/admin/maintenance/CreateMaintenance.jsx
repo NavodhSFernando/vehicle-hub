@@ -135,7 +135,7 @@ export default function CreateMaintenance() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                //defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>

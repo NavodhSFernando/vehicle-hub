@@ -39,7 +39,13 @@ export const columns = [
     },
     {
         accessorKey: 'vehicleId',
-        header: 'Vehicle ID'
+        header: 'Vehicle ID',
+        cell: ({ row }) => {
+            const vehicleId = row.original.vehicle.id
+            const value = parseFloat(vehicleId)
+
+            return <div className="font-medium">{value}</div>
+        }
     },
     {
         accessorKey: 'type',
