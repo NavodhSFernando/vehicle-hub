@@ -51,6 +51,7 @@ import EditInsurance from './views/admin/insurance/EditInsurance'
 import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
+import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
 
 function App() {
     return (
@@ -233,6 +234,14 @@ function App() {
                             element={
                                 <TitleComponent title="Create Vehicle Model">
                                     <CreateVehicleModel />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="/admin/vehiclemodel/edit/:vehicleModelId"
+                            element={
+                                <TitleComponent title="Edit Vehicle Model">
+                                    <EditVehicleModel />
                                 </TitleComponent>
                             }
                         />
