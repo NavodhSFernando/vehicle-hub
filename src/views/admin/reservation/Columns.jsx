@@ -4,24 +4,29 @@ import { GrEdit, GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-const BeginReservation = async ({ customerReservationId }) => {
+const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
     const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}`
     try {
         // POST request to the server with form data
         const result = await axios.post(url)
         console.log(result)
+        refetchReservation()
     } catch (error) {
         console.log(error)
     }
 }
 
 // Define a component to encapsulate the action buttons
-const ActionButtons = ({ customerReservationId, status }) => {
+const ActionButtons = ({ customerReservationId, status, refetchReservation }) => {
     const navigate = useNavigate()
     return (
         <div className="flex items-center justify-end gap-2">
             {status === 'Confirmed' && (
-                <Button variant="ghost" className="p-0" onClick={() => BeginReservation({ customerReservationId })}>
+                <Button
+                    variant="ghost"
+                    className="p-0"
+                    onClick={() => BeginReservation({ customerReservationId, refetchReservation })}
+                >
                     <GrPlay fontSize={20} className="mr-1" />
                 </Button>
             )}
@@ -34,7 +39,7 @@ const ActionButtons = ({ customerReservationId, status }) => {
                     <GrStop fontSize={20} className="mr-1" />
                 </Button>
             )}
-            <Button variant="ghost" className="p-0">
+            <Button variant="ghost" className="p-0" onClick={() => console.log('buuruwa')}>
                 <GrEdit fontSize={24} className="mr-1" />
             </Button>
             <Button variant="ghost" className="p-0">
@@ -183,6 +188,15 @@ export const columns = [
     {
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
-        cell: ({ row }) => <ActionButtons customerReservationId={row.getValue('id')} status={row.getValue('status')} />
+        cell: ({ row, column }) => {
+            const refetchReservation = column.columnDef.refetchReservation
+            return (
+                <ActionButtons
+                    customerReservationId={row.getValue('id')}
+                    status={row.getValue('status')}
+                    refetchReservation={refetchReservation}
+                />
+            )
+        }
     }
 ]

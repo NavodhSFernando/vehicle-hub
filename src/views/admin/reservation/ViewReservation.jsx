@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import DataTable from './DataTable'
-import { columns } from './Columns'
+import { columns as originalColumns } from './Columns'
 
 export default function ViewReservation() {
     const data = [
@@ -68,6 +68,17 @@ export default function ViewReservation() {
     useEffect(() => {
         fetchReservation()
     }, [])
+
+    // Define columns with ActionButtons
+    const columns = originalColumns.map((column) => {
+        if (column.accessorKey === 'actions') {
+            return {
+                ...column,
+                refetchReservation: fetchReservation
+            }
+        }
+        return column
+    })
 
     return (
         <>

@@ -28,6 +28,7 @@ export default function DataTable({ columns, data }) {
         }
     })
 
+    console.log(table.getRowModel().rows)
     return (
         <div>
             <div className="flex flex-row items-center my-8">
