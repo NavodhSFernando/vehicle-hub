@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 
 const vehicleTypes = [
     { id: 'all', name: 'All Vehicle Types' },
@@ -8,81 +7,30 @@ const vehicleTypes = [
     // ...more types
 ]
 
-// const vehicleMakes = [
-//     { id: 'all', name: 'All Vehicle Makes' },
-//     { id: 'Toyota', name: 'Toyota' },
-//     { id: 'Nizan', name: 'Nizan' },
-//     { id: 'Honda', name: 'Honda' },
-//     { id: 'Mazda', name: 'Mazda' },
-//     { id: 'BMW', name: 'BMW' },
-//     { id: 'Audi', name: 'Audi' }
-//     // ...more makes
-// ];
+const vehicleMakes = [
+    { id: 'all', name: 'All Vehicle Makes' },
+    { id: 'Toyota', name: 'Toyota' },
+    { id: 'Nizan', name: 'Nizan' },
+    { id: 'Honda', name: 'Honda' },
+    { id: 'Mazda', name: 'Mazda' },
+    { id: 'BMW', name: 'BMW' },
+    { id: 'Audi', name: 'Audi' }
+    // ...more makes
+]
 
-// const vehicleCapacities = [
-//     { id: 'all', name: 'All Vehicle Capacities' },
-//     { id: '3 Persons', name: '3 Persons' },
-//     { id: '4 Persons', name: '4 Persons' },
-//     { id: '6 Persons', name: '6 Persons' }
-//     // ...more capacities
-// ];
+const vehicleCapacities = [
+    { id: 'all', name: 'All Vehicle Capacities' },
+    { id: '3 Persons', name: '3 Persons' },
+    { id: '4 Persons', name: '4 Persons' },
+    { id: '6 Persons', name: '6 Persons' }
+    // ...more capacities
+]
 
 const FilterCard = ({ onFilterChange }) => {
-    const [allVehicleTypes, setAllVehicleTypes] = useState([])
-    const [allVehicleMakes, setAllVehicleMakes] = useState([])
-    const [allVehicleCapacities, setAllVehicleCapacities] = useState([])
-
     const [vehicleType, setVehicleType] = useState('all')
     const [vehicleMake, setVehicleMake] = useState('all')
     const [vehicleCapacity, setVehicleCapacity] = useState('all')
     const [maxPrice, setMaxPrice] = useState(0)
-
-    const fetchVehicleMakes = async () => {
-        try {
-            const response = await axios.get('http://localhost:47367/api/VehicleMake')
-            const vehicleMakes = response.data.map((make) => ({
-                id: `${make.name}`,
-                name: `${make.name}`
-            }))
-            setAllVehicleMakes([{ id: 'all', name: 'All Vehicle Makes' }, ...vehicleMakes])
-        } catch (error) {
-            console.error('Error fetching vehicle makes:', error)
-        }
-    }
-
-    const fetchVehicleModels = async () => {
-        try {
-            const response = await axios.get('http://localhost:47367/api/VehicleModel')
-            const vehicleModels = response.data.map((model) => ({
-                id: `${model.name}`,
-                name: `${model.name}`
-            }))
-            setAllVehicleMakes([{ id: 'all', name: 'All Vehicle Models' }, ...vehicleModels])
-
-            const capacitiesSet = new Set()
-            const vehicleCapacities = response.data
-                .map((capacity) => ({
-                    id: `${capacity.seatingCapacity} Persons`,
-                    name: `${capacity.seatingCapacity} Persons`
-                }))
-                .filter((capacity) => {
-                    if (capacitiesSet.has(capacity.id)) {
-                        return false
-                    } else {
-                        capacitiesSet.add(capacity.id)
-                        return true
-                    }
-                })
-            setAllVehicleCapacities([{ id: 'all', name: 'All Vehicle Capacities' }, ...vehicleCapacities])
-        } catch (error) {
-            console.error('Error fetching vehicle makes:', error)
-        }
-    }
-
-    useEffect(() => {
-        fetchVehicleMakes()
-        fetchVehicleModels()
-    }, [])
 
     const handleTypeChange = (event) => {
         setVehicleType(event.target.value)
@@ -155,7 +103,7 @@ const FilterCard = ({ onFilterChange }) => {
                             className="block w-full text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                             style={{ fontFamily: "'DM Sans', sans-serif" }}
                         >
-                            {allVehicleMakes.map((make) => (
+                            {vehicleMakes.map((make) => (
                                 <option key={make.id} value={make.id}>
                                     {make.name}
                                 </option>
@@ -183,7 +131,7 @@ const FilterCard = ({ onFilterChange }) => {
                             className="block w-full text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                             style={{ fontFamily: "'DM Sans', sans-serif" }}
                         >
-                            {allVehicleCapacities.map((capacity) => (
+                            {vehicleCapacities.map((capacity) => (
                                 <option key={capacity.id} value={capacity.id}>
                                     {capacity.name}
                                 </option>
