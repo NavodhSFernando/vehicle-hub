@@ -19,7 +19,7 @@ import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { type } from '@testing-library/user-event/dist/type'
 
-const validVehicleIds = [1]
+const validVehicleIds = [1, 7]
 
 const currentDate = new Date().toISOString().split('T')[0]
 

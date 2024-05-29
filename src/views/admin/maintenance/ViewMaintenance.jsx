@@ -12,6 +12,7 @@ export default function ViewMaintenance() {
                 // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleMaintenance')
                 setMaintenances(response.data) // Assume the response data is the array of vehicles
+                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch maintenances:', error)
             }
