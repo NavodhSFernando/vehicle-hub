@@ -43,6 +43,9 @@ export const columns = [
         cell: ({ row }) => {
             const name = row.original.vehicleModel.name
             return <div className="font-medium">{name}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicleModel.name.toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {

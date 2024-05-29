@@ -110,26 +110,27 @@ export default function EditVehicleModel() {
         }
     })
 
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        try {
+            const { data } = await axios.get(url)
+            reset({
+                name: data.vehicleModel.name,
+                year: data.vehicleModel.year,
+                engineCapacity: data.vehicleModel.engineCapacity,
+                seatingCapacity: data.vehicleModel.seatingCapacity,
+                fuel: data.vehicleModel.fuel,
+                vehicleMakeId: data.vehicleModel.vehicleMakeId,
+                items: Object.keys(data.additionalFeatures).filter((key) => data.additionalFeatures[key])
+            })
+            console.log(data.vehicleModel.fuel)
+        } catch (error) {
+            console.error('Failed to fetch vehicle model', error)
+        }
+    }
+
     // Fetch vehicle model data
     useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
-            try {
-                const { data } = await axios.get(url)
-                reset({
-                    name: data.vehicleModel.name,
-                    year: data.vehicleModel.year,
-                    engineCapacity: data.vehicleModel.engineCapacity,
-                    seatingCapacity: data.vehicleModel.seatingCapacity,
-                    fuel: data.vehicleModel.fuel,
-                    vehicleMakeId: data.vehicleModel.vehicleMakeId,
-                    items: Object.keys(data.additionalFeatures).filter((key) => data.additionalFeatures[key])
-                })
-                console.log(data.vehicleModel.fuel)
-            } catch (error) {
-                console.error('Failed to fetch vehicle model', error)
-            }
-        }
         fetchData()
     }, [vehicleModelId, reset])
 

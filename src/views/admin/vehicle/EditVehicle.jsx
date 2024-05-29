@@ -18,6 +18,7 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { Checkbox } from '../../../components/ui/checkbox'
 
 const regNoPattern = /^[A-Z]{2}\s\d{4}$/
 
@@ -42,6 +43,10 @@ const formSchema = z.object({
         .int('Cost per day must be an integer')
         .min(3000, 'Cost per day must be at least 3000')
         .max(10000, 'Cost per day must be no more than 10000'),
+    costPerExtraKm: z
+        .number()
+        .int('Cost per extra Km  must be an integer')
+        .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
     vehicleTypeId: z.number().refine((vehicleTypeId) => validVehicleTypeIds.includes(vehicleTypeId), {
@@ -52,7 +57,8 @@ const formSchema = z.object({
     }),
     employeeId: z.number().refine((employeeId) => validEmployeeIds.includes(employeeId), {
         message: 'Invalid employee ID'
-    })
+    }),
+    status: z.boolean().default(false) // Added status field
 })
 
 export default function EditVehicle() {
@@ -69,44 +75,52 @@ export default function EditVehicle() {
             chassisNo: '',
             color: '',
             costPerDay: 0,
+            costPerExtraKm: 0,
             transmission: 'auto',
             mileage: 0,
             vehicleTypeId: 0,
             vehicleModelId: 0,
-            employeeId: 0
+            employeeId: 0,
+            status: true
         }
     })
+
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+        try {
+            const { data } = await axios.get(url)
+            console.log(data.registrationNumber)
+            console.log(data.chassisNo)
+            console.log(data.colour)
+            console.log(data.mileage)
+            console.log(data.costPerDay)
+            console.log(data.costPerExtraKM)
+            console.log(data.transmission)
+            console.log(data.vehicleTypeId)
+            console.log(data.vehicleModelId)
+            console.log(data.employeeId)
+            console.log(data.status)
+            console.log(data)
+            reset({
+                regNo: data.registrationNumber,
+                chassisNo: data.chassisNo,
+                color: data.colour,
+                mileage: data.mileage,
+                costPerDay: data.costPerDay,
+                costPerExtraKm: data.costPerExtraKM,
+                transmission: data.transmission,
+                vehicleTypeId: data.vehicleType.id,
+                vehicleModelId: data.vehicleModel.id,
+                employeeId: data.employee.id,
+                status: data.status
+            })
+        } catch (error) {
+            console.error('Failed to fetch vehicle make', error)
+        }
+    }
+
     // Fetch vehicle data
     useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
-            try {
-                const { data } = await axios.get(url)
-                console.log(data.registrationNumber)
-                console.log(data.chassisNo)
-                console.log(data.colour)
-                console.log(data.mileage)
-                console.log(data.costPerDay)
-                console.log(data.transmission)
-                console.log(data.vehicleTypeId)
-                console.log(data.vehicleModelId)
-                console.log(data.employeeId)
-                console.log(data)
-                reset({
-                    regNo: data.registrationNumber,
-                    chassisNo: data.chassisNo,
-                    color: data.colour,
-                    mileage: data.mileage,
-                    costPerDay: data.costPerDay,
-                    transmission: data.transmission,
-                    vehicleTypeId: data.vehicleType.id,
-                    vehicleModelId: data.vehicleModel.id,
-                    employeeId: data.employee.id
-                })
-            } catch (error) {
-                console.error('Failed to fetch vehicle make', error)
-            }
-        }
         fetchData()
     }, [vehicleId, reset])
 
@@ -119,17 +133,19 @@ export default function EditVehicle() {
                 Colour: data.color,
                 Mileage: data.mileage,
                 CostPerDay: data.costPerDay,
+                CostPerExtraKM: data.costPerExtraKm,
                 Transmission: data.transmission,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
-                EmployeeId: data.employeeId
+                EmployeeId: data.employeeId,
+                Status: data.status
             }
 
             const result = await axios.put(url, formData)
             console.log(result)
-            reset()
+            fetchData()
         } catch (error) {
-            console.error('Failed to update vehicle make', error)
+            console.error('Failed to update vehicle', error)
         }
     }
 
@@ -248,6 +264,27 @@ export default function EditVehicle() {
                 />
                 <FormField
                     control={control}
+                    name="costPerExtraKm"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Cost Per Extra Km</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number" // Ensure input type is number for direct numeric input
+                                    className="w-full"
+                                    {...field}
+                                    onChange={(e) => {
+                                        const number = parseInt(e.target.value) // This is the input string in "yyyy-MM-dd"
+                                        field.onChange(number) // Pass the string directly to your form's state
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.costPerExtraKm && errors.costPerExtraKm.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
                     name="mileage"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
@@ -318,9 +355,26 @@ export default function EditVehicle() {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={control}
+                    name="status"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Status </FormLabel>
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={(checked) => field.onChange(checked)}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.status && errors.status.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>

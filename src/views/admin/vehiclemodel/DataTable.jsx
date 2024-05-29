@@ -11,6 +11,7 @@ import {
 import { Input } from '../../../components/ui/input'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { Label } from 'recharts'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -27,10 +28,11 @@ export default function DataTable({ columns, data }) {
             sorting
         }
     })
-
     return (
         <div>
             <div className="flex items-center py-4">
+                <Label>Model Name</Label>
+
                 <Input
                     placeholder="Filter Model Names..."
                     value={table.getColumn('name')?.getFilterValue() ?? ''}
