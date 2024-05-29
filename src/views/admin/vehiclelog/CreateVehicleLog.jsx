@@ -16,20 +16,21 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
+import { useParams } from 'react-router-dom'
 
-const validReservationIds = [4]
-
+// Define the schema for form validation using zod
 const formSchema = z.object({
-    reservationId: z.number().refine((reservationId) => validReservationIds.includes(reservationId), {
-        message: 'Invalid Vehicle ID'
+    customerReservationId: z.number({
+        required_error: 'Vehicle ID is required'
     }),
     endMileage: z.number().int().positive(),
     penalty: z.number().min(0).optional(),
-    description: z.string().optional(),
-    extraDays: z.number().min(0).optional()
+    description: z.string().optional()
 })
 
 export default function CreateVehicleLog() {
+    const { customerReservationId } = useParams() // Access route parameter
+    // Initialize useForm with zodResolver for schema validation
     const {
         control,
         handleSubmit,
@@ -38,27 +39,28 @@ export default function CreateVehicleLog() {
     } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            reservationId: 0,
+            customerReservationId: 0,
             endMileage: 0,
             penalty: 0,
-            description: '',
-            extraDays: 0
+            description: ''
         }
     })
 
+    // Function to handle form submission
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleLog'
+        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${customerReservationId}`
         try {
             const formData = {
-                ReservationId: data.reservationId,
+                CustomerReservationId: data.customerReservationId,
                 EndMileage: data.endMileage,
                 Penalty: data.penalty,
-                Description: data.description,
-                ExtraDays: data.extraDays
+                Description: data.description
             }
 
+            // POST request to the server with form data
             const result = await axios.post(url, formData)
             console.log(result)
+            // Reset form fields after submission
             reset()
         } catch (error) {
             console.log(error)
@@ -74,18 +76,21 @@ export default function CreateVehicleLog() {
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={control}
-                    name="reservationId"
+                    name="customerReservationId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Reservation Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Customer Reservation Id</FormLabel>
                             <FormControl>
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    value={customerReservationId}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.reservationId && errors.reservationId.message}</FormMessage>
+                            <FormMessage>
+                                {errors.customerReservationId && errors.customerReservationId.message}
+                            </FormMessage>
                         </FormItem>
                     )}
                 />
@@ -140,23 +145,6 @@ export default function CreateVehicleLog() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.description && errors.description.message}</FormMessage>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={control}
-                    name="extraDays"
-                    render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Extra Days</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
-                            </FormControl>
-                            <FormMessage>{errors.extraDays && errors.extraDays.message}</FormMessage>
                         </FormItem>
                     )}
                 />

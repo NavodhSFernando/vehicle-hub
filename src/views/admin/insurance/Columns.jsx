@@ -2,11 +2,12 @@ import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom' // Hook for navigation
 
 const ActionButtons = ({ insuranceId }) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate() // Hook to navigate to different routes
 
+    //edit and delete buttons
     return (
         <div className="flex items-center justify-end gap-2">
             <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/insurance/edit/${insuranceId}`)}>
@@ -27,6 +28,9 @@ export const columns = [
             const value = parseFloat(row.getValue('id'))
 
             return <div className="font-medium">{'#' + value}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.id.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {
@@ -47,9 +51,13 @@ export const columns = [
         accessorKey: 'vehicleId',
         header: 'Vehicle ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleId'))
+            const vehicleId = row.original.vehicle.id
+            const value = parseFloat(vehicleId)
 
             return <div className="font-medium">{value}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicle.id.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {

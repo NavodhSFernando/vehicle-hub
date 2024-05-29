@@ -22,13 +22,12 @@ import { Textarea } from '../../../components/ui/textarea'
 const validReservationIds = [4]
 
 const formSchema = z.object({
-    reservationId: z.number().refine((reservationId) => validReservationIds.includes(reservationId), {
+    customerReservationId: z.number().refine((reservationId) => validReservationIds.includes(reservationId), {
         message: 'Invalid Vehicle ID'
     }),
     endMileage: z.number().int().positive(),
     penalty: z.number().min(0).optional(),
-    description: z.string().optional(),
-    extraDays: z.number().min(0).optional()
+    description: z.string().optional()
 })
 
 export default function EditVehicleLog() {
@@ -41,11 +40,10 @@ export default function EditVehicleLog() {
     } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            reservationId: 0,
+            customerReservationId: 0,
             endMileage: 0,
             penalty: 0,
-            description: '',
-            extraDays: 0
+            description: ''
         }
     })
     // Fetch vehicle Log data
@@ -54,17 +52,12 @@ export default function EditVehicleLog() {
             const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
             try {
                 const { data } = await axios.get(url)
-                console.log(data.reservationId)
-                console.log(data.endMileage)
-                console.log(data.penalty)
-                console.log(data.description)
-                console.log(data.extraDays)
+                // Reset form with fetched data
                 reset({
-                    reservationId: data.reservationId,
+                    customerReservationId: data.customerReservationId,
                     endMileage: data.endMileage,
                     penalty: data.penalty,
-                    description: data.description,
-                    extraDays: data.extraDays
+                    description: data.description
                 })
             } catch (error) {
                 console.error('Failed to fetch vehicle Logs', error)
@@ -73,17 +66,19 @@ export default function EditVehicleLog() {
         fetchData()
     }, [vehicleLogId, reset])
 
+    // Function to handle form submission
     const handleSave = async (data) => {
         const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
         try {
             const formData = {
-                ReservationId: data.reservationId,
+                customerReservationId: data.customerReservationId,
                 EndMileage: data.endMileage,
                 Penalty: data.penalty,
                 Description: data.description,
                 ExtraDays: data.extraDays
             }
 
+            // PUT request to the server with form data
             const result = await axios.put(url, formData)
             console.log(result)
             reset()

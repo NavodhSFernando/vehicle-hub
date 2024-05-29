@@ -1,6 +1,19 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrFormView } from 'react-icons/gr'
+import { useNavigate } from 'react-router-dom'
+
+const ActionButtons = ({ customerId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button variant="ghost" className="p-0" onClick={() => navigate()}>
+                <GrFormView fontSize={30} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
@@ -77,5 +90,10 @@ export const columns = [
                 </div>
             )
         }
+    },
+    {
+        accessorKey: 'actions',
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons customerId={row.getValue('id')} />
     }
 ]

@@ -48,25 +48,26 @@ export default function EditInsurance() {
         }
     })
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
-            try {
-                const { data } = await axios.get(url)
-                console.log(data.insuranceNo)
-                console.log(data.expiryDate)
-                console.log(data.vehicleId)
-                console.log(data)
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
+        try {
+            const { data } = await axios.get(url)
+            console.log(data.insuranceNo)
+            console.log(data.expiryDate)
+            console.log(data.vehicleId)
+            console.log(data)
 
-                reset({
-                    insuranceNo: data.insuranceNo,
-                    expiryDate: data.expiryDate,
-                    vehicleId: data.vehicleId
-                })
-            } catch (error) {
-                console.error('Failed to fetch insurance', error)
-            }
+            reset({
+                insuranceNo: data.insuranceNo,
+                expiryDate: data.expiryDate,
+                vehicleId: data.vehicle.id
+            })
+        } catch (error) {
+            console.error('Failed to fetch insurance', error)
         }
+    }
+
+    useEffect(() => {
         fetchData()
     }, [insuranceId, reset])
 
@@ -81,7 +82,7 @@ export default function EditInsurance() {
 
             const result = await axios.put(url, formData)
             console.log(result)
-            reset()
+            fetch()
         } catch (error) {
             console.error('Failed to update vehicle Insurance', error)
         }
@@ -155,7 +156,7 @@ export default function EditInsurance() {
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>
