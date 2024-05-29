@@ -102,7 +102,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/viewongoingrental"
+                            path="/account/viewongoingrental/:customerId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <ViewOngoingRental />
