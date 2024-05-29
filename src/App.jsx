@@ -77,7 +77,7 @@ function App() {
                     />
                     <Route path="/account" element={<Account />}>
                         <Route
-                            path="/account/ongoingrentalssingle"
+                            path="/account/ongoingrentalssingle/:customerReservationId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <Ongoingrentalssingle />
@@ -85,14 +85,14 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/rentalhistorysingle"
+                            path="/account/rentalhistorysingle/:customerReservationId"
                             element={
                                 <TitleComponent title="Rental History">
                                     <Rentalhistorysingle />
                                 </TitleComponent>
                             }
                         />
-                        <Route path="/account/notificationcenter" element={<NotificationCenter />} />
+                        <Route path="/account/notificationcenter/:customerId" element={<NotificationCenter />} />
                         <Route
                             path="/account/viewrentalhistory"
                             element={
@@ -102,15 +102,15 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/viewongoingrental/:customerId"
+                            path="/account/viewongoingrentals/:customerId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <ViewOngoingRental />
                                 </TitleComponent>
                             }
                         />
-                        <Route path="/account/viewbillingdetails" element={<ViewBillingDetails />} />
-                        <Route path="/account/viewprofile" element={<Viewprofile />} />
+                        <Route path="/account/viewbillingdetails/:customerId" element={<ViewBillingDetails />} />
+                        <Route path="/account/viewprofile/:customerId" element={<Viewprofile />} />
                     </Route>
                     <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
                     <Route path="/faq" element={<FaqPage />} />

@@ -1,26 +1,40 @@
+import Cookies from 'js-cookie'
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate, Link } from 'react-router-dom'
 
 export default function NavBarSide() {
     const navigate = useNavigate()
+
+    const { customerId } = Cookies.get('customerId')
+    if (!customerId) {
+        console.error('customer Id is not available')
+        return
+    }
+
+    const handleLogout = () => {
+        Cookies.remove('customerId')
+    }
+
     return (
-        <div className="w-full max-w-[360px] p-5 flex flex-col gap-5 bg-white">
-            <a href="#" className="text-lg opacity-50 font-semibold">
-                Account Details
-            </a>
-            <NavLink className="text-lg opacity-50 font-semibold">Ongoing Rentals</NavLink>
-            <a href="#" className="text-lg opacity-50 font-semibold">
-                Rentals History
-            </a>
-            <a href="#" className="text-lg opacity-50 font-semibold">
+        <div className="bg-white flex flex-col w-1/4 p-3 h-fit m-4 rounded-xl">
+            <NavLink className="flex flex-col gap-0.5" to={`/account/viewprofile/${customerId}`}>
+                View Profile
+            </NavLink>
+            <NavLink className="flex flex-col gap-0.5" to={`/account/viewongoingrentals/${customerId}`}>
+                Ongoing Rentals
+            </NavLink>
+            <NavLink className="flex flex-col gap-0.5" to={`/account/viewrentalhistory/${customerId}`}>
+                Rental History
+            </NavLink>
+            <NavLink className="flex flex-col gap-0.5" to={`/account/viewbillingdetails/${customerId}`}>
                 Billing Details
-            </a>
-            <a href="#" className="text-lg opacity-50 font-semibold">
+            </NavLink>
+            <NavLink className="flex flex-col gap-0.5" to={`/account/viewnotificationcenter/${customerId}`}>
                 Notifications
-            </a>
-            <a href="#" className="text-lg opacity-50 font-semibold">
+            </NavLink>
+            <NavLink className="flex flex-col gap-0.5" to="/vehiclefleet" onClick={() => handleLogout()}>
                 Log Out
-            </a>
+            </NavLink>
         </div>
     )
 }

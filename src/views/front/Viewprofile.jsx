@@ -31,8 +31,7 @@ const formSchema = z.object({
 })
 
 function Viewprofile() {
-    // const { Id } = useParams() // Access route parameter
-    // const userid = 10
+    const { customerId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -51,7 +50,6 @@ function Viewprofile() {
     })
 
     useEffect(() => {
-        const customerId = Cookies.get('customerId')
         if (customerId) {
             const fetchData = async () => {
                 const url = `http://localhost:5062/api/customer/${customerId}`
@@ -77,7 +75,6 @@ function Viewprofile() {
 
     const handleSave = async (data) => {
         try {
-            const customerId = Cookies.get('customerId')
             if (!customerId) {
                 console.error('customer Id is not available')
                 return
