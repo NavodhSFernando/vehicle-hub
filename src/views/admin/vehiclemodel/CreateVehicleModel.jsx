@@ -100,17 +100,23 @@ export default function CreateVehicleModel() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            year: new Date().getFullYear(),
-            engineCapacity: 600,
-            seatingCapacity: 4,
+            year: 0,
+            engineCapacity: 0,
+            seatingCapacity: 0,
             vehicleMakeId: 0,
             items: []
         }
     })
 
     const handleSave = async (data) => {
-        //const url = 'http://localhost:5062/api/VehicleModel'
+        const url = 'http://localhost:5062/api/AdminVehicle'
         try {
+            // Convert the items array into an object with key-value pairs
+            const additionalFeatures = items.reduce((acc, item) => {
+                acc[item.id] = data.items.includes(item.id)
+                return acc
+            }, {})
+
             const formData = {
                 VehicleModel: {
                     Name: data.name,
@@ -120,11 +126,12 @@ export default function CreateVehicleModel() {
                     Fuel: data.fuel,
                     VehicleMakeId: data.vehicleMakeId
                 },
-                AdditionalFeatures: data.items // Include items in formDa
+                AdditionalFeatures: additionalFeatures // Include the transformed items in formData
             }
 
-            //const result = await axios.post(url, formData)
-            //console.log(result)
+            // Send formData to the backend
+            const result = await axios.post(url, formData)
+            console.log(result)
             console.log(formData)
             reset()
         } catch (error) {
@@ -223,7 +230,7 @@ export default function CreateVehicleModel() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>

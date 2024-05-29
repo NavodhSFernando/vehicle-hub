@@ -43,22 +43,23 @@ export default function EditVehicleMake() {
         }
     })
 
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
+        try {
+            const { data } = await axios.get(url)
+            console.log(data.name)
+            console.log(data.logo)
+            reset({
+                name: data.name,
+                logo: data.logo
+            })
+        } catch (error) {
+            console.error('Failed to fetch vehicle make', error)
+        }
+    }
+
     // Fetch vehicle make data
     useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
-            try {
-                const { data } = await axios.get(url)
-                console.log(data.name)
-                console.log(data.logo)
-                reset({
-                    name: data.name,
-                    logo: data.logo
-                })
-            } catch (error) {
-                console.error('Failed to fetch vehicle make', error)
-            }
-        }
         fetchData()
     }, [vehicleMakeId, reset])
 

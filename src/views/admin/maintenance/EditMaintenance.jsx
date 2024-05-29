@@ -19,7 +19,6 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
-import { type } from '@testing-library/user-event/dist/type'
 
 const validVehicleIds = [1]
 
@@ -63,27 +62,28 @@ export default function EditMaintenance() {
         }
     })
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
-            try {
-                const { data } = await axios.get(url)
-                console.log(data.date)
-                console.log(data.description)
-                console.log(data.type)
-                console.log(data.vehicleId)
-                console.log(data)
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
+        try {
+            const { data } = await axios.get(url)
+            console.log(data.date)
+            console.log(data.description)
+            console.log(data.type)
+            console.log(data.vehicleId)
+            console.log(data)
 
-                reset({
-                    date: data.date,
-                    description: data.description,
-                    maintenanceType: data.type,
-                    vehicleId: data.vehicleId
-                })
-            } catch (error) {
-                console.error('Failed to fetch maintenance', error)
-            }
+            reset({
+                date: data.date,
+                description: data.description,
+                type: data.type,
+                vehicleId: data.vehicle.id
+            })
+        } catch (error) {
+            console.error('Failed to fetch maintenance', error)
         }
+    }
+
+    useEffect(() => {
         fetchData()
     }, [maintenanceId, reset])
 
@@ -163,7 +163,7 @@ export default function EditMaintenance() {
                                     field.onChange(value)
                                 }}
                                 {...field}
-                                defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -205,7 +205,7 @@ export default function EditMaintenance() {
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>

@@ -16,6 +16,7 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { Checkbox } from '../../../components/ui/checkbox'
 
 const regNoPattern = /^[A-Z]{2}\s\d{4}$/
 
@@ -40,6 +41,10 @@ const formSchema = z.object({
         .int('Cost per day must be an integer')
         .min(3000, 'Cost per day must be at least 3000')
         .max(10000, 'Cost per day must be no more than 10000'),
+    costPerExtraKm: z
+        .number()
+        .int('Cost per extra Km  must be an integer')
+        .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
     vehicleTypeId: z.number().refine((vehicleTypeId) => validVehicleTypeIds.includes(vehicleTypeId), {
@@ -50,7 +55,8 @@ const formSchema = z.object({
     }),
     employeeId: z.number().refine((employeeId) => validEmployeeIds.includes(employeeId), {
         message: 'Invalid employee ID'
-    })
+    }),
+    status: z.boolean().default(false) // Added status field
 })
 
 export default function CreateVehicle() {
@@ -68,9 +74,12 @@ export default function CreateVehicle() {
             costPerDay: 0,
             transmission: 'auto',
             mileage: 0,
+            costPerExtraKm: 0,
+            status: 0,
             vehicleTypeId: 0,
             vehicleModelId: 0,
-            employeeId: 0
+            employeeId: 0,
+            status: false
         }
     })
     const handleSave = async (data) => {
@@ -83,13 +92,17 @@ export default function CreateVehicle() {
                 Mileage: data.mileage,
                 CostPerDay: data.costPerDay,
                 Transmission: data.transmission,
+                CostPerExtraKM: data.costPerExtraKm,
+                Status: data.status,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
-                EmployeeId: data.employeeId
+                EmployeeId: data.employeeId,
+                Status: data.status
             }
 
             const result = await axios.post(url, formData)
             console.log(result)
+            console.log(formData)
             reset()
         } catch (error) {
             console.log(error)
@@ -207,6 +220,23 @@ export default function CreateVehicle() {
                 />
                 <FormField
                     control={control}
+                    name="costPerExtraKm"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Cost Per Extra Km</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    className="w-full"
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.costPerExtraKm && errors.costPerExtraKm.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
                     name="mileage"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
@@ -273,6 +303,23 @@ export default function CreateVehicle() {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={control}
+                    name="status"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Status </FormLabel>
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={(checked) => field.onChange(checked)}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.status && errors.status.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
                         Create

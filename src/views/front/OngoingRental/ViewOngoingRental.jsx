@@ -1,8 +1,11 @@
 import React from 'react'
 import DataTable from './DataTable'
 import { columns } from './Columns'
+import { useParams } from 'react-router-dom'
 
 export default function ViewOngoingRental() {
+    const customerId = useParams()
+
     const data = [
         {
             id: '1001',

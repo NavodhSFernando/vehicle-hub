@@ -51,6 +51,7 @@ import EditInsurance from './views/admin/insurance/EditInsurance'
 import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
+import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
 
 function App() {
     return (
@@ -101,7 +102,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/viewongoingrental"
+                            path="/account/viewongoingrental/:customerId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <ViewOngoingRental />
@@ -236,6 +237,14 @@ function App() {
                                 </TitleComponent>
                             }
                         />
+                        <Route
+                            path="/admin/vehiclemodel/edit/:vehicleModelId"
+                            element={
+                                <TitleComponent title="Edit Vehicle Model">
+                                    <EditVehicleModel />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="vehicle">
                         <Route
@@ -277,7 +286,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/maintenance/create/:vehicleId"
                             element={
                                 <TitleComponent title="Create Maintenance">
                                     <CreateMaintenance />
@@ -337,7 +346,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/insurance/create/:vehicleId"
                             element={
                                 <TitleComponent title="Create Insurance">
                                     <CreateInsurance />

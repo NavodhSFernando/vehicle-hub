@@ -41,22 +41,23 @@ export default function EditVehicleType() {
         }
     })
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleType/${vehicleTypeId}`
-            try {
-                const { data } = await axios.get(url)
-                console.log(data.name)
-                console.log(data.depositAmount)
-                console.log(data)
-                reset({
-                    name: data.name,
-                    depositAmount: data.depositAmount
-                })
-            } catch (error) {
-                console.error('Failed to fetch vehicle type', error)
-            }
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/VehicleType/${vehicleTypeId}`
+        try {
+            const { data } = await axios.get(url)
+            console.log(data.name)
+            console.log(data.depositAmount)
+            console.log(data)
+            reset({
+                name: data.name,
+                depositAmount: data.depositAmount
+            })
+        } catch (error) {
+            console.error('Failed to fetch vehicle type', error)
         }
+    }
+
+    useEffect(() => {
         fetchData()
     }, [vehicleTypeId, reset])
 
@@ -116,7 +117,7 @@ export default function EditVehicleType() {
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>
