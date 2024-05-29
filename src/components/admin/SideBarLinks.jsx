@@ -68,26 +68,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
-        key: 'availability',
-        label: 'Availability',
-        path: '/admin/availability',
-        icon: <RiStackLine />,
-        subLinks: [
-            {
-                key: 'view all availability',
-                label: 'View All Availability',
-                path: '/admin/availability/view',
-                icon: <LuDot />
-            },
-            {
-                key: 'create availability',
-                label: 'Create Availability',
-                path: '/admin/availability/create',
-                icon: <LuDot />
-            }
-        ]
-    },
-    {
         key: 'vehicle type',
         label: 'Vehicle Type',
         path: '/admin/vehicletype',
@@ -178,12 +158,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 label: 'View All Maintenance',
                 path: '/admin/maintenance/view',
                 icon: <LuDot />
-            },
-            {
-                key: 'create maintenance',
-                label: 'Create Maintenance',
-                path: '/admin/maintenance/create',
-                icon: <LuDot />
             }
         ]
     },
@@ -251,12 +225,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 key: 'view all insurance',
                 label: 'View All Insurance',
                 path: '/admin/insurance/view',
-                icon: <LuDot />
-            },
-            {
-                key: 'create insurance',
-                label: 'Create Insurance',
-                path: '/admin/insurance/create',
                 icon: <LuDot />
             }
         ]

@@ -286,7 +286,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/maintenance/create/:vehicleId"
                             element={
                                 <TitleComponent title="Create Maintenance">
                                     <CreateMaintenance />
@@ -346,7 +346,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/insurance/create/:vehicleId"
                             element={
                                 <TitleComponent title="Create Insurance">
                                     <CreateInsurance />
