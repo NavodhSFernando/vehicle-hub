@@ -6,16 +6,6 @@ import html2canvas from 'html2canvas'
 import axios from 'axios'
 
 export default function ViewVehicleUtilizationReport() {
-    const utilizationData = [
-        { vehicleNo: 'ABC128', startDate: '2024-03-01', endDate: '2024-03-05', mileage: 300, reservationId: 'RES001' },
-        { vehicleNo: 'XYZ255', startDate: '2024-03-02', endDate: '2024-03-06', mileage: 250, reservationId: 'RES002' },
-        { vehicleNo: 'DEF458', startDate: '2024-03-03', endDate: '2024-03-07', mileage: 400, reservationId: 'RES003' },
-        { vehicleNo: 'GHI789', startDate: '2024-03-04', endDate: '2024-03-08', mileage: 350, reservationId: 'RES004' },
-        { vehicleNo: 'JKL012', startDate: '2024-03-05', endDate: '2024-03-09', mileage: 280, reservationId: 'RES005' },
-        { vehicleNo: 'MNO345', startDate: '2024-03-06', endDate: '2024-03-10', mileage: 320, reservationId: 'RES006' }
-    ]
-
-    // 
 
     const [ utilizationData1, setUtilizationData1] = useState([]);
 
