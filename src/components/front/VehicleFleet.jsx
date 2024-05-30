@@ -4,6 +4,7 @@ import BookingStrip2 from './BookingStrip/BookingStrip2'
 import SearchStrip from './BookingStrip/SearchStrip'
 import Aqua from '../../assets/vehicles/aqua.png'
 import FilterCard from './Filtercard'
+import axios from 'axios'
 
 const data = [
     {
@@ -81,6 +82,19 @@ const data = [
 ]
 
 const VehicleFleet = () => {
+    const [vehicleData, setVehicleData] = useState([])
+
+    const fetchData = async () => {
+        try {
+            // Update the URL to your specific API endpoint for fetching vehicles
+            const response = await axios.get('http://localhost:5062/api/BookNow')
+            setVehicleData(response.data) // Assume the response data is the array of vehicles
+            console.log(response.data)
+        } catch (error) {
+            console.error('Failed to fetch vehicle data:', error)
+        }
+    }
+
     const [filters, setFilters] = useState({
         vehicleType: 'all',
         vehicleMake: 'all',
@@ -99,14 +113,15 @@ const VehicleFleet = () => {
     const handleSearch = (searchQuery) => {
         setKeyword(searchQuery)
         console.log(searchQuery)
-        const updatedFilteredData = data.filter((vehicle) =>
+        const updatedFilteredData = vehicleData.filter((vehicle) =>
             vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())
         )
         setFilteredData(updatedFilteredData)
     }
 
     useEffect(() => {
-        const updatedFilteredData = data.filter((vehicle) => {
+        fetchData()
+        const updatedFilteredData = vehicleData.filter((vehicle) => {
             console.log('Vehicle:', vehicle)
             console.log('Filters:', filters)
 
@@ -120,19 +135,21 @@ const VehicleFleet = () => {
                 return false
             }
 
-            if (filters.vehicleCapacity !== 'all' && vehicle.capacity !== filters.vehicleCapacity) {
+            if (
+                parseInt(filters.vehicleCapacity) !== 'all' &&
+                parseInt(vehicle.seatingCapacity) !== parseInt(filters.vehicleCapacity)
+            ) {
                 console.log('Filtered out due to vehicle capacity')
                 return false
             }
 
-            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.price) > parseInt(filters.maxPrice)) {
+            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.costPerDay) > parseInt(filters.maxPrice)) {
                 console.log('Filtered out due to price')
                 return false
             }
 
             return true
         })
-
         setFilteredData(updatedFilteredData)
     }, [filters])
 
@@ -150,15 +167,16 @@ const VehicleFleet = () => {
                     <div className="flex flex-row flex-wrap justify-between mt-10 gap-5">
                         {filteredData.map((vehicle) => (
                             <BookNowCard
-                                key={vehicle.key}
+                                id={vehicle.id}
                                 name={vehicle.name}
+                                make={vehicle.make}
                                 type={vehicle.type}
-                                imageSrc={vehicle.imageSrc}
-                                imageAlt={vehicle.imageAlt}
+                                //imageSrc={vehicle.imageSrc}
+                                //imageAlt={vehicle.imageAlt}
                                 year={vehicle.year}
                                 transmission={vehicle.transmission}
-                                capacity={vehicle.capacity}
-                                price={vehicle.price}
+                                capacity={vehicle.seatingCapacity}
+                                price={vehicle.costPerDay}
                             />
                         ))}
                     </div>
