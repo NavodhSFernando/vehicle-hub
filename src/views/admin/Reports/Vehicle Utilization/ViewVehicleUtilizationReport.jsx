@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import VehicleUtilizationTable from './VehicleUtilizationTable'
 import { vehicleUtilizationColumns } from './VehicleUtilizationColumns'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import axios from 'axios'
 
 export default function ViewVehicleUtilizationReport() {
     const utilizationData = [
@@ -13,6 +14,25 @@ export default function ViewVehicleUtilizationReport() {
         { vehicleNo: 'JKL012', startDate: '2024-03-05', endDate: '2024-03-09', mileage: 280, reservationId: 'RES005' },
         { vehicleNo: 'MNO345', startDate: '2024-03-06', endDate: '2024-03-10', mileage: 320, reservationId: 'RES006' }
     ]
+
+    // 
+
+    const [ utilizationData1, setUtilizationData1] = useState([]);
+
+    useEffect(() => {
+        const fetchUtilizationData = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching VehicleUtilizationReport
+                const response = await axios.get('http://localhost:5062/api/VehicleUtilizationReport')
+                setUtilizationData1(response.data) // Assume the response data is the array of VehicleUtilizationReport
+            } catch (error) {
+                console.error('Failed to fetch vehicles:', error)
+            }
+        }
+        fetchUtilizationData()
+    }, [])
+
+    // 
 
     function handlePrint() {
         window.print()
@@ -38,7 +58,7 @@ export default function ViewVehicleUtilizationReport() {
             <div className="flex flex-col p-6 bg-white rounded-lg">
                 {/* Ensure the container ID is correct for the PDF capture */}
                 <div id="feedback-report-container">
-                    <VehicleUtilizationTable columns={vehicleUtilizationColumns} data={utilizationData} />
+                    <VehicleUtilizationTable columns={vehicleUtilizationColumns} data={utilizationData1} />
                 </div>
                 <div className="flex mt-4">
                     <button

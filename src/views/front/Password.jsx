@@ -81,8 +81,10 @@ export const Password = () => {
                             </div>
 
                             <div className="flex pt-4">
-                                <div className="text-gray-800 text-justify ">Don't have an account?</div>
-                                <div className="text-indigo-600 text-justify ">Sign Up</div>
+                                <div className="text-gray-800 text-justify pr-2">Don't have an account? </div>
+                                <div className="text-indigo-600 text-justify ">
+                                    <a href="signup">Sign Up</a>
+                                </div>
                             </div>
                         </form>
                     </Form>
