@@ -44,6 +44,7 @@ const formSchema = z.object({
 
 export default function CreateMaintenance() {
     const { vehicleId } = useParams()
+    const numericVehicleId = parseInt(vehicleId, 10)
     const {
         control,
         handleSubmit,
@@ -53,7 +54,7 @@ export default function CreateMaintenance() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             date: '',
-            vehicleId: 0,
+            vehicleId: numericVehicleId,
             description: ''
         }
     })
