@@ -1,53 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import FeedbackTable from './FeedbackTable'
 import { feedbackColumns } from './FeedbackColumns'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import axios from 'axios'
 
 export default function ViewFeedbackReport() {
-    const feedbackData = [
-        {
-            id: 1,
-            content: 'Great service!',
-            rating: 3.5,
-            date: '2024-03-20',
-            customer: 'John Doe',
-            vehicle: 'Car'
-        },
-        {
-            id: 2,
-            content: 'The wait time was longer than expected.',
-            rating: 2,
-            date: '2024-03-18',
-            customer: 'Jane Smith',
-            vehicle: 'Car'
-        },
-        {
-            id: 3,
-            content: 'Friendly staff and clean facilities.',
-            rating: 4.5,
-            date: '2024-03-15',
-            customer: 'Michael Brown',
-            vehicle: 'Motorcycle'
-        },
-        {
-            id: 4,
-            content: 'Excellent work on the repair, but a bit pricey.',
-            rating: 4,
-            date: '2024-03-10',
-            customer: 'Linda Garcia',
-            vehicle: 'Truck'
-        },
-        {
-            id: 5,
-            content: 'Very satisfied with the service.',
-            rating: 5,
-            date: '2024-03-08',
-            customer: 'Robert Johnson',
-            vehicle: 'Convertible'
+    
+
+    // 
+
+    const [feedbackData1, setFeedbackData1] = useState([]);
+
+    useEffect(() => {
+        const fetchfeedbackData = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching FeedBackReport
+                const response = await axios.get('http://localhost:5062/api/FeedBackReport')
+                setFeedbackData1(response.data) // Assume the response data is the array of FeedBackReport
+            } catch (error) {
+                console.error('Failed to fetch vehicles:', error)
+            }
         }
-        // Add more feedback items as needed
-    ]
+        fetchfeedbackData()
+    }, [])
+
+    // 
 
     function handlePrint() {
         window.print()
@@ -73,7 +51,7 @@ export default function ViewFeedbackReport() {
             <div className="flex flex-col p-6 bg-white rounded-lg">
                 {/* Ensure the container ID is correct for the PDF capture */}
                 <div id="feedback-report-container">
-                    <FeedbackTable columns={feedbackColumns} data={feedbackData} />
+                    <FeedbackTable columns={feedbackColumns} data={feedbackData1} />
                 </div>
                 <div className="flex mt-4">
                     <button
