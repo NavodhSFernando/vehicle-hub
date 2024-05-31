@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { FaCcVisa, FaCcMastercard } from 'react-icons/fa';
 import axios from "axios";
 
 const stripePromise = loadStripe("pk_test_51PKzzr2NtGTfzr39JL9elmrssZNbhuSPuz0NBmql7gZntZqk8O1pRKaNqkjd6mPskyRk1Fgavgp8ATRM7BZWEcdK00qJ7Rx4UR");
@@ -10,6 +11,7 @@ const PaymentForm = () => {
   const elements = useElements();
   const [cardholderName, setCardholderName] = useState("");
   const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false); // New state for success status
 
   const handleInputChange = (e) => {
     setCardholderName(e.target.value);
@@ -23,7 +25,7 @@ const PaymentForm = () => {
       });
 
       const clientSecret = response.data.clientSecret;
-      console.log(response.data)
+      console.log(response.data);
 
       const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
@@ -37,20 +39,27 @@ const PaymentForm = () => {
       if (error) {
         console.error("Payment failed:", error);
         setMessage("Your payment was not successful, please try again.");
+        setIsSuccess(false);
       } else if (paymentIntent.status === "succeeded") {
         setMessage("Payment succeeded!");
-        
+        setIsSuccess(true);
       } else {
         setMessage("Your payment is processing.");
+        setIsSuccess(false);
       }
     } catch (error) {
       console.error("Error handling payment:", error);
       setMessage("Something went wrong.");
+      setIsSuccess(false);
     }
   };
 
   return (
-    <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 p-10">
+    <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 p-10 relative">
+      <div className="absolute top-4 right-4 flex items-center space-x-2">
+        <FaCcVisa className="text-3xl text-blue-600" />
+        <FaCcMastercard className="text-3xl text-red-600" />
+      </div>
       <h2 className="text-2xl font-semibold text-gray-950 mb-4">Payment Method</h2>
       <p className="text-sm font-light text-gray-600 mb-6">Please enter your payment method</p>
 
@@ -94,7 +103,9 @@ const PaymentForm = () => {
         Pay
       </button>
 
-      {message && <p className="mt-4 text-red-600">{message}</p>}
+      {message && (
+        <p className={`mt-4 ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>{message}</p>
+      )}
     </div>
   );
 };
