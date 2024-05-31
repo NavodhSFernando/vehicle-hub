@@ -29,6 +29,8 @@ const formSchema = z.object({
 
 export default function CreateInsurance() {
     const { vehicleId } = useParams()
+    const numericVehicleId = parseInt(vehicleId, 10)
+
     const {
         control,
         handleSubmit,
@@ -39,7 +41,7 @@ export default function CreateInsurance() {
         defaultValues: {
             insuranceNo: '',
             expiryDate: '',
-            vehicleId: 0
+            vehicleId: numericVehicleId
         }
     })
 
@@ -52,6 +54,7 @@ export default function CreateInsurance() {
                 ExpiryDate: data.expiryDate,
                 VehicleId: data.vehicleId
             }
+            console.log(formData)
             const result = await axios.post(url, formData)
             console.log(result)
             reset() // Reset form after successful submission
@@ -59,7 +62,6 @@ export default function CreateInsurance() {
             console.log(error) // Log error if submission fails
         }
     }
-
     return (
         <Form {...control}>
             <form

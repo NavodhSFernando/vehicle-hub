@@ -1,76 +1,120 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { FaCcVisa, FaCcMastercard } from 'react-icons/fa';
+import axios from "axios";
 
-const PaymentMethod = () => {
-  const [cardDetails, setCardDetails] = useState({
-    cardNumber: '',
-    expirationDate: '',
-    cvv: ''
-  });
+const stripePromise = loadStripe("pk_test_51PKzzr2NtGTfzr39JL9elmrssZNbhuSPuz0NBmql7gZntZqk8O1pRKaNqkjd6mPskyRk1Fgavgp8ATRM7BZWEcdK00qJ7Rx4UR");
+
+const PaymentForm = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [cardholderName, setCardholderName] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false); // New state for success status
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCardDetails({
-      ...cardDetails,
-      [name]: value
-    });
+    setCardholderName(e.target.value);
+  };
+
+  const handlePayment = async () => {
+    try {
+      const response = await axios.post("http://localhost:5062/api/Payments/create-payment-intent", {
+        amount: 200000,
+        currency: "lkr"
+      });
+
+      const clientSecret = response.data.clientSecret;
+      console.log(response.data);
+
+      const { paymentIntent, error } = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: {
+            name: cardholderName
+          }
+        }
+      });
+
+      if (error) {
+        console.error("Payment failed:", error);
+        setMessage("Your payment was not successful, please try again.");
+        setIsSuccess(false);
+      } else if (paymentIntent.status === "succeeded") {
+        setMessage("Payment succeeded!");
+        setIsSuccess(true);
+      } else {
+        setMessage("Your payment is processing.");
+        setIsSuccess(false);
+      }
+    } catch (error) {
+      console.error("Error handling payment:", error);
+      setMessage("Something went wrong.");
+      setIsSuccess(false);
+    }
   };
 
   return (
-    <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 p-10">
+    <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 p-10 relative">
+      <div className="absolute top-4 right-4 flex items-center space-x-2">
+        <FaCcVisa className="text-3xl text-blue-600" />
+        <FaCcMastercard className="text-3xl text-red-600" />
+      </div>
       <h2 className="text-2xl font-semibold text-gray-950 mb-4">Payment Method</h2>
       <p className="text-sm font-light text-gray-600 mb-6">Please enter your payment method</p>
-      
-      <div className="flex items-center mb-4">
+
+      <div className="mt-6">
+        <label className="block text-sm font-medium text-gray-700">Cardholder Name</label>
         <input
-          type="radio"
-          checked
-          readOnly
-          className="form-radio text-indigo-600"
+          type="text"
+          value={cardholderName}
+          onChange={handleInputChange}
+          placeholder="John Doe"
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
-        <span className="ml-2 text-lg">Credit Card</span>
-        <div className="ml-auto flex space-x-2">
-          <FaCcVisa className="h-8 w-8 text-blue-600" />
-          <FaCcMastercard className="h-8 w-8 text-red-600" />
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-sm font-medium text-gray-700">Card Details</label>
+        <div className="border border-gray-300 rounded-md p-2">
+          <CardElement
+            options={{
+              style: {
+                base: {
+                  fontSize: "16px",
+                  color: "#424770",
+                  "::placeholder": {
+                    color: "#aab7c4"
+                  }
+                },
+                invalid: {
+                  color: "#9e2146"
+                }
+              }
+            }}
+          />
         </div>
       </div>
 
-      <div className="space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Card Number</label>
-          <input
-            type="text"
-            name="cardNumber"
-            value={cardDetails.cardNumber}
-            onChange={handleInputChange}
-            placeholder="8016 2345 6790 1234"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Expiration Date</label>
-          <input
-            type="text"
-            name="expirationDate"
-            value={cardDetails.expirationDate}
-            onChange={handleInputChange}
-            placeholder="12/26"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">CVV</label>
-          <input
-            type="text"
-            name="cvv"
-            value={cardDetails.cvv}
-            onChange={handleInputChange}
-            placeholder="512"
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          />
-        </div>
-      </div>
+      <button
+        onClick={handlePayment}
+        className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md text-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+      >
+        Pay
+      </button>
+
+      {message && (
+        <p className={`mt-4 ${isSuccess ? 'text-green-600' : 'text-red-600'}`}>{message}</p>
+      )}
     </div>
+  );
+};
+
+const PaymentMethod = () => {
+  return (
+    <Elements stripe={stripePromise}>
+      <PaymentForm />
+    </Elements>
   );
 };
 

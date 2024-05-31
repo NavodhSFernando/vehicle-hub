@@ -1,19 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import RevenueTable from './RevenueTable'
 import { revenueColumns } from './RevenueColumns'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import axios from 'axios'
 
 export default function ViewRevenueReport() {
-    const revenueData = [
-        { id: 1, type: 'Balance Payment', amount: 1000, date: '2024-03-18' },
-        { id: 2, type: 'Deposit Payment', amount: 1500, date: '2024-03-19' },
-        { id: 3, type: 'Balance Payment', amount: 800, date: '2024-03-20' },
-        { id: 4, type: 'Deposit Payment', amount: 2000, date: '2024-03-21' },
-        { id: 5, type: 'Balance Payment', amount: 1200, date: '2024-03-22' },
-        { id: 6, type: 'Deposit Payment', amount: 1700, date: '2024-03-23' },
-        // Add more data as needed
-    ];
+
+
+   
+
+    const [ revenueData1, setrevenueData1] = useState([]);
+
+    useEffect(() => {
+        const fetchRevenueData = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching RevenueReport
+                const response = await axios.get('http://localhost:5062/api/RevenueReport')
+                setrevenueData1(response.data) // Assume the response data is the array of RevenueReport
+            } catch (error) {
+                console.error('Failed to fetch revenue:', error)
+            }
+        }
+        fetchRevenueData()
+    }, [])
+
+    //
 
     function handlePrint() {
         window.print()
@@ -47,7 +59,7 @@ export default function ViewRevenueReport() {
                 <div id="reveune-report-container">
                     <h2 id="report-heading">Revenue Report</h2> {/* Add the report heading */}
                     <div id="reveune-report-table">
-                        <RevenueTable columns={revenueColumns} data={revenueData} />
+                        <RevenueTable columns={revenueColumns} data={revenueData1} />
                     </div>
                 </div>
                 <div className="flex mt-4">

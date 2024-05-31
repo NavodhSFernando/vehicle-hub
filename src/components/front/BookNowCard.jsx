@@ -7,7 +7,18 @@ import { IoCalendarClear } from 'react-icons/io5'
 import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
 
-export default function BookNowCard({ key, name, type, year, transmission, capacity, imageSrc, imageAlt, price }) {
+export default function BookNowCard({
+    key,
+    name,
+    make,
+    type,
+    year,
+    transmission,
+    capacity,
+    imageSrc,
+    imageAlt,
+    price
+}) {
     const [clicked, setClicked] = useState(false)
 
     useEffect(() => {
@@ -22,6 +33,7 @@ export default function BookNowCard({ key, name, type, year, transmission, capac
     const handleClick = () => {
         const vehicleDetails = {
             name: name,
+            make: make,
             type: type,
             year: year,
             transmission: transmission,
@@ -48,7 +60,9 @@ export default function BookNowCard({ key, name, type, year, transmission, capac
         <div className="w-[317px] flex flex-col p-5 shadow-xl rounded-xl bg-white">
             <div className="flex justify-between pb-12 align-top">
                 <div className="flex flex-col">
-                    <h1 className="text-xl font-bold">{name}</h1>
+                    <h1 className="text-xl font-bold">
+                        {make} {name}
+                    </h1>
                     <p className="text-base opacity-50 font-semibold">{type}</p>
                 </div>
                 {clicked ? (
