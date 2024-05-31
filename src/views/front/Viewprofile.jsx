@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useOutletContext, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
@@ -31,7 +31,7 @@ const formSchema = z.object({
 })
 
 function Viewprofile() {
-    const { customerId } = useParams() // Access route parameter
+    const customerId = useOutletContext()
     const {
         control,
         handleSubmit,
@@ -50,27 +50,25 @@ function Viewprofile() {
     })
 
     useEffect(() => {
-        if (customerId) {
-            const fetchData = async () => {
-                const url = `http://localhost:5062/api/customer/${customerId}`
-                try {
-                    const { data } = await axios.get(url)
-                    console.log(data)
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/customer/${customerId}`
+            try {
+                const { data } = await axios.get(url)
+                console.log(data)
 
-                    reset({
-                        name: data.name,
-                        email: data.email,
-                        nic: data.nic,
-                        licenseno: data.drivingLicenseNo,
-                        contactNumber: data.contactNo,
-                        address: data.address
-                    })
-                } catch (error) {
-                    console.error('Failed to fetch profile', error)
-                }
+                reset({
+                    name: data.name,
+                    email: data.email,
+                    nic: data.nic,
+                    licenseno: data.drivingLicenseNo,
+                    contactNumber: data.contactNo,
+                    address: data.address
+                })
+            } catch (error) {
+                console.error('Failed to fetch profile', error)
             }
-            fetchData()
         }
+        fetchData()
     }, [reset])
 
     const handleSave = async (data) => {
