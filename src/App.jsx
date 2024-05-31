@@ -92,9 +92,16 @@ function App() {
                                 </TitleComponent>
                             }
                         />
-                        <Route path="/account/notificationcenter/:customerId" element={<NotificationCenter />} />
                         <Route
-                            path="/account/viewrentalhistory"
+                            path="notificationcenter"
+                            element={
+                                <TitleComponent title="Notification Center">
+                                    <NotificationCenter />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="viewrentalhistory"
                             element={
                                 <TitleComponent title="Rental History">
                                     <ViewRentalHistory />
@@ -102,15 +109,29 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/viewongoingrentals/:customerId"
+                            path="viewongoingrentals"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <ViewOngoingRental />
                                 </TitleComponent>
                             }
                         />
-                        <Route path="/account/viewbillingdetails/:customerId" element={<ViewBillingDetails />} />
-                        <Route path="/account/viewprofile/:customerId" element={<Viewprofile />} />
+                        <Route
+                            path="viewbillingdetails"
+                            element={
+                                <TitleComponent title="Billing Details">
+                                    <ViewBillingDetails />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="viewprofile"
+                            element={
+                                <TitleComponent title="View Profile">
+                                    <Viewprofile />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
                     <Route path="/faq" element={<FaqPage />} />
@@ -120,24 +141,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
-                <Route
-                    path="/ongoingrentalssingle"
-                    element={
-                        <TitleComponent title="Ongoing Rentals">
-                            <Ongoingrentalssingle />
-                        </TitleComponent>
-                    }
-                />
-                <Route
-                    path="/rentalhistorysingle"
-                    element={
-                        <TitleComponent title="Rental History">
-                            <Rentalhistorysingle />
-                        </TitleComponent>
-                    }
-                />
-
                 <Route path="/feedbackform" element={<Feedbackform />} />
+
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
