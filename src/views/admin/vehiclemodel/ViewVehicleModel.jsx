@@ -10,7 +10,7 @@ export default function ViewVehicleMode() {
         const fetchVehicleModels = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
-                const response = await axios.get('http://localhost:5062/api/AdditionalFeatures')
+                const response = await axios.get('http://localhost:5062/api/AdminVehicle')
                 setVehicleModels(response.data)
                 console.log(response.data)
             } catch (error) {

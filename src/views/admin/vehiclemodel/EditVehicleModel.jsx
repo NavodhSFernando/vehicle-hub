@@ -4,6 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -41,14 +42,6 @@ const items = [
     { id: 'keylessEntry', label: 'Keyless Entry' }
 ]
 
-const vehicleMakes = [
-    { value: 'toyota', label: 'Toyota' },
-    { value: 'ford', label: 'Ford' },
-    { value: 'chevrolet', label: 'Chevrolet' }
-]
-
-const validVehicleMakeIds = [1, 7]
-
 const currentYear = new Date().getFullYear()
 
 const formSchema = z.object({
@@ -83,8 +76,8 @@ const formSchema = z.object({
     fuel: z.string({
         required_error: 'Please select a fuel type'
     }),
-    vehicleMakeId: z.number().refine((vehicleMakeId) => validVehicleMakeIds.includes(vehicleMakeId), {
-        message: 'Invalid Vehicle Make ID'
+    vehicleMakeId: z.string({
+        required_error: 'Vehicle Model is required'
     }),
     items: z.array(z.string()).refine((value) => value.some((item) => item), {
         message: 'You have to select at least one item.'
@@ -105,7 +98,7 @@ export default function EditVehicleModel() {
             year: 0,
             engineCapacity: 0,
             seatingCapacity: 0,
-            vehicleMakeId: 0,
+            vehicleMakeId: '',
             items: []
         }
     })
@@ -129,8 +122,21 @@ export default function EditVehicleModel() {
         }
     }
 
+    const [vehicleMakes, setVehicleMakes] = useState([])
+
     // Fetch vehicle model data
     useEffect(() => {
+        const fetchVehicleMakes = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching vehicles
+                const response = await axios.get('http://localhost:5062/api/VehicleMake')
+                setVehicleMakes(response.data)
+                console.log(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle makes:', error)
+            }
+        }
+        fetchVehicleMakes()
         fetchData()
     }, [vehicleModelId, reset])
 
@@ -275,14 +281,25 @@ export default function EditVehicleModel() {
                     name="vehicleMakeId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Make Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Make</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    value={field.value}
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Make" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleMakes.map((vehicleMake) => (
+                                            <SelectItem key={vehicleMake.id} value={String(vehicleMake.id)}>
+                                                {vehicleMake.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleMakeId && errors.vehicleMakeId.message}</FormMessage>
                         </FormItem>

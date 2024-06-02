@@ -32,7 +32,7 @@ export const columns = [
         accessorKey: 'id',
         header: 'ID',
         cell: ({ row }) => {
-            const ID = row.original.additionalFeatures.id
+            const ID = row.original.id
             const value = parseFloat(ID)
             return <div className="font-medium">{'#' + value}</div>
         }
@@ -41,7 +41,7 @@ export const columns = [
         accessorKey: 'name',
         header: 'Name',
         cell: ({ row }) => {
-            const name = row.original.vehicleModel.name
+            const name = row.original.name
             return <div className="font-medium">{name}</div>
         },
         filterFn: (row, columnId, filterValue) => {
@@ -52,7 +52,7 @@ export const columns = [
         accessorKey: 'year',
         header: 'Year',
         cell: ({ row }) => {
-            const year = row.original.vehicleModel.year
+            const year = row.original.year
             const value = parseFloat(year)
 
             return <div className="font-medium">{value}</div>
@@ -62,7 +62,7 @@ export const columns = [
         accessorKey: 'engineCapacity',
         header: 'Engine Capacity',
         cell: ({ row }) => {
-            const engineCapacity = row.original.vehicleModel.engineCapacity
+            const engineCapacity = row.original.engineCapacity
             const value = parseFloat(engineCapacity)
             const formattedEngineCapacity = `${value}cc`
 
@@ -73,7 +73,7 @@ export const columns = [
         accessorKey: 'seatingCapacity',
         header: 'Seating Capacity',
         cell: ({ row }) => {
-            const seatingCapacity = row.original.vehicleModel.seatingCapacity
+            const seatingCapacity = row.original.seatingCapacity
             const value = parseFloat(seatingCapacity)
 
             return <div className="font-medium">{value}</div>
@@ -83,7 +83,7 @@ export const columns = [
         accessorKey: 'fuel',
         header: 'Fuel Type',
         cell: ({ row }) => {
-            const fuel = row.original.vehicleModel.fuel
+            const fuel = row.original.fuel
             return <div className="font-normal">{fuel}</div>
         }
     },
@@ -91,17 +91,16 @@ export const columns = [
         accessorKey: 'vehicleMakeId',
         header: 'Vehicle Make',
         cell: ({ row }) => {
-            const vehicleMakeId = row.original.vehicleModel.vehicleMakeId
-            const value = parseFloat(vehicleMakeId)
+            const vehicleMakeId = row.original.vehicleMake.name
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleMakeId}</div>
         }
     },
     {
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
         cell: ({ row }) => {
-            const Id = row.original.vehicleModel.id
+            const Id = row.original.id
             const value = parseFloat(Id)
             return <ActionButtons vehicleModelId={value} />
         }
