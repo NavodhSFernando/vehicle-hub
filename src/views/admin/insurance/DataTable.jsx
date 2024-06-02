@@ -32,14 +32,6 @@ export default function DataTable({ columns, data }) {
         <div>
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter ID..."
-                    value={table.getColumn('id')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('id')?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
-            </div>
-            <div className="flex items-center py-4">
-                <Input
                     placeholder="Filter VehicleID..."
                     value={table.getColumn('vehicleId')?.getFilterValue() ?? ''}
                     onChange={(event) => table.getColumn('vehicleId')?.setFilterValue(event.target.value)}
