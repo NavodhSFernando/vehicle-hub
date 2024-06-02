@@ -3,7 +3,7 @@ import { useState } from 'react'
 import aqua from '../../assets/vehicles/aqua.png'
 import { Button } from '../ui/button'
 
-function RentalSummary() {
+function RentalSummary({ make, modelName, deposit, extraKMCost, penalty, rentalCost, amount }) {
     const [rating, setRating] = useState(0)
 
     const handleStarClick = (value) => {
@@ -19,7 +19,9 @@ function RentalSummary() {
                 <div className="pb-8 flex items-center">
                     <img src={aqua} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
                     <div className="flex flex-col">
-                        <h1 className="text-2xl font-semibold text-gray-950 mb-1">Toyota Aqua</h1>
+                        <h1 className="text-2xl font-semibold text-gray-950 mb-1">
+                            {make} {modelName}
+                        </h1>
                         <div className="flex items-center">
                             {[...Array(5)].map((_, index) => (
                                 <svg
@@ -42,26 +44,26 @@ function RentalSummary() {
 
                 <div className="pt-8 flex justify-between">
                     <p className="text-gray-500">Deposit Amount</p>
-                    <p className="font-semibold"> -Rs 5000.00</p>
+                    <p className="font-semibold">{deposit}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Extra Mileage Charge(per km)</p>
-                    <p className="font-semibold"> Rs 960.00</p>
+                    <p className="font-semibold">{extraKMCost}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
-                    <p className="text-gray-500">Damage Fees</p>
-                    <p className="font-semibold">Rs 0.00</p>
+                    <p className="text-gray-500">Penalty</p>
+                    <p className="font-semibold">{penalty}</p>
                 </div>
                 <div className="pt-3 flex justify-between pb-8">
                     <p className="text-gray-500">Rental Charge</p>
-                    <p className="font-semibold">Rs 10,000.00</p>
+                    <p className="font-semibold">{rentalCost}</p>
                 </div>
 
                 <hr className="pb-3 border-t-2 border-stone-200" />
 
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-950 font-bold text-xl">Total Amount</p>
-                    <p className="font-semibold text-3xl">LKR 5960.00</p>
+                    <p className="font-semibold text-3xl">{amount}</p>
                 </div>
                 <div className="text-gray-500 text-xs">
                     <p>Overall price including additions </p>
