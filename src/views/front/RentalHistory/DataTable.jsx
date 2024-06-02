@@ -35,8 +35,10 @@ export default function DataTable({ columns, data }) {
                     <Label>Reservation ID</Label>
                     <Input
                         placeholder="Filter Reservation ID"
-                        value={table.getColumn('id')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('id')?.setFilterValue(event.target.value)}
+                        value={table.getColumn('customerReservationId')?.getFilterValue() ?? ''}
+                        onChange={(event) =>
+                            table.getColumn('customerReservationId')?.setFilterValue(event.target.value)
+                        }
                         className="max-w-lg"
                     />
                 </div>

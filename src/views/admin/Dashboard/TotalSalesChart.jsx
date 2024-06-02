@@ -1,58 +1,29 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
-const data = [
-    {
-        name: 'Jan',
-        TotalSales: 4000,
-    },
-    {
-        name: 'Feb',
-        TotalSales: 3000,
-    },
-    {
-        name: 'Mar',
-        TotalSales: 2000,
-    },
-    {
-        name: 'Apr',
-        TotalSales: 2780,
-    },
-    {
-        name: 'May',
-        TotalSales: 1890,
-    },
-    {
-        name: 'Jun',
-        TotalSales: 2390,
-    },
-    {
-        name: 'July',
-        TotalSales: 3490,
-    },
-    {
-        name: 'Aug',
-        TotalSales: 2000,
-    },
-    {
-        name: 'Sep',
-        TotalSales: 2780,
-    },
-    {
-        name: 'Oct',
-        TotalSales: 1890,
-    },
-    {
-        name: 'Nov',
-        TotalSales: 2390,
-    },
-    {
-        name: 'Dec',
-        TotalSales: 3490,
-    }
-]
 
 export default function TotalSalesChart() {
+
+    // 
+
+    const [ data1, setData1] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching data
+                const response = await axios.get('http://localhost:5062/api/SalesChart')
+                setData1(response.data) // Assume the response data is the array of data
+            } catch (error) {
+                console.error('Failed to fetch data:', error)
+            }
+        }
+        fetchData()
+    }, [])
+
+    // 
+
     return (
         <div className="h-[28rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
             <strong className="text-gray-700 font-medium">Total Sales</strong>
@@ -61,7 +32,7 @@ export default function TotalSalesChart() {
                     <BarChart
                         width={500}
                         height={300}
-                        data={data}
+                        data={data1}
                         margin={{
                             top: 20,
                             right: 10,
@@ -74,7 +45,7 @@ export default function TotalSalesChart() {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="TotalSales" fill="#0ea5e9" />
+                        <Bar dataKey="totalSales" fill="#0ea5e9" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

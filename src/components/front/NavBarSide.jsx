@@ -1,26 +1,32 @@
+import Cookies from 'js-cookie'
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 
 export default function NavBarSide() {
-    const navigate = useNavigate()
+    const handleLogout = () => {
+        Cookies.remove('customerId')
+    }
+
     return (
-        <div className="w-full max-w-[360px] p-5 flex flex-col gap-5 bg-white">
-            <a href="#" className="text-lg opacity-50 font-semibold">
-                Account Details
-            </a>
-            <NavLink className="text-lg opacity-50 font-semibold">Ongoing Rentals</NavLink>
-            <a href="#" className="text-lg opacity-50 font-semibold">
-                Rentals History
-            </a>
-            <a href="#" className="text-lg opacity-50 font-semibold">
+        <div className="bg-white flex flex-col w-1/4 p-5 h-fit m-4 rounded-xl text-lg">
+            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewprofile`}>
+                View Profile
+            </NavLink>
+            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewongoingrentals`}>
+                Ongoing Rentals
+            </NavLink>
+            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewrentalhistory`}>
+                Rental History
+            </NavLink>
+            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewbillingdetails`}>
                 Billing Details
-            </a>
-            <a href="#" className="text-lg opacity-50 font-semibold">
+            </NavLink>
+            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewnotificationcenter`}>
                 Notifications
-            </a>
-            <a href="#" className="text-lg opacity-50 font-semibold">
+            </NavLink>
+            <NavLink className="flex flex-col pl-2 py-1" to="/vehiclefleet">
                 Log Out
-            </a>
+            </NavLink>
         </div>
     )
 }
