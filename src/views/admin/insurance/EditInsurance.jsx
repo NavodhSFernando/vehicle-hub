@@ -144,10 +144,10 @@ export default function EditInsurance() {
                             <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
                             <FormControl>
                                 <Input
+                                    {...field}
                                     type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
-                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>

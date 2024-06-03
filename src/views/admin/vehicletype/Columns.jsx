@@ -31,9 +31,6 @@ export const columns = [
             const value = parseFloat(row.getValue('id'))
 
             return <div className="font-medium">{'#' + value}</div>
-        },
-        filterFn: (row, columnId, filterValue) => {
-            return row.original.id.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {

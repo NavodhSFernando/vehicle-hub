@@ -31,9 +31,6 @@ export const columns = [
             const value = parseFloat(row.getValue('id'))
 
             return <div className="font-medium">{'#' + value}</div>
-        },
-        filterFn: (row, columnId, filterValue) => {
-            return row.original.id.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {
@@ -42,15 +39,14 @@ export const columns = [
     },
     {
         accessorKey: 'vehicleId',
-        header: 'Vehicle ID',
+        header: 'Vehicle',
         cell: ({ row }) => {
-            const vehicleId = row.original.vehicle.id
-            const value = parseFloat(vehicleId)
+            const vehicleId = row.original.vehicle.registrationNumber
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleId}</div>
         },
         filterFn: (row, columnId, filterValue) => {
-            return row.original.vehicle.id.toString().toLowerCase().includes(filterValue.toLowerCase())
+            return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {
