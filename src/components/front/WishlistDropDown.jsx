@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import aqua from '../../assets/vehicles/aqua.png'
 
 const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
-    // State to manage wishlist items
     const [wishlistItems, setWishlistItems] = useState([])
 
     useEffect(() => {
@@ -10,23 +9,33 @@ const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
         setWishlistItems(storedWishlistItems)
     }, [])
 
-    const handleRemoveFromWishlist = (itemName) => {
-        const updatedWishlistItems = wishlistItems.filter((item) => item.name !== itemName)
+    const areVehiclesEqual = (vehicle1, vehicle2) => {
+        return (
+            vehicle1.name === vehicle2.name &&
+            vehicle1.type === vehicle2.type &&
+            vehicle1.year === vehicle2.year &&
+            vehicle1.transmission === vehicle2.transmission &&
+            vehicle1.capacity === vehicle2.capacity &&
+            vehicle1.imageSrc === vehicle2.imageSrc &&
+            vehicle1.imageAlt === vehicle2.imageAlt &&
+            vehicle1.price === vehicle2.price
+        )
+    }
+
+    const handleRemoveFromWishlist = (vehicleDetails) => {
+        const updatedWishlistItems = wishlistItems.filter((item) => !areVehiclesEqual(item, vehicleDetails))
         setWishlistItems(updatedWishlistItems)
         localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems))
+        //onWishlistChange(updatedWishlistItems);
     }
 
     return (
-        // The dropdown menu
         isOpen && (
             <div className="absolute top-5 right-[50px] mt-12 w-[384px] bg-white rounded-lg shadow-xl z-20">
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Wish List</h3>
                 </div>
-
-                {/* Scrollable list container */}
                 <div className="overflow-y-auto wishlist-scrollbar" style={{ maxHeight: '17rem' }}>
-                    {/* List of wishlist items */}
                     {wishlistItems.map((item) => (
                         <div key={item.id} className="flex items-center px-[20px] py-3 border-t border-gray-100">
                             <img className="w-[50px] h-full scale-x-[-1] mt-2 p-1" src={aqua} alt={item.name} />
@@ -37,7 +46,7 @@ const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                             </div>
                             <button
                                 className="text-gray-400 hover:text-gray-500"
-                                onClick={() => handleRemoveFromWishlist(item.name)}
+                                onClick={() => handleRemoveFromWishlist(item)}
                             >
                                 ×
                             </button>
