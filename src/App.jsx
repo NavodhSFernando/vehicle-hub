@@ -133,7 +133,7 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
+                    <Route path="/bookingconfirmation/:invoiceId" element={<Bookingconfirmredirect />} />
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/contact" element={<ContactUs />} />
                 </Route>

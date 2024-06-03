@@ -2,7 +2,7 @@ import React from 'react'
 import { format } from 'date-fns'
 import { CiCalendar, CiClock2 } from 'react-icons/ci'
 
-export default function BookingForm({ startDate, startTime, endDate, endTime }) {
+export default function BookingForm({ startDate = '', startTime = '', endDate = '', endTime = '' }) {
     return (
         <div className="w-full max-w-[850px] p-6 flex flex-col bg-white rounded-lg">
             <article className="pb-5">
@@ -23,7 +23,7 @@ export default function BookingForm({ startDate, startTime, endDate, endTime }) 
                                 <input
                                     type="date"
                                     className="w-full border-0 p-0 outline-none"
-                                    value={endDate}
+                                    value={startDate}
                                     readOnly
                                 />
                             </div>
