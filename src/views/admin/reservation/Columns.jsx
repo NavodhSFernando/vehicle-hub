@@ -3,6 +3,7 @@ import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { EditVehicleDialog } from '../../../components/admin/reservation/EditVehicleDialog'
 
 const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
     const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}`
@@ -39,9 +40,7 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
                     <GrStop fontSize={20} className="mr-1" />
                 </Button>
             )}
-            <Button variant="ghost" className="p-0" onClick={() => console.log('buuruwa')}>
-                <GrEdit fontSize={24} className="mr-1" />
-            </Button>
+            <EditVehicleDialog />
             <Button variant="ghost" className="p-0">
                 <GrTrash fontSize={24} className="mr-1" />
             </Button>

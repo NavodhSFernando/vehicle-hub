@@ -27,6 +27,9 @@ const formSchema = z.object({
     vehicleId: z.number({
         required_error: 'Vehicle ID is required'
     }),
+    customerId: z.number({
+        required_error: 'Customer ID is required'
+    }),
     reservationId: z.number({
         required_error: 'Reservation ID is required'
     }),
@@ -66,6 +69,7 @@ export default function EditReservation() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             vehicleId: 0,
+            customerId: 0,
             reservationId: 0,
             startDate: '',
             startTime: '',
@@ -81,6 +85,7 @@ export default function EditReservation() {
             try {
                 const { data } = await axios.get(url)
                 console.log(data.vehicle.id)
+                console.log(data.customerId)
                 console.log(data.reservation.id)
                 console.log(data.reservation.startDate)
                 console.log(data.reservation.startTime)
@@ -89,6 +94,7 @@ export default function EditReservation() {
                 // Reset form with fetched data
                 reset({
                     vehicleId: data.vehicle.id,
+                    customerId: data.customerId,
                     reservationId: data.reservation.id,
                     startDate: data.reservation.startDate,
                     startTime: data.reservation.startTime,
@@ -109,8 +115,12 @@ export default function EditReservation() {
             const formData = {
                 Id: customerReservationId,
                 VehicleId: data.vehicleId,
+                CustomerId: data.customerId,
                 ReservationId: data.reservationId,
-                CustmomerId: 0
+                StartDate: data.startDate,
+                StartTime: data.startTime,
+                EndDate: data.endDate,
+                EndTime: data.endTime
             }
 
             // PUT request to the server with form data
@@ -144,6 +154,24 @@ export default function EditReservation() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="customerId"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Customer Id</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number"
+                                    className="w-full"
+                                    {...field}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.customerId && errors.customerId.message}</FormMessage>
                         </FormItem>
                     )}
                 />
