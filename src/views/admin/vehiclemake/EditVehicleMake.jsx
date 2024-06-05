@@ -78,7 +78,6 @@ export default function EditVehicleMake() {
 
             const result = await axios.put(url, formData)
             console.log(result)
-            reset()
             if (fileInputRef.current) {
                 fileInputRef.current.value = ''
             }

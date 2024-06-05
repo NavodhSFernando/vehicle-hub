@@ -287,6 +287,7 @@ export default function EditVehicleModel() {
                                     onValueChange={(value) => {
                                         field.onChange(value)
                                     }}
+                                    {...field}
                                     defaultValue={field.value}
                                 >
                                     <SelectTrigger>
