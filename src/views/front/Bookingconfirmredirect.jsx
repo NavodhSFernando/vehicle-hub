@@ -7,18 +7,20 @@ import axios from 'axios'
 import { useParams } from 'react-router-dom'
 
 export default function Bookingconfirmredirect() {
-    const customerReservationId = useParams()
+    const { invoiceId } = useParams()
     const [rentalData, setRentalData] = useState({})
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching rentals
-                const response = await axios.get(`http://localhost:5062/api/FrontReservationService/view-booking`)
+                const response = await axios.get(
+                    `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${invoiceId}`
+                )
                 setRentalData(response.data) // Assume the response data is the array of rentals
-                console.log('Fetched Ongoing Rentals:', response.data)
+                console.log('Fetched Booking Confirmation:', response.data)
             } catch (error) {
-                console.error('Failed to fetch Ongoing Rentals:', error)
+                console.error('Failed to fetch Booking Confirmation:', error)
             }
         }
         fetchData()
