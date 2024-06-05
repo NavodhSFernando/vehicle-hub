@@ -128,7 +128,7 @@ const Navbar = () => {
                                     <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
                                 )}
                             </div>
-                            <NavLink to="/account/notificationcenter">
+                            <NavLink to="/account/viewprofile">
                                 <div className="text-yellowtheme cursor-pointer" onClick={handleLogged}>
                                     {logged ? (
                                         <FaUserCircle fontSize={24} style={{ color: '#FBDAC6' }} />

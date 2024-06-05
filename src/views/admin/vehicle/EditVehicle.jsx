@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -18,14 +19,9 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { Checkbox } from '../../../components/ui/checkbox'
 
 const regNoPattern = /^[A-Z]{2}\s\d{4}$/
-
-const validVehicleTypeIds = [1]
-
-const validVehicleModelIds = [1]
-
-const validEmployeeIds = [1]
 
 const formSchema = z.object({
     regNo: z
@@ -42,17 +38,19 @@ const formSchema = z.object({
         .int('Cost per day must be an integer')
         .min(3000, 'Cost per day must be at least 3000')
         .max(10000, 'Cost per day must be no more than 10000'),
+    costPerExtraKm: z
+        .number()
+        .int('Cost per extra Km  must be an integer')
+        .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
-    vehicleTypeId: z.number().refine((vehicleTypeId) => validVehicleTypeIds.includes(vehicleTypeId), {
-        message: 'Invalid Vehicle Type ID'
+    vehicleTypeId: z.string({
+        required_error: 'Vehicle Type is required'
     }),
-    vehicleModelId: z.number().refine((vehicleModelId) => validVehicleModelIds.includes(vehicleModelId), {
-        message: 'Invalid Vehicle Model ID'
+    vehicleModelId: z.string({
+        required_error: 'Vehicle Model is required'
     }),
-    employeeId: z.number().refine((employeeId) => validEmployeeIds.includes(employeeId), {
-        message: 'Invalid employee ID'
-    })
+    status: z.boolean().default(false) // Added status field
 })
 
 export default function EditVehicle() {
@@ -69,44 +67,74 @@ export default function EditVehicle() {
             chassisNo: '',
             color: '',
             costPerDay: 0,
+            costPerExtraKm: 0,
             transmission: 'auto',
             mileage: 0,
             vehicleTypeId: 0,
-            vehicleModelId: 0,
-            employeeId: 0
+            vehicleModelId: '',
+            status: true
         }
     })
-    // Fetch vehicle data
+
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+        try {
+            const { data } = await axios.get(url)
+            console.log(data.registrationNumber)
+            console.log(data.chassisNo)
+            console.log(data.colour)
+            console.log(data.mileage)
+            console.log(data.costPerDay)
+            console.log(data.costPerExtraKM)
+            console.log(data.transmission)
+            console.log(data.vehicleTypeId)
+            console.log(data.vehicleModelId)
+            console.log(data.EmployeeId)
+            console.log(data.status)
+            console.log(data)
+            reset({
+                regNo: data.registrationNumber,
+                chassisNo: data.chassisNo,
+                color: data.colour,
+                mileage: data.mileage,
+                costPerDay: data.costPerDay,
+                costPerExtraKm: data.costPerExtraKM,
+                transmission: data.transmission,
+                vehicleTypeId: data.vehicleType.id,
+                vehicleModelId: data.vehicleModel.id,
+                EmployeeId: data.employee.id,
+                status: data.status
+            })
+        } catch (error) {
+            console.error('Failed to fetch vehicle', error)
+        }
+    }
+
+    const [vehicleModels, setVehicleModels] = useState([])
+    const [vehicleTypes, setVehicleTypes] = useState([])
+
     useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+        const fetchVehicleModels = async () => {
             try {
-                const { data } = await axios.get(url)
-                console.log(data.registrationNumber)
-                console.log(data.chassisNo)
-                console.log(data.colour)
-                console.log(data.mileage)
-                console.log(data.costPerDay)
-                console.log(data.transmission)
-                console.log(data.vehicleTypeId)
-                console.log(data.vehicleModelId)
-                console.log(data.employeeId)
-                console.log(data)
-                reset({
-                    regNo: data.registrationNumber,
-                    chassisNo: data.chassisNo,
-                    color: data.colour,
-                    mileage: data.mileage,
-                    costPerDay: data.costPerDay,
-                    transmission: data.transmission,
-                    vehicleTypeId: data.vehicleTypeId,
-                    vehicleModelId: data.vehicleModelId,
-                    employeeId: data.employeeId
-                })
+                // Update the URL to your specific API endpoint for fetching vehicles
+                const response = await axios.get('http://localhost:5062/api/VehicleModel')
+                setVehicleModels(response.data)
+                console.log(response.data)
             } catch (error) {
-                console.error('Failed to fetch vehicle make', error)
+                console.error('Failed to fetch vehicle models:', error)
             }
         }
+        fetchVehicleModels()
+
+        const fetchVehicleTypes = async () => {
+            try {
+                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                setVehicleTypes(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle Types:', error)
+            }
+        }
+        fetchVehicleTypes()
         fetchData()
     }, [vehicleId, reset])
 
@@ -119,17 +147,19 @@ export default function EditVehicle() {
                 Colour: data.color,
                 Mileage: data.mileage,
                 CostPerDay: data.costPerDay,
+                CostPerExtraKM: data.costPerExtraKm,
                 Transmission: data.transmission,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
-                EmployeeId: data.employeeId
+                EmployeeId: 1,
+                Status: data.status
             }
 
             const result = await axios.put(url, formData)
             console.log(result)
-            reset()
+            fetchData()
         } catch (error) {
-            console.error('Failed to update vehicle make', error)
+            console.error('Failed to update vehicle', error)
         }
     }
 
@@ -248,16 +278,37 @@ export default function EditVehicle() {
                 />
                 <FormField
                     control={control}
+                    name="costPerExtraKm"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Cost Per Extra Km</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="number" // Ensure input type is number for direct numeric input
+                                    className="w-full"
+                                    {...field}
+                                    onChange={(e) => {
+                                        const number = parseInt(e.target.value)
+                                        field.onChange(number)
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.costPerExtraKm && errors.costPerExtraKm.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
                     name="mileage"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Mileage</FormLabel>
                             <FormControl>
                                 <Input
+                                    {...field}
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
-                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
@@ -269,14 +320,26 @@ export default function EditVehicle() {
                     name="vehicleTypeId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Type Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Type</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
                                     {...field}
-                                />
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleTypes.map((vehicleType) => (
+                                            <SelectItem key={vehicleType.id} value={String(vehicleType.id)}>
+                                                {vehicleType.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleTypeId && errors.vehicleTypeId.message}</FormMessage>
                         </FormItem>
@@ -287,14 +350,26 @@ export default function EditVehicle() {
                     name="vehicleModelId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Model Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Model</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
                                     {...field}
-                                />
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Model" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleModels.map((vehicleModel) => (
+                                            <SelectItem key={vehicleModel.id} value={String(vehicleModel.id)}>
+                                                {vehicleModel.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleModelId && errors.vehicleModelId.message}</FormMessage>
                         </FormItem>
@@ -302,25 +377,24 @@ export default function EditVehicle() {
                 />
                 <FormField
                     control={control}
-                    name="employeeId"
+                    name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Employee Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Status </FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                    {...field}
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={(checked) => field.onChange(checked)}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.employeeId && errors.employeeId.message}</FormMessage>
+                            <FormMessage>{errors.status && errors.status.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>

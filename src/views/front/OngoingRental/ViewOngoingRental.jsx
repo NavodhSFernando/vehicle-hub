@@ -1,6 +1,9 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import DataTable from './DataTable'
 import { columns } from './Columns'
+import { useOutletContext } from 'react-router-dom'
 
 export default function ViewOngoingRental() {
     const data = [
@@ -41,10 +44,31 @@ export default function ViewOngoingRental() {
         }
     ]
 
+    const customerId = useOutletContext()
+    console.log('customerId', customerId)
+
+    const [Data, setData] = useState([])
+
+    useEffect(() => {
+        const fetchOngoingRentals = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching rentals
+                const response = await axios.get(
+                    `http://localhost:5062/api/FrontReservationService/ongoing-rentals/${customerId}`
+                )
+                setData(response.data) // Assume the response data is the array of rentals
+                console.log('Fetched Ongoing Rentals:', response.data)
+            } catch (error) {
+                console.error('Failed to fetch Ongoing Rentals:', error)
+            }
+        }
+        fetchOngoingRentals()
+    }, [])
+
     return (
         <>
             <div className="flex flex-col p-6 bg-white rounded-lg">
-                <DataTable columns={columns} data={data} />
+                <DataTable columns={columns} data={Data} />
             </div>
         </>
     )

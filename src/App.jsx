@@ -51,6 +51,7 @@ import EditInsurance from './views/admin/insurance/EditInsurance'
 import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
+import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
 
 function App() {
     return (
@@ -76,7 +77,7 @@ function App() {
                     />
                     <Route path="/account" element={<Account />}>
                         <Route
-                            path="/account/ongoingrentalssingle"
+                            path="/account/ongoingrentalssingle/:customerReservationId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <Ongoingrentalssingle />
@@ -84,16 +85,15 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/rentalhistorysingle"
+                            path="viewnotificationcenter"
                             element={
-                                <TitleComponent title="Rental History">
-                                    <Rentalhistorysingle />
+                                <TitleComponent title="Notification Center">
+                                    <NotificationCenter />
                                 </TitleComponent>
                             }
                         />
-                        <Route path="/account/notificationcenter" element={<NotificationCenter />} />
                         <Route
-                            path="/account/viewrentalhistory"
+                            path="viewrentalhistory"
                             element={
                                 <TitleComponent title="Rental History">
                                     <ViewRentalHistory />
@@ -101,17 +101,31 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/viewongoingrental"
+                            path="viewongoingrentals"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <ViewOngoingRental />
                                 </TitleComponent>
                             }
                         />
-                        <Route path="/account/viewbillingdetails" element={<ViewBillingDetails />} />
-                        <Route path="/account/viewprofile" element={<Viewprofile />} />
+                        <Route
+                            path="viewbillingdetails"
+                            element={
+                                <TitleComponent title="Billing Details">
+                                    <ViewBillingDetails />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="viewprofile"
+                            element={
+                                <TitleComponent title="View Profile">
+                                    <Viewprofile />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
-                    <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
+                    <Route path="/bookingconfirmation/:invoiceId" element={<Bookingconfirmredirect />} />
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/contact" element={<ContactUs />} />
                 </Route>
@@ -119,24 +133,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
-                <Route
-                    path="/ongoingrentalssingle"
-                    element={
-                        <TitleComponent title="Ongoing Rentals">
-                            <Ongoingrentalssingle />
-                        </TitleComponent>
-                    }
-                />
-                <Route
-                    path="/rentalhistorysingle"
-                    element={
-                        <TitleComponent title="Rental History">
-                            <Rentalhistorysingle />
-                        </TitleComponent>
-                    }
-                />
-
                 <Route path="/feedbackform" element={<Feedbackform />} />
+                <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
@@ -236,6 +234,14 @@ function App() {
                                 </TitleComponent>
                             }
                         />
+                        <Route
+                            path="/admin/vehiclemodel/edit/:vehicleModelId"
+                            element={
+                                <TitleComponent title="Edit Vehicle Model">
+                                    <EditVehicleModel />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="vehicle">
                         <Route
@@ -277,7 +283,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/maintenance/create/:vehicleId"
                             element={
                                 <TitleComponent title="Create Maintenance">
                                     <CreateMaintenance />
@@ -337,7 +343,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="create"
+                            path="/admin/insurance/create/:vehicleId"
                             element={
                                 <TitleComponent title="Create Insurance">
                                     <CreateInsurance />

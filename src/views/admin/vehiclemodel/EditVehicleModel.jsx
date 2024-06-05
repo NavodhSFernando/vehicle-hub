@@ -1,9 +1,10 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { number, z } from 'zod'
+import { z } from 'zod'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -18,14 +19,28 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Checkbox } from '../../../components/ui/checkbox'
 
-const vehicleMakes = [
-    { value: 'toyota', label: 'Toyota' },
-    { value: 'ford', label: 'Ford' },
-    { value: 'chevrolet', label: 'Chevrolet' }
+const items = [
+    { id: 'abs', label: 'ABS' },
+    { id: 'acFront', label: 'Ac Front' },
+    { id: 'securitySystem', label: 'Security System' },
+    { id: 'bluetooth', label: 'Bluetooth' },
+    { id: 'parkingSensors', label: 'Parking Sensors' },
+    { id: 'airbagDriver', label: 'Airbag: Driver' },
+    { id: 'airbagPassenger', label: 'Airbag: Passenger' },
+    { id: 'airbagSide', label: 'Airbag: Side' },
+    { id: 'fogLights', label: 'Fog Lights' },
+    { id: 'navigationSystem', label: 'Navigation System' },
+    { id: 'sunroof', label: 'Sunroof' },
+    { id: 'tintedGlass', label: 'Tinted Glass' },
+    { id: 'powerWindows', label: 'Power Windows' },
+    { id: 'rearWindowWiper', label: 'Rear Window Wiper' },
+    { id: 'alloyWheels', label: 'Alloy Wheels' },
+    { id: 'electricMirrors', label: 'Electric Mirrors' },
+    { id: 'automaticHeadlights', label: 'Automatic Headlights' },
+    { id: 'keylessEntry', label: 'Keyless Entry' }
 ]
-
-const validVehicleMakeIds = [1, 7]
 
 const currentYear = new Date().getFullYear()
 
@@ -61,70 +76,94 @@ const formSchema = z.object({
     fuel: z.string({
         required_error: 'Please select a fuel type'
     }),
-    vehicleMakeId: z.number().refine((vehicleMakeId) => validVehicleMakeIds.includes(vehicleMakeId), {
-        message: 'Invalid Vehicle Make ID'
+    vehicleMakeId: z.string({
+        required_error: 'Vehicle Model is required'
+    }),
+    items: z.array(z.string()).refine((value) => value.some((item) => item), {
+        message: 'You have to select at least one item.'
     })
 })
 
 export default function EditVehicleModel() {
-    // 1. Define your form.
+    const { vehicleModelId } = useParams()
     const {
         control,
         handleSubmit,
         reset,
-        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            year: new Date().getFullYear(), // Current year as default
-            engineCapacity: 600, // Default engine capacity
-            seatingCapacity: 4, // Default seating capacity
-            vehicleMakeId: 0
+            year: 0,
+            engineCapacity: 0,
+            seatingCapacity: 0,
+            vehicleMakeId: '',
+            items: []
         }
     })
 
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        try {
+            const { data } = await axios.get(url)
+            reset({
+                name: data.vehicleModel.name,
+                year: data.vehicleModel.year,
+                engineCapacity: data.vehicleModel.engineCapacity,
+                seatingCapacity: data.vehicleModel.seatingCapacity,
+                fuel: data.vehicleModel.fuel,
+                vehicleMakeId: data.vehicleModel.vehicleMakeId,
+                items: Object.keys(data.additionalFeatures).filter((key) => data.additionalFeatures[key])
+            })
+            console.log(data.vehicleModel.fuel)
+        } catch (error) {
+            console.error('Failed to fetch vehicle model', error)
+        }
+    }
+
+    const [vehicleMakes, setVehicleMakes] = useState([])
+
+    // Fetch vehicle model data
     useEffect(() => {
-        const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleModel/${vehicleModelId}`
+        const fetchVehicleMakes = async () => {
             try {
-                const { data } = await axios.get(url)
-                console.log(data.name)
-                console.log(data.year)
-                console.log(data.engineCapacity)
-                console.log(data.seatingCapacity)
-                console.log(data.vehicleMakeId)
-                reset({
+                // Update the URL to your specific API endpoint for fetching vehicles
+                const response = await axios.get('http://localhost:5062/api/VehicleMake')
+                setVehicleMakes(response.data)
+                console.log(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle makes:', error)
+            }
+        }
+        fetchVehicleMakes()
+        fetchData()
+    }, [vehicleModelId, reset])
+
+    const handleSave = async (data) => {
+        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        try {
+            // Convert the items array into an object with key-value pairs
+            const additionalFeatures = items.reduce((acc, item) => {
+                acc[item.id] = data.items.includes(item.id)
+                return acc
+            }, {})
+
+            const formData = {
+                vehicleModel: {
                     name: data.name,
                     year: data.year,
                     engineCapacity: data.engineCapacity,
                     seatingCapacity: data.seatingCapacity,
+                    fuel: data.fuel,
                     vehicleMakeId: data.vehicleMakeId
-                })
-            } catch (error) {
-                console.error('Failed to fetch vehicle model', error)
+                },
+                additionalFeatures: additionalFeatures
             }
-        }
-        fetchData()
-    }, [vehicleModeId, reset])
-
-    const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleModel/${vehicleModeId}`
-        try {
-            const formData = {
-                Name: data.name,
-                Year: data.year,
-                EngineCapacity: data.engineCapacity,
-                Fuel: data.fuel,
-                VehicleMakeId: data.vehicleMakeId
-            }
-
             const result = await axios.put(url, formData)
             console.log(result)
-            reset()
         } catch (error) {
-            console.error('Failed to update vehicle make', error)
+            console.error('Failed to update vehicle model', error)
         }
     }
 
@@ -163,9 +202,9 @@ export default function EditVehicleModel() {
                             <FormLabel className="pb-3 w-full">Year</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number" // Ensure input type is number for direct numeric input
+                                    type="number"
                                     className="w-full"
-                                    {...field}
+                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -181,9 +220,9 @@ export default function EditVehicleModel() {
                             <FormLabel className="pb-3 w-full">Engine Capacity</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number" // Ensure input type is number for direct numeric input
+                                    type="number"
                                     className="w-full"
-                                    {...field}
+                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -199,9 +238,9 @@ export default function EditVehicleModel() {
                             <FormLabel className="pb-3 w-full">Seating Capacity</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number" // Ensure input type is number for direct numeric input
+                                    type="number"
                                     className="w-full"
-                                    {...field}
+                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -219,7 +258,7 @@ export default function EditVehicleModel() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -228,7 +267,7 @@ export default function EditVehicleModel() {
                                 </FormControl>
                                 <SelectContent>
                                     <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesal">Diesel</SelectItem>
+                                    <SelectItem value="diesel">Diesel</SelectItem>
                                     <SelectItem value="hybrid">Hybrid</SelectItem>
                                     <SelectItem value="electric">Electric</SelectItem>
                                 </SelectContent>
@@ -242,22 +281,65 @@ export default function EditVehicleModel() {
                     name="vehicleMakeId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Make Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Make</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number" // Ensure input type is number for direct numeric input
-                                    className="w-full"
-                                    {...field}
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Make" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleMakes.map((vehicleMake) => (
+                                            <SelectItem key={vehicleMake.id} value={String(vehicleMake.id)}>
+                                                {vehicleMake.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
-                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
+                            <FormMessage>{errors.vehicleMakeId && errors.vehicleMakeId.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+                <FormItem>
+                    <div className="mb-4">
+                        <FormLabel>Additional Features</FormLabel>
+                    </div>
+                    <div className="flex flex-wrap">
+                        {items.map((item) => (
+                            <div className="w-1/2 mb-4" key={item.id}>
+                                <FormField
+                                    control={control}
+                                    name="items"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value?.includes(item.id)}
+                                                    onCheckedChange={(checked) => {
+                                                        const newValue = checked
+                                                            ? [...field.value, item.id]
+                                                            : field.value.filter((value) => value !== item.id)
+                                                        field.onChange(newValue)
+                                                    }}
+                                                />
+                                            </FormControl>
+                                            <FormLabel className="font-normal">{item.label}</FormLabel>
+                                            <FormMessage>{errors.items && errors.items.message}</FormMessage>
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </FormItem>
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>

@@ -1,37 +1,71 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrFormView } from 'react-icons/gr'
+import { useNavigate } from 'react-router-dom'
+
+const ActionButtons = ({ customerReservationId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button
+                variant="ghost"
+                className="p-0"
+                onClick={() => navigate(`/account/ongoingrentalssingle/${customerReservationId}`)}
+            >
+                <GrFormView fontSize={30} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
-        accessorKey: 'id',
+        accessorKey: 'customerReservationId',
         header: 'Reservation ID',
         cell: ({ row }) => {
-            const value = row.getValue('id') // Assuming ID does not need parseFloat
+            const value = row.getValue('customerReservationId') // Assuming ID does not need parseFloat
             return <div className="font-medium">{'#' + value}</div>
         }
     },
     {
         accessorKey: 'modelName',
-        header: 'Model Name'
+        header: 'Vehicle Name',
+        cell: ({ row }) => {
+            const value = row.getValue('modelName')
+            //const make = row.getValue('make')
+            return <div>{value}</div>
+        }
     },
     {
-        accessorKey: 'pickUpDate',
+        accessorKey: 'startDate',
         header: 'Pick up Date',
         cell: ({ row }) => {
-            const value = row.getValue('pickUpDate')
-            // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            const value = row.getValue('startDate')
+            let formattedDate = 'Invalid Date'
+            if (value) {
+                try {
+                    formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+                } catch (e) {
+                    console.error('Invalid start date:', value)
+                }
+            }
             return <div>{formattedDate}</div>
         }
     },
     {
-        accessorKey: 'dropOffDate',
+        accessorKey: 'endDate',
         header: 'Drop off Date',
         cell: ({ row }) => {
-            const value = row.getValue('dropOffDate')
-            // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            const value = row.getValue('endDate')
+            let formattedDate = 'Invalid Date'
+            if (value) {
+                try {
+                    formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+                } catch (e) {
+                    console.error('Invalid end date:', value)
+                }
+            }
             return <div>{formattedDate}</div>
         }
     },
@@ -57,21 +91,25 @@ export const columns = [
             let text = ''
 
             switch (status) {
-                case 'waiting':
+                case 'Waiting':
                     color = 'bg-yellow-500'
                     text = 'Waiting'
                     break
-                case 'pending':
+                case 'Pending':
                     color = 'bg-blue-500'
                     text = 'Pending'
                     break
-                case 'confirmed':
+                case 'Confirmed':
                     color = 'bg-green-500'
                     text = 'Confirmed'
                     break
-                case 'cancelled':
-                    color = 'bg-red-500'
-                    text = 'Cancelled'
+                case 'Ongoing':
+                    color = 'bg-purple-500'
+                    text = 'Ongoing'
+                    break
+                case 'Ended':
+                    color = 'bg-orange-500'
+                    text = 'Ended'
                     break
                 default:
                     color = 'bg-gray-500'
@@ -85,5 +123,10 @@ export const columns = [
                 </div>
             )
         }
+    },
+    {
+        accessorKey: 'actions',
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons customerReservationId={row.getValue('customerReservationId')} />
     }
 ]

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useParams } from 'react-router-dom'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -16,8 +17,6 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 
-const validVehicleIds = [1, 7]
-
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const formSchema = z.object({
@@ -25,12 +24,13 @@ const formSchema = z.object({
     expiryDate: z.string().regex(dateRegex, {
         message: 'Insurance expiry date is required'
     }),
-    vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
-        message: 'Invalid Vehicle ID'
-    })
+    vehicleId: z.number().int('Invalid Vehicle ID')
 })
 
 export default function CreateInsurance() {
+    const { vehicleId } = useParams()
+    const numericVehicleId = parseInt(vehicleId, 10)
+
     const {
         control,
         handleSubmit,
@@ -41,7 +41,7 @@ export default function CreateInsurance() {
         defaultValues: {
             insuranceNo: '',
             expiryDate: '',
-            vehicleId: 0
+            vehicleId: numericVehicleId
         }
     })
 
@@ -54,7 +54,7 @@ export default function CreateInsurance() {
                 ExpiryDate: data.expiryDate,
                 VehicleId: data.vehicleId
             }
-
+            console.log(formData)
             const result = await axios.post(url, formData)
             console.log(result)
             reset() // Reset form after successful submission
@@ -62,7 +62,6 @@ export default function CreateInsurance() {
             console.log(error) // Log error if submission fails
         }
     }
-
     return (
         <Form {...control}>
             <form
@@ -121,6 +120,7 @@ export default function CreateInsurance() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    value={vehicleId}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>

@@ -18,8 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { type } from '@testing-library/user-event/dist/type'
-
-const validVehicleIds = [1]
+import { useParams } from 'react-router-dom'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -34,9 +33,7 @@ const formSchema = z.object({
         .refine((dateStr) => new Date(dateStr) <= new Date(currentDate), {
             message: 'Maintenance date must not be in the future'
         }),
-    vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
-        message: 'Invalid Vehicle ID'
-    }),
+    vehicleId: z.number().int('Invalid Vehicle ID'),
     type: z.string({
         required_error: 'Maintenance Type is required'
     }),
@@ -46,6 +43,8 @@ const formSchema = z.object({
 })
 
 export default function CreateMaintenance() {
+    const { vehicleId } = useParams()
+    const numericVehicleId = parseInt(vehicleId, 10)
     const {
         control,
         handleSubmit,
@@ -55,7 +54,7 @@ export default function CreateMaintenance() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             date: '',
-            vehicleId: 0,
+            vehicleId: numericVehicleId,
             description: ''
         }
     })
@@ -118,6 +117,7 @@ export default function CreateMaintenance() {
                                 <Input
                                     type="number"
                                     className="w-full"
+                                    value={vehicleId}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -135,7 +135,7 @@ export default function CreateMaintenance() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                //defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>

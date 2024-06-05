@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrEdit, GrServices, GrShield } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 
 // Define a component to encapsulate the action buttons
@@ -13,8 +13,11 @@ const ActionButtons = ({ vehicleId }) => {
             <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/vehicle/edit/${vehicleId}`)}>
                 <GrEdit fontSize={24} className="mr-1" />
             </Button>
-            <Button variant="ghost" className="p-0">
-                <GrTrash fontSize={24} className="mr-1" />
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/maintenance/create/${vehicleId}`)}>
+                <GrServices fontSize={24} className="mr-1" />
+            </Button>
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/insurance/create/${vehicleId}`)}>
+                <GrShield fontSize={24} className="mr-1" />
             </Button>
         </div>
     )
@@ -67,6 +70,34 @@ export const columns = [
         }
     },
     {
+        accessorKey: 'costPerExtraKM',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Cost Per Extra Km</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
+        cell: ({ row }) => {
+            const costPerExtraKm = parseFloat(row.getValue('costPerExtraKM'))
+
+            // Format the amount as a dollar amount
+            const formatted = new Intl.NumberFormat('lkr', {
+                style: 'currency',
+                currency: 'LKR'
+            }).format(costPerExtraKm)
+
+            return <div className="font-normal">{formatted}</div>
+        }
+    },
+    {
         accessorKey: 'colour',
         header: 'Color'
     },
@@ -87,34 +118,36 @@ export const columns = [
             const mileage = row.getValue('mileage')
             const formattedMileage = `${mileage} KM`
 
-            return <div className="font-normal">{formattedMileage}</div>
+            return <div className="font-medium">{formattedMileage}</div>
         }
     },
     {
         accessorKey: 'vehicleTypeId',
-        header: 'Vehicle Type ID',
+        header: 'Vehicle Type',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleTypeId'))
+            // Extract the vehicleType.id correctly
+            const vehicleTypeId = row.original.vehicleType.name
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleTypeId}</div>
         }
     },
     {
         accessorKey: 'vehicleModelId',
-        header: 'Vehicle Model ID',
+        header: 'Vehicle Model',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleModelId'))
+            const vehicleModelId = row.original.vehicleModel.name
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleModelId}</div>
         }
     },
     {
-        accessorKey: 'employeeId',
-        header: 'Employee ID',
+        accessorKey: 'status',
+        header: 'Status',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('employeeId'))
+            const status = row.original.status
+            const statusText = status ? 'Active' : 'Inactive'
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{statusText}</div>
         }
     },
     {

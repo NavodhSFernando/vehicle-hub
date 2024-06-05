@@ -16,7 +16,11 @@ const ActionButtons = ({ vehicleModelId }) => {
             >
                 <GrEdit fontSize={24} className="mr-1" />
             </Button>
-            <Button variant="ghost" className="p-0">
+            <Button
+                variant="ghost"
+                className="p-0"
+                onClick={() => navigate(`/admin/vehiclemodel/delete/${vehicleModelId}`)}
+            >
                 <GrTrash fontSize={24} className="mr-1" />
             </Button>
         </div>
@@ -28,44 +32,77 @@ export const columns = [
         accessorKey: 'id',
         header: 'ID',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('id'))
-
+            const ID = row.original.id
+            const value = parseFloat(ID)
             return <div className="font-medium">{'#' + value}</div>
         }
     },
     {
-        accessorKey: 'model',
-        header: 'Model'
+        accessorKey: 'name',
+        header: 'Name',
+        cell: ({ row }) => {
+            const name = row.original.name
+            return <div className="font-medium">{name}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicleModel.name.toLowerCase().includes(filterValue.toLowerCase())
+        }
     },
     {
         accessorKey: 'year',
-        header: 'Year'
+        header: 'Year',
+        cell: ({ row }) => {
+            const year = row.original.year
+            const value = parseFloat(year)
+
+            return <div className="font-medium">{value}</div>
+        }
     },
     {
         accessorKey: 'engineCapacity',
         header: 'Engine Capacity',
         cell: ({ row }) => {
-            const engineCapacity = row.getValue('engineCapacity')
-            const formattedEngineCapacity = `${engineCapacity}cc`
+            const engineCapacity = row.original.engineCapacity
+            const value = parseFloat(engineCapacity)
+            const formattedEngineCapacity = `${value}cc`
 
             return <div className="font-normal">{formattedEngineCapacity}</div>
         }
     },
     {
         accessorKey: 'seatingCapacity',
-        header: 'Seating Capacity'
+        header: 'Seating Capacity',
+        cell: ({ row }) => {
+            const seatingCapacity = row.original.seatingCapacity
+            const value = parseFloat(seatingCapacity)
+
+            return <div className="font-medium">{value}</div>
+        }
     },
     {
-        accessorKey: 'fuelType',
-        header: 'Fuel Type'
+        accessorKey: 'fuel',
+        header: 'Fuel Type',
+        cell: ({ row }) => {
+            const fuel = row.original.fuel
+            return <div className="font-normal">{fuel}</div>
+        }
     },
     {
         accessorKey: 'vehicleMakeId',
-        header: 'Vehicle Make'
+        header: 'Vehicle Make',
+        cell: ({ row }) => {
+            const vehicleMakeId = row.original.vehicleMake.name
+
+            return <div className="font-medium">{vehicleMakeId}</div>
+        }
     },
     {
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
-        cell: ({ row }) => <ActionButtons vehicleModelId={row.getValue('id')} />
+        cell: ({ row }) => {
+            const Id = row.original.id
+            const value = parseFloat(Id)
+            return <ActionButtons vehicleModelId={value} />
+        }
     }
 ]

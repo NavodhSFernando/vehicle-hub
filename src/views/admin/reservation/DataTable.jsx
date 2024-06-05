@@ -11,6 +11,8 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { DatePickerDemo } from '../../..'
+import { Calendar } from 'lucide-react'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -22,21 +24,21 @@ export default function DataTable({ columns, data }) {
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         getSortedRowModel: getSortedRowModel(),
         state: {
-            sorting
+            sorting,
+            columnFilters
         }
     })
 
-    console.log(table.getRowModel().rows)
     return (
         <div>
             <div className="flex flex-row items-center my-8">
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label>Reservation Date Range</Label>
+                    <Label>Reservation Start</Label>
                     <Input
                         type="date"
-                        placeholder="Filter date range"
                         value={table.getColumn('startDate')?.getFilterValue() ?? ''}
                         onChange={(event) => table.getColumn('startDate')?.setFilterValue(event.target.value)}
                         className="max-w-lg"

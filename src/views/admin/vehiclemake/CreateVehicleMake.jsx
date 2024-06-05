@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '../../../components/ui/button'
@@ -18,17 +18,16 @@ import axios from 'axios'
 // File validation Schema
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
-    logo: z
-        .any()
-        .refine((file) => file?.length == 1, 'File is required.')
-        .refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
-        .refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
-            message: 'Invalid file type'
-        })
+    logo: z.any().refine((file) => file?.length == 1, 'File is required.')
+    //.refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
+    //.refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
+    //  message: 'Invalid file type'
+    //})
 })
 
 // Main function component
 export default function CreateVehicleMake() {
+    //const [logo, setLogo] = useState(null)
     const fileInputRef = useRef('')
     const {
         control,
@@ -54,16 +53,39 @@ export default function CreateVehicleMake() {
     const handleSave = async (data) => {
         const url = 'http://localhost:5062/api/VehicleMake'
         try {
-            const formData = {
-                Name: data.name,
-                Logo: data.logo[0].name
-            }
+            // First, send the name as JSON
+            const nameResponse = await axios.post(
+                url,
+                { name: data.name },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
 
-            const result = await axios.post(url, formData)
-            console.log(result)
-            reset()
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '' // This clears the file input field
+            // Check if the name was successfully created
+            if (nameResponse.status === 200) {
+                const { id } = nameResponse.data
+
+                // Then, send the logo as multipart/form-data
+                const formData = new FormData()
+                formData.append('id', id) // Attach the id of the newly created entity
+                formData.append('logo', data.logo[0]) // Append the file object directly
+
+                const logoResponse = await axios.post(`${url}/logo`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
+
+                console.log(nameResponse, logoResponse)
+                reset()
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = '' // This clears the file input field
+                }
+            } else {
+                throw new Error('Failed to create the vehicle make.')
             }
         } catch (error) {
             console.log(error)

@@ -46,11 +46,14 @@ export const columns = [
     },
     {
         accessorKey: 'vehicleId',
-        header: 'Vehicle ID',
+        header: 'Vehicle',
         cell: ({ row }) => {
-            const value = parseFloat(row.getValue('vehicleId'))
+            const vehicleId = row.original.vehicle.registrationNumber
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleId}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {

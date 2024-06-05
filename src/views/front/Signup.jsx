@@ -3,7 +3,6 @@ import ggl from '../../assets/Icons/ggl.svg'
 import fb from '../../assets/Icons/fb.svg'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -50,13 +49,16 @@ export const Signup = () => {
     // Submit handler
     const onSubmit = async (data) => {
         console.log(data)
-        const result = await axios.post('http://localhost:5062/api/CustomerAuth/register', {
-            email: data.email,
-            password: data.password
-        })
+        try {
+            const result = await axios.post('http://localhost:5062/api/CustomerAuth/register', {
+                email: data.email,
+                password: data.password
+            })
 
-        console.log(result.data) // Log the server response
-        reset() // Reset the form after successful submission
+            reset() // Reset the form after successful submission
+        } catch (error) {
+            console.error('Registration failed', error.response ? error.response.data : error.message)
+        }
     }
 
     return (
@@ -184,7 +186,7 @@ export const Signup = () => {
                             </div>
                             <div className="flex justify-center pt-4">
                                 <div className="text-indigo-600 cursor-pointer mr-3 mb-4">
-                                    <a href="">Already member? Login?</a>
+                                    <a href="login">Already member? Login?</a>
                                 </div>
                             </div>
                         </form>

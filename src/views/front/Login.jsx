@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-
+import Cookies from 'js-cookie'
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -43,12 +43,16 @@ export const Login = () => {
         try {
             // Make a POST request to backend API endpoint
             const response = await axios.post('http://localhost:5062/api/CustomerAuth/login', data)
-
+            console.log(response.data)
+            const token = response.data.token.token
+            sessionStorage.setItem('jwtToken', token)
             // Handle successful login
             console.log('Login successful:', response.data)
-
+            const customerId = response.data.token.id
+            Cookies.set('customerId', customerId, { expires: 30 })
+            console.log(`Customer ID saved in cookies: ${Cookies.get('customerId')}`) // Log the server response
             // Redirect to the home page
-            navigate('/VehicleFleetSingle')
+            navigate('/')
         } catch (error) {
             // Handle login error
             console.error('Login failed:', error)
@@ -145,10 +149,10 @@ export const Login = () => {
                             </div>
                             <div className="flex pt-4">
                                 <div className="text-indigo-600 font-bold text-left text-1xl mr-4">
-                                    <a href="">Create An Account</a>
+                                    <a href="signup">Create An Account</a>
                                 </div>
                                 <div className="text-gray-800 font-semibold text-right text-1xl">
-                                    <a href="">Forgot Password?</a>
+                                    <a href="password">Forgot Password?</a>
                                 </div>
                             </div>
                         </form>
