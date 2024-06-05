@@ -9,8 +9,12 @@ export const feedbackColumns = [
     cell: ({ row }) => <div className="font-medium">{'#' + row.original.id}</div>,
   },
   {
-    accessorKey: 'content',
-    header: 'Content',
+    accessorKey: 'vehicle_Review',
+    header: 'Vehicle Review',
+  },
+  {
+    accessorKey: 'service_Review',
+    header: 'Service Review',
   },
   {
     accessorKey: 'rating',

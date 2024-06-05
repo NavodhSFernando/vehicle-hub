@@ -85,15 +85,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/rentalhistorysingle/:customerReservationId"
-                            element={
-                                <TitleComponent title="Rental History">
-                                    <Rentalhistorysingle />
-                                </TitleComponent>
-                            }
-                        />
-                        <Route
-                            path="notificationcenter"
+                            path="viewnotificationcenter"
                             element={
                                 <TitleComponent title="Notification Center">
                                     <NotificationCenter />
@@ -142,7 +134,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
-
+                <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
