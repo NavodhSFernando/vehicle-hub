@@ -71,7 +71,6 @@ export default function EditVehicleType() {
 
             const result = await axios.put(url, formData)
             console.log(result)
-            reset()
         } catch (error) {
             console.error('Failed to update vehicle type', error)
         }
