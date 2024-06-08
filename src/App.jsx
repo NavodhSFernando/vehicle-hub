@@ -52,6 +52,9 @@ import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
 import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
+import Adminlogin from './views/admin/Adminlogin'
+import PasswordReset from './views/front/PasswordReset'
+import EditEmployee from './views/admin/employee/EditEmployee'
 
 function App() {
     return (
@@ -141,8 +144,10 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
+                <Route path="/passwordreset" element={<PasswordReset />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
 
+                <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="report">
@@ -300,6 +305,10 @@ function App() {
                         />
                     </Route>
                     <Route path="employee">
+                        <Route
+                            path="/admin/employee/edit/:employeeId"
+                            element={<TitleComponent title="Edit Employee">{<EditEmployee />}</TitleComponent>}
+                        />
                         <Route path="view" element={<ViewEmployee />} />
                         <Route path="create" element={<CreateEmployee />} />
                     </Route>
