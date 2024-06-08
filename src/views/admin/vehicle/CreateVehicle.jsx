@@ -1,6 +1,8 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -19,12 +21,6 @@ import axios from 'axios'
 import { Checkbox } from '../../../components/ui/checkbox'
 
 const regNoPattern = /^[A-Z]{2}\s\d{4}$/
-
-const validVehicleTypeIds = [1]
-
-const validVehicleModelIds = [1]
-
-const validEmployeeIds = [1]
 
 const formSchema = z.object({
     regNo: z
@@ -47,14 +43,11 @@ const formSchema = z.object({
         .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
-    vehicleTypeId: z.number().refine((vehicleTypeId) => validVehicleTypeIds.includes(vehicleTypeId), {
-        message: 'Invalid Vehicle Type ID'
+    vehicleTypeId: z.string({
+        required_error: 'Vehicle Type is required'
     }),
-    vehicleModelId: z.number().refine((vehicleModelId) => validVehicleModelIds.includes(vehicleModelId), {
-        message: 'Invalid Vehicle Model ID'
-    }),
-    employeeId: z.number().refine((employeeId) => validEmployeeIds.includes(employeeId), {
-        message: 'Invalid employee ID'
+    vehicleModelId: z.string({
+        required_error: 'Vehicle Model is required'
     }),
     status: z.boolean().default(false) // Added status field
 })
@@ -76,12 +69,38 @@ export default function CreateVehicle() {
             mileage: 0,
             costPerExtraKm: 0,
             status: 0,
-            vehicleTypeId: 0,
-            vehicleModelId: 0,
-            employeeId: 0,
+            vehicleTypeId: '',
+            vehicleModelId: '',
             status: false
         }
     })
+    const [vehicleModels, setVehicleModels] = useState([])
+    const [vehicleTypes, setVehicleTypes] = useState([])
+
+    useEffect(() => {
+        const fetchVehicleModels = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching vehicles
+                const response = await axios.get('http://localhost:5062/api/VehicleModel')
+                setVehicleModels(response.data)
+                console.log(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle models:', error)
+            }
+        }
+        fetchVehicleModels()
+
+        const fetchVehicleTypes = async () => {
+            try {
+                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                setVehicleTypes(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle Types:', error)
+            }
+        }
+        fetchVehicleTypes()
+    }, [])
+
     const handleSave = async (data) => {
         const url = 'http://localhost:5062/api/Vehicle'
         try {
@@ -96,10 +115,9 @@ export default function CreateVehicle() {
                 Status: data.status,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
-                EmployeeId: data.employeeId,
+                EmployeeId: 1,
                 Status: data.status
             }
-
             const result = await axios.post(url, formData)
             console.log(result)
             console.log(formData)
@@ -257,13 +275,25 @@ export default function CreateVehicle() {
                     name="vehicleTypeId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Type Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Type</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleTypes.map((vehicleType) => (
+                                            <SelectItem key={vehicleType.id} value={String(vehicleType.id)}>
+                                                {vehicleType.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleTypeId && errors.vehicleTypeId.message}</FormMessage>
                         </FormItem>
@@ -274,32 +304,27 @@ export default function CreateVehicle() {
                     name="vehicleModelId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Model Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Model</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Model" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleModels.map((vehicleModel) => (
+                                            <SelectItem key={vehicleModel.id} value={String(vehicleModel.id)}>
+                                                {vehicleModel.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleModelId && errors.vehicleModelId.message}</FormMessage>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={control}
-                    name="employeeId"
-                    render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Employee Id</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
-                            </FormControl>
-                            <FormMessage>{errors.employeeId && errors.employeeId.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -319,7 +344,6 @@ export default function CreateVehicle() {
                         </FormItem>
                     )}
                 />
-
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
                         Create

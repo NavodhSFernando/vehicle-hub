@@ -123,33 +123,21 @@ export const columns = [
     },
     {
         accessorKey: 'vehicleTypeId',
-        header: 'Vehicle Type ID',
+        header: 'Vehicle Type',
         cell: ({ row }) => {
             // Extract the vehicleType.id correctly
-            const vehicleTypeId = row.original.vehicleType.id
-            const value = parseFloat(vehicleTypeId)
+            const vehicleTypeId = row.original.vehicleType.name
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleTypeId}</div>
         }
     },
     {
         accessorKey: 'vehicleModelId',
-        header: 'Vehicle Model ID',
+        header: 'Vehicle Model',
         cell: ({ row }) => {
-            const vehicleModelId = row.original.vehicleModel.id
-            const value = parseFloat(vehicleModelId)
+            const vehicleModelId = row.original.vehicleModel.name
 
-            return <div className="font-medium">{value}</div>
-        }
-    },
-    {
-        accessorKey: 'employeeId',
-        header: 'Employee ID',
-        cell: ({ row }) => {
-            const employeeId = row.original.employee.id
-            const value = parseFloat(employeeId)
-
-            return <div className="font-medium">{value}</div>
+            return <div className="font-medium">{vehicleModelId}</div>
         }
     },
     {

@@ -70,7 +70,7 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                     ))}
                 </div>
                 {/* 'View all' button */}
-                <Link to={'/account/notificationcenter'}>
+                <Link to={'/account/viewnotificationcenter'}>
                     <button
                         onClick={() => {
                             onNavigate() // This should be a function passed as a prop for navigation

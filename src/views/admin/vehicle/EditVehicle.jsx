@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -21,12 +22,6 @@ import axios from 'axios'
 import { Checkbox } from '../../../components/ui/checkbox'
 
 const regNoPattern = /^[A-Z]{2}\s\d{4}$/
-
-const validVehicleTypeIds = [1]
-
-const validVehicleModelIds = [1]
-
-const validEmployeeIds = [1]
 
 const formSchema = z.object({
     regNo: z
@@ -49,14 +44,11 @@ const formSchema = z.object({
         .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
-    vehicleTypeId: z.number().refine((vehicleTypeId) => validVehicleTypeIds.includes(vehicleTypeId), {
-        message: 'Invalid Vehicle Type ID'
+    vehicleTypeId: z.string({
+        required_error: 'Vehicle Type is required'
     }),
-    vehicleModelId: z.number().refine((vehicleModelId) => validVehicleModelIds.includes(vehicleModelId), {
-        message: 'Invalid Vehicle Model ID'
-    }),
-    employeeId: z.number().refine((employeeId) => validEmployeeIds.includes(employeeId), {
-        message: 'Invalid employee ID'
+    vehicleModelId: z.string({
+        required_error: 'Vehicle Model is required'
     }),
     status: z.boolean().default(false) // Added status field
 })
@@ -79,8 +71,7 @@ export default function EditVehicle() {
             transmission: 'auto',
             mileage: 0,
             vehicleTypeId: 0,
-            vehicleModelId: 0,
-            employeeId: 0,
+            vehicleModelId: '',
             status: true
         }
     })
@@ -98,7 +89,7 @@ export default function EditVehicle() {
             console.log(data.transmission)
             console.log(data.vehicleTypeId)
             console.log(data.vehicleModelId)
-            console.log(data.employeeId)
+            console.log(data.EmployeeId)
             console.log(data.status)
             console.log(data)
             reset({
@@ -111,16 +102,39 @@ export default function EditVehicle() {
                 transmission: data.transmission,
                 vehicleTypeId: data.vehicleType.id,
                 vehicleModelId: data.vehicleModel.id,
-                employeeId: data.employee.id,
+                EmployeeId: data.employee.id,
                 status: data.status
             })
         } catch (error) {
-            console.error('Failed to fetch vehicle make', error)
+            console.error('Failed to fetch vehicle', error)
         }
     }
 
-    // Fetch vehicle data
+    const [vehicleModels, setVehicleModels] = useState([])
+    const [vehicleTypes, setVehicleTypes] = useState([])
+
     useEffect(() => {
+        const fetchVehicleModels = async () => {
+            try {
+                // Update the URL to your specific API endpoint for fetching vehicles
+                const response = await axios.get('http://localhost:5062/api/VehicleModel')
+                setVehicleModels(response.data)
+                console.log(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle models:', error)
+            }
+        }
+        fetchVehicleModels()
+
+        const fetchVehicleTypes = async () => {
+            try {
+                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                setVehicleTypes(response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle Types:', error)
+            }
+        }
+        fetchVehicleTypes()
         fetchData()
     }, [vehicleId, reset])
 
@@ -137,7 +151,7 @@ export default function EditVehicle() {
                 Transmission: data.transmission,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
-                EmployeeId: data.employeeId,
+                EmployeeId: 1,
                 Status: data.status
             }
 
@@ -274,8 +288,8 @@ export default function EditVehicle() {
                                     className="w-full"
                                     {...field}
                                     onChange={(e) => {
-                                        const number = parseInt(e.target.value) // This is the input string in "yyyy-MM-dd"
-                                        field.onChange(number) // Pass the string directly to your form's state
+                                        const number = parseInt(e.target.value)
+                                        field.onChange(number)
                                     }}
                                 />
                             </FormControl>
@@ -291,10 +305,10 @@ export default function EditVehicle() {
                             <FormLabel className="pb-3 w-full">Mileage</FormLabel>
                             <FormControl>
                                 <Input
+                                    {...field}
                                     type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
-                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
@@ -306,14 +320,26 @@ export default function EditVehicle() {
                     name="vehicleTypeId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Type Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Type</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
                                     {...field}
-                                />
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Type" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleTypes.map((vehicleType) => (
+                                            <SelectItem key={vehicleType.id} value={String(vehicleType.id)}>
+                                                {vehicleType.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleTypeId && errors.vehicleTypeId.message}</FormMessage>
                         </FormItem>
@@ -324,34 +350,28 @@ export default function EditVehicle() {
                     name="vehicleModelId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Model Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Vehicle Model</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                <Select
+                                    onValueChange={(value) => {
+                                        field.onChange(value)
+                                    }}
                                     {...field}
-                                />
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select Vehicle Model" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {vehicleModels.map((vehicleModel) => (
+                                            <SelectItem key={vehicleModel.id} value={String(vehicleModel.id)}>
+                                                {vehicleModel.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
                             <FormMessage>{errors.vehicleModelId && errors.vehicleModelId.message}</FormMessage>
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={control}
-                    name="employeeId"
-                    render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Employee Id</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage>{errors.employeeId && errors.employeeId.message}</FormMessage>
                         </FormItem>
                     )}
                 />

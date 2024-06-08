@@ -88,15 +88,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/rentalhistorysingle/:customerReservationId"
-                            element={
-                                <TitleComponent title="Rental History">
-                                    <Rentalhistorysingle />
-                                </TitleComponent>
-                            }
-                        />
-                        <Route
-                            path="notificationcenter"
+                            path="viewnotificationcenter"
                             element={
                                 <TitleComponent title="Notification Center">
                                     <NotificationCenter />
@@ -136,7 +128,7 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="/bookingconfirmation" element={<Bookingconfirmredirect />} />
+                    <Route path="/bookingconfirmation/:invoiceId" element={<Bookingconfirmredirect />} />
                     <Route path="/faq" element={<FaqPage />} />
                     <Route path="/contact" element={<ContactUs />} />
                 </Route>
@@ -146,7 +138,7 @@ function App() {
                 <Route path="/password" element={<Password />} />
                 <Route path="/passwordreset" element={<PasswordReset />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
-
+                <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
