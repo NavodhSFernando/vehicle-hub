@@ -16,6 +16,7 @@ import {
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 // File validation Schema
 const formSchema = z
@@ -31,6 +32,8 @@ const formSchema = z
     })
 
 export const Signup = () => {
+    const navigate = useNavigate()
+
     const {
         control,
         handleSubmit,
@@ -55,7 +58,8 @@ export const Signup = () => {
                 password: data.password
             })
 
-            reset() // Reset the form after successful submission
+            //reset() // Reset the form after successful submission
+            navigate('/Login')
         } catch (error) {
             console.error('Registration failed', error.response ? error.response.data : error.message)
         }
