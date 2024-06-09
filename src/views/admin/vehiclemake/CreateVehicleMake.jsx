@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '../../../components/ui/button'
@@ -18,7 +18,7 @@ import axios from 'axios'
 // File validation Schema
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
-    logo: z.any().refine((file) => file?.length == 1, 'File is required.')
+    formFile: z.any().refine((file) => file?.length === 1, 'File is required.')
     //.refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
     //.refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
     //  message: 'Invalid file type'
@@ -27,8 +27,7 @@ const formSchema = z.object({
 
 // Main function component
 export default function CreateVehicleMake() {
-    //const [logo, setLogo] = useState(null)
-    const fileInputRef = useRef('')
+    const fileInputRef = useRef(null)
     const {
         control,
         handleSubmit,
@@ -39,53 +38,36 @@ export default function CreateVehicleMake() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            logo: ''
+            formFile: null
         }
     })
 
     // File change handler
     const handleFileChange = (e) => {
         const files = e.target.files
-        setValue('logo', files, { shouldValidate: true })
+        setValue('formFile', files, { shouldValidate: true })
     }
 
-    //Submit handler
+    // Submit handler
     const handleSave = async (data) => {
         const url = 'http://localhost:5062/api/VehicleMake'
         try {
-            // First, send the name as JSON
-            const nameResponse = await axios.post(
-                url,
-                { name: data.name },
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+            // Create FormData object and append the name and formFile
+            const formData = new FormData()
+            formData.append('name', data.name)
+            formData.append('formFile', data.formFile[0]) // Ensure the key matches the backend expectation
+
+            // Send the form data as multipart/form-data
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
                 }
-            )
+            })
 
-            // Check if the name was successfully created
-            if (nameResponse.status === 200) {
-                const { id } = nameResponse.data
-
-                // Then, send the logo as multipart/form-data
-                const formData = new FormData()
-                formData.append('id', id) // Attach the id of the newly created entity
-                formData.append('logo', data.logo[0]) // Append the file object directly
-
-                const logoResponse = await axios.post(`${url}/logo`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-
-                console.log(nameResponse, logoResponse)
-                reset()
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = '' // This clears the file input field
-                }
-            } else {
-                throw new Error('Failed to create the vehicle make.')
+            console.log(response)
+            reset()
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '' // This clears the file input field
             }
         } catch (error) {
             console.log(error)
@@ -114,14 +96,14 @@ export default function CreateVehicleMake() {
                 />
                 <FormField
                     control={control}
-                    name="logo"
+                    name="formFile"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Logo</FormLabel>
                             <FormControl>
                                 <Input type="file" className="w-full" ref={fileInputRef} onChange={handleFileChange} />
                             </FormControl>
-                            <FormMessage>{errors.logo && errors.logo.message}</FormMessage>
+                            <FormMessage>{errors.formFile && errors.formFile.message}</FormMessage>
                         </FormItem>
                     )}
                 />
