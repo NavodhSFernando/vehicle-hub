@@ -20,14 +20,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { Checkbox } from '../../../components/ui/checkbox'
 
-const regNoPattern = /^[A-Z]{2}\s\d{4}$/
+//const regNoPattern = /^[A-Z]{2}\s\d{4}$/
 
 const formSchema = z.object({
     regNo: z
         .string()
-        .min(1, 'Registration number is required')
-        .regex(
-            regNoPattern,
+        .min(
+            1,
             'Registration number must be in the format XX 9999, where X is any uppercase letter and 9 is any digit.'
         ),
     chassisNo: z.string().min(9, 'Chassis number should be at least 9 characters long.'),
@@ -36,7 +35,7 @@ const formSchema = z.object({
         .number()
         .int('Cost per day must be an integer')
         .min(3000, 'Cost per day must be at least 3000')
-        .max(10000, 'Cost per day must be no more than 10000'),
+        .max(20000, 'Cost per day must be no more than 20000'),
     costPerExtraKm: z
         .number()
         .int('Cost per extra Km  must be an integer')
