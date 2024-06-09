@@ -9,6 +9,7 @@ import {
     getSortedRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
@@ -32,9 +33,9 @@ export default function DataTable({ columns, data }) {
         <div>
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter emails..."
-                    value={table.getColumn('email')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+                    placeholder="Filter Name..."
+                    value={table.getColumn('name')?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
                     className="max-w-sm"
                 />
             </div>
@@ -76,6 +77,7 @@ export default function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }

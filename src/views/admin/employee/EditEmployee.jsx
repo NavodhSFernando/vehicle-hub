@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import { Button } from '../../../components/ui/button'
+import { useParams } from 'react-router-dom'
 import {
     Form,
     FormControl,
@@ -15,7 +16,6 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Password from '../../front/Password'
 import { Checkbox } from '../../../components/ui/checkbox'
 
 const formSchema = z.object({
@@ -36,12 +36,12 @@ const formSchema = z.object({
     department: z.string({
         required_error: 'department is required'
     }),
-    password: z.string().min(8),
-    status: z.boolean().default(true) // Added status field
+    password: z.string().min(8).optional(),
+    status: z.boolean().default(true)
 })
 
-export default function CreateEmployee() {
-    // 1. Define your form.
+export default function EditEmployee() {
+    const { employeeId } = useParams() // Access route parameter
     const {
         control,
         handleSubmit,
@@ -59,13 +59,40 @@ export default function CreateEmployee() {
             nic: '',
             gender: '',
             department: '',
-            password: '',
-            status: ''
+            status: true
         }
     })
 
+    const fetchData = async () => {
+        const url = `http://localhost:5062/api/Employee/${employeeId}`
+        try {
+            const { data } = await axios.get(url)
+
+            console.log(data)
+            reset({
+                name: data.name,
+                email: data.email,
+                address: data.address,
+                role: data.role,
+                dob: data.dob,
+                contactNo: data.contactNo,
+                nic: data.nic,
+                gender: data.gender,
+                department: data.department,
+                status: data.status
+            })
+            console.log(data.department)
+        } catch (error) {
+            console.error('Failed to fetch Employee', error)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [employeeId])
+
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/EmployeeAuth/register'
+        const url = `http://localhost:5062/api/Employee/${employeeId}`
         try {
             const formData = {
                 Name: data.name,
@@ -77,16 +104,14 @@ export default function CreateEmployee() {
                 NIC: data.nic,
                 Gender: data.gender,
                 Department: data.department,
-                Password: data.password,
                 Status: data.status
             }
             console.log(formData)
 
-            const result = await axios.post(url, formData)
+            const result = await axios.put(url, formData)
             console.log(result)
-            console.log(formData)
-            reset()
         } catch (error) {
+            console.error('Failed to Update', error)
             if (error.response) {
                 // The request was made and the server responded with a status code
                 console.error('Server responded with error data:', error.response.data)
@@ -99,6 +124,7 @@ export default function CreateEmployee() {
             }
         }
     }
+
     return (
         <Form {...control}>
             <form
@@ -117,10 +143,10 @@ export default function CreateEmployee() {
                             </div>
                             <FormControl>
                                 <Input
+                                    {...field}
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
                                     }}
-                                    {...field}
                                 />
                             </FormControl>
                             <FormMessage>{errors.name && errors.name.message}</FormMessage>
@@ -218,9 +244,13 @@ export default function CreateEmployee() {
                                 <FormLabel className="pb-3">Phone</FormLabel>
                             </div>
                             <FormControl>
-                                <Input type="number" onChange={(e) => field.onChange(Number(e.target.value))} />
+                                <Input
+                                    type="number"
+                                    {...field}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
                             </FormControl>
-                            <FormMessage>{errors.phone && errors.phone.message}</FormMessage>
+                            <FormMessage>{errors.contactNo && errors.contactNo.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -254,7 +284,7 @@ export default function CreateEmployee() {
                             <div className="flex flex-col space-y-1 pt-6">
                                 <FormLabel className=" pb-3">Gender</FormLabel>
                             </div>
-                            <Select onValueChange={field.onChange} defaultValue={field.value || ''}>
+                            <Select onValueChange={field.onChange} {...field} value={field.value}>
                                 <SelectTrigger className="w-2/3">
                                     <SelectValue />
                                 </SelectTrigger>
@@ -279,7 +309,7 @@ export default function CreateEmployee() {
                                     field.onChange(value)
                                 }}
                                 {...field}
-                                defaultValue={field.value}
+                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -300,27 +330,6 @@ export default function CreateEmployee() {
 
                 <FormField
                     control={control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col space-y-1 pt-6">
-                                <FormLabel className="pb-3">Password</FormLabel>
-                            </div>
-                            <FormControl>
-                                <Input
-                                    type="password"
-                                    onChange={(e) => {
-                                        field.onChange(e.target.value)
-                                    }}
-                                    {...field}
-                                />
-                            </FormControl>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
                     name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
@@ -328,7 +337,7 @@ export default function CreateEmployee() {
                             <FormControl>
                                 <Checkbox
                                     checked={field.value}
-                                    onCheckedChange={(checked) => field.onChange(checked)}
+                                    onCheckedChange={(checked) => field.onChange(checked === true)}
                                 />
                             </FormControl>
                             <FormMessage>{errors.status && errors.status.message}</FormMessage>
@@ -337,7 +346,7 @@ export default function CreateEmployee() {
                 />
                 <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
                     <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                        Create
+                        Update
                     </Button>
                 </div>
             </form>

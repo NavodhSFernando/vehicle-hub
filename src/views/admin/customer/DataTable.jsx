@@ -9,6 +9,7 @@ import {
     getSortedRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
