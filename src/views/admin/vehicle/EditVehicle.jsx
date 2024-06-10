@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { Checkbox } from '../../../components/ui/checkbox'
+import { useRef } from 'react'
 
 //const regNoPattern = /^[A-Z]{2}\s\d{4}$/
 
@@ -32,17 +33,18 @@ const formSchema = z.object({
         ),
     chassisNo: z.string().min(9, 'Chassis number should be at least 9 characters long.'),
     color: z.string().min(1, 'Color is required'),
-    costPerDay: z
-        .number()
-        .int('Cost per day must be an integer')
-        .min(3000, 'Cost per day must be at least 3000')
-        .max(10000, 'Cost per day must be no more than 10000'),
+    costPerDay: z.number().int('Cost per day must be an integer').min(3000, 'Cost per day must be at least 3000'),
     costPerExtraKm: z
         .number()
         .int('Cost per extra Km  must be an integer')
         .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
+    thumbnail: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    frontImg: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    rearImg: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    dashboard: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    interior: z.any().refine((file) => file?.length === 1, 'File is required.'),
     vehicleTypeId: z.string({
         required_error: 'Vehicle Type is required'
     }),
@@ -54,10 +56,12 @@ const formSchema = z.object({
 
 export default function EditVehicle() {
     const { vehicleId } = useParams() // Access route parameter
+    const fileInputRef = useRef(null)
     const {
         control,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -69,50 +73,55 @@ export default function EditVehicle() {
             costPerExtraKm: 0,
             transmission: 'auto',
             mileage: 0,
+            thumbnail: null,
+            frontImg: null,
+            rearImg: null,
+            dashboard: null,
+            interior: null,
             vehicleTypeId: 0,
             vehicleModelId: '',
             status: true
         }
     })
 
-    const fetchData = async () => {
-        const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
-        try {
-            const { data } = await axios.get(url)
-            console.log(data.registrationNumber)
-            console.log(data.chassisNo)
-            console.log(data.colour)
-            console.log(data.mileage)
-            console.log(data.costPerDay)
-            console.log(data.costPerExtraKM)
-            console.log(data.transmission)
-            console.log(data.vehicleTypeId)
-            console.log(data.vehicleModelId)
-            console.log(data.EmployeeId)
-            console.log(data.status)
-            console.log(data)
-            reset({
-                regNo: data.registrationNumber,
-                chassisNo: data.chassisNo,
-                color: data.colour,
-                mileage: data.mileage,
-                costPerDay: data.costPerDay,
-                costPerExtraKm: data.costPerExtraKM,
-                transmission: data.transmission,
-                vehicleTypeId: data.vehicleType.id,
-                vehicleModelId: data.vehicleModel.id,
-                EmployeeId: data.employee.id,
-                status: data.status
-            })
-        } catch (error) {
-            console.error('Failed to fetch vehicle', error)
-        }
-    }
+    const [image, setImage] = useState('')
+
+    const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
 
     const [vehicleModels, setVehicleModels] = useState([])
     const [vehicleTypes, setVehicleTypes] = useState([])
 
     useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+            try {
+                const { data } = await axios.get(url)
+                setImage(data.thumbnail)
+                console.log(image)
+                console.log(data)
+                reset({
+                    regNo: data.registrationNumber,
+                    chassisNo: data.chassisNo,
+                    color: data.colour,
+                    mileage: data.mileage,
+                    costPerDay: data.costPerDay,
+                    costPerExtraKm: data.costPerExtraKM,
+                    transmission: data.transmission,
+                    thumbnail: null,
+                    frontImg: null,
+                    rearImg: null,
+                    dashboard: null,
+                    interior: null,
+                    vehicleTypeId: data.vehicleType.id,
+                    vehicleModelId: data.vehicleModel.id,
+                    EmployeeId: data.employee.id,
+                    status: data.status
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle', error)
+            }
+        }
+
         const fetchVehicleModels = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
@@ -137,28 +146,70 @@ export default function EditVehicle() {
         fetchData()
     }, [vehicleId, reset])
 
+    // File change handler
+    const handleThumbnailChange = (e) => {
+        const files = e.target.files
+        setValue('thumbnail', files, { shouldValidate: true })
+    }
+
+    const handleFrontImgChange = (e) => {
+        const files = e.target.files
+        setValue('frontImg', files, { shouldValidate: true })
+    }
+
+    const handleRearImgChange = (e) => {
+        const files = e.target.files
+        setValue('rearImg', files, { shouldValidate: true })
+    }
+
+    const handleDashboardImgChange = (e) => {
+        const files = e.target.files
+        setValue('dashboard', files, { shouldValidate: true })
+    }
+
+    const handleInteriorImgChange = (e) => {
+        const files = e.target.files
+        setValue('interior', files, { shouldValidate: true })
+    }
+
     const handleSave = async (data) => {
         const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
         try {
-            const formData = {
-                RegistrationNumber: data.regNo,
-                ChassisNo: data.chassisNo,
-                Colour: data.color,
-                Mileage: data.mileage,
-                CostPerDay: data.costPerDay,
-                CostPerExtraKM: data.costPerExtraKm,
-                Transmission: data.transmission,
-                VehicleTypeId: data.vehicleTypeId,
-                VehicleModelId: data.vehicleModelId,
-                EmployeeId: 1,
-                Status: data.status
-            }
+            const formData = new FormData()
+            console.log(data)
+            formData.append('RegistrationNumber', data.regNo)
+            formData.append('ChassisNo', data.chassisNo)
+            formData.append('Colour', data.color)
+            formData.append('Mileage', data.mileage)
+            formData.append('CostPerDay', data.costPerDay)
+            formData.append('Transmission', data.transmission)
+            formData.append('CostPerExtraKM', data.costPerExtraKm)
+            formData.append('formFile', data.thumbnail[0])
+            formData.append('front', data.frontImg[0])
+            formData.append('rear', data.rearImg[0])
+            formData.append('dashboard', data.dashboard[0])
+            formData.append('interior', data.interior[0])
+            formData.append('VehicleTypeId', data.vehicleTypeId)
+            formData.append('VehicleModelId', data.vehicleModelId)
+            formData.append('EmployeeId', '1')
+            formData.append('Status', data.status)
 
-            const result = await axios.put(url, formData)
-            console.log(result)
-            fetchData()
+            console.log('Form Data:', formData)
+
+            const response = await axios.put(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
+            console.log('Response:', response.data)
+            reset()
+
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '' // This clears the file input field
+            }
         } catch (error) {
-            console.error('Failed to update vehicle', error)
+            console.error('Error:', error)
         }
     }
 
@@ -311,6 +362,97 @@ export default function EditVehicle() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="thumbnail"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Thumbnail</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleThumbnailChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.thumbnail && errors.thumbnail.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <img className=" object-contain pt-3 h-24 w-24" src={`${baseUrl}${image}`} />
+                <FormField
+                    control={control}
+                    name="frontImg"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Front Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleFrontImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.frontImg && errors.frontImg.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="rearImg"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Rear Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleRearImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.rearImg && errors.rearImg.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="dashboard"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Dashboard Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleDashboardImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.dashboard && errors.dashboard.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="interior"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Interior Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleInteriorImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.interior && errors.interior.message}</FormMessage>
                         </FormItem>
                     )}
                 />
