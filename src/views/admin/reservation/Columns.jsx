@@ -1,6 +1,6 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash, GrStop, GrPlay } from 'react-icons/gr'
+import { GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { EditVehicleDialog } from '../../../components/admin/reservation/EditVehicleDialog'
@@ -17,11 +17,53 @@ const BeginReservation = async ({ customerReservationId, refetchReservation }) =
     }
 }
 
+const AcceptReservation = async ({ customerReservationId, refetchReservation }) => {
+    const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}`
+    try {
+        // POST request to the server with form data
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const DeclineReservation = async ({ customerReservationId, refetchReservation }) => {
+    const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}`
+    try {
+        // POST request to the server with form data
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 // Define a component to encapsulate the action buttons
 const ActionButtons = ({ customerReservationId, status, refetchReservation }) => {
     const navigate = useNavigate()
     return (
         <div className="flex items-center justify-end gap-2">
+            {status === 'Waiting' && (
+                <>
+                    <Button
+                        variant="ghost"
+                        className="border border-gray-500"
+                        onClick={() => AcceptReservation({ customerReservationId, refetchReservation })}
+                    >
+                        Accept
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className="border border-gray-500"
+                        onClick={() => DeclineReservation({ customerReservationId, refetchReservation })}
+                    >
+                        Decline
+                    </Button>
+                </>
+            )}
             {status === 'Confirmed' && (
                 <Button
                     variant="ghost"
