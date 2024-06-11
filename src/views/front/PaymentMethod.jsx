@@ -17,6 +17,7 @@ const PaymentForm = () => {
     setCardholderName(e.target.value);
   };
 
+  // test
   const handlePayment = async () => {
     try {
       const response = await axios.post("http://localhost:5062/api/Payments/create-payment-intent", {

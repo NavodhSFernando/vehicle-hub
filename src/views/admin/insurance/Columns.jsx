@@ -58,7 +58,13 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: 'Status'
+        header: 'Status',
+        cell: ({ row }) => {
+            const status = row.original.status
+            const statusText = status ? 'Active' : 'Inactive'
+
+            return <div className="font-medium">{statusText}</div>
+        }
     },
     {
         accessorKey: 'actions',

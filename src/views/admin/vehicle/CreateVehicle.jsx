@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { useRef } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -20,14 +21,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { Checkbox } from '../../../components/ui/checkbox'
 
-const regNoPattern = /^[A-Z]{2}\s\d{4}$/
+//const regNoPattern = /^[A-Z]{2}\s\d{4}$/
 
 const formSchema = z.object({
     regNo: z
         .string()
-        .min(1, 'Registration number is required')
-        .regex(
-            regNoPattern,
+        .min(
+            1,
             'Registration number must be in the format XX 9999, where X is any uppercase letter and 9 is any digit.'
         ),
     chassisNo: z.string().min(9, 'Chassis number should be at least 9 characters long.'),
@@ -36,13 +36,18 @@ const formSchema = z.object({
         .number()
         .int('Cost per day must be an integer')
         .min(3000, 'Cost per day must be at least 3000')
-        .max(10000, 'Cost per day must be no more than 10000'),
+        .max(20000, 'Cost per day must be no more than 20000'),
     costPerExtraKm: z
         .number()
         .int('Cost per extra Km  must be an integer')
         .min(0, 'Cost per extra Km must be at least 0'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
+    thumbnail: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    frontImg: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    rearImg: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    dashboard: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    interior: z.any().refine((file) => file?.length === 1, 'File is required.'),
     vehicleTypeId: z.string({
         required_error: 'Vehicle Type is required'
     }),
@@ -53,10 +58,12 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicle() {
+    const fileInputRef = useRef(null)
     const {
         control,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -68,12 +75,43 @@ export default function CreateVehicle() {
             transmission: 'auto',
             mileage: 0,
             costPerExtraKm: 0,
-            status: 0,
             vehicleTypeId: '',
             vehicleModelId: '',
+            thumbnail: null,
+            frontImg: null,
+            rearImg: null,
+            dashboard: null,
+            interior: null,
             status: false
         }
     })
+
+    // File change handler
+    const handleThumbnailChange = (e) => {
+        const files = e.target.files
+        setValue('thumbnail', files, { shouldValidate: true })
+    }
+
+    const handleFrontImgChange = (e) => {
+        const files = e.target.files
+        setValue('frontImg', files, { shouldValidate: true })
+    }
+
+    const handleRearImgChange = (e) => {
+        const files = e.target.files
+        setValue('rearImg', files, { shouldValidate: true })
+    }
+
+    const handleDashboardImgChange = (e) => {
+        const files = e.target.files
+        setValue('dashboard', files, { shouldValidate: true })
+    }
+
+    const handleInteriorImgChange = (e) => {
+        const files = e.target.files
+        setValue('interior', files, { shouldValidate: true })
+    }
+
     const [vehicleModels, setVehicleModels] = useState([])
     const [vehicleTypes, setVehicleTypes] = useState([])
 
@@ -104,28 +142,44 @@ export default function CreateVehicle() {
     const handleSave = async (data) => {
         const url = 'http://localhost:5062/api/Vehicle'
         try {
-            const formData = {
-                RegistrationNumber: data.regNo,
-                ChassisNo: data.chassisNo,
-                Colour: data.color,
-                Mileage: data.mileage,
-                CostPerDay: data.costPerDay,
-                Transmission: data.transmission,
-                CostPerExtraKM: data.costPerExtraKm,
-                Status: data.status,
-                VehicleTypeId: data.vehicleTypeId,
-                VehicleModelId: data.vehicleModelId,
-                EmployeeId: 1,
-                Status: data.status
-            }
-            const result = await axios.post(url, formData)
-            console.log(result)
-            console.log(formData)
+            const formData = new FormData()
+            console.log(data)
+            formData.append('RegistrationNumber', data.regNo)
+            formData.append('ChassisNo', data.chassisNo)
+            formData.append('Colour', data.color)
+            formData.append('Mileage', data.mileage)
+            formData.append('CostPerDay', data.costPerDay)
+            formData.append('Transmission', data.transmission)
+            formData.append('CostPerExtraKM', data.costPerExtraKm)
+            formData.append('formFile', data.thumbnail[0])
+            formData.append('front', data.frontImg[0])
+            formData.append('rear', data.rearImg[0])
+            formData.append('dashboard', data.dashboard[0])
+            formData.append('interior', data.interior[0])
+            formData.append('VehicleTypeId', data.vehicleTypeId)
+            formData.append('VehicleModelId', data.vehicleModelId)
+            formData.append('EmployeeId', '1')
+            formData.append('Status', data.status)
+
+            console.log('Form Data:', formData)
+
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
+            console.log('Response:', response.data)
             reset()
+
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '' // This clears the file input field
+            }
         } catch (error) {
-            console.log(error)
+            console.error('Error:', error)
         }
     }
+
     return (
         <Form {...control}>
             <form
@@ -267,6 +321,96 @@ export default function CreateVehicle() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="thumbnail"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Thumbnail</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleThumbnailChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.thumbnail && errors.thumbnail.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="frontImg"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Front Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleFrontImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.frontImg && errors.frontImg.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="rearImg"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Rear Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleRearImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.rearImg && errors.rearImg.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="dashboard"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Dashboard Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleDashboardImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.dashboard && errors.dashboard.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="interior"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Interior Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleInteriorImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.interior && errors.interior.message}</FormMessage>
                         </FormItem>
                     )}
                 />

@@ -1,6 +1,20 @@
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
+import { format, parseISO } from 'date-fns'
+import { useNavigate } from 'react-router-dom'
+
+const ActionButtons = ({ employeeId }) => {
+    const navigate = useNavigate()
+
+    return (
+        <div className="flex items-center justify-end gap-2">
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/admin/employee/edit/${employeeId}`)}>
+                <GrEdit fontSize={24} className="mr-1" />
+            </Button>
+        </div>
+    )
+}
 
 export const columns = [
     {
@@ -22,6 +36,24 @@ export const columns = [
         }
     },
     {
+        accessorKey: 'nic',
+        header: 'NIC',
+        cell: ({ row }) => {
+            const value = row.getValue('nic')
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
+        accessorKey: 'address',
+        header: 'Address',
+        cell: ({ row }) => {
+            const value = row.getValue('address')
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
         accessorKey: 'email',
         header: 'Email'
     },
@@ -35,33 +67,59 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
-
+        accessorKey: 'contactNo',
+        header: 'Contact Number',
         cell: ({ row }) => {
-            const status = row.getValue('status')
+            const phone = row.original.contactNo
+            const value = parseFloat(phone)
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
+        accessorKey: 'dob',
+        header: 'Date Of Birth',
+        cell: ({ row }) => {
+            const value = row.getValue('dob')
+            const formattedDate = value ? format(parseISO(value), 'yyyy-MM-dd') : ''
+
+            return <div className="font-medium">{formattedDate}</div>
+        }
+    },
+    {
+        accessorKey: 'department',
+        header: 'Department',
+        cell: ({ row }) => {
+            const value = row.getValue('department')
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
+        accessorKey: 'gender',
+        header: 'Gender',
+        cell: ({ row }) => {
+            const value = row.getValue('gender')
+
+            return <div className="font-medium">{value}</div>
+        }
+    },
+    {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: ({ row }) => {
+            const status = row.original.status
+            const statusText = status ? 'Active' : 'Inactive'
+
             let color = ''
             let text = ''
 
-            switch (status) {
-                case 'active':
+            switch (statusText) {
+                case 'Active':
                     color = 'bg-green-500'
                     text = 'Active'
                     break
-                case 'inactive':
+                case 'Inactive':
                     color = 'bg-red-500'
                     text = 'Inactive'
                     break
@@ -82,21 +140,7 @@ export const columns = [
 
     {
         accessorKey: 'actions',
-        header: () => {
-            return <div className="text-end">Actions</div>
-        },
-
-        cell: () => {
-            return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
-            )
-        }
+        header: () => <div className="text-end">Actions</div>,
+        cell: ({ row }) => <ActionButtons employeeId={row.getValue('id')} />
     }
 ]

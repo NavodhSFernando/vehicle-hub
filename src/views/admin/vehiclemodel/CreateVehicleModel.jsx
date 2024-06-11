@@ -75,8 +75,8 @@ const formSchema = z.object({
         .min(2, {
             message: 'Seating capacity must be at least 2'
         })
-        .max(7, {
-            message: 'Seating capacity must be no more than 7'
+        .max(20, {
+            message: 'Seating capacity must be no more than 20'
         }),
     fuel: z.string({
         required_error: 'Please select a fuel type'
