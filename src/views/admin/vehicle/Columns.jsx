@@ -130,7 +130,7 @@ export const columns = [
 
             return (
                 <div className="flex items-center gap-2">
-                    <img src={`${baseUrl}${value}`} alt="thumbnail" className="w-20 h-14" />
+                    <img src={`${baseUrl}${value}`} alt="thumbnail" className="w-32 h-24" />
                 </div>
             )
         }
