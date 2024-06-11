@@ -18,6 +18,7 @@ const SearchStrip = ({ onSearch }) => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
+
                 <button
                     className="flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
                     onClick={handleSearch}
