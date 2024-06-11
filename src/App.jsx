@@ -88,6 +88,14 @@ function App() {
                             }
                         />
                         <Route
+                            path="/account/rentalhistorysingle/:customerReservationId"
+                            element={
+                                <TitleComponent title="Rental History">
+                                    <Rentalhistorysingle />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
                             path="viewnotificationcenter"
                             element={
                                 <TitleComponent title="Notification Center">
