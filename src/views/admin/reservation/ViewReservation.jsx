@@ -35,7 +35,7 @@ export default function ViewReservation() {
 
     return (
         <>
-            <Tabs defaultValue="reservation" className="w-full p-6">
+            <Tabs defaultValue="waiting" className="w-full p-6">
                 <TabsList>
                     <TabsTrigger value="waiting">Waiting</TabsTrigger>
                     <TabsTrigger value="pending">Pending</TabsTrigger>
