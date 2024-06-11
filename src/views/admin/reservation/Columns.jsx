@@ -4,6 +4,13 @@ import { GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { EditVehicleDialog } from '../../../components/admin/reservation/EditVehicleDialog'
+import Cookies from 'js-cookie'
+
+const employeeId = Cookies.get('employeeId')
+console.log('employeeId', employeeId)
+if (!employeeId) {
+    console.error('customer Id is not available')
+}
 
 const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
     const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}`
@@ -21,7 +28,11 @@ const AcceptReservation = async ({ customerReservationId, refetchReservation }) 
     const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}`
     try {
         // POST request to the server with form data
-        const result = await axios.post(url)
+        const formData = {
+            id: customerReservationId,
+            eid: employeeId
+        }
+        const result = await axios.post(url, formData)
         console.log(result)
         refetchReservation()
     } catch (error) {
@@ -33,7 +44,11 @@ const DeclineReservation = async ({ customerReservationId, refetchReservation })
     const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}`
     try {
         // POST request to the server with form data
-        const result = await axios.post(url)
+        const formData = {
+            id: customerReservationId,
+            eid: employeeId
+        }
+        const result = await axios.post(url, formData)
         console.log(result)
         refetchReservation()
     } catch (error) {
