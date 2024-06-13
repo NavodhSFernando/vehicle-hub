@@ -64,15 +64,9 @@ const formSchema = z.object({
         .max(7200, {
             message: 'Engine capacity must be under 7200cc'
         }),
-    seatingCapacity: z
-        .number()
-        .int()
-        .min(2, {
-            message: 'Seating capacity must be at least 2'
-        })
-        .max(7, {
-            message: 'Seating capacity must be no more than 7'
-        }),
+    seatingCapacity: z.number().int().min(2, {
+        message: 'Seating capacity must be at least 2'
+    }),
     fuel: z.string({
         required_error: 'Please select a fuel type'
     }),

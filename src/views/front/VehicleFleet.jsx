@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import BookNowCard from './BookNowCard'
-import BookingStrip2 from './BookingStrip/BookingStrip2'
-import SearchStrip from './BookingStrip/SearchStrip'
+import BookNowCard from '../../components/front/BookNowCard'
+import BookingStrip2 from '../../components/front/BookingStrip/BookingStrip2'
+import SearchStrip from '../../components/front/BookingStrip/SearchStrip'
 import Aqua from '../../assets/vehicles/aqua.png'
-import FilterCard from './Filtercard'
+import FilterCard from '../../components/front/Filtercard'
 import axios from 'axios'
 
 const VehicleFleet = () => {
@@ -79,6 +79,7 @@ const VehicleFleet = () => {
     }, [filters])
 
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+    const baseUrlLogo = 'https://vehiclehubimages.blob.core.windows.net/logos/'
 
     return (
         <div>
@@ -91,12 +92,12 @@ const VehicleFleet = () => {
                     <div className="mt-[20px]">
                         <BookingStrip2 />
                     </div>
-                    <div className="flex flex-row flex-wrap justify-between mt-10 gap-5">
+                    <div className="flex flex-row flex-wrap mt-10 gap-7">
                         {filteredData.map((vehicle) => (
                             <BookNowCard
-                                id={vehicle.id}
+                                key={vehicle.vehicleId}
                                 name={vehicle.name}
-                                make={vehicle.make}
+                                make={vehicle.logo}
                                 type={vehicle.type}
                                 imageSrc={`${baseUrl}${vehicle.thumbnail}`}
                                 //imageAlt={vehicle.imageAlt}
@@ -104,6 +105,7 @@ const VehicleFleet = () => {
                                 transmission={vehicle.transmission}
                                 capacity={vehicle.seatingCapacity}
                                 price={vehicle.costPerDay}
+                                logo={`${baseUrlLogo}${vehicle.logo}`}
                             />
                         ))}
                     </div>

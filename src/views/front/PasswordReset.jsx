@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -19,19 +20,23 @@ const passwordSchema = z
         path: ['confirmPassword']
     })
 
-const PasswordReset = ({ token }) => {
+const PasswordReset = () => {
+    const navigate = useNavigate()
     const form = useForm({
         resolver: zodResolver(passwordSchema)
     })
 
-    const [message, setMessage] = useState('')
+    const otp = useParams()
+    console.log(otp.otp)
 
     const onSubmit = async (data) => {
+        const URL = `http://localhost:5062/api/CustomerAuth/ResetPassword?otp=${otp.otp}&password=${data.password}`
         try {
-            await axios.post('https://yourdomain.com/api/reset-password', { token, password: data.password })
-            setMessage('Password reset successfully')
+            const response = await axios.post(URL)
+            alert('Password reset successfully')
+            navigate('/login')
         } catch (error) {
-            setMessage('Failed to reset password')
+            alert('Failed to reset password')
         }
     }
 
@@ -89,7 +94,6 @@ const PasswordReset = ({ token }) => {
                         </Button>
                     </form>
                 </Form>
-                {message && <p className="mt-4 text-center text-indigo-600">{message}</p>}
             </div>
         </div>
     )

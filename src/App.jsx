@@ -34,7 +34,7 @@ import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import VehicleFleetSingle from './views/front/VehicleFleetSingle'
-import VehicleFleet from './components/front/VehicleFleet'
+import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
@@ -55,6 +55,7 @@ import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
 import Adminlogin from './views/admin/Adminlogin'
 import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
+import VerifyOTP from './views/front/VerifyOTP'
 
 function App() {
     return (
@@ -144,7 +145,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
-                <Route path="/passwordreset" element={<PasswordReset />} />
+                <Route path="/passwordreset/:otp" element={<PasswordReset />} />
+                <Route path="/verifyotp" element={<VerifyOTP />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
