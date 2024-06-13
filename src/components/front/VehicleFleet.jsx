@@ -6,81 +6,6 @@ import Aqua from '../../assets/vehicles/aqua.png'
 import FilterCard from './Filtercard'
 import axios from 'axios'
 
-const data = [
-    {
-        key: '001',
-        name: 'Toyota aqua',
-        type: 'SUV',
-        imageSrc: Aqua,
-        imageAlt: 'Toyota Aqua',
-        year: '2017',
-        make: 'Nizan',
-        transmission: 'Manual',
-        capacity: '4 Persons',
-        price: '15000'
-    },
-    {
-        key: '002',
-        name: 'Toyota prius',
-        type: 'Sedan',
-        imageSrc: Aqua,
-        imageAlt: 'Toyota Aqua',
-        year: '2017',
-        make: 'Toyota',
-        transmission: 'Manual',
-        capacity: '6 Persons',
-        price: '15000'
-    },
-    {
-        key: '003',
-        name: 'Toyota prius',
-        type: 'SUV',
-        imageSrc: Aqua,
-        imageAlt: 'Toyota Aqua',
-        year: '2017',
-        make: 'Toyota',
-        transmission: 'Manual',
-        capacity: '3 Persons',
-        price: '15000'
-    },
-    {
-        key: '004',
-        name: 'Toyota prius',
-        type: 'Sedan',
-        imageSrc: Aqua,
-        imageAlt: 'Toyota Aqua',
-        year: '2017',
-        make: 'Toyota',
-        transmission: 'Manual',
-        capacity: '6 Persons',
-        price: '15000'
-    },
-    {
-        key: '005',
-        name: 'Toyota prius',
-        type: 'Sedan',
-        imageSrc: Aqua,
-        imageAlt: 'Toyota Aqua',
-        year: '2017',
-        make: 'Toyota',
-        transmission: 'Manual',
-        capacity: '4 Persons',
-        price: '9000'
-    },
-    {
-        key: '006',
-        name: 'Toyota prius',
-        type: 'Sedan',
-        imageSrc: Aqua,
-        imageAlt: 'Toyota Aqua',
-        year: '2017',
-        make: 'Toyota',
-        transmission: 'Manual',
-        capacity: '4 Persons',
-        price: '6000'
-    }
-]
-
 const VehicleFleet = () => {
     const [vehicleData, setVehicleData] = useState([])
 
@@ -153,6 +78,9 @@ const VehicleFleet = () => {
         setFilteredData(updatedFilteredData)
     }, [filters])
 
+    const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+    const baseUrlLogo = 'https://vehiclehubimages.blob.core.windows.net/logos/'
+
     return (
         <div>
             <div className="flex flex-row justify-center gap-[30px]">
@@ -164,19 +92,20 @@ const VehicleFleet = () => {
                     <div className="mt-[20px]">
                         <BookingStrip2 />
                     </div>
-                    <div className="flex flex-row flex-wrap justify-between mt-10 gap-5">
+                    <div className="flex flex-row flex-wrap mt-10 gap-7">
                         {filteredData.map((vehicle) => (
                             <BookNowCard
                                 id={vehicle.id}
                                 name={vehicle.name}
-                                make={vehicle.make}
+                                make={vehicle.logo}
                                 type={vehicle.type}
-                                //imageSrc={vehicle.imageSrc}
+                                imageSrc={`${baseUrl}${vehicle.thumbnail}`}
                                 //imageAlt={vehicle.imageAlt}
                                 year={vehicle.year}
                                 transmission={vehicle.transmission}
                                 capacity={vehicle.seatingCapacity}
                                 price={vehicle.costPerDay}
+                                logo={`${baseUrlLogo}${vehicle.logo}`}
                             />
                         ))}
                     </div>

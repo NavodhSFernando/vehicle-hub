@@ -122,6 +122,20 @@ export const columns = [
         }
     },
     {
+        accessorKey: 'thumbnail',
+        header: 'Thumbnail',
+        cell: ({ row }) => {
+            const value = row.getValue('thumbnail')
+            const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+
+            return (
+                <div className="flex items-center gap-2">
+                    <img src={`${baseUrl}${value}`} alt="thumbnail" className="w-52 h-20" />
+                </div>
+            )
+        }
+    },
+    {
         accessorKey: 'vehicleTypeId',
         header: 'Vehicle Type',
         cell: ({ row }) => {

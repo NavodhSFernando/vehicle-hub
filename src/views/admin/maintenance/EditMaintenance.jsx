@@ -20,8 +20,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 
-const validVehicleIds = [1]
-
 const currentDate = new Date().toISOString().split('T')[0]
 
 //const dateRegex = /^\d{4}-\d{2}-\d{2}$/ // Regex to validate yyyy-mm-dd format
@@ -35,7 +33,7 @@ const formSchema = z.object({
         .refine((dateStr) => new Date(dateStr) <= new Date(currentDate), {
             message: 'Maintenance date must not be in the future'
         }),
-    vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
+    vehicleId: z.number({
         message: 'Invalid Vehicle ID'
     }),
     type: z.string({

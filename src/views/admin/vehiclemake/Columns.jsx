@@ -42,11 +42,11 @@ export const columns = [
         header: 'Logo',
         cell: ({ row }) => {
             const value = row.getValue('logo')
+            const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/logos/'
 
             return (
                 <div className="flex items-center gap-2">
-                    <img src={value} alt="logo" className="w-8 h-8 object-cover rounded-full" />
-                    <span>{value}</span>
+                    <img src={`${baseUrl}${value}`} alt="logo" className="w-10 h-10" />
                 </div>
             )
         }

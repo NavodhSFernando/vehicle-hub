@@ -43,6 +43,7 @@ export default function Bookingconfirmredirect() {
                 <RentalSummary
                     make={rentalData.make}
                     modelName={rentalData.modelName}
+                    thumbnail={rentalData.thumbnail}
                     deposit={rentalData.deposit}
                     extraKMCost={rentalData.extraKMCost}
                     penalty={rentalData.penalty}
