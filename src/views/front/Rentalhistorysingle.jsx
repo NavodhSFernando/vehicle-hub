@@ -30,6 +30,8 @@ function Ongoingrentalssingle() {
     const [status, setStatus] = useState('') // State for tracking the reservation status
     const [rentalData, setRentalData] = useState({})
 
+    const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -79,8 +81,8 @@ function Ongoingrentalssingle() {
         <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
             <div className="my-16 lg:mx-36">
                 <h3 className="pb-6 text-l text-gray-950 font-semibold">Rental Summary</h3>
-                <div className="pb-8 flex items-center">
-                    <img src={aqua} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
+                <div className="flex items-center">
+                    <img src={`${baseUrl}${rentalData.thumbnail}`} alt="car" className="w-40 mr-12" />
                     <div className="flex flex-col">
                         <h1 className="text-2xl font-semibold text-gray-950 mb-1">
                             {rentalData.make} {rentalData.modelName}

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import aqua from '../../assets/vehicles/aqua.png'
 import { Button } from '../ui/button'
 
-function RentalSummary({ make, modelName, deposit, extraKMCost, penalty, rentalCost, amount }) {
+function RentalSummary({ make, modelName, deposit, extraKMCost, penalty, rentalCost, amount, thumbnail }) {
     const [rating, setRating] = useState(0)
 
     const handleStarClick = (value) => {
@@ -17,7 +17,7 @@ function RentalSummary({ make, modelName, deposit, extraKMCost, penalty, rentalC
                     Prices may change depending on the length of the rental and the price of your rental car.
                 </p>
                 <div className="pb-8 flex items-center">
-                    <img src={aqua} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
+                    <img src={thumbnail} alt="car" className="w-32 h-18 rounded-full shadow-lg mr-12" />
                     <div className="flex flex-col">
                         <h1 className="text-2xl font-semibold text-gray-950 mb-1">
                             {make} {modelName}
