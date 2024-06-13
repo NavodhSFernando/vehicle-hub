@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import BookNowCard from './BookNowCard'
-import BookingStrip2 from './BookingStrip/BookingStrip2'
-import SearchStrip from './BookingStrip/SearchStrip'
+import BookNowCard from '../../components/front/BookNowCard'
+import BookingStrip2 from '../../components/front/BookingStrip/BookingStrip2'
+import SearchStrip from '../../components/front/BookingStrip/SearchStrip'
 import Aqua from '../../assets/vehicles/aqua.png'
-import FilterCard from './Filtercard'
+import FilterCard from '../../components/front/Filtercard'
 import axios from 'axios'
 
 const VehicleFleet = () => {
@@ -95,7 +95,7 @@ const VehicleFleet = () => {
                     <div className="flex flex-row flex-wrap mt-10 gap-7">
                         {filteredData.map((vehicle) => (
                             <BookNowCard
-                                id={vehicle.id}
+                                key={vehicle.vehicleId}
                                 name={vehicle.name}
                                 make={vehicle.logo}
                                 type={vehicle.type}

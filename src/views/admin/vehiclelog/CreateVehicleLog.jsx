@@ -17,6 +17,7 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // Define the schema for form validation using zod
 const formSchema = z.object({
@@ -29,6 +30,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleLog() {
+    const navigate = useNavigate()
     const { customerReservationId } = useParams() // Access route parameter
     // Initialize useForm with zodResolver for schema validation
     const {
@@ -62,6 +64,7 @@ export default function CreateVehicleLog() {
             console.log(result)
             // Reset form fields after submission
             reset()
+            navigate(`/admin/reservation/view`)
         } catch (error) {
             console.log(error)
         }

@@ -49,6 +49,7 @@ export default function Bookingconfirmredirect() {
                     penalty={rentalData.penalty}
                     rentalCost={rentalData.rentalCost}
                     amount={rentalData.amount}
+                    type={rentalData.invoiceType}
                 />
             </div>
         </div>

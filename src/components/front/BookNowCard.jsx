@@ -32,6 +32,7 @@ export default function BookNowCard({
 
     const handleClick = () => {
         const vehicleDetails = {
+            key: key,
             name: name,
             make: make,
             type: type,
