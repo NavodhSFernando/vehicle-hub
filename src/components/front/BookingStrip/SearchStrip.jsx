@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import Search from '../../../assets/Icons/search.svg'
+import React, { useState } from 'react';
+import Search from '../../../assets/Icons/search.svg';
 
 const SearchStrip = ({ onSearch }) => {
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = () => {
-        onSearch(searchQuery)
-    }
+        onSearch(searchQuery);
+    };
 
     return (
         <div>
@@ -31,4 +31,5 @@ const SearchStrip = ({ onSearch }) => {
     )
 }
 
-export default SearchStrip
+
+export default SearchStrip;

@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { IoCalendarClear } from 'react-icons/io5'
 import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
+import Cookies from 'js-cookie'
 
 export default function BookNowCard({
     key,
@@ -20,9 +21,9 @@ export default function BookNowCard({
     logo
 }) {
     const [clicked, setClicked] = useState(false)
+    const customerId = Cookies.get('customerId')
 
     useEffect(() => {
-        // Check if the item is already in the wishlist in localStorage
         const existingWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
         const index = existingWishlistItems.findIndex((item) => item.name === name)
         if (index !== -1) {
@@ -32,21 +33,31 @@ export default function BookNowCard({
 
     const handleClick = () => {
         const vehicleDetails = {
-            key: key,
             name: name,
-            make: make,
             type: type,
             year: year,
             transmission: transmission,
             capacity: capacity,
             imageSrc: imageSrc,
             imageAlt: imageAlt,
-            price: price,
-            logo: logo
+            price: price
         }
+    
         const existingWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
 
-        const index = existingWishlistItems.findIndex((item) => item.name === name)
+        const areVehiclesEqual = (vehicle1, vehicle2) => {
+            return vehicle1.name === vehicle2.name &&
+                   vehicle1.type === vehicle2.type &&
+                   vehicle1.year === vehicle2.year &&
+                   vehicle1.transmission === vehicle2.transmission &&
+                   vehicle1.capacity === vehicle2.capacity &&
+                   vehicle1.imageSrc === vehicle2.imageSrc &&
+                   vehicle1.imageAlt === vehicle2.imageAlt &&
+                   vehicle1.price === vehicle2.price
+        }
+    
+        const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
+    
         if (index === -1) {
             existingWishlistItems.push(vehicleDetails)
             setClicked(true)
@@ -54,9 +65,9 @@ export default function BookNowCard({
             existingWishlistItems.splice(index, 1)
             setClicked(false)
         }
-
+    
         localStorage.setItem('wishlistItems', JSON.stringify(existingWishlistItems))
-    }
+    } 
 
     return (
         <div className="w-[317px] flex flex-col p-5 shadow-xl rounded-xl bg-white">
@@ -68,15 +79,15 @@ export default function BookNowCard({
                         <p className="text-base opacity-50 font-semibold">{type}</p>
                     </div>
                 </div>
-                {clicked ? (
+                {clicked && customerId ? (
                     <button>
                         <BsBookmarkStarFill fontSize={24} onClick={handleClick} />
                     </button>
-                ) : (
+                ) : !clicked && customerId ?(
                     <button>
                         <BsBookmarkStar fontSize={24} onClick={handleClick} />
                     </button>
-                )}
+                ): null}
             </div>
             <img className="w-full booknowimage pb-12 scale-x" src={imageSrc} alt={imageAlt} />
             <div className="flex justify-between pb-8">

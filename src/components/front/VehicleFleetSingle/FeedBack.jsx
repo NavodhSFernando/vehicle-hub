@@ -2,39 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
 
-export default function FeedBack() {
-    // const reviewDatas = [
-    //     {
-    //         name: 'Alex Fernando',
-    //         position: 'CEO at Bukalapak',
-    //         date: '2 Jun 2023',
-    //         rating: 3,
-    //         comment: 'The vehicle looks good and runs good. Very economical.'
-    //     },
-    //     {
-    //         name: 'John Doe',
-    //         position: 'CTO at Amazon',
-    //         date: '5 Mar 2023',
-    //         rating: 4,
-    //         comment: 'Excellent service. Highly recommended.'
-    //     }
-    // ]
+export default function FeedBack({ slug }) {
 
-    const [reviewDatas, setReviewDatas] = useState([])
+    const [reviewDatas, setReviewDatas] = useState([]);
+    const reservationId = slug;
 
     const fetchFeedbacks = async () => {
         try {
-            const response = await axios.get('http://localhost:47367/api/Feedback/vehicle/7')
+            const response = await axios.get(`http://localhost:47367/api/Feedback/vehicle/${reservationId}`);
             console.log(response.data)
-            setReviewDatas(response.data)
+            setReviewDatas(response.data);
         } catch (error) {
-            console.error('Error fetching feedbacks:', error)
+            console.error('Error fetching feedbacks:', error);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchFeedbacks()
-    }, [])
+        fetchFeedbacks();
+    }, []);
 
     return (
         <>
