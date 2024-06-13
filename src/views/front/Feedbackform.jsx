@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form'
 import { Button } from '../../components/ui/button'
 import axios from 'axios'
 import { FaStar } from 'react-icons/fa6'
+import { useParams } from 'react-router-dom';
 
 export default function FeedbackForm() {
-    //star icon size
     const [iconSize, setIconSize] = useState(window.innerWidth <= 768 ? 15 : 30)
-
     const [value, setValue] = useState(0)
-    // Updates the value state when a user selects a rating
+    const { reservationId } = useParams();
+
     const handleRatingChange = (newValue) => {
         setValue(newValue)
     }
@@ -23,21 +23,15 @@ export default function FeedbackForm() {
 
     const onSubmit = async (data) => {
         try {
-            console.log('feedback frm data')
-            console.log(data)
-
             const FeedbackRequest = {
                 Designation: data.designation,
-                RatingNo: parseInt(data.rating), // Convert rating to integer if needed
+                RatingNo: parseInt(data.rating),
                 Service_Review: data.serviceReview,
                 Vehicle_Review: data.vehicleReview,
-                ReservationId: 1
+                ReservationId: reservationId
             }
-
-            // Now sending feedbackData to the server
             const response = await axios.post('http://localhost:47367/api/Feedback', FeedbackRequest)
-            console.log('Feedback submitted successfully:', response.data)
-            alert('Feedback submitted successfully.')
+            alert(response.data)
         } catch (error) {
             console.error('Error submitting feedback:', error)
             alert('Error submitting feedback')

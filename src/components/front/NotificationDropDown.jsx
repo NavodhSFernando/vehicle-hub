@@ -1,67 +1,66 @@
-import React from 'react'
-import NotificationCenter from '../../views/front/NotificationCenter'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
+import Cookies from 'js-cookie'
 
-// Sample notifications data - might want to pass this as a prop as well
-const sampleNotifications = [
-    {
-        id: 'n1',
-        title: 'Reservation confirmed.',
-        description: 'CBI-2345 vehicle has been allocated for your reservation.',
-        time: '14 hours ago'
-    },
-    {
-        id: 'n2',
-        title: 'Reservation confirmed.',
-        description: 'CBI-2345 vehicle has been allocated for your reservation.',
-        time: '14 hours ago'
-    },
-    {
-        id: 'n3',
-        title: 'Reservation confirmed.',
-        description: 'CBI-2345 vehicle has been allocated for your reservation.',
-        time: '14 hours ago'
-    },
-    {
-        id: 'n4',
-        title: 'Reservation confirmed.',
-        description: 'CBI-2345 vehicle has been allocated for your reservation.',
-        time: '14 hours ago'
-    },
-    {
-        id: 'n5',
-        title: 'Reservation confirmed.',
-        description: 'CBI-2345 vehicle has been allocated for your reservation.',
-        time: '14 hours ago'
-    }
-    // ... more notifications
-]
-
-// NotificationDropdown component:takes in props that control the dropdown is open,
-// function to set open state and a navigation function.
 const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
+    const [notifications, setNotifications] = useState([])
+    const customerId = Cookies.get('customerId')
+
+    const fetchNotifications = async () => {
+        try {
+            const response = await axios.get(`http://localhost:47367/api/Notification/Notifications/${customerId}`)
+            console.log(response.data)
+            setNotifications(response.data)
+        } catch (error) {
+            console.error('Error fetching notifications:', error)
+        }
+    }
+
+    const deleteNotification = async (id) => {
+        try {
+            const response = await axios.delete(`http://localhost:47367/api/Notification/Notifications/${id}`);
+            if (response.status === 200) {
+                console.log('Notification deleted successfully.');
+            } else {
+                console.log('Failed to delete the notification.');
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Error deleting notification:', error.response.data);
+            } else if (error.request) {
+                console.error('No response received:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchNotifications()
+    }, [deleteNotification, customerId])
+
     return (
-        // The dropdown menu
         isOpen && (
             <div className="absolute top-5 right-[50px] mt-12 py-2 w-[384px] h-auto bg-white rounded-lg shadow-xl z-20">
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Notification</h3>
                 </div>
-                {/* List of notifications : Mapping from the sampleNotifications array.*/}
+
                 <div className="overflow-y-auto wishlist-scrollbar" style={{ maxHeight: '17rem' }}>
-                    {sampleNotifications.map((notification) => (
+                    {notifications.map((notification) => (
                         <div className="flex justify-between items-center px-[30px] ">
                             {/* Individual notification item */}
                             <div key={notification.id} className="px-4 py-3 border-t border-gray-100 w-[265px]">
-                                <p className="text-bold text-gray-900">{notification.title}</p>
+                                <p className="text-bold text-gray-900">{notification.description}</p>
                                 <p className="text-sm text-gray-600">{notification.description}</p>
-                                <p className="text-xs text-gray-400">{notification.time}</p>
+                                <p className="text-xs text-gray-400">{notification.generated_DateTime}</p>
                             </div>
-                            {/* Button to remove notification */}
+
                             <button
                                 className="text-gray-400 hover:text-gray-500"
                                 onClick={() => {
-                                    console.log(`Remove ${notification.title}`)
+                                    deleteNotification(notification.id)
                                 }}
                             >
                                 ×
@@ -69,11 +68,11 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                         </div>
                     ))}
                 </div>
-                {/* 'View all' button */}
-                <Link to={'/account/viewnotificationcenter'}>
+
+                <Link to={'/account/notificationcenter'}>
                     <button
                         onClick={() => {
-                            onNavigate() // This should be a function passed as a prop for navigation
+                            onNavigate() 
                             setIsOpen(false)
                         }}
                         className="block w-full px-4 py-2 text-sm text-blue-600 hover:bg-gray-50"

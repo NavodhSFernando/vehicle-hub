@@ -22,6 +22,12 @@ export default function TimePicker(props) {
         return roundedTime
     }
 
+    const handleTimeChange = (event) => {
+        if (props.onChange) {
+            props.onChange(event.target.value);
+        }
+    };
+
     return (
         <div className="flex flex-col justify-center items-start gap-[6px]">
             <div className="font-[500] ml-[70px] text-[15px] text-[#525252]">{props.timepickertext}</div>
@@ -34,6 +40,7 @@ export default function TimePicker(props) {
                         defaultValue={currentTime}
                         step={1800}
                         list="time-intervals"
+                        onChange={handleTimeChange}
                     />
                     <datalist id="time-intervals">
                         {intervals.map((interval) => (

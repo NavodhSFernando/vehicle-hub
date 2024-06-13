@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { BsBookmarkStar } from 'react-icons/bs'
@@ -11,20 +11,16 @@ import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
 import WishlistDropdown from './WishlistDropDown'
-import NotificationCenter from '../../views/front/NotificationCenter'
+import Cookies from 'js-cookie'
 
 const Navbar = () => {
-    const [wishlistDropdownOpen, setWishlistDropdownOpen] = useState(true)
-
-    const closeWishlistDropdown = () => {
-        setWishlistDropdownOpen(false)
-    }
+    const [loggedIn, setLoggedIn] = useState(true)
 
     const [isDropdownOpen] = useState(true)
     const handleNavigate = () => {
         console.log('Navigating to all notifications view')
     }
-    const loggedIn = true
+
     const [clicked, setClicked] = useState(false)
     const handleClick = () => {
         setClicked(!clicked)
@@ -44,6 +40,11 @@ const Navbar = () => {
     const toggleNav = () => {
         setShowNav(!showNav)
     }
+
+    useEffect(() => {
+        const isLoggedIn = Cookies.get('customerId');
+        setLoggedIn(!!isLoggedIn);
+    }, []);
 
     return (
         <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary w-screen">
@@ -86,7 +87,7 @@ const Navbar = () => {
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <NavLink to="/singin">
+                            <NavLink to="/login">
                                 <button className="border-yellowtheme border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign In
                                 </button>
@@ -128,7 +129,7 @@ const Navbar = () => {
                                     <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
                                 )}
                             </div>
-                            <NavLink to="/account/viewprofile">
+                            <NavLink to="/account/notificationcenter">
                                 <div className="text-yellowtheme cursor-pointer" onClick={handleLogged}>
                                     {logged ? (
                                         <FaUserCircle fontSize={24} style={{ color: '#FBDAC6' }} />

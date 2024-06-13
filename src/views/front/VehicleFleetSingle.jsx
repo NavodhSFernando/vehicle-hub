@@ -30,7 +30,7 @@ export default function VehicleFleetSingle() {
             <div className="flex flex-col w-1/2">
                 <ImageShowCase />
                 <CheckList />
-                <FeedBack slug={slug} />
+                <FeedBack slug={slug}/>
             </div>
             <div className="flex flex-col w-1/2">
                 <Detailcar
