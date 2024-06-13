@@ -55,6 +55,7 @@ import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
 import Adminlogin from './views/admin/Adminlogin'
 import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
+import VerifyOTP from './views/front/VerifyOTP'
 
 function App() {
     return (
@@ -136,7 +137,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
-                <Route path="/passwordreset" element={<PasswordReset />} />
+                <Route path="/passwordreset/:otp" element={<PasswordReset />} />
+                <Route path="/verifyotp" element={<VerifyOTP />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
