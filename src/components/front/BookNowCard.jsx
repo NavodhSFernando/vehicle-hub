@@ -97,8 +97,8 @@ export default function BookNowCard({
                     </h1>
                     <p className="text-sm opacity-50 font-semibold">100Km/day</p>
                 </span>
-                <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700">
-                    Book Now
+                <button className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] w-fit focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700">
+                    View
                 </button>
             </article>
         </div>
