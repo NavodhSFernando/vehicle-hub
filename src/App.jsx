@@ -81,7 +81,7 @@ function App() {
                     />
                     <Route path="/account" element={<Account />}>
                         <Route
-                            path="/account/ongoingrentalssingle/:customerReservationId"
+                            path="/account/ongoingrental/:customerReservationId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <Ongoingrentalssingle />
@@ -89,7 +89,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/rentalhistorysingle/:customerReservationId"
+                            path="/account/rentalhistory/:customerReservationId"
                             element={
                                 <TitleComponent title="Rental History">
                                     <Rentalhistorysingle />

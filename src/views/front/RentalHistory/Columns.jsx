@@ -2,17 +2,30 @@ import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrFormView } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 
 const ActionButtons = ({ customerReservationId }) => {
+    const [encrypt, setEncrypt] = useState('')
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const encryptId = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5062/api/Encryption/encrypt/${customerReservationId}`
+                )
+                setEncrypt(response.data.encryptedText)
+            } catch (error) {
+                console.error('Failed to encrypt reservation ID:', error)
+            }
+        }
+        encryptId()
+    }, [customerReservationId])
 
     return (
         <div className="flex items-center justify-end gap-2">
-            <Button
-                variant="ghost"
-                className="p-0"
-                onClick={() => navigate(`/account/rentalhistorysingle/${customerReservationId}`)}
-            >
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/account/rentalhistory/${encrypt}`)}>
                 <GrFormView fontSize={30} className="mr-1" />
             </Button>
         </div>
@@ -30,7 +43,8 @@ export const columns = [
     },
     {
         accessorKey: 'modelName',
-        header: 'Model Name'
+        header: 'Vehicle Name',
+        cell: ({ row }) => <div>{row.getValue('modelName')}</div>
     },
     {
         accessorKey: 'startDate',
