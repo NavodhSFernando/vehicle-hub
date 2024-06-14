@@ -12,7 +12,7 @@ const VehicleFleet = () => {
     const fetchData = async () => {
         try {
             // Update the URL to your specific API endpoint for fetching vehicles
-            const response = await axios.get('http://localhost:5062/api/BookNow')
+            const response = await axios.get('http://localhost:5062/api/FrontVehicleService/Details')
             setVehicleData(response.data) // Assume the response data is the array of vehicles
             console.log(response.data)
         } catch (error) {
@@ -95,7 +95,7 @@ const VehicleFleet = () => {
                     <div className="flex flex-row flex-wrap mt-10 gap-7">
                         {filteredData.map((vehicle) => (
                             <BookNowCard
-                                key={vehicle.vehicleId}
+                                id={vehicle.vehicleId}
                                 name={vehicle.name}
                                 make={vehicle.logo}
                                 type={vehicle.type}

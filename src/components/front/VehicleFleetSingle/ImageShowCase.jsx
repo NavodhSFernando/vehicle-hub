@@ -1,29 +1,73 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Slide } from 'react-slideshow-image'
 import 'react-slideshow-image/dist/styles.css'
-
-import vitz from '../../../assets/vehicles/vitz.jpg'
-import vitzinterior from '../../../assets/vehicles/vitzinterior.jpg'
-import vitsseats from '../../../assets/vehicles/vitzseats.jpg'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
 
 export default function ImageShowCase() {
-    const images = [vitz, vitzinterior, vitsseats]
+    const { id } = useParams()
+    const [images, setImages] = useState([])
+    const [currentImage, setCurrentImage] = useState('')
+    const [loading, setLoading] = useState(true)
 
-    // State to track the currently displayed main image
-    const [currentImage, setCurrentImage] = useState(images[0])
+    const baseFrontImgUrl = 'https://vehiclehubimages.blob.core.windows.net/front/'
+    const baseRearImgUrl = 'https://vehiclehubimages.blob.core.windows.net/rear/'
+    const baseDashboardUrl = 'https://vehiclehubimages.blob.core.windows.net/dashboard/'
+    const baseInteriorUrl = 'https://vehiclehubimages.blob.core.windows.net/interior/'
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5062/api/FrontVehicleService/Images/${id}`)
+            const data = response.data
+            const frontSrc = `${baseFrontImgUrl}${data.frontImg}`
+            const rearSrc = `${baseRearImgUrl}${data.rearImg}`
+            const dashboardSrc = `${baseDashboardUrl}${data.dashboardImg}`
+            const interiorSrc = `${baseInteriorUrl}${data.interiorImg}`
+            const imageList = [frontSrc, rearSrc, dashboardSrc, interiorSrc]
+            setImages(imageList)
+            setCurrentImage(imageList[0]) // Set the first image as the default current image
+            setLoading(false) // Images are loaded
+        } catch (error) {
+            console.error('Failed to fetch vehicle data:', error)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [id])
+
     return (
-        <div className="w-[584px] grid grid-rows-[380px_auto] rounded-t-lg gap-9 bg-white overflow-hidden">
-            <img className="justify-self-center w-[500px] self-center rounded-lg" src={currentImage} alt="" />
-            <div className="w-full sm:max-w-[550px] max-w-[300px] justify-self-center items-center p-10">
-                <Slide slidesToScroll={1} slidesToShow={3} cssClass="objects-center" autoplay={false}>
-                    {images.map((image, index) => (
-                        // Button that sets the main image to the clicked thumbnail
-                        <button onClick={() => setCurrentImage(image)} className={currentImage === image && 'border-8'}>
-                            <img key={index} className="rounded-lg" src={image} alt="" />
-                        </button>
-                    ))}
-                </Slide>
-            </div>
+        <div className="w-full flex flex-col pt-12 rounded-t-lg gap-10 bg-white overflow-hidden">
+            {loading ? (
+                <div>Loading...</div>
+            ) : (
+                <>
+                    <img className="justify-self-center w-3/4 self-center rounded-lg" src={currentImage} alt="" />
+                    <div className="w-3/4 mx-auto p-6">
+                        <Slide slidesToScroll={1} slidesToShow={4} cssClass="objects-center" autoplay={false}>
+                            {images.map((image, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentImage(image)}
+                                    className={`${
+                                        currentImage === image ? 'border border-gray-200' : ''
+                                    } w-24 h-24 p-1`}
+                                >
+                                    <img
+                                        className="w-full h-full object-cover rounded-lg"
+                                        src={image}
+                                        alt={`vehicle view ${index}`}
+                                        onLoad={() => {
+                                            // Force a repaint when the image is loaded
+                                            setLoading(false)
+                                        }}
+                                    />
+                                </button>
+                            ))}
+                        </Slide>
+                    </div>
+                </>
+            )}
         </div>
     )
 }
