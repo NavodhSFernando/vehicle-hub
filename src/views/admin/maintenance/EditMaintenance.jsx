@@ -41,7 +41,8 @@ const formSchema = z.object({
     }),
     description: z.string({
         message: 'Maintenance Type is required'
-    })
+    }),
+    mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required')
 })
 
 export default function EditMaintenance() {
@@ -56,7 +57,8 @@ export default function EditMaintenance() {
         defaultValues: {
             date: '',
             description: '',
-            vehicleId: 0
+            vehicleId: 0,
+            currentMileage: 0
         }
     })
 
@@ -68,13 +70,14 @@ export default function EditMaintenance() {
             console.log(data.description)
             console.log(data.type)
             console.log(data.vehicleId)
-            console.log(data)
+            console.log('hi', data)
 
             reset({
                 date: data.date,
                 description: data.description,
                 type: data.type,
-                vehicleId: data.vehicle.id
+                vehicleId: data.vehicle.id,
+                currentMileage: data.currentMileage
             })
         } catch (error) {
             console.error('Failed to fetch maintenance', error)
@@ -92,7 +95,8 @@ export default function EditMaintenance() {
                 Date: data.date,
                 Description: data.description,
                 Type: data.type,
-                VehicleId: data.vehicleId
+                VehicleId: data.vehicleId,
+                CurrentMileage: data.currentMileage
             }
 
             const result = await axios.put(url, formData)
@@ -131,25 +135,25 @@ export default function EditMaintenance() {
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={control}
-                    name="vehicleId"
+                    name="currentMileage"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Current Mileage</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number"
-                                    className="w-full"
                                     {...field}
+                                    type="number" // Ensure input type is number for direct numeric input
+                                    className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
+                            <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={control}
                     name="type"
@@ -169,11 +173,13 @@ export default function EditMaintenance() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="oilChange">Oil and Fluid Changes</SelectItem>
-                                    <SelectItem value="tireRotation">Tyre Rotation</SelectItem>
-                                    <SelectItem value="brakeChecks">Brake Checks</SelectItem>
+                                    <SelectItem value="service">Vehicle Service</SelectItem>
+                                    <SelectItem value="brakePad">Brake Pad Replacement</SelectItem>
+                                    <SelectItem value="gearOil">Gear Oil Replacements</SelectItem>
+                                    <SelectItem value="tyreRotation">Tyre Rotation</SelectItem>
                                     <SelectItem value="batteryMaintenance">Battery Maintenance</SelectItem>
                                     <SelectItem value="airConditioningChecks">Air Conditioning Checks</SelectItem>
+                                    <SelectItem value="engineTuneUp">Engine Tune Up</SelectItem>
                                     <SelectItem value="replacements">Replacements</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -198,6 +204,19 @@ export default function EditMaintenance() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.description && errors.description.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="vehicleId"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormControl>
+                                <Input disabled {...field} type="number" className="w-full text-gray-950" />
+                            </FormControl>
+                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
                     )}
                 />

@@ -38,6 +38,10 @@ export const columns = [
         header: 'Maintenance Date'
     },
     {
+        accessorKey: 'currentMileage',
+        header: 'Current Mileage'
+    },
+    {
         accessorKey: 'vehicleId',
         header: 'Vehicle',
         cell: ({ row }) => {
