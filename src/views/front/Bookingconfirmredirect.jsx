@@ -1,30 +1,29 @@
-import RentalSummary from '../../components/front/RentalSummary'
-import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm'
-import PaymentMethod from './PaymentMethod'
-import React from 'react'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
+// Bookingconfirmredirect.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import RentalSummary from '../../components/front/RentalSummary';
+import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm';
+import PaymentMethod from './PaymentMethod';
 
 export default function Bookingconfirmredirect() {
-    const { invoiceId } = useParams()
-    const [rentalData, setRentalData] = useState({})
+    const { invoiceId } = useParams();
+    const [rentalData, setRentalData] = useState({});
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Update the URL to your specific API endpoint for fetching rentals
                 const response = await axios.get(
                     `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${invoiceId}`
-                )
-                setRentalData(response.data) // Assume the response data is the array of rentals
-                console.log('Fetched Booking Confirmation:', response.data)
+                );
+                setRentalData(response.data);
+                console.log('Fetched Booking Confirmation:', response.data);
             } catch (error) {
-                console.error('Failed to fetch Booking Confirmation:', error)
+                console.error('Failed to fetch Booking Confirmation:', error);
             }
-        }
-        fetchData()
-    }, [])
+        };
+        fetchData();
+    }, [invoiceId]);
 
     return (
         <div className="flex gap-5">
@@ -36,7 +35,11 @@ export default function Bookingconfirmredirect() {
                     endTime={rentalData.endTime}
                 />
                 <div className="mt-5">
-                    <PaymentMethod />
+                    <PaymentMethod 
+                        invoiceId={invoiceId} 
+                        amount={rentalData.amount} 
+                        invoiceType={rentalData.invoiceType} 
+                    />
                 </div>
             </div>
             <div className="flex flex-col w-2/5">
@@ -52,5 +55,5 @@ export default function Bookingconfirmredirect() {
                 />
             </div>
         </div>
-    )
+    );
 }

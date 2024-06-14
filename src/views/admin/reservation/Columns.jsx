@@ -1,4 +1,4 @@
-import { FaUpDown } from 'react-icons/fa6'
+import React from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
@@ -9,7 +9,7 @@ import Cookies from 'js-cookie'
 const employeeId = Cookies.get('employeeId')
 console.log('employeeId', employeeId)
 if (!employeeId) {
-    console.error('customer Id is not available')
+    console.error('Employee Id is not available')
 }
 
 const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
@@ -97,10 +97,14 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
                     <GrStop fontSize={20} className="mr-1" />
                 </Button>
             )}
-            <EditVehicleDialog />
-            <Button variant="ghost" className="p-0">
-                <GrTrash fontSize={24} className="mr-1" />
-            </Button>
+            {status !== 'Waiting' && (
+                <>
+                    <EditVehicleDialog />
+                    <Button variant="ghost" className="p-0">
+                        <GrTrash fontSize={24} className="mr-1" />
+                    </Button>
+                </>
+            )}
         </div>
     )
 }
@@ -117,14 +121,6 @@ export const columns = [
     {
         accessorKey: 'name',
         header: 'Customer Name'
-    },
-    {
-        accessorKey: 'email',
-        header: 'Customer Email'
-    },
-    {
-        accessorKey: 'phone',
-        header: 'Customer Phone'
     },
     {
         accessorKey: 'regNo',
@@ -147,6 +143,14 @@ export const columns = [
         }
     },
     {
+        accessorKey: 'startTime',
+        header: 'Start Time',
+        cell: ({ row }) => {
+            const value = row.getValue('startTime')
+            return <div>{value || 'Invalid Time'}</div>
+        }
+    },
+    {
         accessorKey: 'endDate',
         header: 'Drop off Date',
         cell: ({ row }) => {
@@ -163,14 +167,6 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'startTime',
-        header: 'Start Time',
-        cell: ({ row }) => {
-            const value = row.getValue('startTime')
-            return <div>{value || 'Invalid Time'}</div>
-        }
-    },
-    {
         accessorKey: 'endTime',
         header: 'End Time',
         cell: ({ row }) => {
@@ -180,20 +176,7 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
+        header: 'Status',
         cell: ({ row }) => {
             const status = row.getValue('status')
             let color = ''

@@ -118,8 +118,8 @@ export default function DataTable({ columns, data }) {
                     <Label>Reservation ID</Label>
                     <Input
                         placeholder="Filter reservation ID"
-                        value={table.getColumn('reservationId')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('reservationId')?.setFilterValue(event.target.value)}
+                        value={table.getColumn('id')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('id')?.setFilterValue(event.target.value)}
                         className="w-3/4"
                     />
                 </div>
@@ -127,8 +127,8 @@ export default function DataTable({ columns, data }) {
                     <Label>Registration Number</Label>
                     <Input
                         placeholder="Filter registration number"
-                        value={table.getColumn('registrationNumber')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('registrationNumber')?.setFilterValue(event.target.value)}
+                        value={table.getColumn('regNo')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('regNo')?.setFilterValue(event.target.value)}
                         className="w-3/4"
                     />
                 </div>

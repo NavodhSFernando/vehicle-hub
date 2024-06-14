@@ -33,11 +33,12 @@ function Adminlogin() {
         try {
             const result = await axios.post('http://localhost:5062/api/EmployeeAuth/login', data)
             console.log(result.data)
-            const token = result.data
+            const token = result.data.token.token
+            const encryptedEmployeeId = result.data.token.id
+
             sessionStorage.setItem('jwtToken', token)
-            // Assuming that the backend returns the employee ID within the token payload
-            const employeeId = result.data.token.id
-            Cookies.set('employeeId', employeeId, { expires: 30 })
+
+            Cookies.set('employeeId', encryptedEmployeeId, { expires: 30 })
             console.log(`Employee ID saved in cookies: ${Cookies.get('employeeId')}`)
             navigate('/admin/dashboard')
         } catch (error) {
