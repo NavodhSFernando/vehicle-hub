@@ -12,8 +12,8 @@ export default function BookingStrip({ onDateFilter }) {
     const navigate = useNavigate()
 
     const handleDateFilter = () => {
-        navigate('/vehiclefleet')
-    }
+        navigate('/vehiclefleet', { state: {startDate, startTime, endDate, endTime}});
+    };
 
     return (
         <div className="flex items-center justify-center">
