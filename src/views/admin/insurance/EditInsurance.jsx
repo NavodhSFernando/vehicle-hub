@@ -143,12 +143,7 @@ export default function EditInsurance() {
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
                             <FormControl>
-                                <Input
-                                    {...field}
-                                    type="number"
-                                    className="w-full"
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
+                                <Input disabled {...field} type="number" className="w-full text-gray-950" />
                             </FormControl>
                             <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
