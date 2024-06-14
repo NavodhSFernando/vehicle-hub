@@ -72,7 +72,7 @@ function App() {
                         }
                     />
                     <Route
-                        path="/vehiclefleet/:slug"
+                        path="/vehiclefleet/:id"
                         element={
                             <TitleComponent title="Vehicle Fleet">
                                 <VehicleFleetSingle />

@@ -5,9 +5,11 @@ import { useState } from 'react'
 import { IoCalendarClear } from 'react-icons/io5'
 import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
+import { useNavigate } from 'react-router-dom'
 
 export default function BookNowCard({
     key,
+    id,
     name,
     make,
     type,
@@ -20,6 +22,8 @@ export default function BookNowCard({
     logo
 }) {
     const [clicked, setClicked] = useState(false)
+    const navigate = useNavigate()
+    console.log(id)
 
     useEffect(() => {
         // Check if the item is already in the wishlist in localStorage
@@ -33,6 +37,7 @@ export default function BookNowCard({
     const handleClick = () => {
         const vehicleDetails = {
             key: key,
+            id: id,
             name: name,
             make: make,
             type: type,
@@ -65,7 +70,10 @@ export default function BookNowCard({
                     <img className="w-9 h-9" src={logo} alt="Logo" />
                     <div className="flex flex-col ml-2">
                         <h1 className="text-xl font-bold">{name}</h1>
-                        <p className="text-base opacity-50 font-semibold">{type}</p>
+                        <p className="text-base opacity-50 font-semibold">
+                            {type}
+                            {id}
+                        </p>
                     </div>
                 </div>
                 {clicked ? (
@@ -101,7 +109,10 @@ export default function BookNowCard({
                     </h1>
                     <p className="text-sm opacity-50 font-semibold">100Km/day</p>
                 </span>
-                <button className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] w-fit focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700">
+                <button
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] w-fit focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
+                    onClick={() => navigate(`/vehiclefleet/${id}`)}
+                >
                     View
                 </button>
             </article>
