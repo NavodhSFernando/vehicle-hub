@@ -99,7 +99,10 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
             )}
             {status !== 'Waiting' && (
                 <>
-                    <EditVehicleDialog />
+                    <EditVehicleDialog
+                        customerReservationId={customerReservationId}
+                        refetchReservation={refetchReservation}
+                    />
                     <Button variant="ghost" className="p-0">
                         <GrTrash fontSize={24} className="mr-1" />
                     </Button>
