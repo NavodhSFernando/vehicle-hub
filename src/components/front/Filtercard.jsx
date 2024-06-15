@@ -13,7 +13,7 @@ const FilterCard = ({ onFilterChange }) => {
 
     const fetchVehicleTypes = async () => {
         try {
-            const response = await axios.get('http://localhost:47367/api/VehicleType')
+            const response = await axios.get('http://localhost:5062/api/VehicleType')
             const typesSet = new Set()
             const vehicleTypes = response.data
             .map((type) => ({
@@ -36,7 +36,7 @@ const FilterCard = ({ onFilterChange }) => {
 
     const fetchVehicleMakes = async () => {
         try {
-            const response = await axios.get('http://localhost:47367/api/VehicleMake')
+            const response = await axios.get('http://localhost:5062/api/VehicleMake')
             const makesSet = new Set()
             const vehicleMakes = response.data
                 .map((make) => ({
@@ -59,7 +59,7 @@ const FilterCard = ({ onFilterChange }) => {
 
     const fetchVehicleModels = async () => {
         try {
-            const response = await axios.get('http://localhost:47367/api/VehicleModel')
+            const response = await axios.get('http://localhost:5062/api/VehicleModel')
             const capacitiesSet = new Set()
             const vehicleCapacities = response.data
                 .map((capacity) => ({

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
 
-export default function FeedBack({ slug }) {
+export default function FeedBack({ id }) {
 
     const [reviewDatas, setReviewDatas] = useState([]);
-    const reservationId = slug;
+    const reservationId = id;
 
     const fetchFeedbacks = async () => {
         try {
-            const response = await axios.get(`http://localhost:47367/api/Feedback/vehicle/${reservationId}`);
+            const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${reservationId}`);
             console.log(response.data)
             setReviewDatas(response.data);
         } catch (error) {

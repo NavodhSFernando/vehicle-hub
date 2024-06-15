@@ -9,7 +9,7 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:47367/api/Notification/Notifications/${customerId}`)
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${customerId}`)
             console.log(response.data)
             setNotifications(response.data)
         } catch (error) {
@@ -19,7 +19,7 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
 
     const deleteNotification = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:47367/api/Notification/Notifications/${id}`);
+            const response = await axios.delete(`http://localhost:5062/api/Notification/Notifications/${id}`);
             if (response.status === 200) {
                 console.log('Notification deleted successfully.');
             } else {
