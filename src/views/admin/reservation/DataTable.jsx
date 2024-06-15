@@ -5,7 +5,8 @@ import {
     getCoreRowModel,
     useReactTable,
     getFilteredRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
@@ -16,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import cn from 'classnames'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -28,13 +30,15 @@ export default function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getSortedRowModel: getSortedRowModel(),
         state: {
             sorting,
             columnFilters
-        }
+        },
+        initialState: { pagination: { pageSize: 5 } }
     })
 
     // Update the date filter when the date state changes
@@ -148,7 +152,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -163,7 +167,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="py-5 px-5" key={cell.id}>
+                                        <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
