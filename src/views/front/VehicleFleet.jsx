@@ -76,7 +76,7 @@ const VehicleFleet = () => {
                     key: `new-${index}`,
                     name: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
                     type:  `${item.vehicleType.name}`,
-                    imageSrc: item.vehiclePhotos && item.vehiclePhotos.length > 0 && item.vehiclePhotos[0].imageData ? item.vehiclePhotos[0].imageData : Aqua,
+                    imageSrc: Aqua,
                     imageAlt: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
                     year: item.vehicleModel.year,
                     make: item.vehicleMake.name,
