@@ -30,9 +30,9 @@ export default function FeedbackForm() {
                 Vehicle_Review: data.vehicleReview,
                 CustomerReservationId: reservationId
             }
-            const response = await axios.post('http://localhost:47367/api/Feedback', FeedbackRequest)
+            const response = await axios.post('http://localhost:5062/api/Feedback', FeedbackRequest)
             console.log(response.data)
-            alert(response.data)
+            alert(response.data.message)
         } catch (error) {
             console.error('Error submitting feedback:', error)
             alert('Error submitting feedback')

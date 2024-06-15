@@ -44,7 +44,7 @@ const VehicleFleet = () => {
 
     const handleDateFilter = async ({ startDate, startTime, endDate, endTime }) => {
         try {
-            const response = await axios.get('http://localhost:47367/api/VehicleFilter/available', {
+            const response = await axios.get('http://localhost:5062/api/VehicleFilter/available', {
                 params: { startDate, startTime, endDate, endTime }
             });
             const newVehicleData = response.data.map((item, index) => ({
@@ -69,7 +69,7 @@ const VehicleFleet = () => {
 
     const fetchAllVehicles = async () => {
         try {
-            const response = await axios.get(`http://localhost:47367/api/Vehicle/alldata`);
+            const response = await axios.get(`http://localhost:5062/api/Vehicle/alldata`);
             
             const newVehicleData = response.data.map((item, index) => ({
 
