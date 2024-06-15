@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 const NOTIFICATIONS_PER_PAGE = 3
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const customerId = Cookies.get('customerId')
 
     const indexOfLastNotification = currentPage * NOTIFICATIONS_PER_PAGE
     const indexOfFirstNotification = indexOfLastNotification - NOTIFICATIONS_PER_PAGE
@@ -17,7 +15,7 @@ export default function NotificationCenter() {
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${customerId}`)
+            const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
             console.log(response.data)
             setNotifications(response.data)
         } catch (error) {
@@ -27,7 +25,7 @@ export default function NotificationCenter() {
 
     useEffect(() => {
             fetchNotifications()
-    }, [customerId])
+    }, [])
 
     return (
         <div className="flex justify-center items-start pb-10">

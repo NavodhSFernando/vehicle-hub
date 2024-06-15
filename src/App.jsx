@@ -56,6 +56,7 @@ import Adminlogin from './views/admin/Adminlogin'
 import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
 import VerifyOTP from './views/front/VerifyOTP'
+import Notification from './views/admin/Notification'
 
 function App() {
     return (
@@ -152,6 +153,7 @@ function App() {
                 <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="notification" element={<Notification />} />
                     <Route path="report">
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<ViewRevenueReport />} />

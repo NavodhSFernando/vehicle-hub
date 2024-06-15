@@ -228,6 +228,13 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 icon: <LuDot />
             }
         ]
+    },
+    {
+        key: 'notifications',
+        label: 'Notifications',
+        path: '/admin/notification',
+        icon: <RiStackLine />,
+        heading: 'Notifications'
     }
 ]
 
