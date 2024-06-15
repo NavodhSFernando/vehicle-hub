@@ -75,6 +75,23 @@ const PaymentForm = ({ invoiceId, amount, invoiceType }) => {
                         'Content-Type': 'application/json'
                     }
                 });
+
+                // Determine reservation status based on invoice type
+                const newStatus = invoiceType === "Deposit" ? "Confirmed" : "Completed";
+
+                // Prepare data for updating reservation status
+                const reservationStatusData = {
+                    invoiceId: invoiceId,
+                    newStatus: newStatus
+                };
+
+                // Send PUT request to update reservation status
+                await axios.put(`http://localhost:5062/api/Payment/UpdateReservationStatus`, reservationStatusData, {
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json'
+                    }
+                });
             } else {
                 setMessage("Your payment is processing.");
                 setIsSuccess(false);
