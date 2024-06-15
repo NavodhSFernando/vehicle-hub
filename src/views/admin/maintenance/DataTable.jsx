@@ -82,6 +82,7 @@ export default function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }
