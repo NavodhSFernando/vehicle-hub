@@ -23,10 +23,10 @@ const VehicleFleet = () => {
 
     const fetchData = async () => {
         try {
-            // Update the URL to your specific API endpoint for fetching vehicles
             const response = await axios.get('http://localhost:5062/api/FrontVehicleService/Details')
             setVehicleData(response.data) 
             setAllVehicle(response.data);
+            setFilteredData(response.data);
             console.log(response.data)
         } catch (error) {
             console.error('Failed to fetch vehicle data:', error)
@@ -47,21 +47,8 @@ const VehicleFleet = () => {
             const response = await axios.get('http://localhost:5062/api/VehicleFilter/available', {
                 params: { startDate, startTime, endDate, endTime }
             });
-            const newVehicleData = response.data.map((item, index) => ({
-                key: `new-${index}`,
-                name: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
-                type:  `${item.vehicleType.name}`,
-                imageSrc: Aqua,
-                imageAlt: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
-                year: item.vehicleModel.year,
-                make: item.vehicleMake.name,
-                transmission: item.vehicle.transmission,
-                capacity: `${item.vehicleModel.seatingCapacity} Persons`,
-                price: item.vehicle.costPerDay.toString()
-            }))
-
-            setAllVehicle(newVehicleData);
-            setFilteredData(newVehicleData);
+            setAllVehicle(response.data);
+            setFilteredData(response.data);
         } catch (error) {
             console.error('Error fetching vehicles:', error);
         }
@@ -93,7 +80,7 @@ const VehicleFleet = () => {
     }
 
     useEffect(() => {
-        fetchAllVehicles()
+        fetchData()
     }, [])
 
     useEffect(() => {
