@@ -63,7 +63,7 @@ const FilterCard = ({ onFilterChange }) => {
             const capacitiesSet = new Set()
             const vehicleCapacities = response.data
                 .map((capacity) => ({
-                    id: `${capacity.seatingCapacity} Persons`,
+                    id: `${capacity.seatingCapacity}`,
                     name: `${capacity.seatingCapacity} Persons`
                 }))
                 .filter((capacity) => {
