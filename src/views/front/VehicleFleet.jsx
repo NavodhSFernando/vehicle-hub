@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import BookNowCard from '../../components/front/BookNowCard'
 import BookingStrip2 from '../../components/front/BookingStrip/BookingStrip2'
 import SearchStrip from '../../components/front/BookingStrip/SearchStrip'
-import Aqua from '../../assets/vehicles/aqua.png'
 import FilterCard from '../../components/front/Filtercard'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom';
@@ -23,10 +22,10 @@ const VehicleFleet = () => {
 
     const fetchData = async () => {
         try {
-            // Update the URL to your specific API endpoint for fetching vehicles
             const response = await axios.get('http://localhost:5062/api/FrontVehicleService/Details')
             setVehicleData(response.data) 
             setAllVehicle(response.data);
+            setFilteredData(response.data);
             console.log(response.data)
         } catch (error) {
             console.error('Failed to fetch vehicle data:', error)
@@ -47,53 +46,15 @@ const VehicleFleet = () => {
             const response = await axios.get('http://localhost:5062/api/VehicleFilter/available', {
                 params: { startDate, startTime, endDate, endTime }
             });
-            const newVehicleData = response.data.map((item, index) => ({
-                key: `new-${index}`,
-                name: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
-                type:  `${item.vehicleType.name}`,
-                imageSrc: Aqua,
-                imageAlt: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
-                year: item.vehicleModel.year,
-                make: item.vehicleMake.name,
-                transmission: item.vehicle.transmission,
-                capacity: `${item.vehicleModel.seatingCapacity} Persons`,
-                price: item.vehicle.costPerDay.toString()
-            }))
-
-            setAllVehicle(newVehicleData);
-            setFilteredData(newVehicleData);
+            setAllVehicle(response.data);
+            setFilteredData(response.data);
         } catch (error) {
             console.error('Error fetching vehicles:', error);
         }
     }
 
-    const fetchAllVehicles = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5062/api/Vehicle/alldata`);
-            
-            const newVehicleData = response.data.map((item, index) => ({
-
-                    key: `new-${index}`,
-                    name: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
-                    type:  `${item.vehicleType.name}`,
-                    imageSrc: Aqua,
-                    imageAlt: `${item.vehicleMake.name} ${item.vehicleModel.name}`,
-                    year: item.vehicleModel.year,
-                    make: item.vehicleMake.name,
-                    transmission: item.vehicle.transmission,
-                    capacity: `${item.vehicleModel.seatingCapacity} Persons`,
-                    price: item.vehicle.costPerDay.toString()
-            }))
-
-            setAllVehicle(newVehicleData);
-            setFilteredData(newVehicleData);
-        } catch (error) {
-            console.error('Error fetching vehicle data:', error);
-        }
-    }
-
     useEffect(() => {
-        fetchAllVehicles()
+        fetchData()
     }, [])
 
     useEffect(() => {
@@ -106,8 +67,8 @@ const VehicleFleet = () => {
         const updatedFilteredData = allVehicle.filter(vehicle => {
             if (filters.vehicleType !== 'all' && vehicle.type !== filters.vehicleType) return false;
             if (filters.vehicleMake !== 'all' && vehicle.make !== filters.vehicleMake) return false;
-            if (filters.vehicleCapacity !== 'all' && vehicle.capacity !== filters.vehicleCapacity) return false;
-            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.price) > parseInt(filters.maxPrice)) return false;
+            if (filters.vehicleCapacity !== 'all' && vehicle.seatingCapacity != filters.vehicleCapacity) return false;
+            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.costPerDay) > parseInt(filters.maxPrice)) return false;
             return true;
         })
 
