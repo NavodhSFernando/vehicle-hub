@@ -119,6 +119,9 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('id') // Assuming ID does not need parseFloat
             return <div className="font-medium">{'#' + value}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return String(row.getValue(columnId)).includes(filterValue)
         }
     },
     {
@@ -143,6 +146,11 @@ export const columns = [
                 }
             }
             return <div>{formattedDate}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            const rowValue = new Date(row.getValue(columnId))
+            const filterStartDate = filterValue[0]
+            return !filterStartDate || rowValue >= filterStartDate
         }
     },
     {
@@ -167,6 +175,14 @@ export const columns = [
                 }
             }
             return <div>{formattedDate}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            const rowValue = new Date(row.getValue(columnId))
+            const [filterStartDate, filterEndDate] = filterValue
+            return (
+                (!filterStartDate || rowValue >= filterStartDate) &&
+                (!filterEndDate || rowValue <= new Date(new Date(filterEndDate).setHours(23, 59, 59, 999)))
+            )
         }
     },
     {
