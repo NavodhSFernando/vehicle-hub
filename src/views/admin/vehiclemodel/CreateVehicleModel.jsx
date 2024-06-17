@@ -41,12 +41,6 @@ const items = [
     { id: 'keylessEntry', label: 'Keyless Entry' }
 ]
 
-const vehicleMakes = [
-    { value: 'toyota', label: 'Toyota' },
-    { value: 'ford', label: 'Ford' },
-    { value: 'chevrolet', label: 'Chevrolet' }
-]
-
 const currentYear = new Date().getFullYear()
 
 const formSchema = z.object({
@@ -94,7 +88,6 @@ export default function CreateVehicleModel() {
         control,
         handleSubmit,
         reset,
-        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -116,7 +109,6 @@ export default function CreateVehicleModel() {
                 // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleMake')
                 setVehicleMakes(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
             }
@@ -142,13 +134,11 @@ export default function CreateVehicleModel() {
                     Fuel: data.fuel,
                     VehicleMakeId: data.vehicleMakeId
                 },
-                AdditionalFeatures: additionalFeatures // Include the transformed items in formData
+                AdditionalFeatures: additionalFeatures
             }
 
-            // Send formData to the backend
             const result = await axios.post(url, formData)
-            console.log(result)
-            console.log(formData)
+            console.result('Vehicle model created', result)
             reset()
         } catch (error) {
             console.log(error)
@@ -192,7 +182,6 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number"
                                     className="w-full"
-                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -210,7 +199,6 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number"
                                     className="w-full"
-                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -228,7 +216,6 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number"
                                     className="w-full"
-                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -246,7 +233,6 @@ export default function CreateVehicleModel() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>

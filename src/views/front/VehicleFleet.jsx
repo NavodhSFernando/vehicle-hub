@@ -4,7 +4,7 @@ import BookingStrip2 from '../../components/front/BookingStrip/BookingStrip2'
 import SearchStrip from '../../components/front/BookingStrip/SearchStrip'
 import FilterCard from '../../components/front/Filtercard'
 import axios from 'axios'
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom'
 
 const VehicleFleet = () => {
     const [vehicleData, setVehicleData] = useState([])
@@ -17,16 +17,22 @@ const VehicleFleet = () => {
         maxPrice: 0
     })
 
-    const location = useLocation();
-    const { startDate, startTime, endDate, endTime } = location.state || {};
+    const location = useLocation()
+    const { startDate, startTime, endDate, endTime } = location.state || {}
+
+    const [dateFilter, setDateFilter] = useState({
+        startDate: startDate,
+        startTime: startTime,
+        endDate: endDate,
+        endTime: endTime
+    })
 
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:5062/api/FrontVehicleService/Details')
-            setVehicleData(response.data) 
-            setAllVehicle(response.data);
-            setFilteredData(response.data);
-            console.log(response.data)
+            setVehicleData(response.data)
+            setAllVehicle(response.data)
+            setFilteredData(response.data)
         } catch (error) {
             console.error('Failed to fetch vehicle data:', error)
         }
@@ -37,19 +43,22 @@ const VehicleFleet = () => {
     }
 
     const handleSearch = async (searchQuery) => {
-        const updatedFilteredData = allVehicle.filter(vehicle => vehicle.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        const updatedFilteredData = allVehicle.filter((vehicle) =>
+            vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
         setFilteredData(updatedFilteredData)
     }
 
     const handleDateFilter = async ({ startDate, startTime, endDate, endTime }) => {
+        setDateFilter({ startDate, startTime, endDate, endTime })
         try {
             const response = await axios.get('http://localhost:5062/api/VehicleFilter/available', {
                 params: { startDate, startTime, endDate, endTime }
-            });
-            setAllVehicle(response.data);
-            setFilteredData(response.data);
+            })
+            setAllVehicle(response.data)
+            setFilteredData(response.data)
         } catch (error) {
-            console.error('Error fetching vehicles:', error);
+            console.error('Error fetching vehicles:', error)
         }
     }
 
@@ -59,20 +68,21 @@ const VehicleFleet = () => {
 
     useEffect(() => {
         if (startDate && startTime && endDate && endTime) {
-            handleDateFilter({ startDate, startTime, endDate, endTime });
+            handleDateFilter({ startDate, startTime, endDate, endTime })
         }
-    }, [startDate, startTime, endDate, endTime]);
+    }, [startDate, startTime, endDate, endTime])
 
     useEffect(() => {
-        const updatedFilteredData = allVehicle.filter(vehicle => {
-            if (filters.vehicleType !== 'all' && vehicle.type !== filters.vehicleType) return false;
-            if (filters.vehicleMake !== 'all' && vehicle.make !== filters.vehicleMake) return false;
-            if (filters.vehicleCapacity !== 'all' && vehicle.seatingCapacity != filters.vehicleCapacity) return false;
-            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.costPerDay) > parseInt(filters.maxPrice)) return false;
-            return true;
+        const updatedFilteredData = allVehicle.filter((vehicle) => {
+            if (filters.vehicleType !== 'all' && vehicle.type !== filters.vehicleType) return false
+            if (filters.vehicleMake !== 'all' && vehicle.make !== filters.vehicleMake) return false
+            if (filters.vehicleCapacity !== 'all' && vehicle.seatingCapacity != filters.vehicleCapacity) return false
+            if (parseInt(filters.maxPrice) > 0 && parseInt(vehicle.costPerDay) > parseInt(filters.maxPrice))
+                return false
+            return true
         })
 
-        setFilteredData(updatedFilteredData);
+        setFilteredData(updatedFilteredData)
     }, [filters, vehicleData])
 
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
@@ -87,7 +97,7 @@ const VehicleFleet = () => {
                 <div className="flex-col">
                     <SearchStrip onSearch={handleSearch} />
                     <div className="mt-[20px]">
-                    <BookingStrip2 onDateFilter={handleDateFilter} />
+                        <BookingStrip2 onDateFilter={handleDateFilter} />
                     </div>
                     <div className="flex flex-row flex-wrap mt-10 gap-7">
                         {filteredData.map((vehicle) => (
@@ -103,6 +113,10 @@ const VehicleFleet = () => {
                                 capacity={vehicle.seatingCapacity}
                                 price={vehicle.costPerDay}
                                 logo={`${baseUrlLogo}${vehicle.logo}`}
+                                startDate={new Date(dateFilter.startDate)}
+                                startTime={dateFilter.startTime}
+                                endDate={new Date(dateFilter.endDate)}
+                                endTime={dateFilter.endTime}
                             />
                         ))}
                     </div>

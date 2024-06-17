@@ -1,7 +1,6 @@
 import React from 'react'
-import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrEdit } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 
 const ActionButtons = ({ maintenanceId }) => {
@@ -15,9 +14,6 @@ const ActionButtons = ({ maintenanceId }) => {
                 onClick={() => navigate(`/admin/maintenance/edit/${maintenanceId}`)}
             >
                 <GrEdit fontSize={24} className="mr-1" />
-            </Button>
-            <Button variant="ghost" className="p-0">
-                <GrTrash fontSize={24} className="mr-1" />
             </Button>
         </div>
     )

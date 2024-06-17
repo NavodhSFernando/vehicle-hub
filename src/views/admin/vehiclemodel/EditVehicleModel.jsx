@@ -110,7 +110,6 @@ export default function EditVehicleModel() {
                 vehicleMakeId: data.vehicleModel.vehicleMakeId,
                 items: Object.keys(data.additionalFeatures).filter((key) => data.additionalFeatures[key])
             })
-            console.log(data.vehicleModel.fuel)
         } catch (error) {
             console.error('Failed to fetch vehicle model', error)
         }
@@ -118,14 +117,11 @@ export default function EditVehicleModel() {
 
     const [vehicleMakes, setVehicleMakes] = useState([])
 
-    // Fetch vehicle model data
     useEffect(() => {
         const fetchVehicleMakes = async () => {
             try {
-                // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleMake')
                 setVehicleMakes(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
             }
@@ -155,7 +151,7 @@ export default function EditVehicleModel() {
                 additionalFeatures: additionalFeatures
             }
             const result = await axios.put(url, formData)
-            console.log(result)
+            console.result('Vehicle model updated', result)
         } catch (error) {
             console.error('Failed to update vehicle model', error)
         }
@@ -306,7 +302,7 @@ export default function EditVehicleModel() {
                     </div>
                     <div className="flex flex-wrap">
                         {items.map((item) => (
-                            <div className="w-1/2 mb-4" key={item.id}>
+                            <div className="w-1/3 mb-4" key={item.id}>
                                 <FormField
                                     control={control}
                                     name="items"
