@@ -5,7 +5,8 @@ import {
     getCoreRowModel,
     useReactTable,
     getFilteredRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
@@ -16,6 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { format } from 'date-fns'
 import cn from 'classnames'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -28,34 +30,37 @@ export default function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         getSortedRowModel: getSortedRowModel(),
         state: {
             sorting,
             columnFilters
-        }
+        },
+        initialState: { pagination: { pageSize: 5 } }
     })
 
     // Update the date filter when the date state changes
     React.useEffect(() => {
-        if (startDate) {
-            table.getColumn('startDate')?.setFilterValue(format(startDate, 'yyyy-MM-dd'))
+        if (startDate || endDate) {
+            table.getColumn('startDate')?.setFilterValue([startDate, endDate])
         } else {
-            table.getColumn('startDate')?.setFilterValue('')
+            table.getColumn('startDate')?.setFilterValue([])
         }
-    }, [startDate, table])
+    }, [startDate, endDate, table])
 
     React.useEffect(() => {
-        if (endDate) {
-            table.getColumn('endDate')?.setFilterValue(format(endDate, 'yyyy-MM-dd'))
+        if (startDate || endDate) {
+            table.getColumn('endDate')?.setFilterValue([startDate, endDate])
         } else {
-            table.getColumn('endDate')?.setFilterValue('')
+            table.getColumn('endDate')?.setFilterValue([])
         }
-    }, [endDate, table])
+    }, [startDate, endDate, table])
 
     const clearFilters = () => {
         setStartDate(null)
+        setEndDate(null)
         setColumnFilters([])
         setSorting([])
         table.resetColumnFilters()
@@ -64,7 +69,7 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 mb-8">
                 <div className="flex flex-col space-y-1 pt-2 pb-4">
                     <Label>Reservation Start</Label>
                     <Popover>
@@ -148,7 +153,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -163,7 +168,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="py-5 px-5" key={cell.id}>
+                                        <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -179,6 +184,7 @@ export default function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }

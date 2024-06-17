@@ -1,4 +1,3 @@
-// PaymentMethod.jsx
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -59,6 +58,40 @@ const PaymentForm = ({ invoiceId, amount, invoiceType }) => {
             } else if (paymentIntent.status === "succeeded") {
                 setMessage("Payment succeeded!");
                 setIsSuccess(true);
+
+                // Prepare payment data excluding id
+                const paymentData = {
+                    paymentStatus: invoiceType,
+                    paymentMethod: "Card",
+                    paymentDate: new Date().toISOString(),
+                    paymentTime: new Date().toISOString(),
+                    invoiceId: invoiceId
+                };
+
+                // Send POST request to save payment data
+                await axios.post(`http://localhost:5062/api/Payment`, paymentData, {
+                    headers: {
+                        'accept': 'text/plain',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                // Determine reservation status based on invoice type
+                const newStatus = invoiceType === "Deposit" ? "Confirmed" : "Completed";
+
+                // Prepare data for updating reservation status
+                const reservationStatusData = {
+                    invoiceId: invoiceId,
+                    newStatus: newStatus
+                };
+
+                // Send PUT request to update reservation status
+                await axios.put(`http://localhost:5062/api/Payment/UpdateReservationStatus`, reservationStatusData, {
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json'
+                    }
+                });
             } else {
                 setMessage("Your payment is processing.");
                 setIsSuccess(false);

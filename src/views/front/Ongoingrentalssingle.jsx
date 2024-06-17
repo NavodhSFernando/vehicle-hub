@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { Button } from '../../components/ui/button'
+import { FaStar } from 'react-icons/fa6'
 
 export default function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
@@ -85,18 +86,8 @@ export default function Ongoingrentalssingle() {
                                 {rentalData.make} {rentalData.modelName}
                             </h1>
                             <div className="flex items-center">
-                                {[...Array(5)].map((_, index) => (
-                                    <svg
-                                        key={index}
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className={`h-4 w-4 border-gray-700 rounded-full fill-current ${index < rating ? 'text-yellow-400' : 'text-gray-100'}`}
-                                        viewBox="0 0 24 24"
-                                        onClick={() => handleStarClick(index + 1)}
-                                    >
-                                        <path d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                        <path d="M0 0h24v24H0z" fill="none" />
-                                    </svg>
+                                {[...Array(5)].map((_, starIndex) => (
+                                    <FaStar key={starIndex} color={starIndex < rating ? 'yellow' : 'grey'} />
                                 ))}
                                 <p className="text-gray-500 text-xs">10+ Reviewer</p>
                             </div>
@@ -133,32 +124,35 @@ export default function Ongoingrentalssingle() {
                     </div>
                 </div>
             </div>
-
-            <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mt-3 mb-8">
-                <div className="mr-20 ml-20 my-10 lg:mx-36">
-                    <p className="text-xs text-gray-500 flex items-start pb-3">
-                        Please refer to the Reservation Policy for further details
-                    </p>
-                    <p className="text-s text-gray-500 flex items-start font-semibold pb-3">
-                        *Reservation Cancellation made three(3) days or less prior to arrival date are non-refundable
-                    </p>
-                    <hr className="pb-3" />
-                    <Button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
-                        Cancel Reservation
-                    </Button>
-                    <div className="flex items-start">
-                        <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
-                            Feel free to contact
-                        </div>
-                        <div className="mt-6 text-s text-indigo-800 flex items-start font-semibold mr-1">
-                            vehiclehub@example.com
-                        </div>
-                        <div className="mt-6 text-s text-gray-500 flex items-start font-semibold">
-                            with any questions.
+            {rentalData.status != 'Ongoing' ||
+                (rentalData.status != 'Ended' && (
+                    <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mt-3 mb-8">
+                        <div className="mr-20 ml-20 my-10 lg:mx-36">
+                            <p className="text-xs text-gray-500 flex items-start pb-3">
+                                Please refer to the Reservation Policy for further details
+                            </p>
+                            <p className="text-s text-gray-500 flex items-start font-semibold pb-3">
+                                *Reservation Cancellation made three(3) days or less prior to arrival date are
+                                non-refundable
+                            </p>
+                            <hr className="pb-3" />
+                            <Button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
+                                Cancel Reservation
+                            </Button>
+                            <div className="flex items-start">
+                                <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
+                                    Feel free to contact
+                                </div>
+                                <div className="mt-6 text-s text-indigo-800 flex items-start font-semibold mr-1">
+                                    vehiclehub@example.com
+                                </div>
+                                <div className="mt-6 text-s text-gray-500 flex items-start font-semibold">
+                                    with any questions.
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                ))}
         </>
     )
 }

@@ -6,14 +6,17 @@ import {
     getCoreRowModel,
     useReactTable,
     getFilteredRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { Label } from '../../../components/ui/label'
 
 export default function DataTable({ columns, data }) {
-    //const [columnFilters, setColumnFilters] = React.useState([])
+    const [columnFilters, setColumnFilters] = React.useState([])
     const [sorting, setSorting] = React.useState([])
 
     const table = useReactTable({
@@ -21,16 +24,28 @@ export default function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         getSortedRowModel: getSortedRowModel(),
         state: {
-            sorting
-        }
+            sorting,
+            columnFilters
+        },
+        initialState: { pagination: { pageSize: 5 } }
     })
 
     return (
         <div>
-            <div className="flex items-center py-4"></div>
+            <div className="flex flex-col space-y-1 mt-2 mb-8">
+                <Label>Reservation ID</Label>
+                <Input
+                    placeholder="Filter Reservation Number..."
+                    value={table.getColumn('customerReservationId')?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn('customerReservationId')?.setFilterValue(event.target.value)}
+                    className="max-w-sm"
+                />
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -38,7 +53,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -53,7 +68,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="py-5 px-5" key={cell.id}>
+                                        <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

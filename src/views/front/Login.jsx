@@ -59,6 +59,7 @@ export const Login = () => {
         } catch (error) {
             // Handle login error
             console.error('Login failed:', error)
+            alert(`Login failed: ${error.message}`)
         }
     }
     return (

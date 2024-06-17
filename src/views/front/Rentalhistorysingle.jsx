@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { FaStar } from 'react-icons/fa6'
 
 function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
@@ -86,18 +87,8 @@ function Ongoingrentalssingle() {
                             {rentalData.make} {rentalData.modelName}
                         </h1>
                         <div className="flex items-center">
-                            {[...Array(5)].map((_, index) => (
-                                <svg
-                                    key={index}
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className={`h-4 w-4 border-gray-700 rounded-full fill-current ${index < rating ? 'text-yellow-400' : 'text-gray-100'}`}
-                                    viewBox="0 0 24 24"
-                                    onClick={() => handleStarClick(index + 1)}
-                                >
-                                    <path d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                                    <path d="M0 0h24v24H0z" fill="none" />
-                                </svg>
+                            {[...Array(5)].map((_, starIndex) => (
+                                <FaStar key={starIndex} color={starIndex < rating ? 'yellow' : 'grey'} />
                             ))}
                             <p className="text-gray-500 text-xs">10+ Reviewer</p>
                         </div>

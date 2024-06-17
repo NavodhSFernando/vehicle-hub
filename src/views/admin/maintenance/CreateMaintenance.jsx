@@ -17,7 +17,6 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
-import { type } from '@testing-library/user-event/dist/type'
 import { useParams } from 'react-router-dom'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -39,7 +38,8 @@ const formSchema = z.object({
     }),
     description: z.string({
         message: 'Maintenance Type is required'
-    })
+    }),
+    currentMileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required')
 })
 
 export default function CreateMaintenance() {
@@ -55,7 +55,8 @@ export default function CreateMaintenance() {
         defaultValues: {
             date: '',
             vehicleId: numericVehicleId,
-            description: ''
+            description: '',
+            currentMileage: 0
         }
     })
 
@@ -67,7 +68,8 @@ export default function CreateMaintenance() {
                 Date: data.date,
                 VehicleId: data.vehicleId,
                 Description: data.description,
-                Type: data.type
+                Type: data.type,
+                CurrentMileage: data.currentMileage
             }
 
             const result = await axios.post(url, formData)
@@ -106,25 +108,24 @@ export default function CreateMaintenance() {
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={control}
-                    name="vehicleId"
+                    name="currentMileage"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Current Mileage</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number"
+                                    type="number" // Ensure input type is number for direct numeric input
                                     className="w-full"
-                                    value={vehicleId}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
+                            <FormMessage>{errors.currentMileage && errors.currentMileage.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={control}
                     name="type"
@@ -143,11 +144,13 @@ export default function CreateMaintenance() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="oilChange">Oil and Fluid Changes</SelectItem>
-                                    <SelectItem value="tireRotation">Tyre Rotation</SelectItem>
-                                    <SelectItem value="brakeChecks">Brake Checks</SelectItem>
+                                    <SelectItem value="service">Vehicle Service</SelectItem>
+                                    <SelectItem value="brakePadReplacement">Brake Pad Replacement</SelectItem>
+                                    <SelectItem value="gearOil">Gear Oil Replacements</SelectItem>
+                                    <SelectItem value="tyreRotation">Tyre Rotation</SelectItem>
                                     <SelectItem value="batteryMaintenance">Battery Maintenance</SelectItem>
                                     <SelectItem value="airConditioningChecks">Air Conditioning Checks</SelectItem>
+                                    <SelectItem value="engineTuneUp">Engine Tune Up</SelectItem>
                                     <SelectItem value="replacements">Replacements</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -172,6 +175,25 @@ export default function CreateMaintenance() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.description && errors.description.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="vehicleId"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormControl>
+                                <Input
+                                    disabled
+                                    type="number"
+                                    className="w-full"
+                                    value={vehicleId}
+                                    onChange={(e) => field.onChange(Number(e.target.value))}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
                     )}
                 />

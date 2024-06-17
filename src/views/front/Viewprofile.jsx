@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react'
-import { useOutletContext, useParams } from 'react-router-dom'
+import React, { useRef, useEffect, useState } from 'react'
+import { useOutletContext, useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
@@ -31,6 +31,8 @@ const formSchema = z.object({
 })
 
 function Viewprofile() {
+    const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted Customer ID
+    const navigate = useNavigate()
     const customerId = useOutletContext()
     const {
         control,
@@ -50,8 +52,20 @@ function Viewprofile() {
     })
 
     useEffect(() => {
+        const decryptId = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+                setDecrypt(response.data.decryptedUserId)
+            } catch (error) {
+                console.error('Failed to decrypt Customer ID:', error)
+            }
+        }
+        decryptId()
+    }, [customerId])
+
+    useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/customer/${customerId}`
+            const url = `http://localhost:5062/api/customer/${decrypt}`
             try {
                 const { data } = await axios.get(url)
                 console.log(data)
@@ -69,7 +83,7 @@ function Viewprofile() {
             }
         }
         fetchData()
-    }, [reset])
+    }, [decrypt, reset])
 
     const handleSave = async (data) => {
         try {
@@ -88,7 +102,7 @@ function Viewprofile() {
             }
             // Handle file data appropriately for your backend
 
-            const url = `http://localhost:5062/api/customer/${customerId}`
+            const url = `http://localhost:5062/api/customer/${decrypt}`
             const result = await axios.put(url, formData)
             console.log(result.data)
         } catch (error) {
@@ -207,6 +221,24 @@ function Viewprofile() {
                     <div className="bg-white rounded-lg pt-4 pb-3">
                         <Button onClick={handleSave} type="submit" className="bg-indigo-800 ml-auto text-yellow-200">
                             Save Changes
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
+                    <FormDescription>Reset Password</FormDescription>
+                    <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
+                        Click the button below to reset your password.
+                    </p>
+                    <p className="text-s text-gray-600 text-left mb-2 font-semibold">
+                        You can reset your password anytime you want for further security.
+                    </p>
+                    <div className="bg-white rounded-lg pt-4 pb-3">
+                        <Button
+                            onClick={() => navigate('/profileresetpassword')}
+                            className="bg-indigo-800 ml-auto text-yellow-200"
+                        >
+                            Reset Password
                         </Button>
                     </div>
                 </div>

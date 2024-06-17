@@ -38,9 +38,9 @@ import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -57,6 +57,8 @@ import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
 import VerifyOTP from './views/front/VerifyOTP'
 import Notification from './views/admin/Notification'
+import Settings from './views/admin/Settings'
+import ProfileResetPassword from './views/front/ProfileResetPassword'
 
 function App() {
     return (
@@ -148,6 +150,7 @@ function App() {
                 <Route path="/password" element={<Password />} />
                 <Route path="/passwordreset/:otp" element={<PasswordReset />} />
                 <Route path="/verifyotp" element={<VerifyOTP />} />
+                <Route path="profileresetpassword" element={<ProfileResetPassword />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
@@ -372,6 +375,14 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="/admin/settings"
+                        element={
+                            <TitleComponent title="Settings">
+                                <Settings />
+                            </TitleComponent>
+                        }
+                    />
                 </Route>
             </Routes>
         </Router>
