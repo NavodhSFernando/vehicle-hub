@@ -20,6 +20,13 @@ const VehicleFleet = () => {
     const location = useLocation()
     const { startDate, startTime, endDate, endTime } = location.state || {}
 
+    const [dateFilter, setDateFilter] = useState({
+        startDate: startDate,
+        startTime: startTime,
+        endDate: endDate,
+        endTime: endTime
+    })
+
     const fetchData = async () => {
         try {
             const response = await axios.get('http://localhost:5062/api/FrontVehicleService/Details')
@@ -43,6 +50,7 @@ const VehicleFleet = () => {
     }
 
     const handleDateFilter = async ({ startDate, startTime, endDate, endTime }) => {
+        setDateFilter({ startDate, startTime, endDate, endTime })
         try {
             const response = await axios.get('http://localhost:5062/api/VehicleFilter/available', {
                 params: { startDate, startTime, endDate, endTime }
@@ -105,6 +113,10 @@ const VehicleFleet = () => {
                                 capacity={vehicle.seatingCapacity}
                                 price={vehicle.costPerDay}
                                 logo={`${baseUrlLogo}${vehicle.logo}`}
+                                startDate={new Date(dateFilter.startDate)}
+                                startTime={dateFilter.startTime}
+                                endDate={new Date(dateFilter.endDate)}
+                                endTime={dateFilter.endTime}
                             />
                         ))}
                     </div>
