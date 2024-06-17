@@ -13,6 +13,7 @@ import { Input } from '../../../components/ui/input'
 import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { Label } from '../../../components/ui/label'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -36,7 +37,15 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="flex items-center py-4"></div>
+            <div className="flex flex-col space-y-1 mt-2 mb-8">
+                <Label>Reservation ID</Label>
+                <Input
+                    placeholder="Filter Reservation Number..."
+                    value={table.getColumn('customerReservationId')?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn('customerReservationId')?.setFilterValue(event.target.value)}
+                    className="max-w-sm"
+                />
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>

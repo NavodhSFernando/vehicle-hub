@@ -87,22 +87,39 @@ import axios from 'axios'
 
 export function EditVehicleDialog({ customerReservationId, refetchReservation }) {
     const [data, setData] = useState([])
-    useEffect(() => {
-        const getAvailableVehicles = async () => {
-            const url = `http://localhost:5062/api/AdminReservation/Available-Vehicles/${customerReservationId}`
-            try {
-                const response = await axios.get(url)
-                console.log(response.data)
-                setData(response.data)
-            } catch (error) {
-                console.log(error)
-            }
+    const [open, setOpen] = useState(false)
+
+    const getAvailableVehicles = async () => {
+        const url = `http://localhost:5062/api/AdminReservation/Available-Vehicles/${customerReservationId}`
+        try {
+            const response = await axios.get(url)
+            console.log(response.data)
+            setData(response.data)
+        } catch (error) {
+            console.log(error)
         }
+    }
+
+    useEffect(() => {
         getAvailableVehicles()
     }, [customerReservationId])
 
+    const handleSelect = async (id) => {
+        const url = `http://localhost:5062/api/AdminReservation/Change-Vehicle/${customerReservationId}?vid=${id}`
+        try {
+            const response = await axios.post(url)
+            console.log(response.data)
+            console.log('Vehicle selected')
+            setOpen(false) // Close the dialog
+            refetchReservation() // Update the reservation data
+            getAvailableVehicles() // Update the available vehicles
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button variant="ghost" className="p-0">
                     <GrEdit fontSize={24} className="mr-1" />
@@ -130,6 +147,7 @@ export function EditVehicleDialog({ customerReservationId, refetchReservation })
                             imageSrc={tag.thumbnail}
                             customerReservationId={customerReservationId}
                             refetchReservation={refetchReservation}
+                            handleSelect={handleSelect} // Pass handleSelect function
                         />
                     ))}
                 </ScrollArea>

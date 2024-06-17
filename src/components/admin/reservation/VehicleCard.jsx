@@ -16,21 +16,10 @@ export default function VehicleCard({
     imageSrc,
     price,
     customerReservationId,
-    refetchReservation
+    refetchReservation,
+    handleSelect
 }) {
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
-
-    const handleSelect = async () => {
-        const url = `http://localhost:5062/api/AdminReservation/Change-Vehicle/${customerReservationId}?vid=${id}`
-        try {
-            const response = await axios.post(url)
-            console.log(response.data)
-            console.log('Vehicle selected')
-            refetchReservation()
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     return (
         <div className="flex w-full p-5 border border-slate-100 mb-2 rounded-xl bg-white">
@@ -67,7 +56,7 @@ export default function VehicleCard({
                     </span>
                     <button
                         className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
-                        onClick={() => handleSelect()}
+                        onClick={() => handleSelect(id)}
                     >
                         Select
                     </button>

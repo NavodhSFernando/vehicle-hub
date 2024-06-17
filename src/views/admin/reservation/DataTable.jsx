@@ -43,23 +43,24 @@ export default function DataTable({ columns, data }) {
 
     // Update the date filter when the date state changes
     React.useEffect(() => {
-        if (startDate) {
-            table.getColumn('startDate')?.setFilterValue(format(startDate, 'yyyy-MM-dd'))
+        if (startDate || endDate) {
+            table.getColumn('startDate')?.setFilterValue([startDate, endDate])
         } else {
-            table.getColumn('startDate')?.setFilterValue('')
+            table.getColumn('startDate')?.setFilterValue([])
         }
-    }, [startDate, table])
+    }, [startDate, endDate, table])
 
     React.useEffect(() => {
-        if (endDate) {
-            table.getColumn('endDate')?.setFilterValue(format(endDate, 'yyyy-MM-dd'))
+        if (startDate || endDate) {
+            table.getColumn('endDate')?.setFilterValue([startDate, endDate])
         } else {
-            table.getColumn('endDate')?.setFilterValue('')
+            table.getColumn('endDate')?.setFilterValue([])
         }
-    }, [endDate, table])
+    }, [startDate, endDate, table])
 
     const clearFilters = () => {
         setStartDate(null)
+        setEndDate(null)
         setColumnFilters([])
         setSorting([])
         table.resetColumnFilters()
@@ -68,7 +69,7 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 my-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 mb-8">
                 <div className="flex flex-col space-y-1 pt-2 pb-4">
                     <Label>Reservation Start</Label>
                     <Popover>
