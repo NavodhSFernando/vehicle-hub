@@ -27,7 +27,7 @@ const formSchema = z.object({
     role: z.string({
         required_error: 'role is required'
     }),
-    dob: z.string().regex(/^\d{4}\-\d{2}\-\d{2}$/, { message: 'Date of birth must be in YYYY.MM.DD format' }),
+    dob: z.string().regex(/^\d{4}\-\d{2}\-\d{2}$/, { message: 'Date of birth must be in YYYY-MM-DD format' }),
     contactNo: z.number().int(),
     nic: z.string().length(12),
     gender: z.string({
@@ -36,7 +36,6 @@ const formSchema = z.object({
     department: z.string({
         required_error: 'department is required'
     }),
-    password: z.string().min(8),
     status: z.boolean().default(true) // Added status field
 })
 
@@ -59,7 +58,6 @@ export default function CreateEmployee() {
             nic: '',
             gender: '',
             department: '',
-            password: '',
             status: ''
         }
     })
@@ -77,7 +75,7 @@ export default function CreateEmployee() {
                 NIC: data.nic,
                 Gender: data.gender,
                 Department: data.department,
-                Password: data.password,
+                Password: '',
                 Status: data.status
             }
             console.log(formData)
@@ -294,27 +292,6 @@ export default function CreateEmployee() {
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.transmission && errors.transmission.message}</FormMessage>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <div className="flex flex-col space-y-1 pt-6">
-                                <FormLabel className="pb-3">Password</FormLabel>
-                            </div>
-                            <FormControl>
-                                <Input
-                                    type="password"
-                                    onChange={(e) => {
-                                        field.onChange(e.target.value)
-                                    }}
-                                    {...field}
-                                />
-                            </FormControl>
                         </FormItem>
                     )}
                 />
