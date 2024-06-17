@@ -56,6 +56,7 @@ import Adminlogin from './views/admin/Adminlogin'
 import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
 import VerifyOTP from './views/front/VerifyOTP'
+import Settings from './views/admin/Settings'
 
 function App() {
     return (
@@ -370,6 +371,14 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="/admin/settings"
+                        element={
+                            <TitleComponent title="Settings">
+                                <Settings />
+                            </TitleComponent>
+                        }
+                    />
                 </Route>
             </Routes>
         </Router>
