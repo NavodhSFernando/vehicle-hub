@@ -1,10 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { useState } from 'react'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -16,12 +13,8 @@ import {
     FormMessage
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useRef } from 'react'
-import { set } from 'date-fns'
-
-//const regNoPattern = /^[A-Z]{2}\s\d{4}$/
 
 export default function EditVehiclePhotos({ vehicleId }) {
     const fileInputRef = useRef('')
@@ -49,7 +42,6 @@ export default function EditVehiclePhotos({ vehicleId }) {
         const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
         try {
             const { data } = await axios.get(url)
-            console.log('data', data)
             setThumbnail(data.thumbnail)
             setFrontImg(data.frontImg)
             setRearImg(data.rearImg)
@@ -101,21 +93,16 @@ export default function EditVehiclePhotos({ vehicleId }) {
         const url = `http://localhost:5062/api/Vehicle/Thumbnail/${vehicleId}`
         try {
             const formData = new FormData()
-            console.log(data)
             formData.append('formFile', data.thumbnail ? data.thumbnail[0] : null)
-
-            console.log('Form Data:', formData)
-
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log('Response:', response.data)
             if (response.data && response.data.thumbnail) {
                 setThumbnail(response.data.thumbnail)
             }
+            reset()
             fetchData()
         } catch (error) {
             console.error('Error:', error)
@@ -126,21 +113,16 @@ export default function EditVehiclePhotos({ vehicleId }) {
         const url = `http://localhost:5062/api/Vehicle/FrontImg/${vehicleId}`
         try {
             const formData = new FormData()
-            console.log(data)
             formData.append('front', data.frontImg[0])
-
-            console.log('Form Data:', formData)
-
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log('Response:', response.data)
             if (response.data && response.data.frontImg) {
                 setFrontImg(response.data.frontImg)
             }
+            reset()
             fetchData()
         } catch (error) {
             console.error('Error:', error)
@@ -151,21 +133,16 @@ export default function EditVehiclePhotos({ vehicleId }) {
         const url = `http://localhost:5062/api/Vehicle/RearImg/${vehicleId}`
         try {
             const formData = new FormData()
-            console.log('data', data)
             formData.append('rear', data.rearImg[0])
-
-            console.log('Form Data:', formData)
-
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log('Response:', response.data)
             if (response.data && response.data.rearImg) {
                 setRearImg(response.data.rearImg)
             }
+            reset()
             fetchData()
         } catch (error) {
             console.error('Error:', error)
@@ -176,21 +153,16 @@ export default function EditVehiclePhotos({ vehicleId }) {
         const url = `http://localhost:5062/api/Vehicle/DashboardImg/${vehicleId}`
         try {
             const formData = new FormData()
-            console.log('data', data)
             formData.append('dashboard', data.dashboard[0])
-
-            console.log('Form Data:', formData)
-
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log('Response:', response.data)
             if (response.data && response.data.dashboard) {
                 setDashboard(response.data.dashboard)
             }
+            reset()
             fetchData()
         } catch (error) {
             console.error('Error:', error)
@@ -201,21 +173,16 @@ export default function EditVehiclePhotos({ vehicleId }) {
         const url = `http://localhost:5062/api/Vehicle/InteriorImg/${vehicleId}`
         try {
             const formData = new FormData()
-            console.log(data)
             formData.append('interior', data.interior[0])
-
-            console.log('Form Data:', formData)
-
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log('Response:', response.data)
             if (response.data && response.data.interior) {
                 setInterior(response.data.interior)
             }
+            reset()
             fetchData()
         } catch (error) {
             console.error('Error:', error)
@@ -253,7 +220,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         Update
                     </Button>
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseThumbnailUrl}${thumbnail}`} />
+                <img className=" object-contain h-60 w-60" src={`${baseThumbnailUrl}${thumbnail}`} alt="" />
             </form>
 
             <form
@@ -283,7 +250,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         Update
                     </Button>
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseFrontImgUrl}${frontImg}`} />
+                <img className=" object-contain h-60 w-60" src={`${baseFrontImgUrl}${frontImg}`} alt="" />
             </form>
 
             <form
@@ -313,7 +280,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         Update
                     </Button>
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseRearImgUrl}${rearImg}`} />
+                <img className=" object-contain h-60 w-60" src={`${baseRearImgUrl}${rearImg}`} alt="" />
             </form>
 
             <form
@@ -343,7 +310,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         Update
                     </Button>
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseDashboardUrl}${dashboard}`} />
+                <img className=" object-contain h-60 w-60" src={`${baseDashboardUrl}${dashboard}`} alt="" />
             </form>
 
             <form
@@ -373,7 +340,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         Update
                     </Button>
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseInteriorUrl}${interior}`} />
+                <img className=" object-contain h-60 w-60" src={`${baseInteriorUrl}${interior}`} alt="" />
             </form>
         </Form>
     )
