@@ -48,7 +48,7 @@ export default function CreateVehicleType() {
             }
 
             const result = await axios.post(url, formData)
-            console.log(result)
+            console.log(result.data)
             reset()
         } catch (error) {
             console.log(error)
