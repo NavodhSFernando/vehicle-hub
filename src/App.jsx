@@ -57,6 +57,8 @@ import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
 import VerifyOTP from './views/front/VerifyOTP'
 import Notification from './views/admin/Notification'
+import Settings from './views/admin/Settings'
+import ProfileResetPassword from './views/front/ProfileResetPassword'
 
 function App() {
     return (
@@ -148,6 +150,7 @@ function App() {
                 <Route path="/password" element={<Password />} />
                 <Route path="/passwordreset/:otp" element={<PasswordReset />} />
                 <Route path="/verifyotp" element={<VerifyOTP />} />
+                <Route path="profileresetpassword" element={<ProfileResetPassword />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
@@ -372,6 +375,14 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="/admin/settings"
+                        element={
+                            <TitleComponent title="Settings">
+                                <Settings />
+                            </TitleComponent>
+                        }
+                    />
                 </Route>
             </Routes>
         </Router>
