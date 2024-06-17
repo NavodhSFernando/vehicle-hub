@@ -43,6 +43,7 @@ function Adminlogin() {
             navigate('/admin/dashboard')
         } catch (error) {
             console.error('Login failed', error.response ? error.response.data : error.message)
+            alert('Login failed: ' + (error.response && error.response.data ? error.response.data : error.message))
         }
     }
 
