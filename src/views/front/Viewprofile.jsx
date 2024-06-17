@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react'
-import { useOutletContext, useParams } from 'react-router-dom'
+import React, { useRef, useEffect, useState } from 'react'
+import { useOutletContext, useParams, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
@@ -30,18 +30,9 @@ const formSchema = z.object({
     })
 })
 
-const passwordSchema = z
-    .object({
-        currentPassword: z.string().min(8, 'Current password must be at least 8 characters long'),
-        newPassword: z.string().min(8, 'New password must be at least 8 characters long'),
-        confirmPassword: z.string().min(8, 'Confirm password must be at least 8 characters long')
-    })
-    .refine((data) => data.newPassword === data.confirmPassword, {
-        message: "New password and confirm password don't match",
-        path: ['confirmPassword']
-    })
-
 function Viewprofile() {
+    const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted Customer ID
+    const navigate = useNavigate()
     const customerId = useOutletContext()
     const {
         control,
@@ -60,22 +51,21 @@ function Viewprofile() {
         }
     })
 
-    const {
-        control: passwordControl,
-        handleSubmit: handlePasswordSubmit,
-        formState: { errors: passwordErrors }
-    } = useForm({
-        resolver: zodResolver(passwordSchema),
-        defaultValues: {
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
+    useEffect(() => {
+        const decryptId = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+                setDecrypt(response.data.decryptedUserId)
+            } catch (error) {
+                console.error('Failed to decrypt Customer ID:', error)
+            }
         }
-    })
+        decryptId()
+    }, [customerId])
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/customer/${customerId}`
+            const url = `http://localhost:5062/api/customer/${decrypt}`
             try {
                 const { data } = await axios.get(url)
                 console.log(data)
@@ -93,7 +83,7 @@ function Viewprofile() {
             }
         }
         fetchData()
-    }, [reset])
+    }, [decrypt, reset])
 
     const handleSave = async (data) => {
         try {
@@ -112,35 +102,11 @@ function Viewprofile() {
             }
             // Handle file data appropriately for your backend
 
-            const url = `http://localhost:5062/api/customer/${customerId}`
+            const url = `http://localhost:5062/api/customer/${decrypt}`
             const result = await axios.put(url, formData)
             console.log(result.data)
         } catch (error) {
             console.error('Failed to update the profile', error)
-        }
-    }
-
-    const handlePasswordReset = async (data) => {
-        try {
-            const token = sessionStorage.getItem('jwtToken')
-            if (!token) {
-                console.error('JWT token is not available')
-                return
-            }
-
-            const formData = {
-                currentPassword: data.currentPassword,
-                newPassword: data.newPassword
-            }
-            const url = `http://localhost:5062/api/customer/reset-password`
-            const result = await axios.post(url, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            console.log(result.data)
-        } catch (error) {
-            console.error('Failed to reset the password', error)
         }
     }
 
@@ -259,70 +225,23 @@ function Viewprofile() {
                     </div>
                 </div>
 
-                <Form {...passwordControl}>
-                    <form onSubmit={handlePasswordSubmit(handlePasswordReset)} className="w-full space-y-4 mt-6">
-                        <div className="flex flex-col p-6 bg-white rounded-lg pb-6">
-                            <FormDescription>Reset Password</FormDescription>
-                            <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
-                                Enter your current password to verify, then enter your new password.
-                            </p>
-
-                            <FormField
-                                control={passwordControl}
-                                name="currentPassword"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex flex-col space-y-1 pt-6">
-                                            <FormLabel className="pb-3">Current Password</FormLabel>
-                                        </div>
-                                        <FormControl>
-                                            <Input type="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage>{passwordErrors.currentPassword?.message}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={passwordControl}
-                                name="newPassword"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex flex-col space-y-1 pt-6">
-                                            <FormLabel className="pb-3">New Password</FormLabel>
-                                        </div>
-                                        <FormControl>
-                                            <Input type="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage>{passwordErrors.newPassword?.message}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={passwordControl}
-                                name="confirmPassword"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <div className="flex flex-col space-y-1 pt-6">
-                                            <FormLabel className="pb-3">Confirm Password</FormLabel>
-                                        </div>
-                                        <FormControl>
-                                            <Input type="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage>{passwordErrors.confirmPassword?.message}</FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-
-                            <div className="bg-white rounded-lg pt-4 pb-3">
-                                <Button type="submit" className="bg-indigo-800 ml-auto text-yellow-200">
-                                    Reset Password
-                                </Button>
-                            </div>
-                        </div>
-                    </form>
-                </Form>
+                <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
+                    <FormDescription>Reset Password</FormDescription>
+                    <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
+                        Click the button below to reset your password.
+                    </p>
+                    <p className="text-s text-gray-600 text-left mb-2 font-semibold">
+                        You can reset your password anytime you want for further security.
+                    </p>
+                    <div className="bg-white rounded-lg pt-4 pb-3">
+                        <Button
+                            onClick={() => navigate('/profileresetpassword')}
+                            className="bg-indigo-800 ml-auto text-yellow-200"
+                        >
+                            Reset Password
+                        </Button>
+                    </div>
+                </div>
 
                 <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                     <FormDescription>Delete Customer</FormDescription>
