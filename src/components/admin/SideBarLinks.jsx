@@ -58,11 +58,19 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 label: 'View All Reservation',
                 path: '/admin/reservation/view',
                 icon: <LuDot />
-            },
+            }
+        ]
+    },
+    {
+        key: 'vehicle log',
+        label: 'Vehicle Log',
+        path: '/admin/vehiclelog',
+        icon: <RiStackLine />,
+        subLinks: [
             {
-                key: 'create reservations',
-                label: 'Create Reservations',
-                path: '/admin/reservation/create',
+                key: 'view all vehicle log',
+                label: 'View All vehicle Log',
+                path: '/admin/vehiclelog/view',
                 icon: <LuDot />
             }
         ]
@@ -191,26 +199,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 key: 'view all customer',
                 label: 'View All Customer',
                 path: '/admin/customer/view',
-                icon: <LuDot />
-            }
-        ]
-    },
-    {
-        key: 'vehicle log',
-        label: 'Vehicle Log',
-        path: '/admin/vehiclelog',
-        icon: <RiStackLine />,
-        subLinks: [
-            {
-                key: 'view all vehicle log',
-                label: 'View All vehicle Log',
-                path: '/admin/vehiclelog/view',
-                icon: <LuDot />
-            },
-            {
-                key: 'create vehicle log',
-                label: 'Create Vehicle Log',
-                path: '/admin/vehiclelog/create',
                 icon: <LuDot />
             }
         ]
