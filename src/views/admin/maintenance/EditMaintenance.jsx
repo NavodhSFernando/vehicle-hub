@@ -174,7 +174,7 @@ export default function EditMaintenance() {
                                 </FormControl>
                                 <SelectContent>
                                     <SelectItem value="service">Vehicle Service</SelectItem>
-                                    <SelectItem value="brakePad">Brake Pad Replacement</SelectItem>
+                                    <SelectItem value="brakePadReplacement">Brake Pad Replacement</SelectItem>
                                     <SelectItem value="gearOil">Gear Oil Replacements</SelectItem>
                                     <SelectItem value="tyreRotation">Tyre Rotation</SelectItem>
                                     <SelectItem value="batteryMaintenance">Battery Maintenance</SelectItem>
