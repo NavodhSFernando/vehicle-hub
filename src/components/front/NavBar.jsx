@@ -43,7 +43,7 @@ const Navbar = () => {
 
     useEffect(() => {
         const isLoggedIn = Cookies.get('customerId')
-        setLoggedIn(!isLoggedIn)
+        setLoggedIn(!!isLoggedIn)
     }, [])
 
     return (
