@@ -36,17 +36,6 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="flex flex-row items-center my-8">
-                <div className="flex flex-col space-y-1 w-full pb-4">
-                    <Label>Vehicle Name</Label>
-                    <Input
-                        placeholder="Filter Vehicle Name"
-                        value={table.getColumn('modelName')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('modelName')?.setFilterValue(event.target.value)}
-                        className="max-w-lg"
-                    />
-                </div>
-            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
