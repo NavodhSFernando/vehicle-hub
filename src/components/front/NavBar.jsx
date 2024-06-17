@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { BsBookmarkStar } from 'react-icons/bs'
@@ -11,20 +11,16 @@ import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
 import WishlistDropdown from './WishlistDropDown'
-import NotificationCenter from '../../views/front/NotificationCenter'
+import Cookies from 'js-cookie'
 
 const Navbar = () => {
-    const [wishlistDropdownOpen, setWishlistDropdownOpen] = useState(true)
-
-    const closeWishlistDropdown = () => {
-        setWishlistDropdownOpen(false)
-    }
+    const [loggedIn, setLoggedIn] = useState(true)
 
     const [isDropdownOpen] = useState(true)
     const handleNavigate = () => {
         console.log('Navigating to all notifications view')
     }
-    const loggedIn = true
+
     const [clicked, setClicked] = useState(false)
     const handleClick = () => {
         setClicked(!clicked)
@@ -45,8 +41,13 @@ const Navbar = () => {
         setShowNav(!showNav)
     }
 
+    useEffect(() => {
+        const isLoggedIn = Cookies.get('customerId')
+        setLoggedIn(!isLoggedIn)
+    }, [])
+
     return (
-        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary w-screen">
+        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -86,7 +87,7 @@ const Navbar = () => {
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <NavLink to="/singin">
+                            <NavLink to="/login">
                                 <button className="border-yellowtheme border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign In
                                 </button>

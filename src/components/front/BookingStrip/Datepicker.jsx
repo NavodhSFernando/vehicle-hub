@@ -12,6 +12,12 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/
 export default function Datepicker(props) {
     const [date, setDate] = useState(new Date())
 
+    const handleDateSelect = (newDate) => {
+        setDate(newDate);
+        if (props.onChange) {
+            props.onChange(newDate);
+        }
+    };
     return (
         <div className="flex gap-2 items-center ">
             <Popover>
@@ -29,7 +35,7 @@ export default function Datepicker(props) {
                     </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                    <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+                    <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
                 </PopoverContent>
             </Popover>
 

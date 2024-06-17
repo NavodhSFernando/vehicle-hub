@@ -6,10 +6,12 @@ import {
     getCoreRowModel,
     useReactTable,
     getFilteredRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
 export default function DataTable({ columns, data }) {
@@ -21,11 +23,15 @@ export default function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         getSortedRowModel: getSortedRowModel(),
         state: {
-            sorting
-        }
+            sorting,
+            columnFilters
+        },
+        initialState: { pagination: { pageSize: 5 } }
     })
 
     return (
@@ -48,7 +54,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -63,7 +69,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="py-5 px-5" key={cell.id}>
+                                        <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -79,6 +85,7 @@ export default function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }

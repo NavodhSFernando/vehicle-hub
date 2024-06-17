@@ -1,14 +1,14 @@
-import React from 'react'
-import { useState, useEffect } from 'react'
-import aqua from '../../assets/vehicles/aqua.png'
-import { Button } from '../../components/ui/button'
+import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import { Button } from '../../components/ui/button'
 
 export default function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
     const [rating, setRating] = useState(0) // State for tracking the star rating
     const [status, setStatus] = useState('') // State for tracking the reservation status
+    const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted reservation ID
+    const [rentalData, setRentalData] = useState({}) // State for tracking rental data
 
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
 
@@ -17,72 +17,69 @@ export default function Ongoingrentalssingle() {
         setRating(value)
     }
 
-    // Example JSON object
-    // const rentalData = {
-    //     reservationId: 'R001',
-    //     name: 'Alex Fernando',
-    //     vehicleName: 'Toyota Aqua',
-    //     pickupDate: '21.12.2023',
-    //     pickupTime: '10.30 AM',
-    //     dropOffDate: '02.01.2024',
-    //     dropOffTime: '11.00 AM',
-    //     reservationStatus: 'Pending'
-    // }
-
-    const [rentalData, setRentalData] = useState({})
+    useEffect(() => {
+        const decryptId = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`
+                )
+                setDecrypt(response.data.decryptedUserId)
+            } catch (error) {
+                console.error('Failed to decrypt reservation ID:', error)
+            }
+        }
+        decryptId()
+    }, [customerReservationId])
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Update the URL to your specific API endpoint for fetching rentals
                 const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/ongoing-rental-single/${customerReservationId}`
+                    `http://localhost:5062/api/FrontReservationService/ongoing-rental-single/${decrypt}`
                 )
-                setRentalData(response.data) // Assume the response data is the array of rentals
+                setRentalData(response.data) // Assume the response data is the rental data
                 setStatus(response.data.status)
-                console.log('Fetched Ongoing Rentals:', response.data)
             } catch (error) {
                 console.error('Failed to fetch Ongoing Rentals:', error)
             }
         }
-        fetchData()
-    }, [])
+        if (decrypt) {
+            fetchData()
+        }
+    }, [decrypt])
 
-    let color = ''
-    switch (status) {
-        case 'Waiting':
-            color = 'bg-yellow-500'
-            break
-        case 'Pending':
-            color = 'bg-blue-500'
-            break
-        case 'Confirmed':
-            color = 'bg-green-500'
-            break
-        case 'Ongoing':
-            color = 'bg-purple-500'
-            break
-        case 'Ended':
-            color = 'bg-orange-500'
-            break
-        case 'Completed':
-            color = 'bg-green-700'
-            break
-        case 'Cancelled':
-            color = 'bg-red-500'
-            break
-        default:
-            color = 'bg-gray-500'
-            break
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Waiting':
+                return 'bg-yellow-500'
+            case 'Pending':
+                return 'bg-blue-500'
+            case 'Confirmed':
+                return 'bg-green-500'
+            case 'Ongoing':
+                return 'bg-purple-500'
+            case 'Ended':
+                return 'bg-orange-500'
+            case 'Completed':
+                return 'bg-green-700'
+            case 'Cancelled':
+                return 'bg-red-500'
+            default:
+                return 'bg-gray-500'
+        }
     }
 
     return (
         <>
-            <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
+            <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1">
                 <div className="my-16 lg:mx-36">
                     <h3 className="pb-6 text-l text-gray-950 font-semibold">Rental Summary</h3>
                     <div className="flex items-center">
-                        <img src={`${baseUrl}${rentalData.thumbnail}`} alt="car" className="w-40 mr-12" />
+                        <img
+                            src={rentalData.thumbnail ? `${baseUrl}${rentalData.thumbnail}` : null}
+                            alt="car"
+                            className="w-40 mr-12"
+                        />
                         <div className="flex flex-col">
                             <h1 className="text-2xl font-semibold text-gray-950 mb-1">
                                 {rentalData.make} {rentalData.modelName}
@@ -107,11 +104,11 @@ export default function Ongoingrentalssingle() {
                     </div>
                     <hr className="pb-3 border-t-2 border-stone-200 mx-5" />
                     <div className="pt-8 flex justify-between">
-                        <p className="text-gray-500">Reservation ID </p>
+                        <p className="text-gray-500">Reservation ID</p>
                         <p className="font-semibold">{rentalData.customerReservationId}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
-                        <p className="text-gray-500">Pick-Up Date </p>
+                        <p className="text-gray-500">Pick-Up Date</p>
                         <p className="font-semibold">{rentalData.startDate}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
@@ -127,9 +124,9 @@ export default function Ongoingrentalssingle() {
                         <p className="font-semibold">{rentalData.endTime}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
-                        <p className="text-gray-500">Reservation Status </p>
+                        <p className="text-gray-500">Reservation Status</p>
                         <button
-                            className={`${color} rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2`}
+                            className={`${getStatusColor(status)} rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2`}
                         >
                             {rentalData.status}
                         </button>
@@ -153,7 +150,7 @@ export default function Ongoingrentalssingle() {
                         <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
                             Feel free to contact
                         </div>
-                        <div className=" mt-6 text-s text-indigo-800 flex items-start font-semibold mr-1">
+                        <div className="mt-6 text-s text-indigo-800 flex items-start font-semibold mr-1">
                             vehiclehub@example.com
                         </div>
                         <div className="mt-6 text-s text-gray-500 flex items-start font-semibold">

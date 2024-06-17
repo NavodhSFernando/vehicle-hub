@@ -28,8 +28,10 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'reservationId',
-        header: 'Reservation ID'
+        accessorKey: 'customerReservationId',
+        header: 'Reservation ID',
+        filterFn: 'includesString', // Add a filter function
+        cell: ({ row }) => <div>{row.getValue('customerReservationId')}</div> // Make sure to render the cell value
     },
     {
         accessorKey: 'endMileage',

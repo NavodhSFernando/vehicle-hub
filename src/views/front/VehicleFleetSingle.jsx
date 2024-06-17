@@ -7,7 +7,8 @@ import CheckList from '../../components/front/VehicleFleetSingle/CheckList'
 import ImageShowCase from '../../components/front/VehicleFleetSingle/ImageShowCase'
 
 export default function VehicleFleetSingle() {
-    const { slug } = useParams()
+    const { id } = useParams()
+    console.log('vehicleId', id)
 
     const reservation = {
         name: 'Toyota Aqua',
@@ -28,9 +29,9 @@ export default function VehicleFleetSingle() {
     return (
         <div className="flex gap-4 flex-row">
             <div className="flex flex-col w-1/2">
-                <ImageShowCase />
-                <CheckList />
-                <FeedBack slug={slug} />
+                <ImageShowCase id={id} />
+                <CheckList id={id} />
+                <FeedBack id={id} />
             </div>
             <div className="flex flex-col w-1/2">
                 <Detailcar

@@ -56,6 +56,7 @@ import Adminlogin from './views/admin/Adminlogin'
 import PasswordReset from './views/front/PasswordReset'
 import EditEmployee from './views/admin/employee/EditEmployee'
 import VerifyOTP from './views/front/VerifyOTP'
+import Notification from './views/admin/Notification'
 import Settings from './views/admin/Settings'
 
 function App() {
@@ -73,7 +74,7 @@ function App() {
                         }
                     />
                     <Route
-                        path="/vehiclefleet/:slug"
+                        path="/vehiclefleet/:id"
                         element={
                             <TitleComponent title="Vehicle Fleet">
                                 <VehicleFleetSingle />
@@ -82,7 +83,7 @@ function App() {
                     />
                     <Route path="/account" element={<Account />}>
                         <Route
-                            path="/account/ongoingrentalssingle/:customerReservationId"
+                            path="/account/ongoingrental/:customerReservationId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <Ongoingrentalssingle />
@@ -90,7 +91,7 @@ function App() {
                             }
                         />
                         <Route
-                            path="/account/rentalhistorysingle/:customerReservationId"
+                            path="/account/rentalhistory/:customerReservationId"
                             element={
                                 <TitleComponent title="Rental History">
                                     <Rentalhistorysingle />
@@ -153,6 +154,7 @@ function App() {
                 <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="notification" element={<Notification />} />
                     <Route path="report">
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<ViewRevenueReport />} />

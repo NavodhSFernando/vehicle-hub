@@ -10,12 +10,16 @@ const BookingStrip = ({ onDateFilter }) => {
     const [endTime, setEndTime] = useState('')
 
     const handleDateFilter = () => {
+        console.log('startDate', startDate);
+        console.log('endDate', endDate);
+        console.log('startTime', startTime);
+        console.log('endTime', endTime);
         onDateFilter({
             startDate,
             startTime,
             endDate,
             endTime
-        })
+        });
     }
 
     return (

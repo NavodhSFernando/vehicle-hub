@@ -10,22 +10,20 @@ const WishlistDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
     }, [])
 
     const areVehiclesEqual = (vehicle1, vehicle2) => {
-        return (
-            vehicle1.name === vehicle2.name &&
-            vehicle1.type === vehicle2.type &&
-            vehicle1.year === vehicle2.year &&
-            vehicle1.transmission === vehicle2.transmission &&
-            vehicle1.capacity === vehicle2.capacity &&
-            vehicle1.imageSrc === vehicle2.imageSrc &&
-            vehicle1.imageAlt === vehicle2.imageAlt &&
-            vehicle1.price === vehicle2.price
-        )
+        return vehicle1.name === vehicle2.name &&
+               vehicle1.type === vehicle2.type &&
+               vehicle1.year === vehicle2.year &&
+               vehicle1.transmission === vehicle2.transmission &&
+               vehicle1.capacity === vehicle2.capacity &&
+               vehicle1.imageSrc === vehicle2.imageSrc &&
+               vehicle1.imageAlt === vehicle2.imageAlt &&
+               vehicle1.price === vehicle2.price;
     }
-
+    
     const handleRemoveFromWishlist = (vehicleDetails) => {
-        const updatedWishlistItems = wishlistItems.filter((item) => !areVehiclesEqual(item, vehicleDetails))
-        setWishlistItems(updatedWishlistItems)
-        localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems))
+        const updatedWishlistItems = wishlistItems.filter((item) => !areVehiclesEqual(item, vehicleDetails));
+        setWishlistItems(updatedWishlistItems);
+        localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems));
         //onWishlistChange(updatedWishlistItems);
     }
 
