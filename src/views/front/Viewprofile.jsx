@@ -30,6 +30,17 @@ const formSchema = z.object({
     })
 })
 
+const passwordSchema = z
+    .object({
+        currentPassword: z.string().min(8, 'Current password must be at least 8 characters long'),
+        newPassword: z.string().min(8, 'New password must be at least 8 characters long'),
+        confirmPassword: z.string().min(8, 'Confirm password must be at least 8 characters long')
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "New password and confirm password don't match",
+        path: ['confirmPassword']
+    })
+
 function Viewprofile() {
     const customerId = useOutletContext()
     const {
@@ -46,6 +57,19 @@ function Viewprofile() {
             licenseno: '',
             contactNumber: 0,
             address: ''
+        }
+    })
+
+    const {
+        control: passwordControl,
+        handleSubmit: handlePasswordSubmit,
+        formState: { errors: passwordErrors }
+    } = useForm({
+        resolver: zodResolver(passwordSchema),
+        defaultValues: {
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: ''
         }
     })
 
@@ -93,6 +117,30 @@ function Viewprofile() {
             console.log(result.data)
         } catch (error) {
             console.error('Failed to update the profile', error)
+        }
+    }
+
+    const handlePasswordReset = async (data) => {
+        try {
+            const token = sessionStorage.getItem('jwtToken')
+            if (!token) {
+                console.error('JWT token is not available')
+                return
+            }
+
+            const formData = {
+                currentPassword: data.currentPassword,
+                newPassword: data.newPassword
+            }
+            const url = `http://localhost:5062/api/customer/reset-password`
+            const result = await axios.post(url, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            console.log(result.data)
+        } catch (error) {
+            console.error('Failed to reset the password', error)
         }
     }
 
@@ -210,6 +258,71 @@ function Viewprofile() {
                         </Button>
                     </div>
                 </div>
+
+                <Form {...passwordControl}>
+                    <form onSubmit={handlePasswordSubmit(handlePasswordReset)} className="w-full space-y-4 mt-6">
+                        <div className="flex flex-col p-6 bg-white rounded-lg pb-6">
+                            <FormDescription>Reset Password</FormDescription>
+                            <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
+                                Enter your current password to verify, then enter your new password.
+                            </p>
+
+                            <FormField
+                                control={passwordControl}
+                                name="currentPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex flex-col space-y-1 pt-6">
+                                            <FormLabel className="pb-3">Current Password</FormLabel>
+                                        </div>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{passwordErrors.currentPassword?.message}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={passwordControl}
+                                name="newPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex flex-col space-y-1 pt-6">
+                                            <FormLabel className="pb-3">New Password</FormLabel>
+                                        </div>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{passwordErrors.newPassword?.message}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={passwordControl}
+                                name="confirmPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <div className="flex flex-col space-y-1 pt-6">
+                                            <FormLabel className="pb-3">Confirm Password</FormLabel>
+                                        </div>
+                                        <FormControl>
+                                            <Input type="password" {...field} />
+                                        </FormControl>
+                                        <FormMessage>{passwordErrors.confirmPassword?.message}</FormMessage>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="bg-white rounded-lg pt-4 pb-3">
+                                <Button type="submit" className="bg-indigo-800 ml-auto text-yellow-200">
+                                    Reset Password
+                                </Button>
+                            </div>
+                        </div>
+                    </form>
+                </Form>
 
                 <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
                     <FormDescription>Delete Customer</FormDescription>
