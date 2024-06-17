@@ -11,7 +11,6 @@ export default function CheckList() {
         try {
             const response = await axios.get(`http://localhost:5062/api/FrontVehicleService/AdditionalFeatures/${id}`)
             const data = response.data
-            console.log('data', data)
             const items = [
                 { name: 'ABS', value: data.abs },
                 { name: 'AC Front', value: data.acFront },
@@ -33,7 +32,6 @@ export default function CheckList() {
                 { name: 'Tinted Glass', value: data.tintedGlass }
             ]
             setItems(items)
-            console.log('Items', items)
         } catch (error) {
             console.error('Failed to fetch vehicle data:', error)
         }
@@ -46,19 +44,25 @@ export default function CheckList() {
     // Styles for the list
     const listStyle = {
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
+        gridTemplateColumns: 'repeat(3, 1fr)',
         gap: '12px',
         alignItems: 'center',
         listStyleType: 'none'
     }
+    const titleStyle = {
+        gridColumn: '1 / -1'
+    }
 
     return (
-        <div className="w-full rounded-b-lg bg-white p-20 flex flex-col mb-5">
+        <div className="w-full rounded-b-lg bg-white p-10 flex flex-col mb-5">
             <ul style={listStyle}>
+                <p style={titleStyle} className="text-sm text-slate-500 uppercase ">
+                    Features
+                </p>
                 {items
                     .filter((item) => item.value)
                     .map((item, index) => (
-                        <li key={index} className="text-sm text-slate-500 ">
+                        <li key={index} className="text-md leading-3 text-slate-500 pl-2">
                             {item.name}
                         </li>
                     ))}
