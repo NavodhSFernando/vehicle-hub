@@ -72,7 +72,6 @@ export default function CreateVehicle() {
             chassisNo: '',
             color: '',
             costPerDay: 0,
-            transmission: 'auto',
             mileage: 0,
             costPerExtraKm: 0,
             vehicleTypeId: '',
