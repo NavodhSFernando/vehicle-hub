@@ -5,11 +5,15 @@ import Detailcar from '../../components/front/VehicleFleetSingle/Detailcar'
 import FeedBack from '../../components/front/VehicleFleetSingle/FeedBack'
 import CheckList from '../../components/front/VehicleFleetSingle/CheckList'
 import ImageShowCase from '../../components/front/VehicleFleetSingle/ImageShowCase'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import PageNotFound from '../../components/front/PageNotFound'
 
 export default function VehicleFleetSingle() {
     const { id } = useParams()
     const location = useLocation()
     const { startDate, startTime, endDate, endTime } = location.state || {}
+    const [vehicleData, setVehicleData] = useState({})
 
     console.log('vehicleId', id)
 
@@ -33,6 +37,20 @@ export default function VehicleFleetSingle() {
         etime: endTime
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5062/api/Vehicle/${id}`)
+                setVehicleData(response.data)
+                console.log('Fetched Vehicle:', response.data)
+            } catch (error) {
+                console.error('Failed to fetch vehicle data:', error)
+            }
+        }
+
+        fetchData()
+    }, [id])
+
     function formatDate(date) {
         if (!(date instanceof Date) || isNaN(date.getTime())) {
             console.error('Invalid date:', date)
@@ -44,6 +62,12 @@ export default function VehicleFleetSingle() {
         const day = String(date.getDate()).padStart(2, '0')
 
         return `${year}/${month}/${day}`
+    }
+
+    console.log('Vehicle Data:', vehicleData)
+    if (!vehicleData.registrationNumber) {
+        console.log('No vehicle data')
+        return <PageNotFound />
     }
 
     return (
