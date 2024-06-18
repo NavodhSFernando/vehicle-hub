@@ -43,7 +43,7 @@ const Navbar = () => {
 
     useEffect(() => {
         const isLoggedIn = Cookies.get('customerId')
-        setLoggedIn(!!isLoggedIn)
+        isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
     }, [])
 
     return (
@@ -88,12 +88,12 @@ const Navbar = () => {
                     {!loggedIn ? (
                         <div className="flex items-center">
                             <NavLink to="/login">
-                                <button className="border-yellowtheme border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="border-[#FBDAC6] text-[#FBDAC6] border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign In
                                 </button>
                             </NavLink>
                             <NavLink to="/signup">
-                                <button className="ml-4 bg-yellowtheme border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="ml-4 bg-[#FBDAC6] border-[#FBDAC6] border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign Up
                                 </button>
                             </NavLink>

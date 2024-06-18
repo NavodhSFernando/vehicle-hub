@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const NOTIFICATIONS_PER_PAGE = 3
+const NOTIFICATIONS_PER_PAGE = 6
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
@@ -37,7 +37,7 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.description}
+                            title={notification.title}
                             description={notification.description}
                             time={notification.generated_DateTime}
                         />
