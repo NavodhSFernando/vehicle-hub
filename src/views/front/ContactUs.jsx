@@ -3,8 +3,8 @@ import React from 'react'
 export default function ContactUs() {
     return (
         <>
-            <div className="container w-[800px] mt-[50px]">
-                <div className="w-full px-4 flex flex-col justify-center items-center">
+            <div className="container w-[900px]">
+                <div className="w-full flex flex-col justify-center items-center bg-white p-[50px] rounded-lg">
                     <h2 className="mb-6 text-[32px] font-bold uppercase text-black sm:text-[40px] lg:text-[36px] xl:text-[40px]">
                         GET IN TOUCH WITH US
                     </h2>

@@ -40,11 +40,6 @@ export default function Detailcar({
         setClicked(!clicked)
     }
 
-    console.log("===========================================")
-    console.log(sdate)
-    console.log(stime)
-    console.log("===========================================")
-
     const fetchFeedbacks = async () => {
         try {
             const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${reservationId}`);

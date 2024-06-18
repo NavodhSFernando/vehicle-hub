@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
-import { BsBookmarkStar } from 'react-icons/bs'
-import { BsBookmarkStarFill } from 'react-icons/bs'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs'
 import { IoCalendarClear } from 'react-icons/io5'
 import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
@@ -28,17 +26,38 @@ export default function BookNowCard({
 }) {
     const [clicked, setClicked] = useState(false)
 
+    const updateWishlist = (wishlistItems) => {
+        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
+        const event = new CustomEvent('wishlistUpdated', { detail: wishlistItems })
+        window.dispatchEvent(event)
+    }
+
+    const getWishlist = () => {
+        return JSON.parse(localStorage.getItem('wishlistItems')) || []
+    }
+
     const customerId = Cookies.get('customerId')
     const navigate = useNavigate()
 
     useEffect(() => {
-        const existingWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
+        const existingWishlistItems = getWishlist()
         const index = existingWishlistItems.findIndex((item) => item.name === name)
         if (index !== -1) {
             setClicked(true)
         }
-    }, [name])
 
+        const handleWishlistUpdate = (event) => {
+            const updatedWishlist = event.detail
+            const isInWishlist = updatedWishlist.some((item) => item.name === name)
+            setClicked(isInWishlist)
+        }
+
+        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
+
+        return () => {
+            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
+        }
+    }, [name])
 
     const handleClick = () => {
         const vehicleDetails = {
@@ -54,7 +73,7 @@ export default function BookNowCard({
             price: price
         }
 
-        const existingWishlistItems = JSON.parse(localStorage.getItem('wishlistItems')) || []
+        const existingWishlistItems = getWishlist()
 
         const areVehiclesEqual = (vehicle1, vehicle2) => {
             return (
@@ -72,14 +91,14 @@ export default function BookNowCard({
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
 
         if (index === -1) {
-            existingWishlistItems.push(vehicleDetails)
+            const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
+            updateWishlist(updatedWishlistItems)
             setClicked(true)
         } else {
-            existingWishlistItems.splice(index, 1)
+            const updatedWishlistItems = existingWishlistItems.filter((item) => !areVehiclesEqual(item, vehicleDetails))
+            updateWishlist(updatedWishlistItems)
             setClicked(false)
         }
-
-        localStorage.setItem('wishlistItems', JSON.stringify(existingWishlistItems))
     }
 
     return (

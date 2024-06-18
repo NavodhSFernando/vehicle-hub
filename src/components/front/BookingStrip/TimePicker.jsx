@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FaRegClock } from 'react-icons/fa'
 
 export default function TimePicker(props) {
-    const currentTime = roundDownToNearestHalfHour(new Date())
     const intervals = generateTimeIntervals()
-    const [selectedTime, setSelectedTime] = useState(currentTime);
+    const [selectedTime, setSelectedTime] = useState(props.value || '')
+
+    useEffect(() => {
+        setSelectedTime(props.value)
+    }, [props.value])
 
     function generateTimeIntervals() {
         let intervals = []
@@ -16,18 +19,13 @@ export default function TimePicker(props) {
         return intervals
     }
 
-    function roundDownToNearestHalfHour(date) {
-        const minutes = date.getMinutes()
-        const roundedMinutes = minutes < 30 ? '00' : '30'
-        const roundedTime = `${date.getHours().toString().padStart(2, '0')}:${roundedMinutes}`
-        return roundedTime
-    }
-
     const handleTimeChange = (event) => {
+        const newTime = event.target.value
+        setSelectedTime(newTime)
         if (props.onChange) {
-            props.onChange(event.target.value);
+            props.onChange(newTime)
         }
-    };
+    }
 
     return (
         <div className="flex flex-col justify-center items-start gap-[6px]">
@@ -38,7 +36,7 @@ export default function TimePicker(props) {
                     <input
                         type="time"
                         className="font-[500] text-[16px] w-fit outline-none relative"
-                        defaultValue={currentTime}
+                        value={selectedTime}
                         step={1800}
                         list="time-intervals"
                         onChange={handleTimeChange}
@@ -56,6 +54,18 @@ export default function TimePicker(props) {
                             width: 100%;
                             position: absolute;
                             -webkit-appearance: none;
+                        }
+                        input[type="time"]::-webkit-input-placeholder {
+                            color: transparent;
+                        }
+                        input[type="time"]::-moz-placeholder {
+                            color: transparent;
+                        }
+                        input[type="time"]:-ms-input-placeholder {
+                            color: transparent;
+                        }
+                        input[type="time"]::-moz-focus-inner {
+                            border: 0;
                         }
                     `}
                 </style>

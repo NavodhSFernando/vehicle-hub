@@ -17,14 +17,15 @@ export default function NotificationCenter() {
         try {
             const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
             console.log(response.data)
-            setNotifications(response.data)
+            const filteredNotifications = response.data.filter(notification => notification.customerReservationId === null)
+            setNotifications(filteredNotifications)
         } catch (error) {
             console.error('Error fetching notifications:', error)
         }
     }
 
     useEffect(() => {
-            fetchNotifications()
+        fetchNotifications()
     }, [])
 
     return (
@@ -35,7 +36,7 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.description}
+                            title={notification.title}
                             description={notification.description}
                             time={notification.generated_DateTime}
                         />
@@ -50,7 +51,7 @@ export default function NotificationCenter() {
                         paginate={paginate}
                         currentPage={currentPage}
                     />
-                )}   
+                )}
             </div>
         </div>
     )
@@ -106,7 +107,7 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
 
 function NotificationCard({ title, description, time }) {
     return (
-         <div className=" p-4 shadow rounded-lg mb-4 mx-20">
+        <div className="p-4 shadow rounded-lg mb-4 mx-20">
             <div className="font-bold text-lg">{title}</div>
             <div className="text-gray-700">{description}</div>
             <div className="text-gray-500 text-sm">{time}</div>

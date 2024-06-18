@@ -23,10 +23,6 @@ export default function VehicleFleetSingle() {
         year: '2017',
         colour: 'White',
         rate: '15 000',
-        // sdate: '12/12/2024',
-        // stime: '12:00 PM',
-        // edate: '12/13/2024',
-        // etime: '12:00 PM'
         sdate: startDate,
         stime: startTime,
         edate: endDate,

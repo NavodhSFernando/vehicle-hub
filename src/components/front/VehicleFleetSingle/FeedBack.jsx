@@ -32,7 +32,7 @@ export default function FeedBack({ id }) {
                         </div>
                     </div>
                     <div className="flex flex-col p-[20px]">
-                        {reviewDatas.map((reviewData, index) => (
+                    {reviewDatas.slice(0, 3).map((reviewData, index) => (
                             <div key={index} className="p-[20px] flex flex-col gap-[5px]">
                                 <div className="flex justify-between">
                                     <div>

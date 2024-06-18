@@ -10,7 +10,7 @@ const SearchStrip = ({ onSearch }) => {
 
     return (
         <div>
-            <div className="w-[1013px] max-h-[43px] flex bg-white rounded-[64px]">
+            <div className="w-[900px] max-h-[43px] flex bg-white rounded-[64px]">
                 <input
                     type="text"
                     className="w-full h-[43px] rounded-[64px] pl-[30px] outline-none"
