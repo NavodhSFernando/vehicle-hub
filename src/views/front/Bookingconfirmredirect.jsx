@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 import RentalSummary from '../../components/front/RentalSummary'
 import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm'
 import PaymentMethod from './PaymentMethod'
+import PageNotFound from '../../components/front/PageNotFound'
 
 export default function Bookingconfirmredirect() {
     const { invoiceId } = useParams()
@@ -28,6 +29,11 @@ export default function Bookingconfirmredirect() {
         fetchDecrypedIdAndData()
     }, [invoiceId])
 
+    console.log('Rental Data:', rentalData)
+    if (!rentalData.startTime) {
+        console.log('No rental data')
+        return <PageNotFound />
+    }
     return (
         <div className="flex gap-5">
             <div className="flex flex-col w-3/5">
