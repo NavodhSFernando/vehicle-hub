@@ -1,11 +1,9 @@
 import React from 'react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useState } from 'react'
 import { Switch } from '../../../components/ui/switch'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -20,8 +18,7 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-
-//const regNoPattern = /^[A-Z]{2}\s\d{4}$/
+import Cookies from 'js-cookie'
 
 const formSchema = z.object({
     regNo: z
@@ -45,7 +42,7 @@ const formSchema = z.object({
     vehicleModelId: z.string({
         required_error: 'Vehicle Model is required'
     }),
-    status: z.boolean().default(false) // Added status field
+    status: z.boolean().default(false)
 })
 
 export default function EditVehicleDetails({ vehicleId }) {
@@ -53,7 +50,6 @@ export default function EditVehicleDetails({ vehicleId }) {
         control,
         handleSubmit,
         reset,
-        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -71,6 +67,11 @@ export default function EditVehicleDetails({ vehicleId }) {
         }
     })
 
+    const employeeId = Cookies.get('employeeId')
+    if (!employeeId) {
+        console.log('Employee not available')
+    }
+
     const [vehicleModels, setVehicleModels] = useState([])
     const [vehicleTypes, setVehicleTypes] = useState([])
 
@@ -79,7 +80,6 @@ export default function EditVehicleDetails({ vehicleId }) {
             const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
             try {
                 const { data } = await axios.get(url)
-                console.log(data)
                 reset({
                     regNo: data.registrationNumber,
                     chassisNo: data.chassisNo,
@@ -103,7 +103,6 @@ export default function EditVehicleDetails({ vehicleId }) {
                 // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleModel')
                 setVehicleModels(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle models:', error)
             }
@@ -123,6 +122,8 @@ export default function EditVehicleDetails({ vehicleId }) {
     }, [vehicleId, reset])
 
     const handleSave = async (data) => {
+        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+        const decryptedId = decryptResponse.data.decryptedUserId
         const url = `http://localhost:5062/api/Vehicle/Details/${vehicleId}`
         try {
             const formData = {
@@ -136,13 +137,11 @@ export default function EditVehicleDetails({ vehicleId }) {
                 Status: data.status,
                 VehicleTypeId: data.vehicleTypeId,
                 VehicleModelId: data.vehicleModelId,
-                EmployeeId: 1
+                EmployeeId: decryptedId
             }
-
-            console.log('Form Data:', formData)
-
             const result = await axios.put(url, formData)
-            console.log(result)
+            console.result('Vehicle updated', result)
+            reset()
         } catch (error) {
             console.error('Error:', error)
         }
@@ -213,8 +212,8 @@ export default function EditVehicleDetails({ vehicleId }) {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="auto">Auto</SelectItem>
-                                    <SelectItem value="manual">Manual</SelectItem>
+                                    <SelectItem value="Auto">Auto</SelectItem>
+                                    <SelectItem value="Manual">Manual</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.transmission && errors.transmission.message}</FormMessage>

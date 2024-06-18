@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrEdit } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 
 // Define a component to encapsulate the action buttons
@@ -15,13 +15,6 @@ const ActionButtons = ({ vehicleModelId }) => {
                 onClick={() => navigate(`/admin/vehiclemodel/edit/${vehicleModelId}`)}
             >
                 <GrEdit fontSize={24} className="mr-1" />
-            </Button>
-            <Button
-                variant="ghost"
-                className="p-0"
-                onClick={() => navigate(`/admin/vehiclemodel/delete/${vehicleModelId}`)}
-            >
-                <GrTrash fontSize={24} className="mr-1" />
             </Button>
         </div>
     )
@@ -43,9 +36,6 @@ export const columns = [
         cell: ({ row }) => {
             const name = row.original.name
             return <div className="font-medium">{name}</div>
-        },
-        filterFn: (row, columnId, filterValue) => {
-            return row.original.vehicleModel.name.toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {

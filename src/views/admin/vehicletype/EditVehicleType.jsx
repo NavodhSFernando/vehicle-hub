@@ -45,9 +45,6 @@ export default function EditVehicleType() {
         const url = `http://localhost:5062/api/VehicleType/${vehicleTypeId}`
         try {
             const { data } = await axios.get(url)
-            console.log(data.name)
-            console.log(data.depositAmount)
-            console.log(data)
             reset({
                 name: data.name,
                 depositAmount: data.depositAmount
@@ -70,7 +67,7 @@ export default function EditVehicleType() {
             }
 
             const result = await axios.put(url, formData)
-            console.log(result)
+            console.result('Vehicle type updated', result)
         } catch (error) {
             console.error('Failed to update vehicle type', error)
         }

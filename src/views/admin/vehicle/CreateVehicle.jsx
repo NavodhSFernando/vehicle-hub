@@ -20,8 +20,7 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-
-//const regNoPattern = /^[A-Z]{2}\s\d{4}$/
+import Cookies from 'js-cookie'
 
 const formSchema = z.object({
     regNo: z
@@ -40,7 +39,7 @@ const formSchema = z.object({
     costPerExtraKm: z
         .number()
         .int('Cost per extra Km  must be an integer')
-        .min(0, 'Cost per extra Km must be at least 0'),
+        .min(50, 'Cost per extra Km must be at least 50'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
     thumbnail: z.any().refine((file) => file?.length === 1, 'File is required.'),
@@ -54,7 +53,7 @@ const formSchema = z.object({
     vehicleModelId: z.string({
         required_error: 'Vehicle Model is required'
     }),
-    status: z.boolean().default(false) // Added status field
+    status: z.boolean().default(false)
 })
 
 export default function CreateVehicle() {
@@ -64,6 +63,7 @@ export default function CreateVehicle() {
         handleSubmit,
         reset,
         setValue,
+        setError,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -82,9 +82,14 @@ export default function CreateVehicle() {
             rearImg: null,
             dashboard: null,
             interior: null,
-            status: false
+            status: true
         }
     })
+
+    const employeeId = Cookies.get('employeeId')
+    if (!employeeId) {
+        console.error('EmployeeId not available')
+    }
 
     // File change handler
     const handleThumbnailChange = (e) => {
@@ -121,7 +126,6 @@ export default function CreateVehicle() {
                 // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleModel')
                 setVehicleModels(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle models:', error)
             }
@@ -140,10 +144,11 @@ export default function CreateVehicle() {
     }, [])
 
     const handleSave = async (data) => {
+        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+        const decryptedId = decryptResponse.data.decryptedUserId
         const url = 'http://localhost:5062/api/Vehicle'
         try {
             const formData = new FormData()
-            console.log(data)
             formData.append('RegistrationNumber', data.regNo)
             formData.append('ChassisNo', data.chassisNo)
             formData.append('Colour', data.color)
@@ -158,25 +163,28 @@ export default function CreateVehicle() {
             formData.append('interior', data.interior[0])
             formData.append('VehicleTypeId', data.vehicleTypeId)
             formData.append('VehicleModelId', data.vehicleModelId)
-            formData.append('EmployeeId', 1)
+            formData.append('EmployeeId', decryptedId)
             formData.append('Status', data.status)
-
-            console.log('Form Data:', formData)
 
             const response = await axios.post(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log('Response:', response.data)
-            reset()
-
+            console.result(response.data)
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field
             }
+            reset()
         } catch (error) {
             console.error('Error:', error)
+            if (error.response && error.response.data) {
+                const { error: errorMessage, field } = error.response.data
+                // Show the error message under the specific input field
+                setError(field, { type: 'manual', message: errorMessage })
+            } else {
+                console.error('Error:', error)
+            }
         }
     }
 
@@ -203,7 +211,7 @@ export default function CreateVehicle() {
                                     {...field}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.regNo && errors.regNo.message}</FormMessage>
+                            <FormMessage>{errors.regNo?.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -245,8 +253,8 @@ export default function CreateVehicle() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="auto">Auto</SelectItem>
-                                    <SelectItem value="manual">Manual</SelectItem>
+                                    <SelectItem value="Auto">Auto</SelectItem>
+                                    <SelectItem value="Manual">Manual</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.transmission && errors.transmission.message}</FormMessage>
@@ -281,7 +289,7 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Cost Per Day</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number" // Ensure input type is number for direct numeric input
+                                    type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />

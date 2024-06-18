@@ -4,7 +4,11 @@ import { z } from 'zod'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { useEffect } from 'react'
-
+import { Calendar } from '../../../components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { format, parseISO } from 'date-fns'
+import cn from 'classnames'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -18,18 +22,20 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-const validVehicleIds = [1, 7]
-
+const currentDate = new Date().toISOString().split('T')[0]
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 
 const formSchema = z.object({
     insuranceNo: z.string().min(9, 'Insurance No should be at least 9 characters long'),
-    expiryDate: z.string().regex(dateRegex, {
-        message: 'Insurance expiry date is required'
-    }),
-    vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
-        message: 'Invalid Vehicle ID'
-    })
+    expiryDate: z
+        .string()
+        .regex(dateRegex, {
+            message: 'Insurance expiry date is required'
+        })
+        .refine((dateStr) => new Date(dateStr) >= new Date(currentDate), {
+            message: 'Insurance expiry date must be in the future'
+        }),
+    vehicleId: z.number().int('Invalid Vehicle ID')
 })
 
 export default function EditInsurance() {
@@ -52,10 +58,6 @@ export default function EditInsurance() {
         const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
         try {
             const { data } = await axios.get(url)
-            console.log(data.insuranceNo)
-            console.log(data.expiryDate)
-            console.log(data.vehicleId)
-            console.log(data)
 
             reset({
                 insuranceNo: data.insuranceNo,
@@ -79,7 +81,6 @@ export default function EditInsurance() {
                 ExpiryDate: data.expiryDate,
                 VehicleId: data.vehicleId
             }
-
             const result = await axios.put(url, formData)
             console.log(result)
             fetch()
@@ -119,19 +120,38 @@ export default function EditInsurance() {
                     control={control}
                     name="expiryDate"
                     render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Insurance Expiry Date</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="date"
-                                    className="w-full"
-                                    onChange={(e) => {
-                                        const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
-                                        field.onChange(dateValue) // Pass the string directly to your form's state
-                                    }}
-                                    {...field}
-                                />
-                            </FormControl>
+                        <FormItem className="w-1/2 flex flex-col">
+                            <FormLabel className="">Expiry Date</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            {...field}
+                                            variant={'outline'}
+                                            className={cn(
+                                                'justify-start text-left font-normal p-3 h-12',
+                                                !field.value && 'text-muted-foreground'
+                                            )}
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {field.value ? (
+                                                format(parseISO(field.value), 'PPP')
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value ? parseISO(field.value) : null}
+                                        onSelect={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                                        disabled={(date) => date < new Date() || date < new Date('1900-01-01')}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
                             <FormMessage>{errors.expiryDate && errors.expiryDate.message}</FormMessage>
                         </FormItem>
                     )}

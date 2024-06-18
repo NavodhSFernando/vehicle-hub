@@ -19,10 +19,6 @@ import axios from 'axios'
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
     formFile: z.any().refine((file) => file?.length === 1, 'File is required.')
-    // .refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
-    // .refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
-    //     message: 'Invalid file type'
-    // })
 })
 
 export default function EditVehicleMake() {
@@ -43,17 +39,14 @@ export default function EditVehicleMake() {
     })
 
     const [image, setImage] = useState('')
-
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/logos/'
 
-    // Fetch vehicle make data
     useEffect(() => {
         const fetchData = async () => {
             const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
             try {
                 const { data } = await axios.get(url)
                 setImage(data.logo)
-                console.log(image)
                 reset({
                     name: data.name,
                     formFile: null
@@ -72,24 +65,20 @@ export default function EditVehicleMake() {
 
     const handleSave = async (data) => {
         const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
-        console.log(data.formFile[0])
-        console.log(data.name)
         try {
             const formData = new FormData()
             formData.append('Name', data.name)
             formData.append('file', data.formFile[0])
-            // Send the form data as multipart/form-data
 
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            // Assuming the response contains the new logo URL
+
             if (response.data && response.data.logo) {
                 setImage(response.data.logo)
             }
-            console.log(response)
         } catch (error) {
             console.log(error)
         }
@@ -128,7 +117,7 @@ export default function EditVehicleMake() {
                         </FormItem>
                     )}
                 />
-                <img className=" object-contain pt-3 h-24 w-24" src={`${baseUrl}${image}`} />
+                <img className=" object-contain pt-3 h-24 w-24" src={`${baseUrl}${image}`} alt="" />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
                         Update

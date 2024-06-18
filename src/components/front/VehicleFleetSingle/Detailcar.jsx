@@ -1,10 +1,12 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import { Checkbox } from '../../ui/checkbox'
 import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs'
 import { Button } from '../../ui/button'
 import { FaStar } from 'react-icons/fa'
+import axios from 'axios'
 
 export default function Detailcar({
+    id,
     vehicle,
     transmission,
     capacity,
@@ -30,10 +32,40 @@ export default function Detailcar({
     ]
 
     const [clicked, setClicked] = useState(false)
+    const [totalFeedbacks, settotalFeedbacks] = useState();
+    const [averageRating, setaverageRating] = useState()
+    const reservationId = id;
 
     const handleClick = () => {
         setClicked(!clicked)
     }
+
+    console.log("===========================================")
+    console.log(sdate)
+    console.log(stime)
+    console.log("===========================================")
+
+    const fetchFeedbacks = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${reservationId}`);
+            const feedbacks = response.data;
+    
+            const totalFeedbacks = feedbacks.length;          
+            const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0);   
+            const averageRating = totalFeedbacks > 0 ? parseInt((sumOfRatings / totalFeedbacks)) : 0;
+
+            settotalFeedbacks(totalFeedbacks);
+            setaverageRating(averageRating);
+        } catch (error) {
+            console.error('Error fetching feedbacks:', error);
+        }
+    };
+    
+    
+    useEffect(() => {
+        fetchFeedbacks();
+    }, []);
+
     return (
         <div className="w-full bg-white p-6 rounded-lg">
             {/* Header */}
@@ -42,9 +74,15 @@ export default function Detailcar({
                     <h1 className="text-2xl font-semibold text-gray-950 mb-1">{vehicle}</h1>
                     <div className="flex items-center">
                         {[...Array(5)].map((_, starIndex) => (
-                            <FaStar key={starIndex} color={starIndex < reviewData.rating ? 'yellow' : 'grey'} />
+                            <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                         ))}
-                        <p className="text-gray-500 text-xs">10+ Reviewer</p>
+                        {
+                            totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviewers</p>
+                        }
+                        {
+                            totalFeedbacks < 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviewers</p>
+                        }
+                    
                     </div>
                 </div>
                 <div className="mt-1">

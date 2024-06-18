@@ -15,17 +15,11 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 
-// File validation Schema
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
     formFile: z.any().refine((file) => file?.length === 1, 'File is required.')
-    //.refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
-    //.refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
-    //  message: 'Invalid file type'
-    //})
 })
 
-// Main function component
 export default function CreateVehicleMake() {
     const fileInputRef = useRef(null)
     const {
@@ -63,8 +57,7 @@ export default function CreateVehicleMake() {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-
-            console.log(response)
+            console.result(response.data)
             reset()
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field

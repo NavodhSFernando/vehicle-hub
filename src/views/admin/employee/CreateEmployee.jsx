@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import Password from '../../front/Password'
 import { Checkbox } from '../../../components/ui/checkbox'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -63,7 +64,7 @@ export default function CreateEmployee() {
     })
 
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/EmployeeAuth/register'
+        const url = '/EmployeeAuth/register'
         try {
             const formData = {
                 Name: data.name,
@@ -80,7 +81,7 @@ export default function CreateEmployee() {
             }
             console.log(formData)
 
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             console.log(result)
             console.log(formData)
             reset()
