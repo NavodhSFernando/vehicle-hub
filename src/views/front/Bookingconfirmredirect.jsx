@@ -10,6 +10,7 @@ import PageNotFound from '../../components/front/PageNotFound'
 export default function Bookingconfirmredirect() {
     const { invoiceId } = useParams()
     const [rentalData, setRentalData] = useState({})
+    const [decryptedId, setDecryptedId] = useState()
 
     useEffect(() => {
         const fetchDecrypedIdAndData = async () => {
@@ -20,6 +21,7 @@ export default function Bookingconfirmredirect() {
                 const response = await axios.get(
                     `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${decryptedId}`
                 )
+                setDecryptedId(decryptedId)
                 setRentalData(response.data)
                 console.log('Fetched Booking Confirmation:', response.data)
             } catch (error) {
@@ -45,7 +47,7 @@ export default function Bookingconfirmredirect() {
                 />
                 <div className="mt-5">
                     <PaymentMethod
-                        invoiceId={invoiceId}
+                        invoiceId={decryptedId}
                         amount={rentalData.amount}
                         invoiceType={rentalData.invoiceType}
                     />
