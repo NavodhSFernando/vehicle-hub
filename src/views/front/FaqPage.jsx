@@ -41,7 +41,7 @@ export default function Faq() {
             isOpen: false
         }
     ])
-
+    // function toggles the isOpen property of the FAQ item identified by the accordionKey.
     const toggleAccordion = (accordionKey) => {
         const updatedAccordions = accordions.map((accord) => {
             if (accord.key === accordionKey) {
@@ -56,7 +56,7 @@ export default function Faq() {
 
     return (
         <>
-            <div className="flex flex-col justify-center items-center p-[30px] bg-white to-white rounded-lg">
+            <div className="flex flex-col justify-center items-center p-[30px] bg-gradient-to-b from-blue-500 to-white">
                 <div className="text-[40px] font-[700]">Frequently Asked Questions</div>
                 <div className="w-[1000px] text-center mt-[30px] text-black">
                     Welcome to our FAQ page, where we've compiled answers to commonly asked questions to provide you

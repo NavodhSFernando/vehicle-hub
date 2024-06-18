@@ -9,7 +9,7 @@ const FilterCard = ({ onFilterChange }) => {
     const [vehicleType, setVehicleType] = useState('all')
     const [vehicleMake, setVehicleMake] = useState('all')
     const [vehicleCapacity, setVehicleCapacity] = useState('all')
-    const [maxPrice, setMaxPrice] = useState(5000)
+    const [maxPrice, setMaxPrice] = useState(0)
 
     const fetchVehicleTypes = async () => {
         try {
@@ -206,8 +206,8 @@ const FilterCard = ({ onFilterChange }) => {
                     <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '300px' }}>
                         <input
                             type="range"
-                            min="5000"
-                            max="20000"
+                            min="0"
+                            max="10000"
                             value={maxPrice}
                             onChange={handlePriceChange}
                             className="absolute w-full h-3 bg-transparent appearance-none cursor-pointer"
@@ -215,7 +215,7 @@ const FilterCard = ({ onFilterChange }) => {
                         />
                         <div
                             className="absolute h-3 bg-[#283280] rounded-full"
-                            style={{ width: `${((maxPrice-5000) / 15000) * 100}%` }}
+                            style={{ width: `${(maxPrice / 10000) * 100}%` }}
                         ></div>
                     </div>
                     <p

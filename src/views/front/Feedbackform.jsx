@@ -77,7 +77,7 @@ export default function FeedbackForm() {
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
                             placeholder="Alex Fernando"
-                            
+                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -90,7 +90,7 @@ export default function FeedbackForm() {
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 mb-3"
                             placeholder="A12345670"
-                            
+                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -132,7 +132,7 @@ export default function FeedbackForm() {
                             id="vehicleReview"
                             className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500 mb-4"
                             placeholder="'Efficient Toyota Aqua: Economical, compact, and eco-friendly hybrid.'"
-                            
+                            required
                         />
                     </div>
                     <div className="mb-8">
@@ -144,7 +144,7 @@ export default function FeedbackForm() {
                             id="serviceReview"
                             className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500"
                             placeholder="'Service: Exceptional, reliable, and efficient for Toyota Aqua car rental.'"
-                            
+                            required
                         />
                     </div>
                     <div className="mb-4">
