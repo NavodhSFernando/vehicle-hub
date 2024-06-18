@@ -38,9 +38,9 @@ import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -59,13 +59,17 @@ import VerifyOTP from './views/front/VerifyOTP'
 import Notification from './views/admin/Notification'
 import Settings from './views/admin/Settings'
 import ProfileResetPassword from './views/front/ProfileResetPassword'
+import AdminPageNotFound from './components/admin/PageNotFound'
+import FrontPageNotFound from './components/front/PageNotFound'
 
 function App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
+                    <Route path="/*" element={<FrontPageNotFound />} />
                     <Route index element={<Home />} />
+
                     <Route
                         path="/vehiclefleet"
                         element={
@@ -155,6 +159,7 @@ function App() {
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="/admin/*" element={<AdminPageNotFound />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="notification" element={<Notification />} />
                     <Route path="report">

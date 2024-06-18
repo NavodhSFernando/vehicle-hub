@@ -1,8 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { date, z } from 'zod'
+import { z } from 'zod'
 import axios from 'axios'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -18,20 +17,18 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { useParams } from 'react-router-dom'
+import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { format, parseISO } from 'date-fns'
+import cn from 'classnames'
+import { Calendar } from '../../../components/ui/calendar'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
-//const dateRegex = /^\d{4}-\d{2}-\d{2}$/ // Regex to validate yyyy-mm-dd format
-
 const formSchema = z.object({
-    date: z
-        .string()
-        // .regex(dateRegex, {
-        //     message: 'Maintenance date must be in yyyy-mm-dd format'
-        // })
-        .refine((dateStr) => new Date(dateStr) <= new Date(currentDate), {
-            message: 'Maintenance date must not be in the future'
-        }),
+    date: z.string().refine((dateStr) => new Date(dateStr) <= new Date(currentDate), {
+        message: 'Maintenance date must not be in the future'
+    }),
     vehicleId: z.number().int('Invalid Vehicle ID'),
     type: z.string({
         required_error: 'Maintenance Type is required'
@@ -91,19 +88,37 @@ export default function CreateMaintenance() {
                     control={control}
                     name="date"
                     render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Maintenance Date</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="date"
-                                    className="w-full"
-                                    {...field}
-                                    onChange={(e) => {
-                                        const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
-                                        field.onChange(dateValue) // Pass the string directly to your form's state
-                                    }}
-                                />
-                            </FormControl>
+                        <FormItem className="w-1/2 flex flex-col">
+                            <FormLabel className="">Maintenance Date</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            variant={'outline'}
+                                            className={cn(
+                                                'justify-start text-left font-normal p-3 h-12',
+                                                !field.value && 'text-muted-foreground'
+                                            )}
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {field.value ? (
+                                                format(parseISO(field.value), 'PPP')
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value ? parseISO(field.value) : null}
+                                        onSelect={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                                        disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
                             <FormMessage>{errors.maintenanceDate && errors.maintenanceDate.message}</FormMessage>
                         </FormItem>
                     )}

@@ -89,10 +89,7 @@ export default function BookNowCard({
                     <img className="w-9 h-9" src={logo} alt="Logo" />
                     <div className="flex flex-col ml-2">
                         <h1 className="text-xl font-bold">{name}</h1>
-                        <p className="text-base opacity-50 font-semibold">
-                            {type}
-                            {id}
-                        </p>
+                        <p className="text-base opacity-50 font-semibold">{type}</p>
                     </div>
                 </div>
                 {clicked && customerId ? (

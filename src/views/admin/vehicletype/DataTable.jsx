@@ -11,8 +11,9 @@ import {
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { DataTablePagination } from '../../../components/ui/DataTablePagination'
-
+import { Button } from '../../../components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { Label } from '../../../components/ui/label'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -33,16 +34,28 @@ export default function DataTable({ columns, data }) {
         },
         initialState: { pagination: { pageSize: 5 } }
     })
+    const clearFilters = () => {
+        table.resetColumnFilters()
+    }
 
     return (
         <div>
-            <div className="flex items-center py-4">
+            <div className="flex flex-col space-y-1 mt-2 mb-8">
+                <Label>Type</Label>
                 <Input
                     placeholder="Filter Type..."
                     value={table.getColumn('name')?.getFilterValue() ?? ''}
                     onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
                     className="max-w-sm"
                 />
+            </div>
+            <div className="flex flex-col space-y-1 pt-2 pb-4 lg:items-end lg:justify-end">
+                <Button
+                    onClick={clearFilters}
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                >
+                    Clear Filter
+                </Button>
             </div>
             <div className="rounded-md border">
                 <Table>

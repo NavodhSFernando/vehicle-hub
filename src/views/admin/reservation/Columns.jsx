@@ -25,14 +25,12 @@ const BeginReservation = async ({ customerReservationId, refetchReservation }) =
 }
 
 const AcceptReservation = async ({ customerReservationId, refetchReservation }) => {
-    const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}`
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        // POST request to the server with form data
-        const formData = {
-            id: customerReservationId,
-            eid: employeeId
-        }
-        const result = await axios.post(url, formData)
+        const result = await axios.post(url)
         console.log(result)
         refetchReservation()
     } catch (error) {
@@ -41,14 +39,26 @@ const AcceptReservation = async ({ customerReservationId, refetchReservation }) 
 }
 
 const DeclineReservation = async ({ customerReservationId, refetchReservation }) => {
-    const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}`
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        // POST request to the server with form data
-        const formData = {
-            id: customerReservationId,
-            eid: employeeId
-        }
-        const result = await axios.post(url, formData)
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const CancelReservation = async ({ customerReservationId, refetchReservation }) => {
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Cancel-Reservation/${customerReservationId}?eid=${decryptedId}`
+    try {
+        const result = await axios.post(url)
         console.log(result)
         refetchReservation()
     } catch (error) {
@@ -97,17 +107,23 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
                     <GrStop fontSize={20} className="mr-1" />
                 </Button>
             )}
-            {status !== 'Waiting' && (
-                <>
-                    <EditVehicleDialog
-                        customerReservationId={customerReservationId}
-                        refetchReservation={refetchReservation}
-                    />
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </>
-            )}
+            {status == 'Waiting' ||
+                status == 'Completed' ||
+                (status == 'Cancelled' && (
+                    <>
+                        <EditVehicleDialog
+                            customerReservationId={customerReservationId}
+                            refetchReservation={refetchReservation}
+                        />
+                        <Button
+                            variant="ghost"
+                            className="p-0"
+                            onClick={() => CancelReservation({ customerReservationId, refetchReservation })}
+                        >
+                            <GrTrash fontSize={24} className="mr-1" />
+                        </Button>
+                    </>
+                ))}
         </div>
     )
 }
