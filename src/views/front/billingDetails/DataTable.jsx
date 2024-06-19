@@ -48,7 +48,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
+                                        <TableHead className="" key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -63,7 +63,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="py-5 px-5" key={cell.id}>
+                                        <TableCell className="" key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
