@@ -38,7 +38,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
 
-        const url = `http://localhost:5062/api/CustomerReservation`
+        const url = `http://localhost:5062/api/FrontReservationService/request-reservation`
         try {
             const formData = {
                 VehicleId: id,
@@ -52,6 +52,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             }
             const response = await axios.post(url, formData)
             console.log('Request vehicle response:', response.data)
+            navigate(`/account/viewongoingrentals`)
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 navigate('/login')
