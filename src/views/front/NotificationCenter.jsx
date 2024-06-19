@@ -3,7 +3,7 @@ import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useOutletContext } from 'react-router-dom'
 
-const NOTIFICATIONS_PER_PAGE = 3
+const NOTIFICATIONS_PER_PAGE = 6
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])

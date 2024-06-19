@@ -17,10 +17,10 @@ export default function VehicleFleetSingle() {
     console.log('vehicleId', id)
 
     const reservation = {
-        sdate: startDate ? new Date(startDate) : null,
-        stime: startTime || 'N/A',
-        edate: endDate ? new Date(endDate) : null,
-        etime: endTime || 'N/A'
+        sdate: startDate,
+        stime: startTime,
+        edate: endDate,
+        etime: endTime
     }
 
     useEffect(() => {
