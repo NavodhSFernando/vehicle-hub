@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react'
-import { BsBookmarkStar } from 'react-icons/bs'
-import { BsBookmarkStarFill } from 'react-icons/bs'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { BsBookmarkStar, BsBookmarkStarFill } from 'react-icons/bs'
 import { IoCalendarClear } from 'react-icons/io5'
 import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
@@ -9,10 +7,8 @@ import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 
 export default function BookNowCard({
-    key,
     id,
     name,
-    make,
     type,
     year,
     transmission,
@@ -43,14 +39,13 @@ export default function BookNowCard({
 
     useEffect(() => {
         const existingWishlistItems = getWishlist()
-        const index = existingWishlistItems.findIndex((item) => item.name === name)
-        if (index !== -1) {
-            setClicked(true)
-        }
+        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
+        setClicked(isInWishlist)
+
         const handleWishlistUpdate = (event) => {
             const updatedWishlist = event.detail
-            const isInWishlist = updatedWishlist.some((item) => item.name === name)
-            setClicked(isInWishlist)
+            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
+            setClicked(isInUpdatedWishlist)
         }
 
         window.addEventListener('wishlistUpdated', handleWishlistUpdate)
@@ -58,36 +53,23 @@ export default function BookNowCard({
         return () => {
             window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
         }
-    }, [name])
-
+    }, [id])
 
     const handleClick = () => {
         const vehicleDetails = {
-            key: key,
-            id: id,
-            name: name,
-            type: type,
-            year: year,
-            transmission: transmission,
-            capacity: capacity,
-            imageSrc: imageSrc,
-            imageAlt: imageAlt,
-            price: price
+            id,
+            name,
+            type,
+            year,
+            imageSrc,
+            transmission,
+            price,
+            capacity
         }
 
         const existingWishlistItems = getWishlist()
-
         const areVehiclesEqual = (vehicle1, vehicle2) => {
-            return (
-                vehicle1.name === vehicle2.name &&
-                vehicle1.type === vehicle2.type &&
-                vehicle1.year === vehicle2.year &&
-                vehicle1.transmission === vehicle2.transmission &&
-                vehicle1.capacity === vehicle2.capacity &&
-                vehicle1.imageSrc === vehicle2.imageSrc &&
-                vehicle1.imageAlt === vehicle2.imageAlt &&
-                vehicle1.price === vehicle2.price
-            )
+            return vehicle1.id === vehicle2.id
         }
 
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
@@ -101,8 +83,6 @@ export default function BookNowCard({
             updateWishlist(updatedWishlistItems)
             setClicked(false)
         }
-
-        localStorage.setItem('wishlistItems', JSON.stringify(existingWishlistItems))
     }
 
     return (
@@ -115,15 +95,11 @@ export default function BookNowCard({
                         <p className="text-base opacity-50 font-semibold">{type}</p>
                     </div>
                 </div>
-                {clicked && customerId ? (
-                    <button>
-                        <BsBookmarkStarFill fontSize={24} onClick={handleClick} />
+                {customerId && (
+                    <button onClick={handleClick}>
+                        {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
                     </button>
-                ) : !clicked && customerId ? (
-                    <button>
-                        <BsBookmarkStar fontSize={24} onClick={handleClick} />
-                    </button>
-                ) : null}
+                )}
             </div>
             <img className="w-full booknowimage pb-12 scale-x" src={imageSrc} alt={imageAlt} />
             <div className="flex justify-between pb-8">
