@@ -1,7 +1,9 @@
 import React from 'react'
 import RevenueTable from './RevenueTable'
 import RevenueChart from './RevenueChart'
-import RevenueTrendChart from './RevenueTrendChart'
+import RevenueComparisonTable from './RevenueComparisonTable'
+import RevenueGrowthRateDashboard from './RevenueGrowthRateDashboard'
+
 
 const RevenueReport = () => {
     return (
@@ -10,7 +12,10 @@ const RevenueReport = () => {
 
             <RevenueChart />
 
-            <RevenueTrendChart />
+            <RevenueComparisonTable />
+
+            <RevenueGrowthRateDashboard />
+
         </div>
     )
 }

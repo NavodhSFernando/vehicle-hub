@@ -9,6 +9,7 @@ const RevenueTable = () => {
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [filterError, setFilterError] = useState(""); // Add this line
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +39,12 @@ const RevenueTable = () => {
   }, []);
 
   const handleFilter = () => {
+    if (!startDate && !endDate) {
+      setFilterError("Please select a start date or an end date.");
+      return;
+    }
+
+    setFilterError(""); // Clear the error if dates are selected
     let filteredData = revenueData;
 
     if (startDate && endDate) {
@@ -109,9 +116,7 @@ const RevenueTable = () => {
   }
 
   return (
-    <div id="revenue-table-container" className="container mx-auto py-8 mb-10 px-4 sm:px-6 lg:px-8 bg-white border border-gray-300 rounded-lg shadow-md">
-      <h1 id="report-title" className="text-3xl font-bold mb-6 text-center">Revenue Report</h1>
-
+    <div id="revenue-table-container" className="container mx-auto py-8 mb-8 px-4 sm:px-6 lg:px-8 bg-white border border-gray-300 rounded-lg shadow-md">
       <div className="flex flex-wrap justify-between mb-4">
         <div className="mb-4" style={{ width: "45%" }}>
           <label htmlFor="startDate" className="block text-gray-700 font-bold mb-2">Start Date:</label>
@@ -137,6 +142,12 @@ const RevenueTable = () => {
           />
         </div>
       </div>
+
+      {filterError && (
+        <div className="mb-4 text-red-500">
+          {filterError}
+        </div>
+      )}
 
       <div className="mb-6">
         <button
