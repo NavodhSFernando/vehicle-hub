@@ -1,10 +1,30 @@
 import Cookies from 'js-cookie'
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 export default function NavBarSide() {
-    const handleLogout = () => {
-        Cookies.remove('customerId')
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        try {
+            const token = sessionStorage.getItem('jwtToken')
+            await axios.post('http://localhost:5062/api/CustomerAuth/logout', null, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            // Clear the session storage and cookies
+            sessionStorage.removeItem('jwtToken')
+            Cookies.remove('customerId')
+
+            // Redirect to the login page
+            navigate('/login')
+        } catch (error) {
+            console.error('Logout failed:', error)
+            alert(`Logout failed: ${error.message}`)
+        }
     }
 
     return (
@@ -24,7 +44,7 @@ export default function NavBarSide() {
             <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewnotificationcenter`}>
                 Notifications
             </NavLink>
-            <NavLink className="flex flex-col pl-2 py-1" to="/vehiclefleet">
+            <NavLink className="flex flex-col pl-2 py-1" onClick={handleLogout}>
                 Log Out
             </NavLink>
         </div>
