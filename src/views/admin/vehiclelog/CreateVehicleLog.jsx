@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import Cookie from 'js-cookie'
 
 // Define the schema for form validation using zod
 const formSchema = z.object({
@@ -48,9 +49,17 @@ export default function CreateVehicleLog() {
         }
     })
 
+    const employeeId = Cookie.get('employeeId')
+    if (!employeeId) {
+        console.error('Employee ID not found')
+    }
+
     // Function to handle form submission
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${customerReservationId}`
+        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+        const decryptedId = decryptResponse.data.decryptedUserId
+
+        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
         try {
             const formData = {
                 CustomerReservationId: data.customerReservationId,
