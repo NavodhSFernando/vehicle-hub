@@ -72,7 +72,6 @@ export default function CreateVehicle() {
             chassisNo: '',
             color: '',
             costPerDay: 0,
-            transmission: 'auto',
             mileage: 0,
             costPerExtraKm: 0,
             vehicleTypeId: '',
@@ -269,7 +268,6 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Color</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="White"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)

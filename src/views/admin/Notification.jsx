@@ -17,7 +17,8 @@ export default function NotificationCenter() {
         try {
             const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
             console.log(response.data)
-            setNotifications(response.data)
+            const filteredNotifications = response.data.filter(notification => notification.customerReservationId === null)
+            setNotifications(filteredNotifications)
         } catch (error) {
             console.error('Error fetching notifications:', error)
         }
@@ -35,7 +36,7 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.description}
+                            title={notification.title}
                             description={notification.description}
                             time={notification.generated_DateTime}
                         />

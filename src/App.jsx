@@ -59,6 +59,8 @@ import VerifyOTP from './views/front/VerifyOTP'
 import Notification from './views/admin/Notification'
 import Settings from './views/admin/Settings'
 import ProfileResetPassword from './views/front/ProfileResetPassword'
+import AdminPageNotFound from './components/admin/PageNotFound'
+import FrontPageNotFound from './components/front/PageNotFound'
 import ProtectedRoute from '../src/components/admin/ProtectedRoute'
 import ResetPassword from '../src/views/admin/ResetPassword'
 
@@ -67,7 +69,9 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
+                    <Route path="/*" element={<FrontPageNotFound />} />
                     <Route index element={<Home />} />
+
                     <Route
                         path="/vehiclefleet"
                         element={
@@ -157,6 +161,7 @@ function App() {
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
                 <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="/admin/*" element={<AdminPageNotFound />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="notification" element={<Notification />} />
                     <Route path="report">

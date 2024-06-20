@@ -5,10 +5,12 @@ import { useParams } from 'react-router-dom'
 import RentalSummary from '../../components/front/RentalSummary'
 import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm'
 import PaymentMethod from './PaymentMethod'
+import PageNotFound from '../../components/front/PageNotFound'
 
 export default function Bookingconfirmredirect() {
     const { invoiceId } = useParams()
     const [rentalData, setRentalData] = useState({})
+    const [decryptedId, setDecryptedId] = useState()
 
     useEffect(() => {
         const fetchDecrypedIdAndData = async () => {
@@ -19,6 +21,7 @@ export default function Bookingconfirmredirect() {
                 const response = await axios.get(
                     `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${decryptedId}`
                 )
+                setDecryptedId(decryptedId)
                 setRentalData(response.data)
                 console.log('Fetched Booking Confirmation:', response.data)
             } catch (error) {
@@ -28,6 +31,11 @@ export default function Bookingconfirmredirect() {
         fetchDecrypedIdAndData()
     }, [invoiceId])
 
+    console.log('Rental Data:', rentalData)
+    if (!rentalData.startTime) {
+        console.log('No rental data')
+        return <PageNotFound />
+    }
     return (
         <div className="flex gap-5">
             <div className="flex flex-col w-3/5">
@@ -39,7 +47,7 @@ export default function Bookingconfirmredirect() {
                 />
                 <div className="mt-5">
                     <PaymentMethod
-                        invoiceId={invoiceId}
+                        invoiceId={decryptedId}
                         amount={rentalData.amount}
                         invoiceType={rentalData.invoiceType}
                     />

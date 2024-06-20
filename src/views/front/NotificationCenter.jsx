@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { useOutletContext } from 'react-router-dom'
 
-const NOTIFICATIONS_PER_PAGE = 3
+const NOTIFICATIONS_PER_PAGE = 6
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const customerId = Cookies.get('customerId')
 
     const indexOfLastNotification = currentPage * NOTIFICATIONS_PER_PAGE
     const indexOfFirstNotification = indexOfLastNotification - NOTIFICATIONS_PER_PAGE
@@ -15,9 +15,14 @@ export default function NotificationCenter() {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
+    const customerId = useOutletContext()
+
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${customerId}`)
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
             console.log(response.data)
             setNotifications(response.data)
         } catch (error) {
@@ -26,7 +31,7 @@ export default function NotificationCenter() {
     }
 
     useEffect(() => {
-            fetchNotifications()
+        fetchNotifications()
     }, [customerId])
 
     return (
@@ -37,7 +42,7 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.description}
+                            title={notification.title}
                             description={notification.description}
                             time={notification.generated_DateTime}
                         />
@@ -52,7 +57,7 @@ export default function NotificationCenter() {
                         paginate={paginate}
                         currentPage={currentPage}
                     />
-                )}   
+                )}
             </div>
         </div>
     )
@@ -108,7 +113,7 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
 
 function NotificationCard({ title, description, time }) {
     return (
-         <div className=" p-4 shadow rounded-lg mb-4 mx-20">
+        <div className=" p-4 shadow rounded-lg mb-4 mx-20">
             <div className="font-bold text-lg">{title}</div>
             <div className="text-gray-700">{description}</div>
             <div className="text-gray-500 text-sm">{time}</div>

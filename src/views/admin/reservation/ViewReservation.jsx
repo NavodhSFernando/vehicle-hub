@@ -35,8 +35,9 @@ export default function ViewReservation() {
 
     return (
         <>
-            <Tabs defaultValue="waiting" className="w-full p-6">
-                <TabsList className="grid w-2/3 grid-cols-7">
+            <Tabs defaultValue="all" className="w-full p-6">
+                <TabsList className="grid w-2/3 grid-cols-8">
+                    <TabsTrigger value="all">All</TabsTrigger>
                     <TabsTrigger value="waiting">Waiting</TabsTrigger>
                     <TabsTrigger value="pending">Pending</TabsTrigger>
                     <TabsTrigger value="confirmed">Confirmed</TabsTrigger>
@@ -45,6 +46,11 @@ export default function ViewReservation() {
                     <TabsTrigger value="completed">Completed</TabsTrigger>
                     <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
                 </TabsList>
+                <TabsContent value="all">
+                    <div className="flex flex-col p-6 bg-white rounded-lg">
+                        <DataTable columns={columns} data={Reservation} />
+                    </div>
+                </TabsContent>
                 <TabsContent value="waiting">
                     <div className="flex flex-col p-6 bg-white rounded-lg">
                         <DataTable columns={columns} data={filterByStatus('Waiting')} />
