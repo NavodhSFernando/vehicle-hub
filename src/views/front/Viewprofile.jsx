@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { confirmAlert } from 'react-confirm-alert'
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -16,6 +17,16 @@ import {
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
+import {
+    Dialog,
+    DialogContent,
+    DialogOverlay,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+    DialogClose
+} from '../../../src/components/ui/dialog'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -109,6 +120,24 @@ function Viewprofile() {
             console.error('Failed to update the profile', error)
         }
     }
+
+    const handleDeleteAccount = async () => {
+        try {
+            const url = `http://localhost:5062/api/CustomerAuth/deactivate/${decrypt}`
+            const result = await axios.put(url)
+            console.log(result.data)
+            navigate('/signup')
+        } catch (error) {
+            console.error('Failed to delete the account', error)
+        }
+    }
+
+    // Dialog state management
+    const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+    const openDialog = () => setIsDialogOpen(true)
+
+    const closeDialog = () => setIsDialogOpen(false)
 
     return (
         <Form {...control}>
@@ -253,11 +282,44 @@ function Viewprofile() {
                         Delete any and all content you have, such as rental history, invoices and profile details.
                     </p>
                     <div className="bg-white rounded-lg pt-4 pb-3">
-                        <Button type="submit" className=" bg-red-600 hover:bg-red-800 text-white font-bold ml-auto ">
+                        <Button
+                            type="submit"
+                            className=" bg-red-600 hover:bg-red-800 text-white font-bold ml-auto "
+                            onClick={openDialog}
+                        >
                             Delete Account
                         </Button>
                     </div>
                 </div>
+                <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
+                    <DialogContent>
+                        <DialogClose
+                            as="button"
+                            onClick={closeDialog}
+                            className="absolute top-0 right-0 m-2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                        />
+                        <DialogHeader>
+                            <DialogTitle className="text-gray-800 font-bold">Confirm to delete</DialogTitle>
+                        </DialogHeader>
+                        <DialogDescription className="text-gray-400">
+                            Are you sure you want to delete your account?
+                        </DialogDescription>
+                        <DialogFooter className="flex justify-end gap-4 mt-4">
+                            <Button
+                                onClick={handleDeleteAccount}
+                                className="bg-red-600 hover:bg-red-800 text-white font-bold px-6 py-2 rounded-lg"
+                            >
+                                Yes
+                            </Button>
+                            <Button
+                                onClick={closeDialog}
+                                className="bg-gray-400 hover:bg-gray-500 text-white font-bold px-6 py-2 rounded-lg"
+                            >
+                                No
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </form>
         </Form>
     )
