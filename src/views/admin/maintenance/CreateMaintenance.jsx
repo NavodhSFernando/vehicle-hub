@@ -181,7 +181,6 @@ export default function CreateMaintenance() {
                             <FormLabel className="pb-3 w-full">Description</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Explain any damages caused by the user."
                                     className="resize-none w-full h-20"
                                     {...field}
                                     onChange={(e) => {

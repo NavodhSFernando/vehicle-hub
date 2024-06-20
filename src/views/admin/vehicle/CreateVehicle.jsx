@@ -268,7 +268,6 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Color</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="White"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
