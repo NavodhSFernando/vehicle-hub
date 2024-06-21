@@ -15,7 +15,7 @@ const GeneralSettings = () => {
     }
 
     return (
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md mx-auto mt-8">
+        <div className="w-full max-w-xl p-8 space-y-6 bg-gray-100 rounded-lg shadow-md mx-auto mt-8">
             <h1 className="text-xl font-bold text-center text-gray-800">General Settings</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
@@ -51,7 +51,10 @@ const GeneralSettings = () => {
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <Button type="submit" className="w-full bg-indigo-800 text-white py-2 rounded-md">
+                    <Button
+                        type="submit"
+                        className="w-full hover:bg-indigo-700 bg-indigo-600 text-white py-2 rounded-md"
+                    >
                         Save Settings
                     </Button>
                 </div>
