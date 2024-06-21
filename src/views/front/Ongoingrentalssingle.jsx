@@ -124,35 +124,34 @@ export default function Ongoingrentalssingle() {
                     </div>
                 </div>
             </div>
-            {rentalData.status != 'Ongoing' ||
-                (rentalData.status != 'Ended' && (
-                    <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mt-3 mb-8">
-                        <div className="mr-20 ml-20 my-10 lg:mx-36">
-                            <p className="text-xs text-gray-500 flex items-start pb-3">
-                                Please refer to the Reservation Policy for further details
-                            </p>
-                            <p className="text-s text-gray-500 flex items-start font-semibold pb-3">
-                                *Reservation Cancellation made three(3) days or less prior to arrival date are
-                                non-refundable
-                            </p>
-                            <hr className="pb-3" />
-                            <Button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
-                                Cancel Reservation
-                            </Button>
-                            <div className="flex items-start">
-                                <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
-                                    Feel free to contact
-                                </div>
-                                <div className="mt-6 text-s text-indigo-800 flex items-start font-semibold mr-1">
-                                    vehiclehub@example.com
-                                </div>
-                                <div className="mt-6 text-s text-gray-500 flex items-start font-semibold">
-                                    with any questions.
-                                </div>
+            {(rentalData.status != 'Ongoing' || rentalData.status != 'Ended') && (
+                <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mt-3 mb-8">
+                    <div className="mr-20 ml-20 my-10 lg:mx-36">
+                        <p className="text-xs text-gray-500 flex items-start pb-3">
+                            Please refer to the Reservation Policy for further details
+                        </p>
+                        <p className="text-s text-gray-500 flex items-start font-semibold pb-3">
+                            *Reservation Cancellation made three(3) days or less prior to arrival date are
+                            non-refundable
+                        </p>
+                        <hr className="pb-3" />
+                        <Button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
+                            Cancel Reservation
+                        </Button>
+                        <div className="flex items-start">
+                            <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
+                                Feel free to contact
+                            </div>
+                            <div className="mt-6 text-s text-indigo-800 flex items-start font-semibold mr-1">
+                                vehiclehub@example.com
+                            </div>
+                            <div className="mt-6 text-s text-gray-500 flex items-start font-semibold">
+                                with any questions.
                             </div>
                         </div>
                     </div>
-                ))}
+                </div>
+            )}
         </>
     )
 }
