@@ -61,8 +61,8 @@ export default function MonthlyRevenueComparisonTable() {
             {comparisonData.map((row, index) => (
               <tr key={index} className="even:bg-gray-50">
                 <td className="py-2 px-4 border-b border-gray-200">{row.yearMonth}</td>
-                <td className="py-2 px-4 border-b border-gray-200">${row.totalRevenue.toFixed(2)}</td>
-                <td className="py-2 px-4 border-b border-gray-200">${row.avgTransactionAmount.toFixed(2)}</td>
+                <td className="py-2 px-4 border-b border-gray-200">Rs {row.totalRevenue.toFixed(2)}</td>
+                <td className="py-2 px-4 border-b border-gray-200">Rs {row.avgTransactionAmount.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
