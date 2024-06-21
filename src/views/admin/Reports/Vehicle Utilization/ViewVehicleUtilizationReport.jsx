@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import VehicleUtilizationTable from './VehicleUtilizationTable' 
 import UsageDurationChart from './UsageDurationChart';
+import ReservationsChart from './ReservationsChart';
 
 
 const ViewVehicleUtilizationReport = () => {
@@ -8,6 +9,7 @@ const ViewVehicleUtilizationReport = () => {
         <div>
             <VehicleUtilizationTable />
             <UsageDurationChart />
+            <ReservationsChart />
         </div>
     );
 }
