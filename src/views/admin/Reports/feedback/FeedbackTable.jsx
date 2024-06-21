@@ -237,7 +237,7 @@ const FeedbackReport = () => {
     }
 
     return (
-        <div className="container mx-auto py-8 px-4 bg-white border-2 border-gray-300 rounded-md">
+        <div className="container mx-auto mb-8 py-8 px-4 bg-white border-2 border-gray-300 rounded-md">
 
             {/* Filter section */}
             <div className="flex flex-wrap justify-between mb-4">
