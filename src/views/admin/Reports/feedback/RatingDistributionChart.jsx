@@ -51,7 +51,6 @@ export default function RatingDistributionChart() {
   return (
     <div className="h-[34rem] bg-white p-4 rounded-sm border mb-8 border-gray-200 flex flex-col flex-1">
       <strong className="text-gray-700 font-medium mb-2" style={{ fontWeight: 800 }}>Rating Distribution</strong>
-      <p>This chart shows the distribution of customer ratings. Each segment represents the count of ratings for each star level.</p>
       <div className="mt-3 w-full flex-1 text-xs" id="chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

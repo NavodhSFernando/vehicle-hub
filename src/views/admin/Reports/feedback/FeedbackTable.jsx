@@ -119,36 +119,56 @@ const FeedbackReport = () => {
 
     const generatePdf = () => {
         const doc = new jsPDF();
-
+    
         // Add logo to the top right corner
         if (logoBase64) {
             const logoWidth = 50; // Width of the logo in the PDF
             const logoHeight = 40; // Height of the logo in the PDF
             const pageWidth = doc.internal.pageSize.getWidth();
             const margin = 10;
-
+    
             // Adjust logo position
             const logoX = pageWidth - logoWidth - margin;
             doc.addImage(logoBase64, 'PNG', logoX, margin, logoWidth, logoHeight);
         }
-
+    
         // Title
         doc.setFontSize(18);
         doc.text('Feedback Report', 10, 20);
-
-        // Date range
-        if (startDate || endDate) {
-            let dateRangeText = 'Date Range: ';
-            if (startDate) {
-                dateRangeText += `From ${startDate} `;
-            }
-            if (endDate) {
-                dateRangeText += `to ${endDate}`;
-            }
-            doc.setFontSize(12);
-            doc.text(dateRangeText, 10, 30);
+    
+        // Filters section
+        doc.setFontSize(12);
+        let filtersY = 30;
+        doc.text('Applied Filters:', 10, filtersY);
+        filtersY += 10;
+    
+        if (startDate) {
+            doc.text(`Start Date: ${startDate}`, 10, filtersY);
+            filtersY += 10;
         }
-
+        if (endDate) {
+            doc.text(`End Date: ${endDate}`, 10, filtersY);
+            filtersY += 10;
+        }
+        if (vehicleFilter) {
+            doc.text(`Vehicle: ${vehicleFilter}`, 10, filtersY);
+            filtersY += 10;
+        }
+        if (customerFilter) {
+            doc.text(`Customer: ${customerFilter}`, 10, filtersY);
+            filtersY += 10;
+        }
+        if (ratingFilter) {
+            doc.text(`Rating: ${ratingFilter}`, 10, filtersY);
+            filtersY += 10;
+        }
+    
+        // If no filters applied
+        if (!startDate && !endDate && !vehicleFilter && !customerFilter && !ratingFilter) {
+            doc.text('None', 10, filtersY);
+            filtersY += 10;
+        }
+    
         // Prepare table data for jspdf-autotable
         const tableData = filteredFeedbackData.map((feedback) => [
             feedback.id,
@@ -159,7 +179,7 @@ const FeedbackReport = () => {
             feedback.customer,
             feedback.vehicle,
         ]);
-
+    
         // Set table headers
         const tableHeaders = [
             { header: 'Id', dataKey: 'id' },
@@ -170,20 +190,20 @@ const FeedbackReport = () => {
             { header: 'Customer', dataKey: 'customer' },
             { header: 'Vehicle', dataKey: 'vehicle' },
         ];
-
+    
         // Add table to PDF
         autoTable(doc, {
-            startY: 50,
+            startY: filtersY + 10,
             head: [tableHeaders.map((header) => header.header)],
             body: tableData,
             didDrawCell: (data) => {
                 // Customize styles as needed, e.g., data.cell.styles.fillColor = 'white';
             },
         });
-
+    
         return doc;
     };
-
+    
     const handleExportPDF = () => {
         const doc = generatePdf();
 
