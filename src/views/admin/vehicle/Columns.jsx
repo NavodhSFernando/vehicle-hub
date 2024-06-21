@@ -111,6 +111,13 @@ export const columns = [
             return (
                 <div className="flex items-center bg-yell">
                     <div>Mileage</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
             )
         },
@@ -152,6 +159,9 @@ export const columns = [
             const vehicleModelId = row.original.vehicleModel.name
 
             return <div className="font-medium">{vehicleModelId}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicleModel.name.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {

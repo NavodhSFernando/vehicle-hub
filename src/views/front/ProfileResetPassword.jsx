@@ -29,7 +29,6 @@ const passwordSchema = z
     })
 
 function ProfileResetPassword() {
-    const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted Customer ID
     const navigate = useNavigate()
     const {
         control,
@@ -44,58 +43,27 @@ function ProfileResetPassword() {
         }
     })
 
-    useEffect(() => {
-        const decryptId = async () => {
-            const encryptedCustomerId = Cookies.get('customerId')
-            if (encryptedCustomerId) {
-                try {
-                    const response = await axios.get(
-                        `http://localhost:5062/api/Encryption/decrypt/${encryptedCustomerId}`
-                    )
-                    setDecrypt(response.data.decryptedUserId)
-                } catch (error) {
-                    console.error('Failed to decrypt Customer ID:', error)
-                }
-            } else {
-                console.error('Customer ID is not available in cookies')
-            }
-        }
-        decryptId()
-    }, [])
+    const customerId = Cookies.get('customerId')
+    if (!customerId) {
+        console.log('Customer ID not available')
+    }
 
     const handlePasswordReset = async (data) => {
         try {
-            const token = sessionStorage.getItem('jwtToken')
-            const encryptedCustomerId = Cookies.get('customerId')
-
-            if (!token) {
-                console.error('JWT token is not available')
-                return
-            }
-
-            if (!decrypt) {
-                console.error('Decrypted Customer ID is not available')
-                alert('Decrypted Customer ID is not available')
-                return
-            }
+            const response = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = response.data.decryptedUserId
 
             const formData = {
-                Id: decrypt, // Use the decrypted customer ID
+                Id: decryptedId, // Use the decrypted Customer ID
                 currentPassword: data.currentPassword,
                 newPassword: data.newPassword
             }
 
-            console.log('Sending payload:', formData) // Log payload for debugging
-
             const url = `http://localhost:5062/api/CustomerAuth/ResetPasswordProfile`
-            const result = await axios.post(url, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            const result = await axios.post(url, formData)
             console.log(result.data)
             alert('Password has been reset successfully')
-            navigate('/viewprofile') // Navigate to viewprofile after successful password reset
+            navigate('/login')
         } catch (error) {
             console.error('Failed to reset the password', error)
             alert('Failed to reset the password!')

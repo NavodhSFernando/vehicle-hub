@@ -16,6 +16,7 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -27,6 +28,7 @@ const formSchema = z.object({
 })
 
 export default function EditVehicleType() {
+    const navigate = useNavigate()
     const { vehicleTypeId } = useParams() // Access route parameter
     const {
         control,
@@ -67,7 +69,8 @@ export default function EditVehicleType() {
             }
 
             const result = await axios.put(url, formData)
-            console.result('Vehicle type updated', result)
+            console.log('Vehicle type updated', result)
+            navigate(`/admin/vehicletype/view`)
         } catch (error) {
             console.error('Failed to update vehicle type', error)
         }

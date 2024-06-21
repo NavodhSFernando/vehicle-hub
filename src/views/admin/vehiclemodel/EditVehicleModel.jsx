@@ -20,6 +20,7 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
+import { useNavigate } from 'react-router-dom'
 
 const items = [
     { id: 'abs', label: 'ABS' },
@@ -79,6 +80,7 @@ const formSchema = z.object({
 })
 
 export default function EditVehicleModel() {
+    const navigate = useNavigate()
     const { vehicleModelId } = useParams()
     const {
         control,
@@ -151,7 +153,8 @@ export default function EditVehicleModel() {
                 additionalFeatures: additionalFeatures
             }
             const result = await axios.put(url, formData)
-            console.result('Vehicle model updated', result)
+            console.log('Vehicle model updated', result)
+            navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
             console.error('Failed to update vehicle model', error)
         }

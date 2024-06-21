@@ -44,6 +44,7 @@ export const Login = () => {
             // Make a POST request to backend API endpoint
             const response = await axios.post('http://localhost:5062/api/CustomerAuth/login', data)
             console.log(response.data)
+
             const token = response.data.token.token
             const encryptedCustomerId = response.data.token.id
 

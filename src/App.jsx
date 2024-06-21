@@ -38,9 +38,9 @@ import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -61,6 +61,8 @@ import Settings from './views/admin/Settings'
 import ProfileResetPassword from './views/front/ProfileResetPassword'
 import AdminPageNotFound from './components/admin/PageNotFound'
 import FrontPageNotFound from './components/front/PageNotFound'
+import ProtectedRoute from '../src/components/admin/ProtectedRoute'
+import ResetPassword from '../src/views/admin/ResetPassword'
 
 function App() {
     return (
@@ -322,7 +324,16 @@ function App() {
                             element={<TitleComponent title="Edit Employee">{<EditEmployee />}</TitleComponent>}
                         />
                         <Route path="view" element={<ViewEmployee />} />
-                        <Route path="create" element={<CreateEmployee />} />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Employee">
+                                    <ProtectedRoute allowedRoles={['admin']}>
+                                        <CreateEmployee />
+                                    </ProtectedRoute>
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
 
                     <Route path="customer">
@@ -385,6 +396,14 @@ function App() {
                         element={
                             <TitleComponent title="Settings">
                                 <Settings />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="/admin/resetpassword"
+                        element={
+                            <TitleComponent title="Reset Password">
+                                <ResetPassword />
                             </TitleComponent>
                         }
                     />

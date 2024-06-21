@@ -90,7 +90,7 @@ export const Password = () => {
                                     </FormItem>
                                 )}
                             />
-                            <div className="pt-3 pb-3">
+                            <div className="pt-3 pb-2">
                                 <Button
                                     type="submit"
                                     className="w-full py-3 font-semibold text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md  hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
@@ -98,18 +98,8 @@ export const Password = () => {
                                     Send OTP
                                 </Button>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <FormControl>
-                                        <input type="checkbox" id="confirm" className="h-4 w-4" />
-                                    </FormControl>
-                                    <FormLabel htmlFor="confirm" className="ml-2 text-gray-800 text-justify">
-                                        Remember Me
-                                    </FormLabel>
-                                </div>
-                            </div>
 
-                            <div className="flex pt-4">
+                            <div className="flex pt-2">
                                 <div className="text-gray-800 text-justify pr-2">Don't have an account? </div>
                                 <div className="text-indigo-600 text-justify ">
                                     <a href="signup">Sign Up</a>

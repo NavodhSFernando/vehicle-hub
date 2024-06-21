@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useParams } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -40,6 +40,7 @@ const formSchema = z.object({
 })
 
 export default function CreateInsurance() {
+    const navigate = useNavigate()
     const { vehicleId } = useParams()
     const numericVehicleId = parseInt(vehicleId, 10)
 
@@ -69,6 +70,7 @@ export default function CreateInsurance() {
             const result = await axios.post(url, formData)
             console.log(result)
             reset()
+            navigate(`/admin/insurance/view`)
         } catch (error) {
             console.log(error)
         }

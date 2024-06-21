@@ -22,6 +22,7 @@ import { Calendar as CalendarIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import cn from 'classnames'
 import { Calendar } from '../../../components/ui/calendar'
+import { useNavigate } from 'react-router-dom'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -40,6 +41,7 @@ const formSchema = z.object({
 })
 
 export default function CreateMaintenance() {
+    const navigate = useNavigate()
     const { vehicleId } = useParams()
     const numericVehicleId = parseInt(vehicleId, 10)
     const {
@@ -72,6 +74,7 @@ export default function CreateMaintenance() {
             const result = await axios.post(url, formData)
             console.log(result)
             reset()
+            navigate(`/admin/maintenance/view`)
         } catch (error) {
             console.log(error)
         }
@@ -181,7 +184,6 @@ export default function CreateMaintenance() {
                             <FormLabel className="pb-3 w-full">Description</FormLabel>
                             <FormControl>
                                 <Textarea
-                                    placeholder="Explain any damages caused by the user."
                                     className="resize-none w-full h-20"
                                     {...field}
                                     onChange={(e) => {

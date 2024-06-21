@@ -11,6 +11,7 @@ import {
     FormLabel,
     FormMessage
 } from '../../../components/ui/form'
+import { useNavigate } from 'react-router-dom'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
@@ -21,6 +22,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleMake() {
+    const navigate = useNavigate()
     const fileInputRef = useRef(null)
     const {
         control,
@@ -57,11 +59,11 @@ export default function CreateVehicleMake() {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            console.result(response.data)
-            reset()
+            console.log(response.data)
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field
             }
+            navigate(`/admin/vehiclemake/view`)
         } catch (error) {
             console.log(error)
         }

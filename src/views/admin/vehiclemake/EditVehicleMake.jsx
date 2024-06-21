@@ -15,6 +15,7 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -22,6 +23,7 @@ const formSchema = z.object({
 })
 
 export default function EditVehicleMake() {
+    const navigate = useNavigate()
     const { vehicleMakeId } = useParams() // Access route parameter
     const fileInputRef = useRef(null)
     const {
@@ -79,6 +81,7 @@ export default function EditVehicleMake() {
             if (response.data && response.data.logo) {
                 setImage(response.data.logo)
             }
+            navigate(`/admin/vehiclemake/view`)
         } catch (error) {
             console.log(error)
         }
