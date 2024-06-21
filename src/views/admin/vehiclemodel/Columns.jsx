@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrEdit } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
+import { FaUpDown } from 'react-icons/fa6'
 
 // Define a component to encapsulate the action buttons
 const ActionButtons = ({ vehicleModelId }) => {
@@ -40,7 +41,20 @@ export const columns = [
     },
     {
         accessorKey: 'year',
-        header: 'Year',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Year</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => {
             const year = row.original.year
             const value = parseFloat(year)
@@ -50,7 +64,20 @@ export const columns = [
     },
     {
         accessorKey: 'engineCapacity',
-        header: 'Engine Capacity',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Engine Capacity</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => {
             const engineCapacity = row.original.engineCapacity
             const value = parseFloat(engineCapacity)
@@ -61,7 +88,20 @@ export const columns = [
     },
     {
         accessorKey: 'seatingCapacity',
-        header: 'Seating Capacity',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Seating Capacity</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => {
             const seatingCapacity = row.original.seatingCapacity
             const value = parseFloat(seatingCapacity)

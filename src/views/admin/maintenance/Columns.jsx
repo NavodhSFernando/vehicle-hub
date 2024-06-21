@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrEdit } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
+import { FaUpDown } from 'react-icons/fa6'
 
 const ActionButtons = ({ maintenanceId }) => {
     const navigate = useNavigate()
@@ -35,7 +36,20 @@ export const columns = [
     },
     {
         accessorKey: 'currentMileage',
-        header: 'Current Mileage'
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Current Mileage</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        }
     },
     {
         accessorKey: 'vehicleId',
