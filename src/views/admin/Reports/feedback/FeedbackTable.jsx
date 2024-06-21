@@ -169,15 +169,16 @@ const FeedbackReport = () => {
         }
     
         // Prepare table data for jspdf-autotable
-        const tableData = filteredFeedbackData.map((feedback) => [
-            feedback.id,
-            feedback.vehicleReview,
-            feedback.serviceReview,
-            '⭐'.repeat(feedback.rating), // Render star ratings as text
-            feedback.date,
-            feedback.customer,
-            feedback.vehicle,
-        ]);
+// Prepare table data for jspdf-autotable
+const tableData = filteredFeedbackData.map((feedback) => [
+    feedback.id,
+    feedback.vehicleReview,
+    feedback.serviceReview,
+    '*'.repeat(feedback.rating), // Use asterisks (*) instead of star emoji
+    feedback.date,
+    feedback.customer,
+    feedback.vehicle,
+]);
     
         // Set table headers
         const tableHeaders = [
