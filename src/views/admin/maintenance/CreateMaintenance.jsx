@@ -23,6 +23,7 @@ import { format, parseISO } from 'date-fns'
 import cn from 'classnames'
 import { Calendar } from '../../../components/ui/calendar'
 import { useNavigate } from 'react-router-dom'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -215,9 +216,12 @@ export default function CreateMaintenance() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Create
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Create"
+                        alertTitle="Create New Maintenance"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>
