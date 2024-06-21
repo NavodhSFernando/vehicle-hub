@@ -4,7 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -84,6 +84,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleModel() {
+    const navigate = useNavigate()
     const {
         control,
         handleSubmit,
@@ -138,8 +139,9 @@ export default function CreateVehicleModel() {
             }
 
             const result = await axios.post(url, formData)
-            console.result('Vehicle model created', result)
+            console.log('Vehicle model created', result)
             reset()
+            navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
             console.log(error)
         }

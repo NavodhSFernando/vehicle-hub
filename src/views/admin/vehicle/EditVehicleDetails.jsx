@@ -19,6 +19,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { navigate, useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     regNo: z
@@ -46,6 +47,7 @@ const formSchema = z.object({
 })
 
 export default function EditVehicleDetails({ vehicleId }) {
+    const navigate = useNavigate()
     const {
         control,
         handleSubmit,
@@ -140,8 +142,9 @@ export default function EditVehicleDetails({ vehicleId }) {
                 EmployeeId: decryptedId
             }
             const result = await axios.put(url, formData)
-            console.result('Vehicle updated', result)
+            console.log('Vehicle updated', result)
             reset()
+            navigate(`/admin/vehicle/view`)
         } catch (error) {
             console.error('Error:', error)
         }
