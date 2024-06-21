@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import logoImage from '../../../../assets/logos/Blue-type.png'; // Replace with the actual path to your logo
 
 const RevenueTable = () => {
   const [revenueData, setRevenueData] = useState([]);
@@ -9,7 +10,10 @@ const RevenueTable = () => {
   const [error, setError] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [filterError, setFilterError] = useState(""); // Add this line
+  const [filterError, setFilterError] = useState("");
+  const [logoBase64, setLogoBase64] = useState("");
+  const [pdfUrl, setPdfUrl] = useState(""); // State for PDF URL
+  const [showPreview, setShowPreview] = useState(false); // State to control modal
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +40,23 @@ const RevenueTable = () => {
     };
 
     fetchData();
+
+    // Load the logo image
+    const loadImage = async () => {
+      try {
+        const response = await fetch(logoImage);
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setLogoBase64(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      } catch (error) {
+        console.error("Error loading logo:", error);
+      }
+    };
+
+    loadImage();
   }, []);
 
   const handleFilter = () => {
@@ -44,7 +65,7 @@ const RevenueTable = () => {
       return;
     }
 
-    setFilterError(""); // Clear the error if dates are selected
+    setFilterError("");
     let filteredData = revenueData;
 
     if (startDate && endDate) {
@@ -67,14 +88,39 @@ const RevenueTable = () => {
     );
   };
 
-  const handleExportPDF = () => {
+  const generatePdf = () => {
     const doc = new jsPDF();
-    let startY = 10;
+    let startY = 20; // Adjust starting Y to make room for the logo
+
+    // Add logo to the top right corner
+    if (logoBase64) {
+      const logoWidth = 50; // Width of the logo in the PDF
+      const logoHeight = 40; // Height of the logo in the PDF
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 10;
+
+      // Adjust logo position
+      const logoX = pageWidth - logoWidth - margin;
+      doc.addImage(logoBase64, 'PNG', logoX, margin, logoWidth, logoHeight);
+    }
 
     // Header
     doc.setFontSize(18);
-    doc.text("Revenue Report", 10, startY);
-    startY += 10;
+    doc.text("Revenue Report", 10, startY + (logoBase64 ? 30 : 0)); // Adjust text position
+
+    startY += (logoBase64 ? 50 : 30); // Add a small gap after the title (30 if no logo, 50 if logo is present)
+
+    // Add date range
+    doc.setFontSize(12);
+    let dateRangeText = "Date Range: ";
+    if (startDate) {
+      dateRangeText += `From ${new Date(startDate).toLocaleDateString()} `;
+    }
+    if (endDate) {
+      dateRangeText += `to ${new Date(endDate).toLocaleDateString()}`;
+    }
+    doc.text(dateRangeText, 10, startY);
+    startY += 10; // Move down a bit after the date range
 
     // Table header
     const headers = ["ID", "Type", "Amount", "Date"];
@@ -82,7 +128,7 @@ const RevenueTable = () => {
       revenue.id,
       revenue.type,
       revenue.amount,
-      revenue.date,
+      new Date(revenue.date).toLocaleDateString(), // Format date
     ]);
 
     // Table
@@ -99,12 +145,51 @@ const RevenueTable = () => {
       body: totalRow,
     });
 
+    return doc;
+  };
+
+  const handleExportPDF = () => {
+    const doc = generatePdf();
+
     // Save the PDF
     doc.save("revenue_report.pdf");
   };
 
-  const handlePrint = () => {
-    window.print(); // Generate print dialog
+  const handlePreviewPDF = () => {
+    const doc = generatePdf();
+
+    // Generate a Blob URL for preview
+    const pdfBlob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    setPdfUrl(pdfUrl);
+    setShowPreview(true);
+  };
+
+  const handlePrintPDF = () => {
+    const doc = generatePdf();
+
+    // Create a Blob URL for printing
+    const pdfBlob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    // Create a hidden iframe and load the PDF URL
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.top = '0';
+    iframe.style.left = '0';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    iframe.style.visibility = 'hidden';
+    document.body.appendChild(iframe);
+
+    iframe.onload = () => {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+      document.body.removeChild(iframe);
+    };
+
+    iframe.src = pdfUrl;
   };
 
   if (loading) {
@@ -189,30 +274,57 @@ const RevenueTable = () => {
         </table>
       </div>
 
-      <div className="flex mt-4 space-x-4 export-print-buttons">
+      <div className="flex">
         <button
-          id="export-pdf-button"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          onClick={handleExportPDF}
-        >
-          Export to PDF
-        </button>
-        <button
-          id="print-button"
-          className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-          onClick={handlePrint}
+          id="preview-button"
+          className="bg-blue-500 text-white px-4 py-2 mr-4 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+          onClick={handlePreviewPDF}
         >
           Print
         </button>
+        <button
+          id="export-pdf-button"
+          className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+          onClick={handleExportPDF}
+        >
+          Export PDF
+        </button>
       </div>
 
-      <style jsx>{`
-        @media print {
-          .export-print-buttons {
-            display: none;
-          }
-        }
-      `}</style>
+      {showPreview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700 bg-opacity-50"
+          onClick={() => setShowPreview(false)}
+        >
+          <div
+            className="relative w-4/5 h-4/5 bg-white rounded-lg shadow-lg p-4 overflow-auto"
+            onClick={(e) => e.stopPropagation()} // Prevent click from closing modal
+          >
+            <div className="flex justify-end">
+              <button
+                className="text-red-500 hover:text-red-700 font-bold"
+                onClick={() => setShowPreview(false)}
+              >
+                Close
+              </button>
+            </div>
+            <object
+              data={pdfUrl}
+              type="application/pdf"
+              className="w-full h-full"
+              aria-label="PDF Preview"
+            >
+              <iframe
+                src={pdfUrl}
+                title="PDF Preview"
+                className="w-full h-full border-none"
+              >
+                This browser does not support PDFs. Please download the PDF to view it.
+              </iframe>
+            </object>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
