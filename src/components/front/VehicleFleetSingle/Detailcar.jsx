@@ -5,6 +5,7 @@ import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { useToast } from '../../ui/use-toast'
 
 export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [clicked, setClicked] = useState(false)
@@ -12,6 +13,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [averageRating, setAverageRating] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
     const [vehicleData, setVehicleData] = useState({})
+    const { toast } = useToast()
     const navigate = useNavigate()
     const reservationId = id
 
@@ -27,8 +29,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
 
     const handleRequestVehicle = async () => {
         if (!isChecked) {
-            alert('Please agree to the terms before requesting the vehicle.')
-            return
+            return toast({
+                variant: 'destructive_border',
+                description: 'Please agree to the Terms and Conditions to proceed'
+            })
         }
         if (!customerId) {
             console.error('Customer ID not found in cookies')
@@ -51,6 +55,12 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 }
             }
             const response = await axios.post(url, formData)
+            if (response.status === 200) {
+                toast({
+                    variant: 'success',
+                    description: 'Vehicle requested successfully'
+                })
+            }
             console.log('Request vehicle response:', response.data)
             navigate(`/account/viewongoingrentals`)
         } catch (error) {
