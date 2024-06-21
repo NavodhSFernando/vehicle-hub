@@ -18,6 +18,15 @@ export default function Ongoingrentalssingle() {
         setRating(value)
     }
 
+    const handleCancel = async () => {
+        try {
+            const response = await axios.post()
+            console.log('Reservation Cancelled:', response.data)
+        } catch (error) {
+            console.error('Failed to cancel reservation:', error)
+        }
+    }
+
     useEffect(() => {
         const decryptId = async () => {
             try {
@@ -124,7 +133,7 @@ export default function Ongoingrentalssingle() {
                     </div>
                 </div>
             </div>
-            {(rentalData.status != 'Ongoing' || rentalData.status != 'Ended') && (
+            {(rentalData.status == 'Waiting' || rentalData.status == 'Pending' || rentalData.status == 'Confirmed') && (
                 <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mt-3 mb-8">
                     <div className="mr-20 ml-20 my-10 lg:mx-36">
                         <p className="text-xs text-gray-500 flex items-start pb-3">
@@ -135,7 +144,7 @@ export default function Ongoingrentalssingle() {
                             non-refundable
                         </p>
                         <hr className="pb-3" />
-                        <Button className="bg-red-600 rounded-xl font-semibold text-gray-50 text-xs pt-1 pb-1 pr-2 pl-2">
+                        <Button variant="destructive" onclick={() => handleCancel()}>
                             Cancel Reservation
                         </Button>
                         <div className="flex items-start">

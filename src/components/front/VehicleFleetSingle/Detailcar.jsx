@@ -139,12 +139,14 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                             <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.seatingCapacity}</p>
                         </div>
                         <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-3/5">Engine</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.engineCapacity}</p>
+                            <p className="text-lg text-slate-500 w-3/5">Engine Capacity</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">
+                                {vehicleData.engineCapacity + 'cc'}
+                            </p>
                         </div>
                         <div className="flex w-full">
                             <p className="text-lg text-slate-500 w-3/5">Mileage</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.mileage}</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.mileage + 'km'}</p>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 w-1/2">
@@ -194,7 +196,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 <p className="text-sm text-slate-500 uppercase">Rates</p>
                 <div className="p-3">
                     <h1 className="text-3xl font-bold pb-2 w-full border-b border-black mb-4">
-                        {'Rs' + vehicleData.costPerDay} / <span className="text-slate-500">day</span>
+                        {'Rs ' + vehicleData.costPerDay} / <span className="text-slate-500">day</span>
                     </h1>
                     <div className="flex flex-col pb-14">
                         <span className="flex gap-2 items-center mb-2">
