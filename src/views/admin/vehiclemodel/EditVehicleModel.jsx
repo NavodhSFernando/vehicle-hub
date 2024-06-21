@@ -27,7 +27,7 @@ const items = [
     { id: 'acFront', label: 'Ac Front' },
     { id: 'securitySystem', label: 'Security System' },
     { id: 'bluetooth', label: 'Bluetooth' },
-    { id: 'parkingSensors', label: 'Parking Sensors' },
+    { id: 'parkingSensor', label: 'Parking Sensor' },
     { id: 'airbagDriver', label: 'Airbag: Driver' },
     { id: 'airbagPassenger', label: 'Airbag: Passenger' },
     { id: 'airbagSide', label: 'Airbag: Side' },
@@ -35,7 +35,7 @@ const items = [
     { id: 'navigationSystem', label: 'Navigation System' },
     { id: 'sunroof', label: 'Sunroof' },
     { id: 'tintedGlass', label: 'Tinted Glass' },
-    { id: 'powerWindows', label: 'Power Windows' },
+    { id: 'powerWindow', label: 'Power Window' },
     { id: 'rearWindowWiper', label: 'Rear Window Wiper' },
     { id: 'alloyWheels', label: 'Alloy Wheels' },
     { id: 'electricMirrors', label: 'Electric Mirrors' },
@@ -150,7 +150,7 @@ export default function EditVehicleModel() {
                     fuel: data.fuel,
                     vehicleMakeId: data.vehicleMakeId
                 },
-                additionalFeatures: additionalFeatures
+                AdditionalFeatures: additionalFeatures
             }
             const result = await axios.put(url, formData)
             console.log('Vehicle model updated', result)
@@ -259,10 +259,10 @@ export default function EditVehicleModel() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesel">Diesel</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="electric">Electric</SelectItem>
+                                    <SelectItem value="Petrol">Petrol</SelectItem>
+                                    <SelectItem value="Diesel">Diesel</SelectItem>
+                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                    <SelectItem value="Electric">Electric</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />

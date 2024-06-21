@@ -41,7 +41,7 @@ export const columns = [
     },
     {
         accessorKey: 'vehicleId',
-        header: 'Vehicle',
+        header: 'Registration Number',
         cell: ({ row }) => {
             const vehicleId = row.original.vehicle.registrationNumber
 
