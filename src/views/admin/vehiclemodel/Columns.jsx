@@ -36,7 +36,7 @@ export const columns = [
         header: 'Name',
         cell: ({ row }) => {
             const name = row.original.name
-            return <div className="font-medium">{name}</div>
+            return <div className="">{name}</div>
         }
     },
     {
@@ -59,7 +59,7 @@ export const columns = [
             const year = row.original.year
             const value = parseFloat(year)
 
-            return <div className="font-medium">{value}</div>
+            return <div className="">{value}</div>
         }
     },
     {
@@ -83,7 +83,7 @@ export const columns = [
             const value = parseFloat(engineCapacity)
             const formattedEngineCapacity = `${value}cc`
 
-            return <div className="font-normal">{formattedEngineCapacity}</div>
+            return <div className="">{formattedEngineCapacity}</div>
         }
     },
     {
@@ -106,7 +106,7 @@ export const columns = [
             const seatingCapacity = row.original.seatingCapacity
             const value = parseFloat(seatingCapacity)
 
-            return <div className="font-medium">{value}</div>
+            return <div className="">{value}</div>
         }
     },
     {
@@ -114,7 +114,7 @@ export const columns = [
         header: 'Fuel Type',
         cell: ({ row }) => {
             const fuel = row.original.fuel
-            return <div className="font-normal">{fuel}</div>
+            return <div className="">{fuel}</div>
         }
     },
     {
@@ -123,7 +123,7 @@ export const columns = [
         cell: ({ row }) => {
             const vehicleMakeId = row.original.vehicleMake.name
 
-            return <div className="font-medium">{vehicleMakeId}</div>
+            return <div className="">{vehicleMakeId}</div>
         }
     },
     {

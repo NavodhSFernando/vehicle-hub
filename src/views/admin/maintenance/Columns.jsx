@@ -53,11 +53,11 @@ export const columns = [
     },
     {
         accessorKey: 'vehicleId',
-        header: 'Vehicle',
+        header: 'Registration Number',
         cell: ({ row }) => {
             const vehicleId = row.original.vehicle.registrationNumber
 
-            return <div className="font-medium">{vehicleId}</div>
+            return <div className="">{vehicleId}</div>
         },
         filterFn: (row, columnId, filterValue) => {
             return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())

@@ -242,10 +242,10 @@ export default function CreateVehicleModel() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesel">Diesel</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="electric">Electric</SelectItem>
+                                    <SelectItem value="Petrol">Petrol</SelectItem>
+                                    <SelectItem value="Diesel">Diesel</SelectItem>
+                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                    <SelectItem value="Electric">Electric</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />

@@ -66,7 +66,7 @@ export const columns = [
                 currency: 'LKR'
             }).format(costPerDay)
 
-            return <div className="font-normal">{formatted}</div>
+            return <div className="">{formatted}</div>
         }
     },
     {
@@ -94,7 +94,7 @@ export const columns = [
                 currency: 'LKR'
             }).format(costPerExtraKm)
 
-            return <div className="font-normal">{formatted}</div>
+            return <div className="">{formatted}</div>
         }
     },
     {
@@ -125,7 +125,7 @@ export const columns = [
             const mileage = row.getValue('mileage')
             const formattedMileage = `${mileage} KM`
 
-            return <div className="font-medium">{formattedMileage}</div>
+            return <div className="">{formattedMileage}</div>
         }
     },
     {
@@ -149,7 +149,7 @@ export const columns = [
             // Extract the vehicleType.id correctly
             const vehicleTypeId = row.original.vehicleType.name
 
-            return <div className="font-medium">{vehicleTypeId}</div>
+            return <div className="">{vehicleTypeId}</div>
         }
     },
     {
@@ -158,7 +158,7 @@ export const columns = [
         cell: ({ row }) => {
             const vehicleModelId = row.original.vehicleModel.name
 
-            return <div className="font-medium">{vehicleModelId}</div>
+            return <div className="">{vehicleModelId}</div>
         },
         filterFn: (row, columnId, filterValue) => {
             return row.original.vehicleModel.name.toString().toLowerCase().includes(filterValue.toLowerCase())
@@ -171,7 +171,7 @@ export const columns = [
             const status = row.original.status
             const statusText = status ? 'Active' : 'Inactive'
 
-            return <div className="font-medium">{statusText}</div>
+            return <div className="">{statusText}</div>
         }
     },
     {

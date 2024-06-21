@@ -85,7 +85,6 @@ export default function EditInsurance() {
             }
             const result = await axios.put(url, formData)
             console.log(result)
-            fetch()
             navigate(`/admin/insurance/view`)
         } catch (error) {
             console.error('Failed to update vehicle Insurance', error)
