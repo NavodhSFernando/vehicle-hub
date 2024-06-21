@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import logoImage from '../../../../assets/logos/Blue-type.png'; // Replace with the actual path to your logo
 
 const FeedbackReport = () => {
     const [feedbackData, setFeedbackData] = useState([]);
@@ -11,12 +12,20 @@ const FeedbackReport = () => {
     const [customerFilter, setCustomerFilter] = useState('');
     const [ratingFilter, setRatingFilter] = useState('');
     const [filterError, setFilterError] = useState('');
+    const [logoBase64, setLogoBase64] = useState('');
+    const [pdfUrl, setPdfUrl] = useState(''); // State for PDF URL
+    const [showPreview, setShowPreview] = useState(false); // State to control modal
+    const [loading, setLoading] = useState(true); // Loading state
+    const [error, setError] = useState(null); // Error state
 
     useEffect(() => {
         fetchFeedbackData();
+        loadLogoImage();
     }, []);
 
     const fetchFeedbackData = async () => {
+        setLoading(true); // Start loading
+
         try {
             const response = await fetch('http://localhost:5062/api/FeedbackReport');
             if (!response.ok) {
@@ -31,13 +40,30 @@ const FeedbackReport = () => {
                 rating: item.rating,
                 date: item.date,
                 customer: item.customer,
-                vehicle: item.vehicle
+                vehicle: item.vehicle,
             }));
 
             setFeedbackData(formattedData);
             setFilteredFeedbackData(formattedData);
         } catch (error) {
             console.error('Error fetching feedback data:', error);
+            setError(error); // Set error state if fetch fails
+        } finally {
+            setLoading(false); // Stop loading
+        }
+    };
+
+    const loadLogoImage = async () => {
+        try {
+            const response = await fetch(logoImage);
+            const blob = await response.blob();
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setLogoBase64(reader.result);
+            };
+            reader.readAsDataURL(blob);
+        } catch (error) {
+            console.error('Error loading logo:', error);
         }
     };
 
@@ -73,11 +99,13 @@ const FeedbackReport = () => {
                 feedback.vehicle.toLowerCase().includes(vehicleFilter.toLowerCase())
             );
         }
+        
         if (customerFilter !== '') {
             filteredData = filteredData.filter((feedback) =>
                 feedback.customer.toLowerCase().includes(customerFilter.toLowerCase())
             );
         }
+
         if (ratingFilter !== '') {
             filteredData = filteredData.filter((feedback) => feedback.rating === parseInt(ratingFilter));
         }
@@ -85,8 +113,41 @@ const FeedbackReport = () => {
         setFilteredFeedbackData(filteredData);
     };
 
-    const handleExportPDF = () => {
+    const getTotalAmount = () => {
+        return filteredFeedbackData.reduce((total, feedback) => total + feedback.rating, 0);
+    };
+
+    const generatePdf = () => {
         const doc = new jsPDF();
+
+        // Add logo to the top right corner
+        if (logoBase64) {
+            const logoWidth = 50; // Width of the logo in the PDF
+            const logoHeight = 40; // Height of the logo in the PDF
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const margin = 10;
+
+            // Adjust logo position
+            const logoX = pageWidth - logoWidth - margin;
+            doc.addImage(logoBase64, 'PNG', logoX, margin, logoWidth, logoHeight);
+        }
+
+        // Title
+        doc.setFontSize(18);
+        doc.text('Feedback Report', 10, 20);
+
+        // Date range
+        if (startDate || endDate) {
+            let dateRangeText = 'Date Range: ';
+            if (startDate) {
+                dateRangeText += `From ${startDate} `;
+            }
+            if (endDate) {
+                dateRangeText += `to ${endDate}`;
+            }
+            doc.setFontSize(12);
+            doc.text(dateRangeText, 10, 30);
+        }
 
         // Prepare table data for jspdf-autotable
         const tableData = filteredFeedbackData.map((feedback) => [
@@ -96,7 +157,7 @@ const FeedbackReport = () => {
             '⭐'.repeat(feedback.rating), // Render star ratings as text
             feedback.date,
             feedback.customer,
-            feedback.vehicle
+            feedback.vehicle,
         ]);
 
         // Set table headers
@@ -107,32 +168,80 @@ const FeedbackReport = () => {
             { header: 'Rating', dataKey: 'rating' },
             { header: 'Date', dataKey: 'date' },
             { header: 'Customer', dataKey: 'customer' },
-            { header: 'Vehicle', dataKey: 'vehicle' }
+            { header: 'Vehicle', dataKey: 'vehicle' },
         ];
 
         // Add table to PDF
         autoTable(doc, {
-            head: [tableHeaders.map(header => header.header)],
+            startY: 50,
+            head: [tableHeaders.map((header) => header.header)],
             body: tableData,
             didDrawCell: (data) => {
                 // Customize styles as needed, e.g., data.cell.styles.fillColor = 'white';
-            }
+            },
         });
 
-        // Save PDF
+        return doc;
+    };
+
+    const handleExportPDF = () => {
+        const doc = generatePdf();
+
+        // Save the PDF
         doc.save('feedback_report.pdf');
     };
 
-    const handlePrint = () => {
-        window.print(); // Generate print dialog
+    const handlePreviewPDF = () => {
+        const doc = generatePdf();
+
+        // Generate a Blob URL for preview
+        const pdfBlob = doc.output('blob');
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+        setPdfUrl(pdfUrl);
+        setShowPreview(true);
     };
+
+    const handlePrintPDF = () => {
+        const doc = generatePdf();
+
+        // Create a Blob URL for printing
+        const pdfBlob = doc.output('blob');
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+
+        // Create a hidden iframe and load the PDF URL
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.style.visibility = 'hidden';
+        document.body.appendChild(iframe);
+
+        iframe.onload = () => {
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+            document.body.removeChild(iframe);
+        };
+
+        iframe.src = pdfUrl;
+    };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
 
     return (
         <div className="container mx-auto py-8 px-4 bg-white border-2 border-gray-300 rounded-md">
-            <h1 className="text-3xl font-bold mb-4">Feedback Report</h1>
 
+            {/* Filter section */}
             <div className="flex flex-wrap justify-between mb-4">
-                <div className="mb-4" style={{ width: '45%' }}>
+                <div className="mb-4" style={{ width: "45%" }}>
                     <label htmlFor="startDate" className="block text-gray-700 font-bold mb-2">
                         Start Date:
                     </label>
@@ -146,7 +255,7 @@ const FeedbackReport = () => {
                     />
                 </div>
 
-                <div className="mb-4" style={{ width: '45%' }}>
+                <div className="mb-4" style={{ width: "45%" }}>
                     <label htmlFor="endDate" className="block text-gray-700 font-bold mb-2">
                         End Date:
                     </label>
@@ -162,30 +271,30 @@ const FeedbackReport = () => {
             </div>
 
             <div className="flex flex-wrap justify-between mb-4">
-                <div className="mb-4" style={{ width: '45%' }}>
-                    <label htmlFor="vehicleFilter" className="block text-gray-700 font-bold mb-2">
-                        Vehicle:
+                <div className="mb-4" style={{ width: "45%" }}>
+                    <label htmlFor="rating" className="block text-gray-700 font-bold mb-2">
+                        Rating:
                     </label>
                     <input
-                        type="text"
-                        id="vehicleFilter"
-                        name="vehicleFilter"
-                        placeholder="Enter vehicle"
+                        type="number"
+                        id="rating"
+                        name="rating"
+                        min="1"
+                        max="5"
                         className="w-full px-4 py-2 border rounded-md"
-                        value={vehicleFilter}
-                        onChange={(e) => setVehicleFilter(e.target.value)}
+                        value={ratingFilter}
+                        onChange={(e) => setRatingFilter(e.target.value)}
                     />
                 </div>
 
-                <div className="mb-4" style={{ width: '45%' }}>
-                    <label htmlFor="customerFilter" className="block text-gray-700 font-bold mb-2">
+                <div className="mb-4" style={{ width: "45%" }}>
+                    <label htmlFor="customer" className="block text-gray-700 font-bold mb-2">
                         Customer:
                     </label>
                     <input
                         type="text"
-                        id="customerFilter"
-                        name="customerFilter"
-                        placeholder="Enter customer name"
+                        id="customer"
+                        name="customer"
                         className="w-full px-4 py-2 border rounded-md"
                         value={customerFilter}
                         onChange={(e) => setCustomerFilter(e.target.value)}
@@ -193,22 +302,8 @@ const FeedbackReport = () => {
                 </div>
             </div>
 
-            <div className="mb-4" style={{ width: '45%' }}>
-                <label htmlFor="ratingFilter" className="block text-gray-700 font-bold mb-2">
-                    Rating:
-                </label>
-                <input
-                    type="number"
-                    id="ratingFilter"
-                    name="ratingFilter"
-                    placeholder="Enter rating"
-                    className="w-full px-4 py-2 border rounded-md"
-                    value={ratingFilter}
-                    onChange={(e) => setRatingFilter(e.target.value)}
-                />
-            </div>
-
-            <div className="mb-8 mt-7">
+            {/* Filter button */}
+            <div className="mt-4 mb-8">
                 {filterError && <p className="text-red-500 text-sm">{filterError}</p>}
                 <button
                     className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
@@ -218,6 +313,7 @@ const FeedbackReport = () => {
                 </button>
             </div>
 
+            {/* Feedback data table */}
             <div className="mb-4">
                 <table className="w-full border-collapse border rounded-md">
                     <thead className="bg-gray-200">
@@ -234,33 +330,62 @@ const FeedbackReport = () => {
                     <tbody>
                         {filteredFeedbackData.map((feedback) => (
                             <tr key={feedback.id}>
-                                <td className="px-4 py-2 border-t border-gray-300">{feedback.id}</td>
-                                <td className="px-4 py-2 border-t border-gray-300">{feedback.vehicleReview}</td>
-                                <td className="px-4 py-2 border-t border-gray-300">{feedback.serviceReview}</td>
-                                <td className="px-4 py-2 border-t border-gray-300">{'⭐'.repeat(feedback.rating)}</td>
-                                <td className="px-4 py-2 border-t border-gray-300">{feedback.date}</td>
-                                <td className="px-4 py-2 border-t border-gray-300">{feedback.customer}</td>
-                                <td className="px-4 py-2 border-t border-gray-300">{feedback.vehicle}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{feedback.id}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{feedback.vehicleReview}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{feedback.serviceReview}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{'⭐'.repeat(feedback.rating)}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{feedback.date}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{feedback.customer}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{feedback.vehicle}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
 
-            <div className="flex mt-4 space-x-4 export-print-buttons">
+            <div className="flex">
                 <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    id="preview-button"
+                    className="bg-blue-500 text-white px-4 py-2 mr-4 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    onClick={handlePreviewPDF}
+                >
+                    Preview
+                </button>
+                <button
+                    id="export-pdf-button"
+                    className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                     onClick={handleExportPDF}
                 >
-                    Export to PDF
-                </button>
-                <button
-                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                    onClick={handlePrint}
-                >
-                    Print
+                    Export PDF
                 </button>
             </div>
+
+            {/* PDF Preview Modal */}
+            {showPreview && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-gray-700 bg-opacity-50"
+                    onClick={() => setShowPreview(false)}
+                >
+                    <div
+                        className="relative w-4/5 h-4/5 bg-white rounded-lg shadow-lg p-4 overflow-auto"
+                        onClick={(e) => e.stopPropagation()} // Prevent click from closing modal
+                    >
+                        <div className="flex justify-end">
+                            <button
+                                className="text-red-500 hover:text-red-700 font-bold"
+                                onClick={() => setShowPreview(false)}
+                            >
+                                Close
+                            </button>
+                        </div>
+                        <object data={pdfUrl} type="application/pdf" className="w-full h-full" aria-label="PDF Preview">
+                            <iframe src={pdfUrl} title="PDF Preview" className="w-full h-full border-none">
+                                This browser does not support PDFs. Please download the PDF to view it.
+                            </iframe>
+                        </object>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
