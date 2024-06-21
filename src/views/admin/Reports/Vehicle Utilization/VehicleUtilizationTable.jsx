@@ -63,6 +63,11 @@ const VehicleUtilizationReport = () => {
     const handleFilter = () => {
         setFilterError('')
     
+        if (!startDate && !endDate) {
+            setFilterError('Please select a start date or an end date')
+            return
+        }
+    
         let filteredData = reservationData
     
         // Apply date range filtering
@@ -85,29 +90,30 @@ const VehicleUtilizationReport = () => {
     
         setFilteredReservationData(filteredData)
     }
+    
 
     const generatePdf = () => {
         const doc = new jsPDF()
         let startY = 20 // Adjust starting Y to make room for the logo
-
+    
         // Add logo to the top right corner
         if (logoBase64) {
             const logoWidth = 50 // Width of the logo in the PDF
             const logoHeight = 40 // Height of the logo in the PDF
             const pageWidth = doc.internal.pageSize.getWidth()
             const margin = 10
-
+    
             // Adjust logo position
             const logoX = pageWidth - logoWidth - margin
             doc.addImage(logoBase64, 'PNG', logoX, margin, logoWidth, logoHeight)
         }
-
+    
         // Header
         doc.setFontSize(18)
         doc.text('Vehicle Utilization Report', 10, startY + (logoBase64 ? 30 : 0)) // Adjust text position
-
+    
         startY += (logoBase64 ? 50 : 30) // Add a small gap after the title (30 if no logo, 50 if logo is present)
-
+    
         // Add date range
         doc.setFontSize(12)
         let dateRangeText = 'Date Range: '
@@ -119,7 +125,14 @@ const VehicleUtilizationReport = () => {
         }
         doc.text(dateRangeText, 10, startY)
         startY += 10 // Move down a bit after the date range
-
+    
+        // Add vehicle number filter
+        if (vehicleNo) {
+            doc.setFontSize(12)
+            doc.text(`Vehicle No: ${vehicleNo}`, 10, startY)
+            startY += 10 // Move down a bit after the vehicle number filter
+        }
+    
         // Table header
         const headers = ['Vehicle No', 'Start Date', 'End Date', 'Mileage', 'Reservation ID']
         const data = filteredReservationData.map((reservation) => [
@@ -129,18 +142,17 @@ const VehicleUtilizationReport = () => {
             reservation.mileage,
             reservation.reservationId,
         ])
-
+    
         // Table
         autoTable(doc, {
             startY,
             head: [headers],
             body: data,
         })
-
-        // Total row
-
+    
         return doc
     }
+    
 
     const handleExportPDF = () => {
         const doc = generatePdf()
@@ -197,17 +209,6 @@ const VehicleUtilizationReport = () => {
     return (
         <div id="vehicle-utilization-report-container" className="container mx-auto py-8 mb-8 px-4 sm:px-6 lg:px-8 bg-white border border-gray-300 rounded-lg shadow-md">
             <div className="flex flex-wrap justify-between mb-4">
-                <div className="mb-4" style={{ width: '45%' }}>
-                    <label htmlFor="vehicleNo" className="block text-gray-700 font-bold mb-2">Vehicle No:</label>
-                    <input
-                        type="text"
-                        id="vehicle-no-input"
-                        placeholder="Enter Vehicle No"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        value={vehicleNo}
-                        onChange={(e) => setVehicleNo(e.target.value)}
-                    />
-                </div>
 
                 <div className="mb-4" style={{ width: '45%' }}>
                     <label htmlFor="startDate" className="block text-gray-700 font-bold mb-2">Start Date:</label>
@@ -230,6 +231,19 @@ const VehicleUtilizationReport = () => {
                         onChange={(e) => setEndDate(e.target.value)}
                     />
                 </div>
+
+                <div className="mb-4" style={{ width: '45%' }}>
+                    <label htmlFor="vehicleNo" className="block text-gray-700 font-bold mb-2">Vehicle No:</label>
+                    <input
+                        type="text"
+                        id="vehicle-no-input"
+                        placeholder="Enter Vehicle No"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        value={vehicleNo}
+                        onChange={(e) => setVehicleNo(e.target.value)}
+                    />
+                </div>
+
             </div>
 
             {filterError && (
