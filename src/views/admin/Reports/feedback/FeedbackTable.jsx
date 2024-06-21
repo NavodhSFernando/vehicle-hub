@@ -116,7 +116,6 @@ const FeedbackReport = () => {
     const getTotalAmount = () => {
         return filteredFeedbackData.reduce((total, feedback) => total + feedback.rating, 0);
     };
-
     const generatePdf = () => {
         const doc = new jsPDF();
     
@@ -132,13 +131,13 @@ const FeedbackReport = () => {
             doc.addImage(logoBase64, 'PNG', logoX, margin, logoWidth, logoHeight);
         }
     
-        // Title
+        // Title - Changed to "Revenue Report"
         doc.setFontSize(18);
-        doc.text('Feedback Report', 10, 20);
+        doc.text('Revenue Report', 10, 50);
     
         // Filters section
         doc.setFontSize(12);
-        let filtersY = 30;
+        let filtersY = 60; // Adjusted initial Y position for filters to avoid overlap with title
         doc.text('Applied Filters:', 10, filtersY);
         filtersY += 10;
     
