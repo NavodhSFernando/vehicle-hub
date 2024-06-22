@@ -67,6 +67,12 @@ const VehicleUtilizationReport = () => {
             setFilterError('Please select a start date or an end date')
             return
         }
+
+        if (startDate !== '' && endDate !== '' && new Date(startDate) > new Date(endDate)) {
+            setFilterError('Invalid date range: Start date cannot be after end date.')
+            return
+        }
+
     
         let filteredData = reservationData
     
