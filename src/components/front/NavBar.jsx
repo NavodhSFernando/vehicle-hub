@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { NavLink, useLocation  } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { BsBookmarkStar } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
@@ -14,7 +14,7 @@ import WishlistDropdown from './WishlistDropDown'
 import Cookies from 'js-cookie'
 
 const Navbar = () => {
-    const location = useLocation();
+    const location = useLocation()
     const [loggedIn, setLoggedIn] = useState(true)
 
     const [isDropdownOpen] = useState(true)
@@ -47,10 +47,12 @@ const Navbar = () => {
         isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
     }, [])
 
-    const isHomePage = location.pathname === '/';
+    const isHomePage = location.pathname === '/'
 
     return (
-        <nav className={`absolute top-0 inset-x-0 z-10 ${isHomePage ? 'bg-transparent' : 'bg-gradient-to-b from-[#283280]'}`}>
+        <nav
+            className={`absolute top-0 inset-x-0 z-10 ${isHomePage ? 'bg-transparent' : 'bg-gradient-to-b from-[#283280]'}`}
+        >
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
