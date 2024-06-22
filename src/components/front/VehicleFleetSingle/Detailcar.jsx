@@ -9,6 +9,7 @@ import { useToast } from '../../ui/use-toast'
 
 export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [clicked, setClicked] = useState(false)
+    const [wishlistclick, setwishlistclick] = useState(false)
     const [totalFeedbacks, setTotalFeedbacks] = useState(0)
     const [averageRating, setAverageRating] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
@@ -18,7 +19,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const reservationId = id
 
     const customerId = Cookies.get('customerId')
-
+ 
     const handleClick = () => {
         setClicked(!clicked)
     }
@@ -88,17 +89,78 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         }
     }
 
+
+    //wishlist
+    const updateWishlist = (wishlistItems) => {
+        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
+        const event = new CustomEvent('wishlistUpdated', { detail: wishlistItems })
+        window.dispatchEvent(event)
+    }
+
+    const getWishlist = () => {
+        return JSON.parse(localStorage.getItem('wishlistItems')) || []
+    }
+
+    const handleWishlist = () => {
+        const vehicleDetails = {
+            id: vehicleData.VehicleId,
+            name: vehicleData.name,
+            type: vehicleData.type,
+            year: vehicleData.year,
+            imageSrc: vehicleData.dashboardImg,
+            transmission: vehicleData.transmission,
+            price: vehicleData.costPerDay,
+            capacity: vehicleData.seatingCapacity,
+        }
+
+        const existingWishlistItems = getWishlist()
+        const areVehiclesEqual = (vehicle1, vehicle2) => {
+            return vehicle1.id === vehicle2.id
+        }
+
+        const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
+
+        if (index === -1) {
+            const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
+            updateWishlist(updatedWishlistItems)
+            setClicked(true)
+        } else {
+            const updatedWishlistItems = existingWishlistItems.filter((item) => !areVehiclesEqual(item, vehicleDetails))
+            updateWishlist(updatedWishlistItems)
+            setClicked(false)
+        }
+    }
+
     useEffect(() => {
         const fetchVehicleData = async () => {
             try {
                 const response = await axios.get(`http://localhost:5062/api/FrontReservationService/DetailCar/${id}`)
                 setVehicleData(response.data)
+                console.log(vehicleData)
             } catch (error) {
                 console.error('Error fetching vehicle data:', error)
             }
         }
         fetchVehicleData()
         fetchFeedbacks()
+
+
+        //wishlist
+        const existingWishlistItems = getWishlist()
+        const isInWishlist = existingWishlistItems.some((item) => item.id === vehicleData.VehicleId)
+        setwishlistclick(isInWishlist)
+
+        const handleWishlistUpdate = (event) => {
+            const updatedWishlist = event.detail
+            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === vehicleData.VehicleId)
+            setwishlistclick(isInUpdatedWishlist)
+        }
+
+        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
+
+        return () => {
+            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
+        }
     }, [])
 
     return (
@@ -118,10 +180,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     </div>
                 </div>
                 <div className="mt-1">
-                    {clicked ? (
-                        <BsBookmarkStarFill fontSize={24} onClick={handleClick} />
+                    {wishlistclick ? (
+                        <BsBookmarkStarFill fontSize={24} onClick={handleWishlist} />
                     ) : (
-                        <BsBookmarkStar fontSize={24} onClick={handleClick} />
+                        <BsBookmarkStar fontSize={24} onClick={handleWishlist} />
                     )}
                 </div>
             </article>

@@ -43,11 +43,11 @@ const Navbar = () => {
 
     useEffect(() => {
         const isLoggedIn = Cookies.get('customerId')
-        isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
+        isLoggedIn ? setLoggedIn(false) : setLoggedIn(false)
     }, [])
 
     return (
-        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary">
+        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-[#283280]">
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -93,7 +93,7 @@ const Navbar = () => {
                                 </button>
                             </NavLink>
                             <NavLink to="/signup">
-                                <button className="ml-4 bg-[#FBDAC6] border-[#FBDAC6] border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="ml-4 bg-[#FBDAC6] border-none text-[#283280] px-3 py-2 rounded-md text-sm font-medium">
                                     Sign Up
                                 </button>
                             </NavLink>
