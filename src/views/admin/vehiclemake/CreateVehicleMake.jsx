@@ -11,9 +11,11 @@ import {
     FormLabel,
     FormMessage
 } from '../../../components/ui/form'
+import { useNavigate } from 'react-router-dom'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -21,6 +23,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleMake() {
+    const navigate = useNavigate()
     const fileInputRef = useRef(null)
     const {
         control,
@@ -57,11 +60,11 @@ export default function CreateVehicleMake() {
                     'Content-Type': 'multipart/form-data'
                 }
             })
-            console.result(response.data)
-            reset()
+            console.log(response.data)
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field
             }
+            navigate(`/admin/vehiclemake/view`)
         } catch (error) {
             console.log(error)
         }
@@ -102,9 +105,12 @@ export default function CreateVehicleMake() {
                 />
 
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Create
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Create"
+                        alertTitle="Create New Vehicle Make"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

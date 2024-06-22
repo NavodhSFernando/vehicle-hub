@@ -13,7 +13,10 @@ if (!employeeId) {
 }
 
 const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
-    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}`
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
         // POST request to the server with form data
         const result = await axios.post(url)
@@ -107,23 +110,21 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
                     <GrStop fontSize={20} className="mr-1" />
                 </Button>
             )}
-            {status == 'Waiting' ||
-                status == 'Completed' ||
-                (status == 'Cancelled' && (
-                    <>
-                        <EditVehicleDialog
-                            customerReservationId={customerReservationId}
-                            refetchReservation={refetchReservation}
-                        />
-                        <Button
-                            variant="ghost"
-                            className="p-0"
-                            onClick={() => CancelReservation({ customerReservationId, refetchReservation })}
-                        >
-                            <GrTrash fontSize={24} className="mr-1" />
-                        </Button>
-                    </>
-                ))}
+            {(status === 'Pending' || status === 'Confirmed') && (
+                <>
+                    <EditVehicleDialog
+                        customerReservationId={customerReservationId}
+                        refetchReservation={refetchReservation}
+                    />
+                    <Button
+                        variant="ghost"
+                        className="p-0"
+                        onClick={() => CancelReservation({ customerReservationId, refetchReservation })}
+                    >
+                        <GrTrash fontSize={24} className="mr-1" />
+                    </Button>
+                </>
+            )}
         </div>
     )
 }

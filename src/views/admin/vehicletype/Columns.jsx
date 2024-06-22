@@ -58,7 +58,7 @@ export const columns = [
                 currency: 'LKR'
             }).format(depositAmount)
 
-            return <div className="font-normal">{formatted}</div>
+            return <div className="">{formatted}</div>
         }
     },
     {

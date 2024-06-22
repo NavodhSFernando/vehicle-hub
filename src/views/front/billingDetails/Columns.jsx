@@ -7,13 +7,13 @@ export const columns = [
         accessorKey: 'date',
         header: 'Date',
         cell: ({ row }) => {
-            const value = row.getValue('date'); // Change 'pickUpDate' to 'date'
+            const value = row.getValue('date') // Change 'pickUpDate' to 'date'
             // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value));
-            return <div>{formattedDate}</div>;
+            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            return <div>{formattedDate}</div>
         }
     },
-    
+
     {
         accessorKey: 'amount',
         header: 'Amount'
@@ -58,28 +58,40 @@ export const columns = [
     },
     {
         accessorKey: 'actions',
-        header: '',
+        header: () => <div className="text-end">Actions</div>,
         cell: ({ row }) => {
             const status = row.getValue('status')
 
             return (
-                <div className="flex gap-2">
+                <div className="flex items-center justify-end gap-2">
                     {status === 'due' && (
                         <>
-                            <Button variant="ghost" className="border border-gray-500">View</Button>
-                            <Button variant="ghost" className="border border-gray-500">Download PDF</Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                View
+                            </Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                Download PDF
+                            </Button>
                         </>
                     )}
                     {status === 'paid' && (
                         <>
-                            <Button variant="ghost" className="border border-gray-500">View</Button>
-                            <Button variant="ghost" className="border border-gray-500">Download PDF</Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                View
+                            </Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                Download PDF
+                            </Button>
                         </>
                     )}
                     {status === 'not paid' && (
                         <>
-                            <Button variant="ghost" className="border border-gray-500">Pay Now</Button>
-                            <Button variant="ghost" className="border border-gray-500">Download PDF</Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                Pay Now
+                            </Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                Download PDF
+                            </Button>
                         </>
                     )}
                 </div>

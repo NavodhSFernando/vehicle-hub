@@ -5,6 +5,7 @@ import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { useToast } from '../../ui/use-toast'
 
 export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [clicked, setClicked] = useState(false)
@@ -12,6 +13,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [averageRating, setAverageRating] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
     const [vehicleData, setVehicleData] = useState({})
+    const { toast } = useToast()
     const navigate = useNavigate()
     const reservationId = id
 
@@ -27,8 +29,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
 
     const handleRequestVehicle = async () => {
         if (!isChecked) {
-            alert('Please agree to the terms before requesting the vehicle.')
-            return
+            return toast({
+                variant: 'destructive_border',
+                description: 'Please agree to the Terms and Conditions to proceed'
+            })
         }
         if (!customerId) {
             console.error('Customer ID not found in cookies')
@@ -38,7 +42,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
 
-        const url = `http://localhost:5062/api/CustomerReservation`
+        const url = `http://localhost:5062/api/FrontReservationService/request-reservation`
         try {
             const formData = {
                 VehicleId: id,
@@ -51,7 +55,14 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 }
             }
             const response = await axios.post(url, formData)
+            if (response.status === 200) {
+                toast({
+                    variant: 'success',
+                    description: 'Vehicle requested successfully'
+                })
+            }
             console.log('Request vehicle response:', response.data)
+            navigate(`/account/viewongoingrentals`)
         } catch (error) {
             if (error.response && error.response.status === 403) {
                 navigate('/login')
@@ -128,12 +139,14 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                             <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.seatingCapacity}</p>
                         </div>
                         <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-3/5">Engine</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.engineCapacity}</p>
+                            <p className="text-lg text-slate-500 w-3/5">Engine Capacity</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">
+                                {vehicleData.engineCapacity + 'cc'}
+                            </p>
                         </div>
                         <div className="flex w-full">
                             <p className="text-lg text-slate-500 w-3/5">Mileage</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.mileage}</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.mileage + 'km'}</p>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 w-1/2">
@@ -183,7 +196,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 <p className="text-sm text-slate-500 uppercase">Rates</p>
                 <div className="p-3">
                     <h1 className="text-3xl font-bold pb-2 w-full border-b border-black mb-4">
-                        {'Rs' + vehicleData.costPerDay} / <span className="text-slate-500">day</span>
+                        {'Rs ' + vehicleData.costPerDay} / <span className="text-slate-500">day</span>
                     </h1>
                     <div className="flex flex-col pb-14">
                         <span className="flex gap-2 items-center mb-2">

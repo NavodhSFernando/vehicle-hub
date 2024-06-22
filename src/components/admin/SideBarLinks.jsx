@@ -170,6 +170,20 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
+        key: 'insurance',
+        label: 'Insurance',
+        path: '/admin/insurance',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all insurance',
+                label: 'View All Insurance',
+                path: '/admin/insurance/view',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
         key: 'employee',
         label: 'Employee',
         path: '/admin/employee',
@@ -204,20 +218,6 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
-        key: 'insurance',
-        label: 'Insurance',
-        path: '/admin/insurance',
-        icon: <RiStackLine />,
-        subLinks: [
-            {
-                key: 'view all insurance',
-                label: 'View All Insurance',
-                path: '/admin/insurance/view',
-                icon: <LuDot />
-            }
-        ]
-    },
-    {
         key: 'notifications',
         label: 'Notifications',
         path: '/admin/notification',
@@ -232,11 +232,5 @@ export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
         label: 'Settings',
         path: '/admin/settings',
         icon: <HiOutlineCog />
-    },
-    {
-        key: 'support',
-        label: 'Help & Support',
-        path: '/support',
-        icon: <HiOutlineQuestionMarkCircle />
     }
 ]

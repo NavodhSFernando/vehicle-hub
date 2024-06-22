@@ -36,16 +36,16 @@ export const columns = [
             const value = row.getValue('expiryDate')
             const formattedDate = value ? format(parseISO(value), 'yyyy-MM-dd') : ''
 
-            return <div className="font-medium">{formattedDate}</div>
+            return <div className="">{formattedDate}</div>
         }
     },
     {
         accessorKey: 'vehicleId',
-        header: 'Vehicle',
+        header: 'Registration Number',
         cell: ({ row }) => {
             const vehicleId = row.original.vehicle.registrationNumber
 
-            return <div className="font-medium">{vehicleId}</div>
+            return <div className="">{vehicleId}</div>
         },
         filterFn: (row, columnId, filterValue) => {
             return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())
@@ -58,7 +58,7 @@ export const columns = [
             const status = row.original.status
             const statusText = status ? 'Active' : 'Inactive'
 
-            return <div className="font-medium">{statusText}</div>
+            return <div className="">{statusText}</div>
         }
     },
     {

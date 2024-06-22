@@ -48,6 +48,15 @@ export default function DataTable({ columns, data }) {
                     className="max-w-sm"
                 />
             </div>
+            <div className="flex flex-col space-y-1 mt-2 mb-8">
+                <Label>Model</Label>
+                <Input
+                    placeholder="Filter Model Name..."
+                    value={table.getColumn('vehicleModelId')?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn('vehicleModelId')?.setFilterValue(event.target.value)}
+                    className="max-w-sm"
+                />
+            </div>
             <div className="flex flex-col space-y-1 pt-2 pb-4 lg:items-end lg:justify-end">
                 <Button
                     onClick={clearFilters}

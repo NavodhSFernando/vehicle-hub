@@ -4,7 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -84,6 +84,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleModel() {
+    const navigate = useNavigate()
     const {
         control,
         handleSubmit,
@@ -138,8 +139,9 @@ export default function CreateVehicleModel() {
             }
 
             const result = await axios.post(url, formData)
-            console.result('Vehicle model created', result)
+            console.log('Vehicle model created', result)
             reset()
+            navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
             console.log(error)
         }
@@ -240,10 +242,10 @@ export default function CreateVehicleModel() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesel">Diesel</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="electric">Electric</SelectItem>
+                                    <SelectItem value="Petrol">Petrol</SelectItem>
+                                    <SelectItem value="Diesel">Diesel</SelectItem>
+                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                    <SelectItem value="Electric">Electric</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />

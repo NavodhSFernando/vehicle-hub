@@ -126,28 +126,34 @@ function Ongoingrentalssingle() {
                 </div>
                 <div className="pt-3 flex justify-between pb-8">
                     <p className="text-gray-500">Deposit Amount</p>
-                    <p className="font-semibold">{rentalData.deposit}</p>
+                    <p className="font-semibold">{'Rs ' + rentalData.deposit}</p>
                 </div>
-                <hr className="pb-3 border-t-2 border-stone-200" />
+                {rentalData.status !== 'Cancelled' && (
+                    <>
+                        <hr className="pb-3 border-t-2 border-stone-200" />
 
-                <div className="pt-8 flex justify-between">
-                    <p className="text-gray-500">Extra Mileage Charge(per km)</p>
-                    <p className="font-semibold">{rentalData.extraKMCost}</p>
-                </div>
-                <div className="pt-3 flex justify-between">
-                    <p className="text-gray-500">Penalty Fees</p>
-                    <p className="font-semibold">{rentalData.penalty}</p>
-                </div>
-                <div className="pt-3 flex justify-between pb-8">
-                    <p className="text-gray-500">Rental Charge</p>
-                    <p className="font-semibold">{rentalData.rentalCost}</p>
-                </div>
+                        <div className="pt-8 flex justify-between">
+                            <p className="text-gray-500">Extra Mileage Charge(per km)</p>
+                            <p className="font-semibold">
+                                {rentalData.extraKMCost ? 'Rs ' + rentalData.extraKMCost : '-'}
+                            </p>
+                        </div>
+                        <div className="pt-3 flex justify-between">
+                            <p className="text-gray-500">Penalty Fees</p>
+                            <p className="font-semibold">{rentalData.penalty ? 'Rs ' + rentalData.penalty : '-'}</p>
+                        </div>
+                        <div className="pt-3 flex justify-between pb-8">
+                            <p className="text-gray-500">Rental Charge</p>
+                            <p className="font-semibold">{rentalData.rentalCost}</p>
+                        </div>
+                    </>
+                )}
 
                 <hr className="pb-3 border-t-2 border-stone-200" />
 
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-950 font-bold text-xl">Total Amount</p>
-                    <p className="font-semibold text-3xl">{rentalData.amount}</p>
+                    <p className="font-semibold text-3xl">{'Rs ' + rentalData.amount}</p>
                 </div>
                 <div className="text-gray-500 text-xs">
                     <p>Overall price including additions </p>
