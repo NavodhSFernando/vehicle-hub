@@ -23,7 +23,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = parseFloat(row.getValue('id'))
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -32,7 +32,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('name')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -41,7 +41,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('nic')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -50,7 +50,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('address')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -63,7 +63,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('role')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -73,7 +73,7 @@ export const columns = [
             const phone = row.original.contactNo
             const value = parseFloat(phone)
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -83,7 +83,7 @@ export const columns = [
             const value = row.getValue('dob')
             const formattedDate = value ? format(parseISO(value), 'yyyy-MM-dd') : ''
 
-            return <div className="font-medium">{formattedDate}</div>
+            return <div className="font-small">{formattedDate}</div>
         }
     },
     {
@@ -92,7 +92,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('department')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -101,7 +101,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('gender')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -141,6 +141,15 @@ export const columns = [
     {
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
-        cell: ({ row }) => <ActionButtons employeeId={row.getValue('id')} />
+
+        cell: () => {
+            return (
+                <div className="flex items-center justify-end gap-2">
+                    <Button variant="ghost" className="p-0">
+                        <GrTrash fontSize={24} className="mr-1" />
+                    </Button>
+                </div>
+            )
+        }
     }
 ]
