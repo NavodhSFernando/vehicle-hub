@@ -4,7 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -44,6 +44,7 @@ const formSchema = z.object({
 })
 
 export default function EditMaintenance() {
+    const navigate = useNavigate()
     const { maintenanceId } = useParams()
     const {
         control,
@@ -69,7 +70,7 @@ export default function EditMaintenance() {
                 date: data.date,
                 description: data.description,
                 type: data.type,
-                vehicleId: data.vehicle.id,
+                vehicleId: data.vehicleId,
                 currentMileage: data.currentMileage
             })
         } catch (error) {
@@ -95,6 +96,7 @@ export default function EditMaintenance() {
             const result = await axios.put(url, formData)
             console.log(result)
             reset()
+            navigate(`/admin/maintenance/view`)
         } catch (error) {
             console.error('Failed to update vehicle maintenance', error)
         }

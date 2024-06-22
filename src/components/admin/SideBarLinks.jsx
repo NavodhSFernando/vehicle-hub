@@ -232,11 +232,5 @@ export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
         label: 'Settings',
         path: '/admin/settings',
         icon: <HiOutlineCog />
-    },
-    {
-        key: 'support',
-        label: 'Help & Support',
-        path: '/support',
-        icon: <HiOutlineQuestionMarkCircle />
     }
 ]

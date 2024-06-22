@@ -113,12 +113,14 @@ export default function BookNowCard({
                 </span>
                 <span className="flex gap-1 items-center">
                     <HiUsers fontSize={20} style={{ color: '#90A3BF' }} />
-                    <p className="text-sm opacity-50">{capacity}</p>
+                    <p className="text-sm opacity-50">{capacity} Persons</p>
                 </span>
             </div>
             <article className="flex justify-between items-center">
                 <span>
                     <h1 className="text-base font-bold">
+                        {' '}
+                        <span className="text-sm opacity-50"> Rs </span>
                         {price}
                         <span className="text-sm opacity-50"> / Day</span>
                     </h1>
@@ -126,7 +128,9 @@ export default function BookNowCard({
                 </span>
                 <button
                     className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] w-fit focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
-                    onClick={() => navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime } })}
+                    onClick={() =>
+                        navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime } })
+                    }
                 >
                     View
                 </button>

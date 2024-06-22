@@ -21,6 +21,7 @@ import {
 } from '../../../components/ui/form'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom'
 
 const currentDate = new Date().toISOString().split('T')[0]
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
@@ -39,6 +40,7 @@ const formSchema = z.object({
 })
 
 export default function EditInsurance() {
+    const navigate = useNavigate()
     const { insuranceId } = useParams() // Access route parameter
     const {
         control,
@@ -62,7 +64,7 @@ export default function EditInsurance() {
             reset({
                 insuranceNo: data.insuranceNo,
                 expiryDate: data.expiryDate,
-                vehicleId: data.vehicle.id
+                vehicleId: data.vehicleId
             })
         } catch (error) {
             console.error('Failed to fetch insurance', error)
@@ -83,7 +85,7 @@ export default function EditInsurance() {
             }
             const result = await axios.put(url, formData)
             console.log(result)
-            fetch()
+            navigate(`/admin/insurance/view`)
         } catch (error) {
             console.error('Failed to update vehicle Insurance', error)
         }
