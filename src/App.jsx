@@ -337,7 +337,14 @@ function App() {
                     </Route>
 
                     <Route path="customer">
-                        <Route path="view" element={<ViewCustomer />} />
+                        <Route
+                            path="view"
+                            element={
+                                <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                                    <ViewCustomer />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Route>
                     <Route path="vehiclelog">
                         <Route
