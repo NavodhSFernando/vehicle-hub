@@ -113,7 +113,7 @@ export default function BookNowCard({
                 </span>
                 <span className="flex gap-1 items-center">
                     <HiUsers fontSize={20} style={{ color: '#90A3BF' }} />
-                    <p className="text-sm opacity-50">{capacity}</p>
+                    <p className="text-sm opacity-50">{capacity} Persons</p>
                 </span>
             </div>
             <article className="flex justify-between items-center">

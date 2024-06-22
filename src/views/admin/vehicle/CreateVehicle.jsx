@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
 import { Switch } from '../../../components/ui/switch'
-
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -495,9 +495,12 @@ export default function CreateVehicle() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Create
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Create"
+                        alertTitle="Create New Insurance"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>
