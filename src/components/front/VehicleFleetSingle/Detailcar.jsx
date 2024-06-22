@@ -5,18 +5,21 @@ import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { useToast } from '../../ui/use-toast'
 
 export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [clicked, setClicked] = useState(false)
+    const [wishlistclick, setwishlistclick] = useState(false)
     const [totalFeedbacks, setTotalFeedbacks] = useState(0)
     const [averageRating, setAverageRating] = useState(0)
     const [isChecked, setIsChecked] = useState(false)
     const [vehicleData, setVehicleData] = useState({})
+    const { toast } = useToast()
     const navigate = useNavigate()
     const reservationId = id
 
     const customerId = Cookies.get('customerId')
-
+ 
     const handleClick = () => {
         setClicked(!clicked)
     }
@@ -27,8 +30,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
 
     const handleRequestVehicle = async () => {
         if (!isChecked) {
-            alert('Please agree to the terms before requesting the vehicle.')
-            return
+            return toast({
+                variant: 'destructive_border',
+                description: 'Please agree to the Terms and Conditions to proceed'
+            })
         }
         if (!customerId) {
             console.error('Customer ID not found in cookies')
@@ -51,6 +56,12 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 }
             }
             const response = await axios.post(url, formData)
+            if (response.status === 200) {
+                toast({
+                    variant: 'success',
+                    description: 'Vehicle requested successfully'
+                })
+            }
             console.log('Request vehicle response:', response.data)
             navigate(`/account/viewongoingrentals`)
         } catch (error) {
@@ -78,17 +89,78 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         }
     }
 
+
+    //wishlist
+    const updateWishlist = (wishlistItems) => {
+        localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
+        const event = new CustomEvent('wishlistUpdated', { detail: wishlistItems })
+        window.dispatchEvent(event)
+    }
+
+    const getWishlist = () => {
+        return JSON.parse(localStorage.getItem('wishlistItems')) || []
+    }
+
+    const handleWishlist = () => {
+        const vehicleDetails = {
+            id: vehicleData.VehicleId,
+            name: vehicleData.name,
+            type: vehicleData.type,
+            year: vehicleData.year,
+            imageSrc: vehicleData.dashboardImg,
+            transmission: vehicleData.transmission,
+            price: vehicleData.costPerDay,
+            capacity: vehicleData.seatingCapacity,
+        }
+
+        const existingWishlistItems = getWishlist()
+        const areVehiclesEqual = (vehicle1, vehicle2) => {
+            return vehicle1.id === vehicle2.id
+        }
+
+        const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
+
+        if (index === -1) {
+            const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
+            updateWishlist(updatedWishlistItems)
+            setClicked(true)
+        } else {
+            const updatedWishlistItems = existingWishlistItems.filter((item) => !areVehiclesEqual(item, vehicleDetails))
+            updateWishlist(updatedWishlistItems)
+            setClicked(false)
+        }
+    }
+
     useEffect(() => {
         const fetchVehicleData = async () => {
             try {
                 const response = await axios.get(`http://localhost:5062/api/FrontReservationService/DetailCar/${id}`)
                 setVehicleData(response.data)
+                console.log(vehicleData)
             } catch (error) {
                 console.error('Error fetching vehicle data:', error)
             }
         }
         fetchVehicleData()
         fetchFeedbacks()
+
+
+        //wishlist
+        const existingWishlistItems = getWishlist()
+        const isInWishlist = existingWishlistItems.some((item) => item.id === vehicleData.VehicleId)
+        setwishlistclick(isInWishlist)
+
+        const handleWishlistUpdate = (event) => {
+            const updatedWishlist = event.detail
+            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === vehicleData.VehicleId)
+            setwishlistclick(isInUpdatedWishlist)
+        }
+
+        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
+
+        return () => {
+            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
+        }
     }, [])
 
     return (
@@ -108,10 +180,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     </div>
                 </div>
                 <div className="mt-1">
-                    {clicked ? (
-                        <BsBookmarkStarFill fontSize={24} onClick={handleClick} />
+                    {wishlistclick ? (
+                        <BsBookmarkStarFill fontSize={24} onClick={handleWishlist} />
                     ) : (
-                        <BsBookmarkStar fontSize={24} onClick={handleClick} />
+                        <BsBookmarkStar fontSize={24} onClick={handleWishlist} />
                     )}
                 </div>
             </article>
@@ -129,12 +201,14 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                             <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.seatingCapacity}</p>
                         </div>
                         <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-3/5">Engine</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.engineCapacity}</p>
+                            <p className="text-lg text-slate-500 w-3/5">Engine Capacity</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">
+                                {vehicleData.engineCapacity + 'cc'}
+                            </p>
                         </div>
                         <div className="flex w-full">
                             <p className="text-lg text-slate-500 w-3/5">Mileage</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.mileage}</p>
+                            <p className="text-lg text-slate-500 font-bold w-2/5">{vehicleData.mileage + 'km'}</p>
                         </div>
                     </div>
                     <div className="flex flex-col gap-1 w-1/2">
@@ -184,7 +258,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 <p className="text-sm text-slate-500 uppercase">Rates</p>
                 <div className="p-3">
                     <h1 className="text-3xl font-bold pb-2 w-full border-b border-black mb-4">
-                        {'Rs' + vehicleData.costPerDay} / <span className="text-slate-500">day</span>
+                        {'Rs ' + vehicleData.costPerDay} / <span className="text-slate-500">day</span>
                     </h1>
                     <div className="flex flex-col pb-14">
                         <span className="flex gap-2 items-center mb-2">

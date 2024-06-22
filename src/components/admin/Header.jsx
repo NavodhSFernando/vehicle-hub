@@ -5,9 +5,13 @@ import { DASHBOARD_SIDEBAR_LINKS } from './SideBarLinks'
 
 export default function Header() {
     const { pathname } = useLocation()
-    const currentLabel = DASHBOARD_SIDEBAR_LINKS.flatMap((link) => link.subLinks || []).find(
-        (subLink) => subLink.path === pathname
-    )?.label
+
+    // Find the sublink label or fallback to the main link label
+    const currentLink = DASHBOARD_SIDEBAR_LINKS.flatMap((link) =>
+        link.subLinks ? link.subLinks.map((subLink) => ({ ...subLink, parentLabel: link.label })) : [link]
+    ).find((link) => link.path === pathname)
+
+    const currentLabel = currentLink?.label || currentLink?.parentLabel || ''
 
     return (
         <nav className="">

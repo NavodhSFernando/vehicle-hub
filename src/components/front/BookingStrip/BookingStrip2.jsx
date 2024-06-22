@@ -27,7 +27,7 @@ export default function BookingStrip2({ onDateFilter, initialStartDate, initialS
     }, [initialStartDate, initialStartTime, initialEndDate, initialEndTime])
 
     const today = new Date()
-    const minEndDate = isValid(startDate) ? addDays(new Date(startDate), 1) : today
+    const minEndDate = isValid(startDate) ? addDays(new Date(startDate), 0) : today
 
     return (
         <div className="flex items-center justify-center">

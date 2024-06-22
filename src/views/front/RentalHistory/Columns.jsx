@@ -80,20 +80,7 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
+        header: <div>Status</div>,
         cell: ({ row }) => {
             const status = row.getValue('status')
             let color = ''
