@@ -3,16 +3,16 @@ import axios from 'axios'
 import DataTable from './DataTable'
 import { columns } from './Columns'
 
+import { Button } from '../../../components/ui/button'
+
 export default function ViewCustomer() {
-    const [Customer, setCustomer] = useState([])
+    const [customers, setCustomers] = useState([])
 
     useEffect(() => {
         const fetchCustomer = async () => {
             try {
-                // Update the URL to your specific API endpoint for fetching Customers
                 const response = await axios.get('http://localhost:5062/api/Customer')
-                setCustomer(response.data) // Assume the response data is the array of Employees
-                console.log(response.data)
+                setCustomers(response.data)
             } catch (error) {
                 console.error('Failed to fetch Customers:', error)
             }
@@ -20,10 +20,21 @@ export default function ViewCustomer() {
         fetchCustomer()
     }, [])
 
+    /*const handleDeleteCustomer = async () => {
+        try {
+            const url = `http://localhost:5062/api/CustomerAuth/deactivate/${selectedCustomerId}`
+            await axios.put(url)
+            setCustomers((prevCustomers) => prevCustomers.filter((customer) => customer.id !== selectedCustomerId))
+           
+        } catch (error) {
+            console.error('Failed to delete the customer', error)
+        }
+    }*/
+
     return (
         <>
             <div className="flex flex-col p-6 bg-white rounded-lg">
-                <DataTable columns={columns} data={Customer} />
+                <DataTable columns={columns} data={customers} />
             </div>
         </>
     )
