@@ -66,7 +66,7 @@ export const columns = [
                 currency: 'LKR'
             }).format(costPerDay)
 
-            return <div className="font-normal">{formatted}</div>
+            return <div className="">{formatted}</div>
         }
     },
     {
@@ -94,7 +94,7 @@ export const columns = [
                 currency: 'LKR'
             }).format(costPerExtraKm)
 
-            return <div className="font-normal">{formatted}</div>
+            return <div className="">{formatted}</div>
         }
     },
     {
@@ -111,6 +111,13 @@ export const columns = [
             return (
                 <div className="flex items-center bg-yell">
                     <div>Mileage</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
                 </div>
             )
         },
@@ -118,7 +125,21 @@ export const columns = [
             const mileage = row.getValue('mileage')
             const formattedMileage = `${mileage} KM`
 
-            return <div className="font-medium">{formattedMileage}</div>
+            return <div className="">{formattedMileage}</div>
+        }
+    },
+    {
+        accessorKey: 'thumbnail',
+        header: 'Thumbnail',
+        cell: ({ row }) => {
+            const value = row.getValue('thumbnail')
+            const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+
+            return (
+                <div className="flex items-center gap-2">
+                    <img src={`${baseUrl}${value}`} alt="thumbnail" className="w-20" />
+                </div>
+            )
         }
     },
     {
@@ -128,7 +149,7 @@ export const columns = [
             // Extract the vehicleType.id correctly
             const vehicleTypeId = row.original.vehicleType.name
 
-            return <div className="font-medium">{vehicleTypeId}</div>
+            return <div className="">{vehicleTypeId}</div>
         }
     },
     {
@@ -137,7 +158,10 @@ export const columns = [
         cell: ({ row }) => {
             const vehicleModelId = row.original.vehicleModel.name
 
-            return <div className="font-medium">{vehicleModelId}</div>
+            return <div className="">{vehicleModelId}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicleModel.name.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {
@@ -147,7 +171,7 @@ export const columns = [
             const status = row.original.status
             const statusText = status ? 'Active' : 'Inactive'
 
-            return <div className="font-medium">{statusText}</div>
+            return <div className="">{statusText}</div>
         }
     },
     {

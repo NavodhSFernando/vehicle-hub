@@ -1,60 +1,71 @@
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { Button } from '../../components/ui/button'
-import axios from 'axios'
-import { FaStar } from 'react-icons/fa6'
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '../../components/ui/button';
+import axios from 'axios';
+import { FaStar } from 'react-icons/fa6';
+import { useParams } from 'react-router-dom';
+
+const Notification = ({ message, type, onClose }) => {
+    return (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className={`p-6 rounded shadow-lg ${type === 'success' ? 'text-green-500' : 'text-red-500'} bg-white w-1/3 text-center relative`}>
+                <button
+                    onClick={onClose}
+                    className="absolute top-2 right-2 text-xl font-bold"
+                >
+                    ×
+                </button>
+                <p className="text-lg">{message}</p>
+            </div>
+        </div>
+    );
+};
 
 export default function FeedbackForm() {
-    //star icon size
-    const [iconSize, setIconSize] = useState(window.innerWidth <= 768 ? 15 : 30)
+    const [iconSize, setIconSize] = useState(window.innerWidth <= 768 ? 15 : 30);
+    const [value, setValue] = useState(0);
+    const [notification, setNotification] = useState(null);
+    const { reservationId } = useParams();
 
-    const [value, setValue] = useState(0)
-    // Updates the value state when a user selects a rating
     const handleRatingChange = (newValue) => {
-        setValue(newValue)
-    }
+        setValue(newValue);
+    };
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-        control
-    } = useForm()
+        control,
+    } = useForm();
 
     const onSubmit = async (data) => {
         try {
-            console.log('feedback frm data')
-            console.log(data)
-
             const FeedbackRequest = {
                 Designation: data.designation,
-                RatingNo: parseInt(data.rating), // Convert rating to integer if needed
+                RatingNo: parseInt(data.rating),
                 Service_Review: data.serviceReview,
                 Vehicle_Review: data.vehicleReview,
-                ReservationId: 1
-            }
-
-            // Now sending feedbackData to the server
-            const response = await axios.post('http://localhost:47367/api/Feedback', FeedbackRequest)
-            console.log('Feedback submitted successfully:', response.data)
-            alert('Feedback submitted successfully.')
+                CustomerReservationId: reservationId,
+            };
+            const response = await axios.post('http://localhost:5062/api/Feedback', FeedbackRequest);
+            setNotification({ message: response.data.message, type: 'success' });
         } catch (error) {
-            console.error('Error submitting feedback:', error)
-            alert('Error submitting feedback')
+            console.error('Error submitting feedback:', error);
+            setNotification({ message: 'Error submitting feedback', type: 'error' });
         }
-    }
+    };
 
     useEffect(() => {
         const handleResize = () => {
-            setIconSize(window.innerWidth <= 768 ? 15 : 30)
-        }
+            setIconSize(window.innerWidth <= 768 ? 15 : 30);
+        };
 
-        window.addEventListener('resize', handleResize)
+        window.addEventListener('resize', handleResize);
 
         return () => {
-            window.removeEventListener('resize', handleResize)
-        }
-    }, [])
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     return (
         <div className="flex items-center justify-center w-full min-h-screen bg-gray-300 pb-4 pt-4">
@@ -82,7 +93,6 @@ export default function FeedbackForm() {
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
                             placeholder="Alex Fernando"
-                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -95,7 +105,6 @@ export default function FeedbackForm() {
                             type="text"
                             className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 mb-3"
                             placeholder="A12345670"
-                            required
                         />
                     </div>
                     <div className="mb-4">
@@ -104,7 +113,7 @@ export default function FeedbackForm() {
                         </label>
                         <div className="flex gap-[10px] mb-6">
                             {[...Array(5)].map((_, index) => {
-                                const ratingValue = index + 1
+                                const ratingValue = index + 1;
                                 return (
                                     <label key={index} className="flex">
                                         <input
@@ -124,7 +133,7 @@ export default function FeedbackForm() {
                                         />
                                         <FaStar size={iconSize} color={ratingValue <= value ? '#fcee4e' : '#bfbebb'} />
                                     </label>
-                                )
+                                );
                             })}
                         </div>
                     </div>
@@ -132,25 +141,39 @@ export default function FeedbackForm() {
                         <label htmlFor="vehicleReview" className="block text-gray-700 font-semibold mb-2">
                             Vehicle Review
                         </label>
-                        <textarea
+                        <select
                             {...register('vehicleReview')}
                             id="vehicleReview"
-                            className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500 mb-4"
-                            placeholder="'Efficient Toyota Aqua: Economical, compact, and eco-friendly hybrid.'"
-                            required
-                        />
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500 mb-4"
+                        >
+                            <option value="" disabled selected>
+                                Select a review
+                            </option>
+                            <option value="Efficient and Reliable">Efficient and Reliable</option>
+                            <option value="Comfortable Ride">Comfortable Ride</option>
+                            <option value="Good Fuel Efficiency">Good Fuel Efficiency</option>
+                            <option value="Needs Maintenance">Needs Maintenance</option>
+                            <option value="Not Satisfied">Not Satisfied</option>
+                        </select>
                     </div>
                     <div className="mb-8">
                         <label htmlFor="serviceReview" className="block text-gray-700 font-semibold mb-2">
                             Service Review
                         </label>
-                        <textarea
+                        <select
                             {...register('serviceReview')}
                             id="serviceReview"
-                            className="w-full px-3 py-8 border border-gray-300 rounded-lg text-sm text-gray-500"
-                            placeholder="'Service: Exceptional, reliable, and efficient for Toyota Aqua car rental.'"
-                            required
-                        />
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-500"
+                        >
+                            <option value="" disabled selected>
+                                Select a review
+                            </option>
+                            <option value="Exceptional Service">Exceptional Service</option>
+                            <option value="Very Good">Very Good</option>
+                            <option value="Satisfactory">Satisfactory</option>
+                            <option value="Could Be Better">Could Be Better</option>
+                            <option value="Poor Service">Poor Service</option>
+                        </select>
                     </div>
                     <div className="mb-4">
                         <Button
@@ -161,7 +184,14 @@ export default function FeedbackForm() {
                         </Button>
                     </div>
                 </form>
+                {notification && (
+                    <Notification
+                        message={notification.message}
+                        type={notification.type}
+                        onClose={() => setNotification(null)}
+                    />
+                )}
             </div>
         </div>
-    )
+    );
 }

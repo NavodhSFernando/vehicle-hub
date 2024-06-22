@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react' // import useState
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,21 +15,17 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
-    logo: z
-        .any()
-        .refine((file) => file?.length == 1, 'File is required.')
-        .refine((file) => file[0]?.size <= 5000000, 'Max file size is 5MB')
-        .refine((file) => ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].includes(file[0]?.type), {
-            message: 'Invalid file type'
-        })
+    formFile: z.any().refine((file) => file?.length === 1, 'File is required.')
 })
 
 export default function EditVehicleMake() {
+    const navigate = useNavigate()
     const { vehicleMakeId } = useParams() // Access route parameter
-    const fileInputRef = useRef('')
+    const fileInputRef = useRef(null)
     const {
         control,
         handleSubmit,
@@ -39,51 +35,55 @@ export default function EditVehicleMake() {
     } = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: ''
+            name: '',
+            formFile: null
         }
     })
 
-    const fetchData = async () => {
-        const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
-        try {
-            const { data } = await axios.get(url)
-            console.log(data.name)
-            console.log(data.logo)
-            reset({
-                name: data.name,
-                logo: data.logo
-            })
-        } catch (error) {
-            console.error('Failed to fetch vehicle make', error)
-        }
-    }
+    const [image, setImage] = useState('')
+    const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/logos/'
 
-    // Fetch vehicle make data
     useEffect(() => {
+        const fetchData = async () => {
+            const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
+            try {
+                const { data } = await axios.get(url)
+                setImage(data.logo)
+                reset({
+                    name: data.name,
+                    formFile: null
+                })
+            } catch (error) {
+                console.error('Failed to fetch vehicle make', error)
+            }
+        }
         fetchData()
     }, [vehicleMakeId, reset])
 
     const handleFileChange = (e) => {
         const files = e.target.files
-        setValue('logo', files, { shouldValidate: true })
+        setValue('formFile', files, { shouldValidate: true })
     }
 
     const handleSave = async (data) => {
         const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
         try {
-            const formData = {
-                Name: data.name,
-                Logo: data.logo[0].name // Handle file data appropriately for your backend
-            }
+            const formData = new FormData()
+            formData.append('Name', data.name)
+            formData.append('file', data.formFile[0])
 
-            const result = await axios.put(url, formData)
-            console.log(result)
-            reset()
-            if (fileInputRef.current) {
-                fileInputRef.current.value = ''
+            const response = await axios.put(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+
+            if (response.data && response.data.logo) {
+                setImage(response.data.logo)
             }
+            navigate(`/admin/vehiclemake/view`)
         } catch (error) {
-            console.error('Failed to update vehicle make', error)
+            console.log(error)
         }
     }
 
@@ -109,17 +109,18 @@ export default function EditVehicleMake() {
                 />
                 <FormField
                     control={control}
-                    name="logo"
+                    name="formFile"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Logo</FormLabel>
                             <FormControl>
                                 <Input type="file" className="w-full" ref={fileInputRef} onChange={handleFileChange} />
                             </FormControl>
-                            <FormMessage>{errors.logo && errors.logo.message}</FormMessage>
+                            <FormMessage>{errors.formFile && errors.formFile.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+                <img className=" object-contain pt-3 h-24 w-24" src={`${baseUrl}${image}`} alt="" />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
                     <Button type="submit" className="bg-indigo-600">
                         Update

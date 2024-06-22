@@ -20,13 +20,14 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
+import { useNavigate } from 'react-router-dom'
 
 const items = [
     { id: 'abs', label: 'ABS' },
     { id: 'acFront', label: 'Ac Front' },
     { id: 'securitySystem', label: 'Security System' },
     { id: 'bluetooth', label: 'Bluetooth' },
-    { id: 'parkingSensors', label: 'Parking Sensors' },
+    { id: 'parkingSensor', label: 'Parking Sensor' },
     { id: 'airbagDriver', label: 'Airbag: Driver' },
     { id: 'airbagPassenger', label: 'Airbag: Passenger' },
     { id: 'airbagSide', label: 'Airbag: Side' },
@@ -34,7 +35,7 @@ const items = [
     { id: 'navigationSystem', label: 'Navigation System' },
     { id: 'sunroof', label: 'Sunroof' },
     { id: 'tintedGlass', label: 'Tinted Glass' },
-    { id: 'powerWindows', label: 'Power Windows' },
+    { id: 'powerWindow', label: 'Power Window' },
     { id: 'rearWindowWiper', label: 'Rear Window Wiper' },
     { id: 'alloyWheels', label: 'Alloy Wheels' },
     { id: 'electricMirrors', label: 'Electric Mirrors' },
@@ -64,15 +65,9 @@ const formSchema = z.object({
         .max(7200, {
             message: 'Engine capacity must be under 7200cc'
         }),
-    seatingCapacity: z
-        .number()
-        .int()
-        .min(2, {
-            message: 'Seating capacity must be at least 2'
-        })
-        .max(7, {
-            message: 'Seating capacity must be no more than 7'
-        }),
+    seatingCapacity: z.number().int().min(2, {
+        message: 'Seating capacity must be at least 2'
+    }),
     fuel: z.string({
         required_error: 'Please select a fuel type'
     }),
@@ -85,6 +80,7 @@ const formSchema = z.object({
 })
 
 export default function EditVehicleModel() {
+    const navigate = useNavigate()
     const { vehicleModelId } = useParams()
     const {
         control,
@@ -116,7 +112,6 @@ export default function EditVehicleModel() {
                 vehicleMakeId: data.vehicleModel.vehicleMakeId,
                 items: Object.keys(data.additionalFeatures).filter((key) => data.additionalFeatures[key])
             })
-            console.log(data.vehicleModel.fuel)
         } catch (error) {
             console.error('Failed to fetch vehicle model', error)
         }
@@ -124,14 +119,11 @@ export default function EditVehicleModel() {
 
     const [vehicleMakes, setVehicleMakes] = useState([])
 
-    // Fetch vehicle model data
     useEffect(() => {
         const fetchVehicleMakes = async () => {
             try {
-                // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleMake')
                 setVehicleMakes(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
             }
@@ -158,10 +150,11 @@ export default function EditVehicleModel() {
                     fuel: data.fuel,
                     vehicleMakeId: data.vehicleMakeId
                 },
-                additionalFeatures: additionalFeatures
+                AdditionalFeatures: additionalFeatures
             }
             const result = await axios.put(url, formData)
-            console.log(result)
+            console.log('Vehicle model updated', result)
+            navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
             console.error('Failed to update vehicle model', error)
         }
@@ -266,10 +259,10 @@ export default function EditVehicleModel() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesel">Diesel</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="electric">Electric</SelectItem>
+                                    <SelectItem value="Petrol">Petrol</SelectItem>
+                                    <SelectItem value="Diesel">Diesel</SelectItem>
+                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                    <SelectItem value="Electric">Electric</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -287,6 +280,7 @@ export default function EditVehicleModel() {
                                     onValueChange={(value) => {
                                         field.onChange(value)
                                     }}
+                                    {...field}
                                     defaultValue={field.value}
                                 >
                                     <SelectTrigger>
@@ -311,7 +305,7 @@ export default function EditVehicleModel() {
                     </div>
                     <div className="flex flex-wrap">
                         {items.map((item) => (
-                            <div className="w-1/2 mb-4" key={item.id}>
+                            <div className="w-1/3 mb-4" key={item.id}>
                                 <FormField
                                     control={control}
                                     name="items"

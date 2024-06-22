@@ -14,6 +14,7 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -25,6 +26,7 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleType() {
+    const navigate = useNavigate()
     const {
         control,
         handleSubmit,
@@ -48,8 +50,9 @@ export default function CreateVehicleType() {
             }
 
             const result = await axios.post(url, formData)
-            console.log(result)
+            console.log(result.data)
             reset()
+            navigate(`/admin/vehicletype/view`)
         } catch (error) {
             console.log(error)
         }

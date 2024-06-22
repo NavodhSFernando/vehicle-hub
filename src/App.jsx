@@ -34,13 +34,13 @@ import Rentalhistorysingle from './views/front/Rentalhistorysingle'
 import Feedbackform from './views/front/Feedbackform'
 import NotificationCenter from './views/front/NotificationCenter'
 import VehicleFleetSingle from './views/front/VehicleFleetSingle'
-import VehicleFleet from './components/front/VehicleFleet'
+import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -52,13 +52,26 @@ import EditMaintenance from './views/admin/maintenance/EditMaintenance'
 import EditVehicleType from './views/admin/vehicletype/EditVehicleType'
 import EditVehicleLog from './views/admin/vehiclelog/EditVehicleLog'
 import EditVehicleModel from './views/admin/vehiclemodel/EditVehicleModel'
+import Adminlogin from './views/admin/Adminlogin'
+import PasswordReset from './views/front/PasswordReset'
+import EditEmployee from './views/admin/employee/EditEmployee'
+import VerifyOTP from './views/front/VerifyOTP'
+import Notification from './views/admin/Notification'
+import Settings from './views/admin/Settings'
+import ProfileResetPassword from './views/front/ProfileResetPassword'
+import AdminPageNotFound from './components/admin/PageNotFound'
+import FrontPageNotFound from './components/front/PageNotFound'
+import ProtectedRoute from '../src/components/admin/ProtectedRoute'
+import ResetPassword from '../src/views/admin/ResetPassword'
 
 function App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
+                    <Route path="/*" element={<FrontPageNotFound />} />
                     <Route index element={<Home />} />
+
                     <Route
                         path="/vehiclefleet"
                         element={
@@ -68,7 +81,7 @@ function App() {
                         }
                     />
                     <Route
-                        path="/vehiclefleet/:slug"
+                        path="/vehiclefleet/:id"
                         element={
                             <TitleComponent title="Vehicle Fleet">
                                 <VehicleFleetSingle />
@@ -77,10 +90,18 @@ function App() {
                     />
                     <Route path="/account" element={<Account />}>
                         <Route
-                            path="/account/ongoingrentalssingle/:customerReservationId"
+                            path="/account/ongoingrental/:customerReservationId"
                             element={
                                 <TitleComponent title="Ongoing Rentals">
                                     <Ongoingrentalssingle />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="/account/rentalhistory/:customerReservationId"
+                            element={
+                                <TitleComponent title="Rental History">
+                                    <Rentalhistorysingle />
                                 </TitleComponent>
                             }
                         />
@@ -133,10 +154,16 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/password" element={<Password />} />
+                <Route path="/passwordreset/:otp" element={<PasswordReset />} />
+                <Route path="/verifyotp" element={<VerifyOTP />} />
+                <Route path="profileresetpassword" element={<ProfileResetPassword />} />
                 <Route path="/feedbackform" element={<Feedbackform />} />
                 <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
+                <Route path="/admin-login" element={<Adminlogin />} />
                 <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="/admin/*" element={<AdminPageNotFound />} />
                     <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="notification" element={<Notification />} />
                     <Route path="report">
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<ViewRevenueReport />} />
@@ -292,8 +319,21 @@ function App() {
                         />
                     </Route>
                     <Route path="employee">
+                        <Route
+                            path="/admin/employee/edit/:employeeId"
+                            element={<TitleComponent title="Edit Employee">{<EditEmployee />}</TitleComponent>}
+                        />
                         <Route path="view" element={<ViewEmployee />} />
-                        <Route path="create" element={<CreateEmployee />} />
+                        <Route
+                            path="create"
+                            element={
+                                <TitleComponent title="Create Employee">
+                                    <ProtectedRoute allowedRoles={['admin']}>
+                                        <CreateEmployee />
+                                    </ProtectedRoute>
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
 
                     <Route path="customer">
@@ -351,6 +391,22 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="/admin/settings"
+                        element={
+                            <TitleComponent title="Settings">
+                                <Settings />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="/admin/resetpassword"
+                        element={
+                            <TitleComponent title="Reset Password">
+                                <ResetPassword />
+                            </TitleComponent>
+                        }
+                    />
                 </Route>
             </Routes>
         </Router>

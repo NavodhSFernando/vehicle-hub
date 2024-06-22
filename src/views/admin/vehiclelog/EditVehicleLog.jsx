@@ -18,6 +18,7 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
+import Cookie from 'js-cookie'
 
 const validReservationIds = [4]
 
@@ -66,16 +67,23 @@ export default function EditVehicleLog() {
         fetchData()
     }, [vehicleLogId, reset])
 
+    const employeeId = Cookie.get('employeeId')
+    if (!employeeId) {
+        console.error('Employee ID not found')
+    }
+
     // Function to handle form submission
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
+        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+        const decryptedId = decryptResponse.data.decryptedUserId
+
+        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${data.customerReservationId}?eid=${decryptedId}`
         try {
             const formData = {
                 customerReservationId: data.customerReservationId,
                 EndMileage: data.endMileage,
                 Penalty: data.penalty,
-                Description: data.description,
-                ExtraDays: data.extraDays
+                Description: data.description
             }
 
             // PUT request to the server with form data
@@ -96,7 +104,7 @@ export default function EditVehicleLog() {
                 <FormDescription>Basic Information</FormDescription>
                 <FormField
                     control={control}
-                    name="reservationId"
+                    name="customerReservationId"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Reservation Id</FormLabel>

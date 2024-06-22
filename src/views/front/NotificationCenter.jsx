@@ -1,57 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
+import { useOutletContext } from 'react-router-dom'
 
-// A constant array of notification objects that contains details for each notification.
-// const notifications = [
-//     {
-//         id: 'n1',
-//         title: 'Reservation confirmed.',
-//         description:
-//             'Your reservation for CBI-2345 on 2023/12/23 has been confirmed. Please review the details and prepare for pickup.',
-//         time: '21 hours ago'
-//     },
-//     {
-//         id: 'n2',
-//         title: 'Payment Successful.',
-//         description:
-//             'Payment for the reservation #2345 has been successfully processed. We appreciate your prompt payment and look forward to providing you with an exceptional service during your upcoming reservation. Safe travels!',
-//         time: '21 hours ago'
-//     },
-//     {
-//         id: 'n3',
-//         title: 'Rate your trip.',
-//         description:
-//             'Share your experience! We value your feedback on your recent reservation for #1365. Your insights help us improve our services.',
-//         time: '1 day ago'
-//     },
-//     {
-//         id: 'n4',
-//         title: 'Payment Reminder.',
-//         description:
-//             'Friendly reminder: Payment for your upcoming reservation on 2023/12/23 is due soon. Secure your booking to avoid any disruptions.',
-//         time: '1 day ago'
-//     }
-//     // ... add other notifications here
-// ]
-
-// Constants for pagination
-const NOTIFICATIONS_PER_PAGE = 3
+const NOTIFICATIONS_PER_PAGE = 6
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
 
-    // Calculate the index of the first and last notification on the current page
     const indexOfLastNotification = currentPage * NOTIFICATIONS_PER_PAGE
     const indexOfFirstNotification = indexOfLastNotification - NOTIFICATIONS_PER_PAGE
     const currentNotifications = notifications.slice(indexOfFirstNotification, indexOfLastNotification)
 
-    // Function to change page
     const paginate = (pageNumber) => setCurrentPage(pageNumber)
+
+    const customerId = useOutletContext()
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get('http://localhost:47367/api/Notification/Notifications/9')
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
             console.log(response.data)
             setNotifications(response.data)
         } catch (error) {
@@ -61,20 +32,24 @@ export default function NotificationCenter() {
 
     useEffect(() => {
         fetchNotifications()
-    }, [])
+    }, [customerId])
 
     return (
         <div className="flex justify-center items-start pb-10">
             <div className="w-full max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
                 <h2 className="text-xl pt-10 pl-20 font-semibold mb-4">Notifications</h2>
-                {currentNotifications.map((notification) => (
-                    <NotificationCard
-                        key={notification.id}
-                        title={notification.description}
-                        description={notification.description}
-                        time={notification.generated_DateTime}
-                    />
-                ))}
+                {currentNotifications.length > 0 ? (
+                    currentNotifications.map((notification) => (
+                        <NotificationCard
+                            key={notification.id}
+                            title={notification.title}
+                            description={notification.description}
+                            time={notification.generated_DateTime}
+                        />
+                    ))
+                ) : (
+                    <div className="text-center text-gray-500">No notifications</div>
+                )}
                 {notifications.length > NOTIFICATIONS_PER_PAGE && (
                     <Pagination
                         totalNotifications={notifications.length}
@@ -87,6 +62,7 @@ export default function NotificationCenter() {
         </div>
     )
 }
+
 function Pagination({ totalNotifications, notificationsPerPage, paginate, currentPage }) {
     const pageNumbers = []
 
@@ -135,10 +111,8 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
     )
 }
 
-// The NotificationCard is a presentational component that takes 'title', 'description', and 'time' as props, which are deconstructed from the notification object and renders the UI for an individual notification.
 function NotificationCard({ title, description, time }) {
     return (
-        // Each notification card has a light gray background, padding, shadow for depth, rounded corners, and a bottom margin.
         <div className=" p-4 shadow rounded-lg mb-4 mx-20">
             <div className="font-bold text-lg">{title}</div>
             <div className="text-gray-700">{description}</div>

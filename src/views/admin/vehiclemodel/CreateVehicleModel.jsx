@@ -4,7 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { useState } from 'react'
 import { useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -41,12 +41,6 @@ const items = [
     { id: 'keylessEntry', label: 'Keyless Entry' }
 ]
 
-const vehicleMakes = [
-    { value: 'toyota', label: 'Toyota' },
-    { value: 'ford', label: 'Ford' },
-    { value: 'chevrolet', label: 'Chevrolet' }
-]
-
 const currentYear = new Date().getFullYear()
 
 const formSchema = z.object({
@@ -75,8 +69,8 @@ const formSchema = z.object({
         .min(2, {
             message: 'Seating capacity must be at least 2'
         })
-        .max(7, {
-            message: 'Seating capacity must be no more than 7'
+        .max(20, {
+            message: 'Seating capacity must be no more than 20'
         }),
     fuel: z.string({
         required_error: 'Please select a fuel type'
@@ -90,11 +84,11 @@ const formSchema = z.object({
 })
 
 export default function CreateVehicleModel() {
+    const navigate = useNavigate()
     const {
         control,
         handleSubmit,
         reset,
-        setValue,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -116,7 +110,6 @@ export default function CreateVehicleModel() {
                 // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleMake')
                 setVehicleMakes(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
             }
@@ -142,14 +135,13 @@ export default function CreateVehicleModel() {
                     Fuel: data.fuel,
                     VehicleMakeId: data.vehicleMakeId
                 },
-                AdditionalFeatures: additionalFeatures // Include the transformed items in formData
+                AdditionalFeatures: additionalFeatures
             }
 
-            // Send formData to the backend
             const result = await axios.post(url, formData)
-            console.log(result)
-            console.log(formData)
+            console.log('Vehicle model created', result)
             reset()
+            navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
             console.log(error)
         }
@@ -192,7 +184,6 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number"
                                     className="w-full"
-                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -210,7 +201,6 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number"
                                     className="w-full"
-                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -228,7 +218,6 @@ export default function CreateVehicleModel() {
                                 <Input
                                     type="number"
                                     className="w-full"
-                                    value={field.value}
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
@@ -246,7 +235,6 @@ export default function CreateVehicleModel() {
                                 onValueChange={(value) => {
                                     field.onChange(value)
                                 }}
-                                value={field.value}
                             >
                                 <FormControl>
                                     <SelectTrigger>
@@ -254,10 +242,10 @@ export default function CreateVehicleModel() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="petrol">Petrol</SelectItem>
-                                    <SelectItem value="diesel">Diesel</SelectItem>
-                                    <SelectItem value="hybrid">Hybrid</SelectItem>
-                                    <SelectItem value="electric">Electric</SelectItem>
+                                    <SelectItem value="Petrol">Petrol</SelectItem>
+                                    <SelectItem value="Diesel">Diesel</SelectItem>
+                                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                                    <SelectItem value="Electric">Electric</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />

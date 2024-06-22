@@ -6,12 +6,14 @@ import {
     getCoreRowModel,
     useReactTable,
     getFilteredRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
-
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
+import { Button } from '../../../components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
-import { Label } from 'recharts'
+import { Label } from '../../../components/ui/label'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -22,23 +24,39 @@ export default function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
         getSortedRowModel: getSortedRowModel(),
         state: {
-            sorting
-        }
+            sorting,
+            columnFilters
+        },
+        initialState: { pagination: { pageSize: 5 } }
     })
+
+    const clearFilters = () => {
+        table.resetColumnFilters()
+    }
+
     return (
         <div>
-            <div className="flex items-center py-4">
+            <div className="flex flex-col space-y-1 mt-2 mb-8">
                 <Label>Model Name</Label>
-
                 <Input
                     placeholder="Filter Model Names..."
                     value={table.getColumn('name')?.getFilterValue() ?? ''}
                     onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
                     className="max-w-sm"
                 />
+            </div>
+            <div className="flex flex-col space-y-1 pt-2 pb-4 lg:items-end lg:justify-end">
+                <Button
+                    onClick={clearFilters}
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                >
+                    Clear Filter
+                </Button>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -47,7 +65,7 @@ export default function DataTable({ columns, data }) {
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead className="py-1 px-5" key={header.id}>
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -62,7 +80,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="py-5 px-5" key={cell.id}>
+                                        <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -78,6 +96,7 @@ export default function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }

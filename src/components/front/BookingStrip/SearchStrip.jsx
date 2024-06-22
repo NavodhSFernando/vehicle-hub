@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import Search from '../../../assets/Icons/search.svg'
+import React, { useState } from 'react';
+import Search from '../../../assets/Icons/search.svg';
 
 const SearchStrip = ({ onSearch }) => {
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = () => {
-        onSearch(searchQuery)
-    }
+        onSearch(searchQuery);
+    };
 
     return (
         <div>
-            <div className="w-[1013px] max-h-[43px] flex bg-white rounded-[64px]">
+            <div className="w-[900px] max-h-[43px] flex bg-white rounded-[64px]">
                 <input
                     type="text"
                     className="w-full h-[43px] rounded-[64px] pl-[30px] outline-none"
@@ -18,6 +18,7 @@ const SearchStrip = ({ onSearch }) => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
+
                 <button
                     className="flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
                     onClick={handleSearch}
@@ -30,4 +31,5 @@ const SearchStrip = ({ onSearch }) => {
     )
 }
 
-export default SearchStrip
+
+export default SearchStrip;

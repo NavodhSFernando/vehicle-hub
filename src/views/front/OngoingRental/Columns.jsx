@@ -1,18 +1,31 @@
+import React, { useEffect, useState } from 'react'
 import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrFormView } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const ActionButtons = ({ customerReservationId }) => {
+    const [encrypt, setEncrypt] = useState('')
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const encryptId = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5062/api/Encryption/encrypt/${customerReservationId}`
+                )
+                setEncrypt(response.data.encryptedText)
+            } catch (error) {
+                console.error('Failed to encrypt reservation ID:', error)
+            }
+        }
+        encryptId()
+    }, [customerReservationId])
 
     return (
         <div className="flex items-center justify-end gap-2">
-            <Button
-                variant="ghost"
-                className="p-0"
-                onClick={() => navigate(`/account/ongoingrentalssingle/${customerReservationId}`)}
-            >
+            <Button variant="ghost" className="p-0" onClick={() => navigate(`/account/ongoingrental/${encrypt}`)}>
                 <GrFormView fontSize={30} className="mr-1" />
             </Button>
         </div>
@@ -23,19 +36,12 @@ export const columns = [
     {
         accessorKey: 'customerReservationId',
         header: 'Reservation ID',
-        cell: ({ row }) => {
-            const value = row.getValue('customerReservationId') // Assuming ID does not need parseFloat
-            return <div className="font-medium">{'#' + value}</div>
-        }
+        cell: ({ row }) => <div className="font-medium">{'#' + row.getValue('customerReservationId')}</div>
     },
     {
         accessorKey: 'modelName',
         header: 'Vehicle Name',
-        cell: ({ row }) => {
-            const value = row.getValue('modelName')
-            //const make = row.getValue('make')
-            return <div>{value}</div>
-        }
+        cell: ({ row }) => <div>{row.getValue('modelName')}</div>
     },
     {
         accessorKey: 'startDate',
@@ -71,20 +77,7 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
+        header: <div>Status</div>,
         cell: ({ row }) => {
             const status = row.getValue('status')
             let color = ''

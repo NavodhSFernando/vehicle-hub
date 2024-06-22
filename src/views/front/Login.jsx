@@ -44,18 +44,23 @@ export const Login = () => {
             // Make a POST request to backend API endpoint
             const response = await axios.post('http://localhost:5062/api/CustomerAuth/login', data)
             console.log(response.data)
+
             const token = response.data.token.token
+            const encryptedCustomerId = response.data.token.id
+
             sessionStorage.setItem('jwtToken', token)
             // Handle successful login
             console.log('Login successful:', response.data)
-            const customerId = response.data.token.id
-            Cookies.set('customerId', customerId, { expires: 30 })
+            //const customerId = response.data.token.id
+
+            Cookies.set('customerId', encryptedCustomerId, { expires: 30 })
             console.log(`Customer ID saved in cookies: ${Cookies.get('customerId')}`) // Log the server response
             // Redirect to the home page
             navigate('/')
         } catch (error) {
             // Handle login error
             console.error('Login failed:', error)
+            alert(`Login failed: ${error.message}`)
         }
     }
     return (

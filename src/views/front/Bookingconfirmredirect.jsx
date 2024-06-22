@@ -1,31 +1,41 @@
+// Bookingconfirmredirect.js
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
 import RentalSummary from '../../components/front/RentalSummary'
 import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm'
 import PaymentMethod from './PaymentMethod'
-import React from 'react'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import PageNotFound from '../../components/front/PageNotFound'
 
 export default function Bookingconfirmredirect() {
     const { invoiceId } = useParams()
     const [rentalData, setRentalData] = useState({})
+    const [decryptedId, setDecryptedId] = useState()
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDecrypedIdAndData = async () => {
             try {
-                // Update the URL to your specific API endpoint for fetching rentals
+                const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${invoiceId}`)
+                const decryptedId = decryptResponse.data.decryptedUserId
+
                 const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${invoiceId}`
+                    `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${decryptedId}`
                 )
-                setRentalData(response.data) // Assume the response data is the array of rentals
+                setDecryptedId(decryptedId)
+                setRentalData(response.data)
                 console.log('Fetched Booking Confirmation:', response.data)
             } catch (error) {
                 console.error('Failed to fetch Booking Confirmation:', error)
             }
         }
-        fetchData()
-    }, [])
+        fetchDecrypedIdAndData()
+    }, [invoiceId])
 
+    console.log('Rental Data:', rentalData)
+    if (!rentalData.startTime) {
+        console.log('No rental data')
+        return <PageNotFound />
+    }
     return (
         <div className="flex gap-5">
             <div className="flex flex-col w-3/5">
@@ -36,18 +46,24 @@ export default function Bookingconfirmredirect() {
                     endTime={rentalData.endTime}
                 />
                 <div className="mt-5">
-                    <PaymentMethod />
+                    <PaymentMethod
+                        invoiceId={decryptedId}
+                        amount={rentalData.amount}
+                        invoiceType={rentalData.invoiceType}
+                    />
                 </div>
             </div>
             <div className="flex flex-col w-2/5">
                 <RentalSummary
                     make={rentalData.make}
                     modelName={rentalData.modelName}
+                    thumbnail={rentalData.thumbnail}
                     deposit={rentalData.deposit}
                     extraKMCost={rentalData.extraKMCost}
                     penalty={rentalData.penalty}
                     rentalCost={rentalData.rentalCost}
                     amount={rentalData.amount}
+                    type={rentalData.invoiceType}
                 />
             </div>
         </div>

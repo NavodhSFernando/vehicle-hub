@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import { BsBookmarkStar } from 'react-icons/bs'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import { FaRegUserCircle } from 'react-icons/fa'
@@ -11,20 +11,17 @@ import logo from '../../assets/logos/VH-Icon.png'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
 import WishlistDropdown from './WishlistDropDown'
-import NotificationCenter from '../../views/front/NotificationCenter'
+import Cookies from 'js-cookie'
 
 const Navbar = () => {
-    const [wishlistDropdownOpen, setWishlistDropdownOpen] = useState(true)
-
-    const closeWishlistDropdown = () => {
-        setWishlistDropdownOpen(false)
-    }
+    const location = useLocation()
+    const [loggedIn, setLoggedIn] = useState(true)
 
     const [isDropdownOpen] = useState(true)
     const handleNavigate = () => {
         console.log('Navigating to all notifications view')
     }
-    const loggedIn = true
+
     const [clicked, setClicked] = useState(false)
     const handleClick = () => {
         setClicked(!clicked)
@@ -45,8 +42,17 @@ const Navbar = () => {
         setShowNav(!showNav)
     }
 
+    useEffect(() => {
+        const isLoggedIn = Cookies.get('customerId')
+        isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
+    }, [])
+
+    const isHomePage = location.pathname === '/'
+
     return (
-        <nav className="absolute top-0 inset-x-0 z-10 bg-gradient-to-b from-primary w-screen">
+        <nav
+            className={`absolute top-0 inset-x-0 z-10 ${isHomePage ? 'bg-transparent' : 'bg-gradient-to-b from-[#283280]'}`}
+        >
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -86,13 +92,13 @@ const Navbar = () => {
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <NavLink to="/singin">
-                                <button className="border-yellowtheme border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
+                            <NavLink to="/login">
+                                <button className="border-[#FBDAC6] text-[#FBDAC6] border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
                                     Sign In
                                 </button>
                             </NavLink>
                             <NavLink to="/signup">
-                                <button className="ml-4 bg-yellowtheme border-secondary border-2 text-primary px-3 py-2 rounded-md text-sm font-medium">
+                                <button className="ml-4 bg-[#FBDAC6] border-none text-[#283280] px-3 py-2 rounded-md text-sm font-medium">
                                     Sign Up
                                 </button>
                             </NavLink>

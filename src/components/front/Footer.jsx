@@ -19,6 +19,7 @@ export const Footer = () => {
     return (
         <div>
             <footer
+                style={{ backgroundColor: isHomePage ? 'transparent' : '#283280' }}
                 className={`bottom-0 inset-x-0 z-20 px-4 text-white ${isHomePage ? 'bg-transparent py-10 absolute' : 'bg-primary py-20 relative'}`}
             >
                 <div className="w-[1224px] mx-auto flex flex-col justify-center">

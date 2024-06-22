@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { useRef } from 'react'
+import { Switch } from '../../../components/ui/switch'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -18,16 +20,14 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { Checkbox } from '../../../components/ui/checkbox'
-
-const regNoPattern = /^[A-Z]{2}\s\d{4}$/
+import Cookies from 'js-cookie'
+import { useNavigate } from 'react-router-dom'
 
 const formSchema = z.object({
     regNo: z
         .string()
-        .min(1, 'Registration number is required')
-        .regex(
-            regNoPattern,
+        .min(
+            1,
             'Registration number must be in the format XX 9999, where X is any uppercase letter and 9 is any digit.'
         ),
     chassisNo: z.string().min(9, 'Chassis number should be at least 9 characters long.'),
@@ -36,27 +36,36 @@ const formSchema = z.object({
         .number()
         .int('Cost per day must be an integer')
         .min(3000, 'Cost per day must be at least 3000')
-        .max(10000, 'Cost per day must be no more than 10000'),
+        .max(20000, 'Cost per day must be no more than 20000'),
     costPerExtraKm: z
         .number()
         .int('Cost per extra Km  must be an integer')
-        .min(0, 'Cost per extra Km must be at least 0'),
+        .min(50, 'Cost per extra Km must be at least 50'),
     mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required'),
     transmission: z.string().min(1, { message: 'Transmission type is required' }),
+    thumbnail: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    frontImg: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    rearImg: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    dashboard: z.any().refine((file) => file?.length === 1, 'File is required.'),
+    interior: z.any().refine((file) => file?.length === 1, 'File is required.'),
     vehicleTypeId: z.string({
         required_error: 'Vehicle Type is required'
     }),
     vehicleModelId: z.string({
         required_error: 'Vehicle Model is required'
     }),
-    status: z.boolean().default(false) // Added status field
+    status: z.boolean().default(false)
 })
 
 export default function CreateVehicle() {
+    const navigate = useNavigate()
+    const fileInputRef = useRef(null)
     const {
         control,
         handleSubmit,
         reset,
+        setValue,
+        setError,
         formState: { errors }
     } = useForm({
         resolver: zodResolver(formSchema),
@@ -65,15 +74,50 @@ export default function CreateVehicle() {
             chassisNo: '',
             color: '',
             costPerDay: 0,
-            transmission: 'auto',
             mileage: 0,
             costPerExtraKm: 0,
-            status: 0,
             vehicleTypeId: '',
             vehicleModelId: '',
-            status: false
+            thumbnail: null,
+            frontImg: null,
+            rearImg: null,
+            dashboard: null,
+            interior: null,
+            status: true
         }
     })
+
+    const employeeId = Cookies.get('employeeId')
+    if (!employeeId) {
+        console.error('EmployeeId not available')
+    }
+
+    // File change handler
+    const handleThumbnailChange = (e) => {
+        const files = e.target.files
+        setValue('thumbnail', files, { shouldValidate: true })
+    }
+
+    const handleFrontImgChange = (e) => {
+        const files = e.target.files
+        setValue('frontImg', files, { shouldValidate: true })
+    }
+
+    const handleRearImgChange = (e) => {
+        const files = e.target.files
+        setValue('rearImg', files, { shouldValidate: true })
+    }
+
+    const handleDashboardImgChange = (e) => {
+        const files = e.target.files
+        setValue('dashboard', files, { shouldValidate: true })
+    }
+
+    const handleInteriorImgChange = (e) => {
+        const files = e.target.files
+        setValue('interior', files, { shouldValidate: true })
+    }
+
     const [vehicleModels, setVehicleModels] = useState([])
     const [vehicleTypes, setVehicleTypes] = useState([])
 
@@ -83,7 +127,6 @@ export default function CreateVehicle() {
                 // Update the URL to your specific API endpoint for fetching vehicles
                 const response = await axios.get('http://localhost:5062/api/VehicleModel')
                 setVehicleModels(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle models:', error)
             }
@@ -102,30 +145,51 @@ export default function CreateVehicle() {
     }, [])
 
     const handleSave = async (data) => {
+        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+        const decryptedId = decryptResponse.data.decryptedUserId
         const url = 'http://localhost:5062/api/Vehicle'
         try {
-            const formData = {
-                RegistrationNumber: data.regNo,
-                ChassisNo: data.chassisNo,
-                Colour: data.color,
-                Mileage: data.mileage,
-                CostPerDay: data.costPerDay,
-                Transmission: data.transmission,
-                CostPerExtraKM: data.costPerExtraKm,
-                Status: data.status,
-                VehicleTypeId: data.vehicleTypeId,
-                VehicleModelId: data.vehicleModelId,
-                EmployeeId: 1,
-                Status: data.status
+            const formData = new FormData()
+            formData.append('RegistrationNumber', data.regNo)
+            formData.append('ChassisNo', data.chassisNo)
+            formData.append('Colour', data.color)
+            formData.append('Mileage', data.mileage)
+            formData.append('CostPerDay', data.costPerDay)
+            formData.append('Transmission', data.transmission)
+            formData.append('CostPerExtraKM', data.costPerExtraKm)
+            formData.append('formFile', data.thumbnail[0])
+            formData.append('front', data.frontImg[0])
+            formData.append('rear', data.rearImg[0])
+            formData.append('dashboard', data.dashboard[0])
+            formData.append('interior', data.interior[0])
+            formData.append('VehicleTypeId', data.vehicleTypeId)
+            formData.append('VehicleModelId', data.vehicleModelId)
+            formData.append('EmployeeId', decryptedId)
+            formData.append('Status', data.status)
+
+            const response = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            console.log(response.data)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '' // This clears the file input field
             }
-            const result = await axios.post(url, formData)
-            console.log(result)
-            console.log(formData)
             reset()
+            navigate(`/admin/vehicle/view`)
         } catch (error) {
-            console.log(error)
+            console.error('Error:', error)
+            if (error.response && error.response.data) {
+                const { error: errorMessage, field } = error.response.data
+                // Show the error message under the specific input field
+                setError(field, { type: 'manual', message: errorMessage })
+            } else {
+                console.error('Error:', error)
+            }
         }
     }
+
     return (
         <Form {...control}>
             <form
@@ -149,7 +213,7 @@ export default function CreateVehicle() {
                                     {...field}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.regNo && errors.regNo.message}</FormMessage>
+                            <FormMessage>{errors.regNo?.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -191,8 +255,8 @@ export default function CreateVehicle() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="auto">Auto</SelectItem>
-                                    <SelectItem value="manual">Manual</SelectItem>
+                                    <SelectItem value="Auto">Auto</SelectItem>
+                                    <SelectItem value="Manual">Manual</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.transmission && errors.transmission.message}</FormMessage>
@@ -207,7 +271,6 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Color</FormLabel>
                             <FormControl>
                                 <Input
-                                    placeholder="White"
                                     className="w-full"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
@@ -227,7 +290,7 @@ export default function CreateVehicle() {
                             <FormLabel className="pb-3 w-full">Cost Per Day</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number" // Ensure input type is number for direct numeric input
+                                    type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
@@ -318,7 +381,7 @@ export default function CreateVehicle() {
                                     <SelectContent>
                                         {vehicleModels.map((vehicleModel) => (
                                             <SelectItem key={vehicleModel.id} value={String(vehicleModel.id)}>
-                                                {vehicleModel.name}
+                                                {vehicleModel.name} {vehicleModel.year}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -330,15 +393,102 @@ export default function CreateVehicle() {
                 />
                 <FormField
                     control={control}
+                    name="thumbnail"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Thumbnail</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleThumbnailChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.thumbnail && errors.thumbnail.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="frontImg"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Front Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleFrontImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.frontImg && errors.frontImg.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="rearImg"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Rear Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleRearImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.rearImg && errors.rearImg.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="dashboard"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Dashboard Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleDashboardImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.dashboard && errors.dashboard.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="interior"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Interior Image</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    className="w-full"
+                                    ref={fileInputRef}
+                                    onChange={handleInteriorImgChange}
+                                />
+                            </FormControl>
+                            <FormMessage>{errors.interior && errors.interior.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
                     name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
                             <FormLabel className="pb-3 w-full">Status </FormLabel>
                             <FormControl>
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={(checked) => field.onChange(checked)}
-                                />
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
                             </FormControl>
                             <FormMessage>{errors.status && errors.status.message}</FormMessage>
                         </FormItem>

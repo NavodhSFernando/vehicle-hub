@@ -58,11 +58,19 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 label: 'View All Reservation',
                 path: '/admin/reservation/view',
                 icon: <LuDot />
-            },
+            }
+        ]
+    },
+    {
+        key: 'vehicle log',
+        label: 'Vehicle Log',
+        path: '/admin/vehiclelog',
+        icon: <RiStackLine />,
+        subLinks: [
             {
-                key: 'create reservations',
-                label: 'Create Reservations',
-                path: '/admin/reservation/create',
+                key: 'view all vehicle log',
+                label: 'View All vehicle Log',
+                path: '/admin/vehiclelog/view',
                 icon: <LuDot />
             }
         ]
@@ -162,6 +170,20 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
+        key: 'insurance',
+        label: 'Insurance',
+        path: '/admin/insurance',
+        icon: <RiStackLine />,
+        subLinks: [
+            {
+                key: 'view all insurance',
+                label: 'View All Insurance',
+                path: '/admin/insurance/view',
+                icon: <LuDot />
+            }
+        ]
+    },
+    {
         key: 'employee',
         label: 'Employee',
         path: '/admin/employee',
@@ -196,38 +218,11 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         ]
     },
     {
-        key: 'vehicle log',
-        label: 'Vehicle Log',
-        path: '/admin/vehiclelog',
+        key: 'notifications',
+        label: 'Notifications',
+        path: '/admin/notification',
         icon: <RiStackLine />,
-        subLinks: [
-            {
-                key: 'view all vehicle log',
-                label: 'View All vehicle Log',
-                path: '/admin/vehiclelog/view',
-                icon: <LuDot />
-            },
-            {
-                key: 'create vehicle log',
-                label: 'Create Vehicle Log',
-                path: '/admin/vehiclelog/create',
-                icon: <LuDot />
-            }
-        ]
-    },
-    {
-        key: 'insurance',
-        label: 'Insurance',
-        path: '/admin/insurance',
-        icon: <RiStackLine />,
-        subLinks: [
-            {
-                key: 'view all insurance',
-                label: 'View All Insurance',
-                path: '/admin/insurance/view',
-                icon: <LuDot />
-            }
-        ]
+        heading: 'Notifications'
     }
 ]
 
@@ -235,13 +230,7 @@ export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
     {
         key: 'settings',
         label: 'Settings',
-        path: '/settings',
+        path: '/admin/settings',
         icon: <HiOutlineCog />
-    },
-    {
-        key: 'support',
-        label: 'Help & Support',
-        path: '/support',
-        icon: <HiOutlineQuestionMarkCircle />
     }
 ]

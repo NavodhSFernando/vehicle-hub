@@ -1,14 +1,66 @@
-import { FaUpDown } from 'react-icons/fa6'
+import React from 'react'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash, GrStop, GrPlay } from 'react-icons/gr'
+import { GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { EditVehicleDialog } from '../../../components/admin/reservation/EditVehicleDialog'
+import Cookies from 'js-cookie'
+
+const employeeId = Cookies.get('employeeId')
+console.log('employeeId', employeeId)
+if (!employeeId) {
+    console.error('Employee Id is not available')
+}
 
 const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
-    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}`
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
         // POST request to the server with form data
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const AcceptReservation = async ({ customerReservationId, refetchReservation }) => {
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}?eid=${decryptedId}`
+    try {
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const DeclineReservation = async ({ customerReservationId, refetchReservation }) => {
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}?eid=${decryptedId}`
+    try {
+        const result = await axios.post(url)
+        console.log(result)
+        refetchReservation()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const CancelReservation = async ({ customerReservationId, refetchReservation }) => {
+    const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+    const decryptedId = decryptResponse.data.decryptedUserId
+
+    const url = `http://localhost:5062/api/AdminReservation/Cancel-Reservation/${customerReservationId}?eid=${decryptedId}`
+    try {
         const result = await axios.post(url)
         console.log(result)
         refetchReservation()
@@ -22,6 +74,24 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
     const navigate = useNavigate()
     return (
         <div className="flex items-center justify-end gap-2">
+            {status === 'Waiting' && (
+                <>
+                    <Button
+                        variant="ghost"
+                        className="border border-gray-500"
+                        onClick={() => AcceptReservation({ customerReservationId, refetchReservation })}
+                    >
+                        Accept
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className="border border-gray-500"
+                        onClick={() => DeclineReservation({ customerReservationId, refetchReservation })}
+                    >
+                        Decline
+                    </Button>
+                </>
+            )}
             {status === 'Confirmed' && (
                 <Button
                     variant="ghost"
@@ -40,10 +110,21 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
                     <GrStop fontSize={20} className="mr-1" />
                 </Button>
             )}
-            <EditVehicleDialog />
-            <Button variant="ghost" className="p-0">
-                <GrTrash fontSize={24} className="mr-1" />
-            </Button>
+            {(status === 'Pending' || status === 'Confirmed') && (
+                <>
+                    <EditVehicleDialog
+                        customerReservationId={customerReservationId}
+                        refetchReservation={refetchReservation}
+                    />
+                    <Button
+                        variant="ghost"
+                        className="p-0"
+                        onClick={() => CancelReservation({ customerReservationId, refetchReservation })}
+                    >
+                        <GrTrash fontSize={24} className="mr-1" />
+                    </Button>
+                </>
+            )}
         </div>
     )
 }
@@ -55,19 +136,14 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('id') // Assuming ID does not need parseFloat
             return <div className="font-medium">{'#' + value}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return String(row.getValue(columnId)).includes(filterValue)
         }
     },
     {
         accessorKey: 'name',
         header: 'Customer Name'
-    },
-    {
-        accessorKey: 'email',
-        header: 'Customer Email'
-    },
-    {
-        accessorKey: 'phone',
-        header: 'Customer Phone'
     },
     {
         accessorKey: 'regNo',
@@ -87,6 +163,19 @@ export const columns = [
                 }
             }
             return <div>{formattedDate}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            const rowValue = new Date(row.getValue(columnId))
+            const filterStartDate = filterValue[0]
+            return !filterStartDate || rowValue >= filterStartDate
+        }
+    },
+    {
+        accessorKey: 'startTime',
+        header: 'Start Time',
+        cell: ({ row }) => {
+            const value = row.getValue('startTime')
+            return <div>{value || 'Invalid Time'}</div>
         }
     },
     {
@@ -103,14 +192,14 @@ export const columns = [
                 }
             }
             return <div>{formattedDate}</div>
-        }
-    },
-    {
-        accessorKey: 'startTime',
-        header: 'Start Time',
-        cell: ({ row }) => {
-            const value = row.getValue('startTime')
-            return <div>{value || 'Invalid Time'}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            const rowValue = new Date(row.getValue(columnId))
+            const [filterStartDate, filterEndDate] = filterValue
+            return (
+                (!filterStartDate || rowValue >= filterStartDate) &&
+                (!filterEndDate || rowValue <= new Date(new Date(filterEndDate).setHours(23, 59, 59, 999)))
+            )
         }
     },
     {
@@ -123,20 +212,7 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
+        header: 'Status',
         cell: ({ row }) => {
             const status = row.getValue('status')
             let color = ''

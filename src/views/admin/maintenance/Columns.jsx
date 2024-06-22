@@ -1,8 +1,8 @@
 import React from 'react'
-import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
+import { GrEdit } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
+import { FaUpDown } from 'react-icons/fa6'
 
 const ActionButtons = ({ maintenanceId }) => {
     const navigate = useNavigate()
@@ -15,9 +15,6 @@ const ActionButtons = ({ maintenanceId }) => {
                 onClick={() => navigate(`/admin/maintenance/edit/${maintenanceId}`)}
             >
                 <GrEdit fontSize={24} className="mr-1" />
-            </Button>
-            <Button variant="ghost" className="p-0">
-                <GrTrash fontSize={24} className="mr-1" />
             </Button>
         </div>
     )
@@ -38,12 +35,29 @@ export const columns = [
         header: 'Maintenance Date'
     },
     {
+        accessorKey: 'currentMileage',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Current Mileage</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        }
+    },
+    {
         accessorKey: 'vehicleId',
-        header: 'Vehicle',
+        header: 'Registration Number',
         cell: ({ row }) => {
             const vehicleId = row.original.vehicle.registrationNumber
 
-            return <div className="font-medium">{vehicleId}</div>
+            return <div className="">{vehicleId}</div>
         },
         filterFn: (row, columnId, filterValue) => {
             return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())

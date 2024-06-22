@@ -2,39 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { FaStar } from 'react-icons/fa'
 import axios from 'axios'
 
-export default function FeedBack() {
-    // const reviewDatas = [
-    //     {
-    //         name: 'Alex Fernando',
-    //         position: 'CEO at Bukalapak',
-    //         date: '2 Jun 2023',
-    //         rating: 3,
-    //         comment: 'The vehicle looks good and runs good. Very economical.'
-    //     },
-    //     {
-    //         name: 'John Doe',
-    //         position: 'CTO at Amazon',
-    //         date: '5 Mar 2023',
-    //         rating: 4,
-    //         comment: 'Excellent service. Highly recommended.'
-    //     }
-    // ]
+export default function FeedBack({ id }) {
 
-    const [reviewDatas, setReviewDatas] = useState([])
+    const [reviewDatas, setReviewDatas] = useState([]);
+    const reservationId = id;
 
     const fetchFeedbacks = async () => {
         try {
-            const response = await axios.get('http://localhost:47367/api/Feedback/vehicle/7')
+            const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${reservationId}`);
             console.log(response.data)
-            setReviewDatas(response.data)
+            setReviewDatas(response.data);
         } catch (error) {
-            console.error('Error fetching feedbacks:', error)
+            console.error('Error fetching feedbacks:', error);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchFeedbacks()
-    }, [])
+        fetchFeedbacks();
+    }, []);
 
     return (
         <>
@@ -47,7 +32,7 @@ export default function FeedBack() {
                         </div>
                     </div>
                     <div className="flex flex-col p-[20px]">
-                        {reviewDatas.map((reviewData, index) => (
+                    {reviewDatas.slice(0, 3).map((reviewData, index) => (
                             <div key={index} className="p-[20px] flex flex-col gap-[5px]">
                                 <div className="flex justify-between">
                                     <div>

@@ -4,7 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -19,23 +19,19 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
-
-const validVehicleIds = [1]
+import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/popover'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { format, parseISO } from 'date-fns'
+import cn from 'classnames'
+import { Calendar } from '../../../components/ui/calendar'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
-//const dateRegex = /^\d{4}-\d{2}-\d{2}$/ // Regex to validate yyyy-mm-dd format
-
 const formSchema = z.object({
-    date: z
-        .string()
-        // .regex(dateRegex, {
-        //     message: 'Maintenance date must be in yyyy-mm-dd format'
-        // })
-        .refine((dateStr) => new Date(dateStr) <= new Date(currentDate), {
-            message: 'Maintenance date must not be in the future'
-        }),
-    vehicleId: z.number().refine((vehicleId) => validVehicleIds.includes(vehicleId), {
+    date: z.string().refine((dateStr) => new Date(dateStr) <= new Date(currentDate), {
+        message: 'Maintenance date must not be in the future'
+    }),
+    vehicleId: z.number({
         message: 'Invalid Vehicle ID'
     }),
     type: z.string({
@@ -43,11 +39,13 @@ const formSchema = z.object({
     }),
     description: z.string({
         message: 'Maintenance Type is required'
-    })
+    }),
+    mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required')
 })
 
 export default function EditMaintenance() {
-    const { maintenanceId } = useParams() // Access route parameter
+    const navigate = useNavigate()
+    const { maintenanceId } = useParams()
     const {
         control,
         handleSubmit,
@@ -58,7 +56,8 @@ export default function EditMaintenance() {
         defaultValues: {
             date: '',
             description: '',
-            vehicleId: 0
+            vehicleId: 0,
+            currentMileage: 0
         }
     })
 
@@ -66,17 +65,13 @@ export default function EditMaintenance() {
         const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
         try {
             const { data } = await axios.get(url)
-            console.log(data.date)
-            console.log(data.description)
-            console.log(data.type)
-            console.log(data.vehicleId)
-            console.log(data)
 
             reset({
                 date: data.date,
                 description: data.description,
                 type: data.type,
-                vehicleId: data.vehicle.id
+                vehicleId: data.vehicle.id,
+                currentMileage: data.currentMileage
             })
         } catch (error) {
             console.error('Failed to fetch maintenance', error)
@@ -94,12 +89,14 @@ export default function EditMaintenance() {
                 Date: data.date,
                 Description: data.description,
                 Type: data.type,
-                VehicleId: data.vehicleId
+                VehicleId: data.vehicleId,
+                CurrentMileage: data.currentMileage
             }
 
             const result = await axios.put(url, formData)
             console.log(result)
             reset()
+            navigate(`/admin/maintenance/view`)
         } catch (error) {
             console.error('Failed to update vehicle maintenance', error)
         }
@@ -116,42 +113,60 @@ export default function EditMaintenance() {
                     control={control}
                     name="date"
                     render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Maintenance Date</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="date"
-                                    className="w-full"
-                                    onChange={(e) => {
-                                        const dateValue = e.target.value // This is the input string in "yyyy-MM-dd"
-                                        field.onChange(dateValue) // Pass the string directly to your form's state
-                                    }}
-                                    {...field}
-                                />
-                            </FormControl>
+                        <FormItem className="w-1/2 flex flex-col">
+                            <FormLabel className="">Maintenance Date</FormLabel>
+                            <Popover>
+                                <PopoverTrigger asChild>
+                                    <FormControl>
+                                        <Button
+                                            variant={'outline'}
+                                            className={cn(
+                                                'justify-start text-left font-normal p-3 h-12',
+                                                !field.value && 'text-muted-foreground'
+                                            )}
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {field.value ? (
+                                                format(parseISO(field.value), 'PPP')
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                        </Button>
+                                    </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-auto p-0">
+                                    <Calendar
+                                        mode="single"
+                                        selected={field.value ? parseISO(field.value) : null}
+                                        onSelect={(date) => field.onChange(date ? format(date, 'yyyy-MM-dd') : '')}
+                                        disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                                        initialFocus
+                                    />
+                                </PopoverContent>
+                            </Popover>
                             <FormMessage>{errors.maintenanceDate && errors.maintenanceDate.message}</FormMessage>
                         </FormItem>
                     )}
                 />
-
                 <FormField
                     control={control}
-                    name="vehicleId"
+                    name="currentMileage"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormLabel className="pb-3 w-full">Current Mileage</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="number"
-                                    className="w-full"
                                     {...field}
+                                    type="number" // Ensure input type is number for direct numeric input
+                                    className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
+                            <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
                         </FormItem>
                     )}
                 />
+
                 <FormField
                     control={control}
                     name="type"
@@ -171,11 +186,13 @@ export default function EditMaintenance() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="oilChange">Oil and Fluid Changes</SelectItem>
-                                    <SelectItem value="tireRotation">Tyre Rotation</SelectItem>
-                                    <SelectItem value="brakeChecks">Brake Checks</SelectItem>
+                                    <SelectItem value="service">Vehicle Service</SelectItem>
+                                    <SelectItem value="brakePadReplacement">Brake Pad Replacement</SelectItem>
+                                    <SelectItem value="gearOil">Gear Oil Replacements</SelectItem>
+                                    <SelectItem value="tyreRotation">Tyre Rotation</SelectItem>
                                     <SelectItem value="batteryMaintenance">Battery Maintenance</SelectItem>
                                     <SelectItem value="airConditioningChecks">Air Conditioning Checks</SelectItem>
+                                    <SelectItem value="engineTuneUp">Engine Tune Up</SelectItem>
                                     <SelectItem value="replacements">Replacements</SelectItem>
                                 </SelectContent>
                             </Select>
@@ -200,6 +217,19 @@ export default function EditMaintenance() {
                                 />
                             </FormControl>
                             <FormMessage>{errors.description && errors.description.message}</FormMessage>
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={control}
+                    name="vehicleId"
+                    render={({ field }) => (
+                        <FormItem className="w-1/2">
+                            <FormLabel className="pb-3 w-full">Vehicle Id</FormLabel>
+                            <FormControl>
+                                <Input disabled {...field} type="number" className="w-full text-gray-950" />
+                            </FormControl>
+                            <FormMessage>{errors.vehicleId && errors.vehicleId.message}</FormMessage>
                         </FormItem>
                     )}
                 />

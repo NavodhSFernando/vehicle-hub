@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import axios from 'axios'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button } from '../../components/ui/button'
 import {
@@ -14,13 +17,37 @@ import {
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
 
-export const Password = () => {
-    const form = useForm()
+const formSchema = z.object({
+    email: z.string().email()
+})
 
-    function onSubmit(values) {
-        // Do something with the form values.
-        // This will be type-safe and validated.
-        console.log(values)
+export const Password = () => {
+    const navigate = useNavigate()
+    const {
+        control,
+        handleSubmit,
+        reset,
+        formState: { errors },
+        register
+    } = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: ''
+        }
+    })
+
+    const onSubmit = async (data) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:5062/api/CustomerAuth/ForgotPassword?email=${data.email}`
+            )
+            console.log(response.data)
+            alert('OTP sent to your email.')
+            navigate('/VerifyOTP')
+        } catch (error) {
+            alert('Failed to send OTP.')
+            console.error(error.response ? error.response.data : error.message)
+        }
     }
     return (
         <div>
@@ -37,16 +64,16 @@ export const Password = () => {
                     </p>
                     <p className="text-xs font-inter text-gray-600 mb-6 text-justify">to reset your password.</p>
 
-                    <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+                    <Form {...control}>
+                        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
                             <FormField
-                                control={form.control}
-                                name="username"
+                                control={control}
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
                                         <div className="flex flex-col space-y-3">
                                             <FormLabel htmlFor="email" className="text-gray-800 font-semibold">
-                                                Username
+                                                Email
                                             </FormLabel>
                                             <FormControl>
                                                 <input
@@ -55,32 +82,24 @@ export const Password = () => {
                                                     autoComplete="email"
                                                     required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-800"
+                                                    {...field}
                                                 />
                                             </FormControl>
+                                            <FormMessage>{errors.email && errors.email.message}</FormMessage>
                                         </div>
                                     </FormItem>
                                 )}
                             />
-                            <div className="pt-3 pb-3">
+                            <div className="pt-3 pb-2">
                                 <Button
                                     type="submit"
                                     className="w-full py-3 font-semibold text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md  hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
                                 >
-                                    Reset Password
+                                    Send OTP
                                 </Button>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <FormControl>
-                                        <input type="checkbox" id="confirm" className="h-4 w-4" />
-                                    </FormControl>
-                                    <FormLabel htmlFor="confirm" className="ml-2 text-gray-800 text-justify">
-                                        Remember Me
-                                    </FormLabel>
-                                </div>
-                            </div>
 
-                            <div className="flex pt-4">
+                            <div className="flex pt-2">
                                 <div className="text-gray-800 text-justify pr-2">Don't have an account? </div>
                                 <div className="text-indigo-600 text-justify ">
                                     <a href="signup">Sign Up</a>

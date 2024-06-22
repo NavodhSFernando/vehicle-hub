@@ -22,7 +22,7 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="bg-slate-900 flex flex-col w-80 p-3 text-white overflow-y-auto">
+        <div className="bg-slate-900 flex flex-col w-72 p-3 text-white overflow-y-auto fixed h-screen">
             <div className="flex items-center gap-2 px-1 py-3">
                 <img src={LogoIcon} alt="logo-icon" className="w-10" />
                 <span>
