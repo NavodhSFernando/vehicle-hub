@@ -9,12 +9,15 @@ export default function Layout() {
     const isHomePage = pathname === '/'
 
     return (
-        <div className="bg-slate-200">
-            <NavBar />
-            <div className={`${!isHomePage ? 'max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-28 lg:min-h-[700px]' : ''}`}>
+        <div className="relative bg-slate-200 min-h-screen">
+            <div className="absolute top-0 left-0 w-full h-96 bg-blue-to-transparent z-0"></div>
+            <NavBar className="relative z-10" />
+            <div
+                className={`${!isHomePage ? 'relative z-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-28 lg:min-h-[700px]' : ''}`}
+            >
                 <Outlet />
             </div>
-            <Footer />
+            <Footer className="relative z-10" />
         </div>
     )
 }
