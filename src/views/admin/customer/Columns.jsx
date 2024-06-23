@@ -2,9 +2,21 @@ import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from '../../../components/ui/alert-dialog'
 
-export const columns = [
+export const columns = (handleDeleteCustomer) => [
     {
         accessorKey: 'id',
         header: 'Customer ID',
@@ -88,9 +100,27 @@ export const columns = [
             const customerId = row.getValue('id')
             return (
                 <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger>
+                            <Button variant="ghost" className="p-0">
+                                <GrTrash fontSize={24} className="mr-1" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Deactivate Customer</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Are you sure you want to deactivate this customer?
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction handleConfirm={() => handleDeleteCustomer(customerId)}>
+                                    Deactivate
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             )
         }
