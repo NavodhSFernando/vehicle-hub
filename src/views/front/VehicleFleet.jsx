@@ -20,7 +20,6 @@ const VehicleFleet = () => {
         maxPrice: 0
     })
 
-
     const [dateFilter, setDateFilter] = useState({
         startDate: startDate || '',
         startTime: startTime || '',
@@ -89,6 +88,16 @@ const VehicleFleet = () => {
         setFilteredData(updatedFilteredData)
     }, [filters, vehicleData])
 
+    const resetFilters = () => {
+        setFilters({
+            vehicleType: 'all',
+            vehicleMake: 'all',
+            vehicleCapacity: 'all',
+            maxPrice: 0
+        })
+        setFilteredData(allVehicle)
+    }
+
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
     const baseUrlLogo = 'https://vehiclehubimages.blob.core.windows.net/logos/'
 
@@ -103,7 +112,7 @@ const VehicleFleet = () => {
                         <SearchStrip onSearch={handleSearch} />
                         <button 
                             className='flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]'
-                            onClick={() => {setFilteredData(allVehicle)}}>
+                            onClick={resetFilters}>
                             All Vehicles
                         </button>
                     </div>

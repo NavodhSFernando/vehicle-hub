@@ -23,7 +23,7 @@ export default function FeedBack({ id }) {
 
     return (
         <>
-            <div className="w-[584px] h-auto bg-white rounded-[10px] p-[30px]">
+            <div className="w-full h-auto bg-white rounded-[10px] p-[30px]">
                 <div className="flex flex-col">
                     <div className="flex gap-[10px] items-center">
                         <div className="font-[500] text-[20px]">Reviews</div>

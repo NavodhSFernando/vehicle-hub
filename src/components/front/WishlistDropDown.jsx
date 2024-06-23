@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 import aqua from '../../assets/vehicles/aqua.png'
 
 const WishlistDropdown = ({ isOpen }) => {
@@ -13,7 +14,7 @@ const WishlistDropdown = ({ isOpen }) => {
     const getWishlist = () => {
         return JSON.parse(localStorage.getItem('wishlistItems')) || []
     }
-
+ 
     useEffect(() => {
         setWishlistItems(getWishlist())
 
@@ -51,12 +52,15 @@ const WishlistDropdown = ({ isOpen }) => {
                     ) : (
                         wishlistItems.map((item) => (
                             <div key={item.id} className="flex items-center px-[20px] py-3 border-t border-gray-100">
-                                <img className="w-[50px] h-full scale-x-[-1] mt-2 p-1" src={item.imageSrc} alt={item.name} />
-                                <div className="flex-grow px-2 ml-[30px]">
-                                    <p className="font-bold text-gray-600">{item.name}</p>
-                                    <p className="text-sm text-gray-600">{`${item.year} | ${item.type} | ${item.capacity}`}</p>
-                                    <p className="text-sm text-gray-900 mt-[10px]">{item.price}</p>
-                                </div>
+                                <Link className="flex" to={`/vehiclefleet/${item.id}`}>
+                                    <img className="w-[50px] h-full scale-x-[-1] mt-2 p-1" src={item.imageSrc} alt={item.name} />
+                                </Link>
+                                    <div className="flex-grow px-2 ml-[30px]">
+                                        <p className="font-bold text-gray-600">{item.name}</p>
+                                        <p className="text-sm text-gray-600">{`${item.year} | ${item.type} | ${item.capacity}`}</p>
+                                        <p className="text-sm text-gray-900 mt-[10px]">{item.price}</p>
+                                    </div>
+                               
                                 <button
                                     className="text-gray-400 hover:text-gray-500"
                                     onClick={() => handleRemoveFromWishlist(item)}

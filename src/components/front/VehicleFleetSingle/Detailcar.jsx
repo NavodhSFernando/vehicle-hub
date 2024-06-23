@@ -16,13 +16,9 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [vehicleData, setVehicleData] = useState({})
     const { toast } = useToast()
     const navigate = useNavigate()
-    const reservationId = id
 
     const customerId = Cookies.get('customerId')
  
-    const handleClick = () => {
-        setClicked(!clicked)
-    }
 
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked)
@@ -73,23 +69,6 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         }
     }
 
-    const fetchFeedbacks = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${reservationId}`)
-            const feedbacks = response.data
-
-            const totalFeedbacks = feedbacks.length
-            const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
-            const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
-
-            setTotalFeedbacks(totalFeedbacks)
-            setAverageRating(averageRating)
-        } catch (error) {
-            console.error('Error fetching feedbacks:', error)
-        }
-    }
-
-
     //wishlist
     const updateWishlist = (wishlistItems) => {
         localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
@@ -101,11 +80,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         return JSON.parse(localStorage.getItem('wishlistItems')) || []
     }
 
-    const handleWishlist = () => {
+    const handleClick = () => {
         const vehicleDetails = {
-            id: vehicleData.VehicleId,
-            name: vehicleData.name,
-            type: vehicleData.type,
+            id: id,
+            name: vehicleData.model,
+            type: vehicleData.fuelType,
             year: vehicleData.year,
             imageSrc: vehicleData.dashboardImg,
             transmission: vehicleData.transmission,
@@ -132,28 +111,44 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     }
 
     useEffect(() => {
+
         const fetchVehicleData = async () => {
             try {
                 const response = await axios.get(`http://localhost:5062/api/FrontReservationService/DetailCar/${id}`)
                 setVehicleData(response.data)
-                console.log(vehicleData)
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching vehicle data:', error)
+            }
+        }
+
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${id}`)
+                const feedbacks = response.data
+    
+                const totalFeedbacks = feedbacks.length
+                const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
+                const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
+    
+                setTotalFeedbacks(totalFeedbacks)
+                setAverageRating(averageRating)
+            } catch (error) {
+                console.error('Error fetching feedbacks:', error)
             }
         }
         fetchVehicleData()
         fetchFeedbacks()
 
-
         //wishlist
         const existingWishlistItems = getWishlist()
-        const isInWishlist = existingWishlistItems.some((item) => item.id === vehicleData.VehicleId)
-        setwishlistclick(isInWishlist)
+        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
+        setClicked(isInWishlist)
 
         const handleWishlistUpdate = (event) => {
             const updatedWishlist = event.detail
-            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === vehicleData.VehicleId)
-            setwishlistclick(isInUpdatedWishlist)
+            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
+            setClicked(isInUpdatedWishlist)
         }
 
         window.addEventListener('wishlistUpdated', handleWishlistUpdate)
@@ -161,8 +156,9 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         return () => {
             window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
         }
-    }, [])
 
+    }, [id])
+    
     return (
         <div className="w-full bg-white p-6 rounded-lg">
             {/* Header */}
@@ -180,11 +176,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     </div>
                 </div>
                 <div className="mt-1">
-                    {wishlistclick ? (
-                        <BsBookmarkStarFill fontSize={24} onClick={handleWishlist} />
-                    ) : (
-                        <BsBookmarkStar fontSize={24} onClick={handleWishlist} />
-                    )}
+                {
+                    <button onClick={handleClick}>
+                        {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
+                    </button>
+                }
                 </div>
             </article>
             {/* Specification */}
