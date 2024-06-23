@@ -147,7 +147,7 @@ export default function Ongoingrentalssingle() {
                         <AlertDialogDemo
                             triggerText="Cancel Reservation"
                             alertTitle="Cancel Reservation"
-                            alertDescription="Are you sure you want to continue?"
+                            alertDescription="Are you sure you want to cancel this reservation"
                             handleConfirm={handleCancel}
                             variant="destructive"
                         />
