@@ -70,15 +70,21 @@ const FeedbackReport = () => {
     const handleFilter = () => {
         // Reset previous error
         setFilterError('')
-
-        // Validate start date or end date
+    
+        // Validate if both dates are provided
         if (startDate === '' && endDate === '') {
             setFilterError('Please select a start date or an end date.')
             return
         }
-
+    
+        // Validate if start date is later than end date
+        if (startDate !== '' && endDate !== '' && new Date(startDate) > new Date(endDate)) {
+            setFilterError('Invalid date range: Start date cannot be after end date.')
+            return
+        }
+    
         let filteredData = feedbackData
-
+    
         // Apply filters
         if (startDate !== '') {
             filteredData = filteredData.filter((feedback) => {
@@ -86,33 +92,33 @@ const FeedbackReport = () => {
                 return feedbackDate >= new Date(startDate)
             })
         }
-
+    
         if (endDate !== '') {
             filteredData = filteredData.filter((feedback) => {
                 const feedbackDate = new Date(feedback.date)
                 return feedbackDate <= new Date(endDate)
             })
         }
-
+    
         if (vehicleFilter !== '') {
             filteredData = filteredData.filter((feedback) =>
                 feedback.vehicle.toLowerCase().includes(vehicleFilter.toLowerCase())
             )
         }
-
+    
         if (customerFilter !== '') {
             filteredData = filteredData.filter((feedback) =>
                 feedback.customer.toLowerCase().includes(customerFilter.toLowerCase())
             )
         }
-
+    
         if (ratingFilter !== '') {
             filteredData = filteredData.filter((feedback) => feedback.rating === parseInt(ratingFilter))
         }
-
+    
         setFilteredFeedbackData(filteredData)
     }
-
+    
     const getTotalAmount = () => {
         return filteredFeedbackData.reduce((total, feedback) => total + feedback.rating, 0)
     }

@@ -70,7 +70,7 @@ export default function EditMaintenance() {
                 date: data.date,
                 description: data.description,
                 type: data.type,
-                vehicleId: data.vehicle.id,
+                vehicleId: data.vehicleId,
                 currentMileage: data.currentMileage
             })
         } catch (error) {

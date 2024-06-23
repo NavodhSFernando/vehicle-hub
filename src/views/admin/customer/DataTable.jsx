@@ -1,5 +1,6 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import {
     ColumnDef,
     flexRender,
@@ -11,6 +12,7 @@ import {
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { DataTablePagination } from '../../../components/ui/DataTablePagination'
+import { columns } from '../customer/Columns'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
 
