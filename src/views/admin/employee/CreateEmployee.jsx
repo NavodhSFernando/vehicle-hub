@@ -85,6 +85,7 @@ export default function CreateEmployee() {
             const result = await apiclient.post(url, formData)
             console.log(result)
             console.log(formData)
+            alert('Employee created successfully!')
             reset()
         } catch (error) {
             if (error.response) {
