@@ -4,6 +4,7 @@ import axios from 'axios'
 import { FaStar } from 'react-icons/fa6'
 import { AlertDialogDemo } from '../../components/ui/alertDialog'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../components/ui/use-toast'
 
 export default function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
@@ -11,6 +12,7 @@ export default function Ongoingrentalssingle() {
     const [status, setStatus] = useState('') // State for tracking the reservation status
     const [rentalData, setRentalData] = useState({}) // State for tracking rental data
     const navigate = useNavigate()
+    const { toast } = useToast()
 
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
 
@@ -27,6 +29,10 @@ export default function Ongoingrentalssingle() {
             const url = `http://localhost:5062/api/FrontReservationService/cancel-reservation/${decryptedId}`
             const response = await axios.post(url)
 
+            toast({
+                variant: 'success',
+                description: 'Reservation Cancelled Successfully'
+            })
             navigate('/account/viewrentalhistory')
 
             console.log('Reservation Cancelled:', response.data)
