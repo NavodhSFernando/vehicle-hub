@@ -73,7 +73,7 @@ function SidebarLink({ link, toggleSublinks, showSublinks }) {
 
     const isActive = pathname === link.path || link.subLinks?.some((subLink) => pathname === subLink.path)
     const linkClassNames = classNames(
-        isActive ? 'text-[#FBDAC6] bg-[#2c3e91] font-medium' : 'text-[#D3D3D3] font-light',
+        isActive ? 'text-[#FBDAC6] bg-[#2c3e91] font-normal' : 'text-[#D3D3D3] font-light',
         linkClass
     )
 
@@ -101,7 +101,7 @@ function SidebarSubLink({ subLink }) {
     const isActive = pathname === subLink.path
     const subLinkClassNames = classNames(
         'flex items-center gap-2 font-light px-3 py-0.5 hover:bg-[#2c3e91] hover:no-underline rounded-sm text-sm',
-        { 'text-[#FBDAC6] font-medium': isActive, 'text-[#D3D3D3] font-light': !isActive }
+        { 'text-[#FBDAC6] font-normal': isActive, 'text-[#D3D3D3] font-light': !isActive }
     )
 
     return (
