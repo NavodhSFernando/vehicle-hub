@@ -66,7 +66,7 @@ function Adminlogin() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel htmlFor="email" className="text-gray-800 font-semibold">
-                                            Username
+                                            E-mail
                                         </FormLabel>
                                         <FormControl>
                                             <Input
@@ -99,14 +99,7 @@ function Adminlogin() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex items-center">
-                                <FormControl>
-                                    <input type="checkbox" id="remember" className="h-4 w-4" />
-                                </FormControl>
-                                <FormLabel htmlFor="remember" className="ml-2 text-gray-800">
-                                    Remember me
-                                </FormLabel>
-                            </div>
+
                             <Button
                                 type="submit"
                                 className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
