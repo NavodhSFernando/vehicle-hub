@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { EditVehicleDialog } from '../../../components/admin/reservation/EditVehicleDialog'
 import Cookies from 'js-cookie'
+import { useToast } from '../../../components/ui/use-toast'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const employeeId = Cookies.get('employeeId')
 console.log('employeeId', employeeId)
@@ -12,7 +14,7 @@ if (!employeeId) {
     console.error('Employee Id is not available')
 }
 
-const BeginReservation = async ({ customerReservationId, refetchReservation }) => {
+const BeginReservation = async ({ customerReservationId, refetchReservation, toast }) => {
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
@@ -21,13 +23,17 @@ const BeginReservation = async ({ customerReservationId, refetchReservation }) =
         // POST request to the server with form data
         const result = await axios.post(url)
         console.log(result)
+        toast({
+            variant: 'success',
+            description: 'Reservation has started'
+        })
         refetchReservation()
     } catch (error) {
         console.log(error)
     }
 }
 
-const AcceptReservation = async ({ customerReservationId, refetchReservation }) => {
+const AcceptReservation = async ({ customerReservationId, refetchReservation, toast }) => {
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
@@ -35,13 +41,17 @@ const AcceptReservation = async ({ customerReservationId, refetchReservation }) 
     try {
         const result = await axios.post(url)
         console.log(result)
+        toast({
+            variant: 'success',
+            description: 'Reservation has been accepted'
+        })
         refetchReservation()
     } catch (error) {
         console.log(error)
     }
 }
 
-const DeclineReservation = async ({ customerReservationId, refetchReservation }) => {
+const DeclineReservation = async ({ customerReservationId, refetchReservation, toast }) => {
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
@@ -49,13 +59,17 @@ const DeclineReservation = async ({ customerReservationId, refetchReservation })
     try {
         const result = await axios.post(url)
         console.log(result)
+        toast({
+            variant: 'success',
+            description: 'Reservation has been declined'
+        })
         refetchReservation()
     } catch (error) {
         console.log(error)
     }
 }
 
-const CancelReservation = async ({ customerReservationId, refetchReservation }) => {
+const CancelReservation = async ({ customerReservationId, refetchReservation, toast }) => {
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
@@ -63,6 +77,10 @@ const CancelReservation = async ({ customerReservationId, refetchReservation }) 
     try {
         const result = await axios.post(url)
         console.log(result)
+        toast({
+            variant: 'success',
+            description: 'Reservation has been cancelled'
+        })
         refetchReservation()
     } catch (error) {
         console.log(error)
@@ -72,57 +90,64 @@ const CancelReservation = async ({ customerReservationId, refetchReservation }) 
 // Define a component to encapsulate the action buttons
 const ActionButtons = ({ customerReservationId, status, refetchReservation }) => {
     const navigate = useNavigate()
+    const { toast } = useToast()
     return (
         <div className="flex items-center justify-end gap-2">
             {status === 'Waiting' && (
                 <>
-                    <Button
+                    <AlertDialogDemo
+                        triggerText="Accept"
+                        alertTitle="Accept Reservation"
+                        alertDescription="Are you sure you want to accept this reservation?"
+                        handleConfirm={() => AcceptReservation({ customerReservationId, refetchReservation, toast })}
+                        buttonClass="border border-gray-500"
                         variant="ghost"
-                        className="border border-gray-500"
-                        onClick={() => AcceptReservation({ customerReservationId, refetchReservation })}
-                    >
-                        Accept
-                    </Button>
-                    <Button
+                    />
+                    <AlertDialogDemo
+                        triggerText="Decline"
+                        alertTitle="Decline Reservation"
+                        alertDescription="Are you sure you want to decline this reservation?"
+                        handleConfirm={() => DeclineReservation({ customerReservationId, refetchReservation, toast })}
+                        buttonClass="border border-gray-500"
                         variant="ghost"
-                        className="border border-gray-500"
-                        onClick={() => DeclineReservation({ customerReservationId, refetchReservation })}
-                    >
-                        Decline
-                    </Button>
+                    />
                 </>
             )}
             {status === 'Confirmed' && (
-                <Button
+                <AlertDialogDemo
+                    triggerText={<GrPlay fontSize={20} className="mr-1" />}
+                    alertTitle="Begin Reservation"
+                    alertDescription="Are you sure you want to begin this reservation?"
+                    handleConfirm={() => BeginReservation({ customerReservationId, refetchReservation, toast })}
+                    buttonClass="p-0"
                     variant="ghost"
-                    className="p-0"
-                    onClick={() => BeginReservation({ customerReservationId, refetchReservation })}
-                >
-                    <GrPlay fontSize={20} className="mr-1" />
-                </Button>
+                />
             )}
             {status === 'Ongoing' && (
-                <Button
+                <AlertDialogDemo
+                    triggerText={<GrStop fontSize={20} className="mr-1" />}
+                    alertTitle="End Reservation"
+                    alertDescription="Are you sure you want to end this reservation?"
+                    handleConfirm={() => navigate(`/admin/vehiclelog/create/${customerReservationId}`)}
+                    buttonClass="p-0"
                     variant="ghost"
-                    className="p-0"
-                    onClick={() => navigate(`/admin/vehiclelog/create/${customerReservationId}`)}
-                >
-                    <GrStop fontSize={20} className="mr-1" />
-                </Button>
+                />
             )}
             {(status === 'Pending' || status === 'Confirmed') && (
                 <>
                     <EditVehicleDialog
                         customerReservationId={customerReservationId}
                         refetchReservation={refetchReservation}
+                        toast={toast}
                     />
-                    <Button
+                    <AlertDialogDemo
+                        triggerText={<GrTrash fontSize={20} className="mr-1" />}
+                        alertTitle="Cancel Reservation"
+                        alertDescription="Are you sure you want to cancel this reservation"
+                        handleConfirm={() => CancelReservation({ customerReservationId, refetchReservation, toast })}
+                        buttonClass="p-0"
                         variant="ghost"
-                        className="p-0"
-                        onClick={() => CancelReservation({ customerReservationId, refetchReservation })}
-                    >
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
+                    />
                 </>
             )}
         </div>

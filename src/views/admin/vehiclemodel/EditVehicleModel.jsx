@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
-
+import { useToast } from '../../../components/ui/use-toast'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -21,6 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { useNavigate } from 'react-router-dom'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const items = [
     { id: 'abs', label: 'ABS' },
@@ -82,6 +83,7 @@ const formSchema = z.object({
 export default function EditVehicleModel() {
     const navigate = useNavigate()
     const { vehicleModelId } = useParams()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -153,6 +155,10 @@ export default function EditVehicleModel() {
                 AdditionalFeatures: additionalFeatures
             }
             const result = await axios.put(url, formData)
+            toast({
+                variant: 'success',
+                description: 'VehicleMake Updated successfully'
+            })
             console.log('Vehicle model updated', result)
             navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
@@ -332,9 +338,12 @@ export default function EditVehicleModel() {
                     </div>
                 </FormItem>
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Vehicle Model"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

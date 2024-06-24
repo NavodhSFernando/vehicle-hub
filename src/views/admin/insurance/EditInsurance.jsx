@@ -22,6 +22,8 @@ import {
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const currentDate = new Date().toISOString().split('T')[0]
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
@@ -42,6 +44,7 @@ const formSchema = z.object({
 export default function EditInsurance() {
     const navigate = useNavigate()
     const { insuranceId } = useParams() // Access route parameter
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -85,6 +88,10 @@ export default function EditInsurance() {
             }
             const result = await axios.put(url, formData)
             console.log(result)
+            toast({
+                variaant: 'success',
+                description: 'Insurance updated successfully'
+            })
             navigate(`/admin/insurance/view`)
         } catch (error) {
             console.error('Failed to update vehicle Insurance', error)
@@ -172,9 +179,12 @@ export default function EditInsurance() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Updaye Insurance"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

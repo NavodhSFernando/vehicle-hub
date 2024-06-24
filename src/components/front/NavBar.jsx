@@ -12,6 +12,7 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
 import WishlistDropdown from './WishlistDropDown'
 import Cookies from 'js-cookie'
+import { Button } from '../ui/button'
 import axios from 'axios'
 
 const Navbar = () => {
@@ -69,7 +70,7 @@ const Navbar = () => {
     const isHomePage = location.pathname === '/'
 
     return (
-        <nav className={`absolute top-0 inset-x-0 z-20 ${isHomePage ? 'bg-transparent' : ''}`}>
+        <nav className={`absolute top-0 inset-x-0 z-20 ${isHomePage ? 'bg-gradient-to-b from-primary' : ''}`}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -109,16 +110,12 @@ const Navbar = () => {
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <NavLink to="/login">
-                                <button className="border-[#FBDAC6] text-[#FBDAC6] border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
-                                    Sign In
-                                </button>
-                            </NavLink>
-                            <NavLink to="/signup">
-                                <button className="ml-4 bg-[#FBDAC6] border-none text-[#283280] px-3 py-2 rounded-md text-sm font-medium">
-                                    Sign Up
-                                </button>
-                            </NavLink>
+                            <button className="bg-transparent border-[#FBDAC6] text-[#FBDAC6] border-2 px-5 py-2 rounded-md text-sm font-medium">
+                                <NavLink to="/login">Sign In</NavLink>
+                            </button>
+                            <button className="ml-4 bg-[#FBDAC6] border-2 border-[#FBDAC6] decoration-transparent px-5 py-2 rounded-md text-sm font-medium">
+                                <NavLink to="/signup">Sign Up</NavLink>
+                            </button>
                         </div>
                     ) : (
                         <div className="flex gap-16">

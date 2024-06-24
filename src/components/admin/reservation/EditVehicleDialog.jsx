@@ -85,7 +85,7 @@ import axios from 'axios'
 //     }
 // ]
 
-export function EditVehicleDialog({ customerReservationId, refetchReservation }) {
+export function EditVehicleDialog({ customerReservationId, refetchReservation, toast }) {
     const [data, setData] = useState([])
     const [open, setOpen] = useState(false)
 
@@ -111,6 +111,10 @@ export function EditVehicleDialog({ customerReservationId, refetchReservation })
             console.log(response.data)
             console.log('Vehicle selected')
             setOpen(false) // Close the dialog
+            toast({
+                variant: 'success',
+                description: 'Vehicle changed successfully'
+            })
             refetchReservation() // Update the reservation data
             getAvailableVehicles() // Update the available vehicles
         } catch (error) {

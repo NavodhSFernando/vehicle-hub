@@ -37,8 +37,7 @@ export default function DataTable({ columns, data }) {
         state: {
             sorting,
             columnFilters
-        },
-        initialState: { pagination: { pageSize: 5 } }
+        }
     })
 
     // Update the date filter when the date state changes
