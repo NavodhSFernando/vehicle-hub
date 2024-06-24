@@ -3,6 +3,10 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import { Button } from '../../../components/ui/button'
+import { useNavigate } from 'react-router-dom'
+import { Switch } from '../../../components/ui/switch'
+import { useToast } from '../../../components/ui/use-toast'
+
 import { useParams } from 'react-router-dom'
 import {
     Form,
@@ -16,7 +20,6 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Checkbox } from '../../../components/ui/checkbox'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -42,6 +45,10 @@ const formSchema = z.object({
 
 export default function EditEmployee() {
     const { employeeId } = useParams() // Access route parameter
+    console.log(employeeId)
+    const navigate = useNavigate()
+    const { toast } = useToast()
+
     const {
         control,
         handleSubmit,
@@ -64,8 +71,11 @@ export default function EditEmployee() {
     })
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/Employee/${employeeId}`
         try {
+            //const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
+            //const decryptedId = decryptResponse.data.decryptedUserId
+
+            const url = `http://localhost:5062/api/Employee/${employeeId}`
             const { data } = await axios.get(url)
 
             console.log(data)
@@ -81,7 +91,6 @@ export default function EditEmployee() {
                 department: data.department,
                 status: data.status
             })
-            console.log(data.department)
         } catch (error) {
             console.error('Failed to fetch Employee', error)
         }
@@ -89,7 +98,7 @@ export default function EditEmployee() {
 
     useEffect(() => {
         fetchData()
-    }, [employeeId])
+    }, [employeeId, reset])
 
     const handleSave = async (data) => {
         const url = `http://localhost:5062/api/Employee/${employeeId}`
@@ -110,7 +119,16 @@ export default function EditEmployee() {
 
             const result = await axios.put(url, formData)
             console.log(result)
+            toast({
+                variant: 'success',
+                description: 'Updated the Employee successfully!'
+            })
+            navigate('/admin/employee/view')
         } catch (error) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to update the Employee!'
+            })
             console.error('Failed to Update', error)
             if (error.response) {
                 // The request was made and the server responded with a status code
@@ -302,8 +320,10 @@ export default function EditEmployee() {
                     control={control}
                     name="department"
                     render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Department</FormLabel>
+                        <FormItem>
+                            <div className="flex flex-col space-y-1 pt-6">
+                                <FormLabel className="pb-3 w-full">Department</FormLabel>
+                            </div>
                             <Select
                                 onValueChange={(value) => {
                                     field.onChange(value)
@@ -312,8 +332,8 @@ export default function EditEmployee() {
                                 value={field.value}
                             >
                                 <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Department" />
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -333,12 +353,10 @@ export default function EditEmployee() {
                     name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
+                            <div className="flex flex-col space-y-1 pt-6"></div>
                             <FormLabel className="pb-3 w-full">Status </FormLabel>
                             <FormControl>
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={(checked) => field.onChange(checked === true)}
-                                />
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
                             </FormControl>
                             <FormMessage>{errors.status && errors.status.message}</FormMessage>
                         </FormItem>
