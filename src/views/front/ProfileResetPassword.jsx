@@ -13,6 +13,8 @@ import {
     FormLabel,
     FormMessage
 } from '../../components/ui/form'
+import { useToast } from '../../components/ui/use-toast'
+
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
@@ -29,6 +31,8 @@ const passwordSchema = z
     })
 
 function ProfileResetPassword() {
+    const { toast } = useToast()
+
     const navigate = useNavigate()
     const {
         control,
@@ -62,11 +66,17 @@ function ProfileResetPassword() {
             const url = `http://localhost:5062/api/CustomerAuth/ResetPasswordProfile`
             const result = await axios.post(url, formData)
             console.log(result.data)
-            alert('Password has been reset successfully')
+            toast({
+                variant: 'success',
+                description: 'Password has been reset successfully!'
+            })
             navigate('/login')
         } catch (error) {
             console.error('Failed to reset the password', error)
-            alert('Failed to reset the password!')
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to reset the Password!'
+            })
         }
     }
 
