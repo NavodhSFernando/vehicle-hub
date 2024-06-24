@@ -20,21 +20,20 @@ export default function ViewCustomer() {
         fetchCustomer()
     }, [])
 
-    /*const handleDeleteCustomer = async () => {
+    const handleDeleteCustomer = async (customerId) => {
         try {
-            const url = `http://localhost:5062/api/CustomerAuth/deactivate/${selectedCustomerId}`
-            await axios.put(url)
-            setCustomers((prevCustomers) => prevCustomers.filter((customer) => customer.id !== selectedCustomerId))
-           
+            const url = `http://localhost:5062/api/CustomerAuth/deactivate/${customerId}`
+            await axios.post(url)
+            setCustomers((prevCustomers) => prevCustomers.filter((customer) => customer.id !== customerId))
         } catch (error) {
-            console.error('Failed to delete the customer', error)
+            console.error('Failed to deactivate the customer', error)
         }
-    }*/
+    }
 
     return (
         <>
             <div className="flex flex-col p-6 bg-white rounded-lg">
-                <DataTable columns={columns} data={customers} />
+                <DataTable columns={columns(handleDeleteCustomer)} data={customers} />
             </div>
         </>
     )
