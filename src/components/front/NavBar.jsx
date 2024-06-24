@@ -13,6 +13,7 @@ import NotificationDropdown from './NotificationDropDown'
 import WishlistDropdown from './WishlistDropDown'
 import Cookies from 'js-cookie'
 import { Button } from '../ui/button'
+import axios from 'axios'
 
 const Navbar = () => {
     const location = useLocation()
@@ -42,10 +43,28 @@ const Navbar = () => {
     const toggleNav = () => {
         setShowNav(!showNav)
     }
+    const [notificationCount, setnotificationCount] = useState(0)
+
+    const customerId = Cookies.get('customerId')
 
     useEffect(() => {
         const isLoggedIn = Cookies.get('customerId')
         isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
+
+        const fetchNotifications = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${customerId}`)
+                const currentDate = new Date().toISOString().split('T')[0]
+                const filteredNotifications = response.data.filter((notification) => {
+                    const notificationDate = new Date(notification.generated_DateTime).toISOString().split('T')[0]
+                    return notification.customerReservationId === null && notificationDate === currentDate
+                })
+                setnotificationCount(filteredNotifications.length)
+            } catch (error) {
+                console.error('Error fetching notifications:', error)
+            }
+        }
+        fetchNotifications()
     }, [])
 
     const isHomePage = location.pathname === '/'
@@ -118,7 +137,14 @@ const Navbar = () => {
                             <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
                                 {notification ? (
                                     <>
-                                        <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
+                                        <div className="flex">
+                                            <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
+
+                                            <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                                {notificationCount}
+                                            </span>
+                                        </div>
+                                        {/* <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} /> */}
                                         <NotificationDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
@@ -126,7 +152,13 @@ const Navbar = () => {
                                         />
                                     </>
                                 ) : (
-                                    <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
+                                    <div className="flex">
+                                        <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
+
+                                        <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                            {notificationCount}
+                                        </span>
+                                    </div>
                                 )}
                             </div>
                             <NavLink to="/account/viewprofile">
