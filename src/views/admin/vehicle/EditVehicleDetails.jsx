@@ -20,6 +20,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { navigate, useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const formSchema = z.object({
     regNo: z
@@ -48,6 +50,7 @@ const formSchema = z.object({
 
 export default function EditVehicleDetails({ vehicleId }) {
     const navigate = useNavigate()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -143,7 +146,10 @@ export default function EditVehicleDetails({ vehicleId }) {
             }
             const result = await axios.put(url, formData)
             console.log('Vehicle updated', result)
-            reset()
+            toast({
+                variant: 'success',
+                description: 'Vehicle updated successfully'
+            })
             navigate(`/admin/vehicle/view`)
         } catch (error) {
             console.error('Error:', error)
@@ -377,9 +383,12 @@ export default function EditVehicleDetails({ vehicleId }) {
                 />
 
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Vehicle Details"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

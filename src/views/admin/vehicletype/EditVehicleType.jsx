@@ -17,6 +17,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
+import { Description } from '@radix-ui/react-dialog'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -30,6 +33,7 @@ const formSchema = z.object({
 export default function EditVehicleType() {
     const navigate = useNavigate()
     const { vehicleTypeId } = useParams() // Access route parameter
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -69,6 +73,10 @@ export default function EditVehicleType() {
             }
 
             const result = await axios.put(url, formData)
+            toast({
+                variant: 'success',
+                description: 'VehicleType Updated successfully'
+            })
             console.log('Vehicle type updated', result)
             navigate(`/admin/vehicletype/view`)
         } catch (error) {
@@ -115,9 +123,12 @@ export default function EditVehicleType() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Vehicle Type"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>
