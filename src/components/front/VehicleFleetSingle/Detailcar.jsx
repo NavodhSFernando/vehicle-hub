@@ -19,10 +19,6 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
 
     const customerId = Cookies.get('customerId')
 
-    const handleClick = () => {
-        setClicked(!clicked)
-    }
-
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked)
     }
@@ -114,7 +110,6 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     }
 
     useEffect(() => {
-
         const fetchVehicleData = async () => {
             try {
                 const response = await axios.get(`http://localhost:5062/api/FrontReservationService/DetailCar/${id}`)
@@ -129,11 +124,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             try {
                 const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${id}`)
                 const feedbacks = response.data
-    
+
                 const totalFeedbacks = feedbacks.length
                 const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
                 const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
-    
+
                 setTotalFeedbacks(totalFeedbacks)
                 setAverageRating(averageRating)
             } catch (error) {
@@ -159,9 +154,8 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         return () => {
             window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
         }
-
     }, [id])
-    
+
     return (
         <div className="w-full bg-white p-6 rounded-lg">
             {/* Header */}
@@ -179,11 +173,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     </div>
                 </div>
                 <div className="mt-1">
-                {
-                    <button onClick={handleClick}>
-                        {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
-                    </button>
-                }
+                    {
+                        <button onClick={handleClick}>
+                            {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
+                        </button>
+                    }
                 </div>
             </article>
             {/* Specification */}
