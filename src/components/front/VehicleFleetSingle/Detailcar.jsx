@@ -51,20 +51,16 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                 }
             }
             const response = await axios.post(url, formData)
-            if (response.status === 200) {
-                toast({
-                    variant: 'success',
-                    description: 'Vehicle requested successfully'
-                })
-            }
+
+            toast({
+                variant: 'success',
+                description: 'Vehicle requested successfully'
+            })
+
             console.log('Request vehicle response:', response.data)
             navigate(`/account/viewongoingrentals`)
         } catch (error) {
-            if (error.response && error.response.status === 403) {
-                navigate('/login')
-            } else {
-                console.error('Error requesting vehicle:', error)
-            }
+            navigate('/login')
         }
     }
 

@@ -11,6 +11,8 @@ export default function Ongoingrentalssingle() {
     const [rating, setRating] = useState(0) // State for tracking the star rating
     const [status, setStatus] = useState('') // State for tracking the reservation status
     const [rentalData, setRentalData] = useState({}) // State for tracking rental data
+    const [totalFeedbacks, setTotalFeedbacks] = useState(0)
+    const [averageRating, setAverageRating] = useState(0)
     const navigate = useNavigate()
     const { toast } = useToast()
 
@@ -42,7 +44,7 @@ export default function Ongoingrentalssingle() {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDataAndFeedback = async () => {
             try {
                 const decrypt = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`)
                 const decryptedId = decrypt.data.decryptedUserId
@@ -51,11 +53,24 @@ export default function Ongoingrentalssingle() {
                 )
                 setRentalData(response.data) // Assume the response data is the rental data
                 setStatus(response.data.status)
+
+                const response2 = await axios.get(
+                    `http://localhost:5062/api/Feedback/vehicle/${response.data.vehicleId}`
+                )
+                const feedbacks = response2.data
+                console.log('Fetched Feedbacks:', feedbacks)
+
+                const totalFeedbacks = feedbacks.length
+                const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
+                const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
+
+                setTotalFeedbacks(totalFeedbacks)
+                setAverageRating(averageRating)
             } catch (error) {
                 console.error('Failed to fetch Ongoing Rentals:', error)
             }
         }
-        fetchData()
+        fetchDataAndFeedback()
     }, [])
 
     const getStatusColor = (status) => {
@@ -96,9 +111,12 @@ export default function Ongoingrentalssingle() {
                             </h1>
                             <div className="flex items-center">
                                 {[...Array(5)].map((_, starIndex) => (
-                                    <FaStar key={starIndex} color={starIndex < rating ? 'yellow' : 'grey'} />
+                                    <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                                 ))}
-                                <p className="text-gray-500 text-xs">10+ Reviewer</p>
+                                {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviews</p>}
+                                {totalFeedbacks <= 10 && (
+                                    <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>
+                                )}
                             </div>
                         </div>
                     </div>
