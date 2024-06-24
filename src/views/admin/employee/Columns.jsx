@@ -3,6 +3,7 @@ import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
+import { getValue } from '@testing-library/user-event/dist/utils'
 
 const ActionButtons = ({ employeeId }) => {
     const navigate = useNavigate()
@@ -142,14 +143,9 @@ export const columns = [
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
 
-        cell: () => {
-            return (
-                <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
-                </div>
-            )
+        cell: ({ row }) => {
+            const employeeId = parseFloat(row.getValue('id'))
+            return <ActionButtons employeeId={employeeId} />
         }
     }
 ]

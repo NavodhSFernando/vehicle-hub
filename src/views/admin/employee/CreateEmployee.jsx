@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import { Button } from '../../../components/ui/button'
+import { useToast } from '../../../components/ui/use-toast'
+
 import {
     Form,
     FormControl,
@@ -18,6 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Password from '../../front/Password'
 import { Checkbox } from '../../../components/ui/checkbox'
 import apiclient from '../../../axiosConfig'
+import { useNavigate } from 'react-router-dom'
 import { Switch } from '../../../components/ui/switch'
 
 const formSchema = z.object({
@@ -42,6 +45,8 @@ const formSchema = z.object({
 })
 
 export default function CreateEmployee() {
+    const { toast } = useToast()
+
     // 1. Define your form.
     const {
         control,
@@ -85,9 +90,16 @@ export default function CreateEmployee() {
             const result = await apiclient.post(url, formData)
             console.log(result)
             console.log(formData)
-            alert('Employee created successfully!')
+            toast({
+                variant: 'success',
+                description: 'Employee created successfully!'
+            })
             reset()
         } catch (error) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to create Employee!'
+            })
             if (error.response) {
                 // The request was made and the server responded with a status code
                 console.error('Server responded with error data:', error.response.data)
