@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
@@ -7,6 +7,8 @@ import { EditVehicleDialog } from '../../../components/admin/reservation/EditVeh
 import Cookies from 'js-cookie'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../components/ui/hover-card'
+import { useState } from 'react'
 
 const employeeId = Cookies.get('employeeId')
 console.log('employeeId', employeeId)
@@ -154,6 +156,88 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
     )
 }
 
+const VehicleHoverCard = ({ regNo }) => {
+    const [vehicle, setVehicle] = useState(null)
+    const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            const response = await axios.get(`http://localhost:5062/api/AdminVehicle/regNo?regNo=${regNo}`)
+            setVehicle(response.data)
+            console.log('Vehicle Details:', response.data)
+        }
+        fetchVehicleDetails()
+    }, [regNo])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700">{regNo}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {vehicle ? (
+                    <div>
+                        <h3 className="text-lg font-semibold">{regNo}</h3>
+                        <img
+                            className=" object-contain h-40 w-40"
+                            src={`${baseThumbnailUrl}${vehicle.thumbnail}`}
+                            alt=""
+                        />
+                        <p className="text-gray-700">
+                            <strong>Type:</strong> {vehicle.id}
+                        </p>
+                        <p className="text-gray-700">
+                            <strong>Model:</strong> {vehicle.model}
+                        </p>
+                        <p className="text-gray-700">
+                            <strong>Year:</strong> {vehicle.type}
+                        </p>
+                        <p className="text-gray-700">
+                            <strong>Year:</strong> {vehicle.year}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
+const CustomerHoverCard = ({ reservationId, name }) => {
+    const [customer, setCustomer] = useState(null)
+    useEffect(() => {
+        const fetchCustomerDetails = async () => {
+            const response = await axios.get(
+                `http://localhost:5062/api/AdminReservation/Customer-Details/${reservationId}`
+            )
+            setCustomer(response.data)
+        }
+        fetchCustomerDetails()
+    }, [reservationId])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700">{name}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md w-fit">
+                {customer ? (
+                    <div>
+                        <h3 className="text-lg font-semibold">{customer.name}</h3>
+                        <p className="text-gray-700">
+                            <strong>ID:</strong> {customer.id}
+                        </p>
+                        <p className="text-gray-700">
+                            <strong>Email:</strong> {customer.email}
+                        </p>
+                        <p className="text-gray-700">
+                            <strong>Phone:</strong> {customer.phone}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
 export const columns = [
     {
         accessorKey: 'id',
@@ -168,11 +252,17 @@ export const columns = [
     },
     {
         accessorKey: 'name',
-        header: 'Customer Name'
+        header: 'Customer Name',
+        cell: ({ row }) => {
+            return <CustomerHoverCard reservationId={row.getValue('id')} name={row.getValue('name')} />
+        }
     },
     {
         accessorKey: 'regNo',
-        header: 'Registration No.'
+        header: 'Registration No.',
+        cell: ({ row }) => {
+            return <VehicleHoverCard regNo={row.getValue('regNo')} />
+        }
     },
     {
         accessorKey: 'startDate',
