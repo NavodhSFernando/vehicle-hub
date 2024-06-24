@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { confirmAlert } from 'react-confirm-alert'
+import { useToast } from '../../components/ui/use-toast'
+
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -35,6 +36,8 @@ const formSchema = z.object({
 function Viewprofile() {
     const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted Customer ID
     const navigate = useNavigate()
+    const { toast } = useToast()
+
     const customerId = useOutletContext()
     const {
         control,
@@ -109,20 +112,34 @@ function Viewprofile() {
             const url = `http://localhost:5062/api/customer/${decrypt}`
             const result = await axios.put(url, formData)
             console.log(result.data)
-            alert('Updated successfully!')
+            toast({
+                variant: 'success',
+                description: 'Updated the Profile successfully!'
+            })
         } catch (error) {
             console.error('Failed to update the profile', error)
-            alert('Failed to Update Profile!')
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to update the Profile!'
+            })
         }
     }
 
     const handleDeleteAccount = async () => {
         try {
             const url = `http://localhost:5062/api/CustomerAuth/deactivate/${decrypt}`
-            const result = await axios.put(url)
+            const result = await axios.post(url)
             console.log(result.data)
+            toast({
+                variant: 'success',
+                description: 'Deleted the Profile successfully!'
+            })
             navigate('/signup')
         } catch (error) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to delete the account!'
+            })
             console.error('Failed to delete the account', error)
         }
     }
@@ -261,7 +278,7 @@ function Viewprofile() {
                 </div>
 
                 <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                    <FormDescription>Delete Customer</FormDescription>
+                    <FormDescription>Delete Account</FormDescription>
                     <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
                         Delete your profile, along with your authentication associations.
                     </p>
@@ -275,6 +292,7 @@ function Viewprofile() {
                             alertTitle="Delete your Account"
                             alertDescription="Are you sure you want to delete your account?"
                             handleConfirm={() => handleDeleteAccount(decrypt)}
+                            className="bg-red-600 text-white hover:bg-red-700"
                         />
                     </div>
                 </div>
