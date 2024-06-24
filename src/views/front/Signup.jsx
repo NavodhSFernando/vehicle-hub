@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import ggl from '../../assets/Icons/ggl.svg'
 import fb from '../../assets/Icons/fb.svg'
 import blueicon from '../../assets/logos/blueicon.png'
 import bluetype from '../../assets/logos/Blue-type.png'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { useToast } from '../../components/ui/use-toast'
 import { Button } from '../../components/ui/button'
 import {
@@ -37,7 +38,7 @@ const formSchema = z
 export const Signup = () => {
     const navigate = useNavigate()
     const { toast } = useToast()
-
+    const recaptchaRef = useRef(null)
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
 
     const {
@@ -58,7 +59,26 @@ export const Signup = () => {
     // Submit handler
     const onSubmit = async (data) => {
         console.log(data)
+        const recaptchaValue = recaptchaRef.current.getValue()
+        if (!recaptchaValue) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Please complete the reCAPTCHA!'
+            })
+            return
+        }
         try {
+            const recaptchaResponse = await axios.post(`http://localhost:5062/api/Recaptcha/Captcha`, {
+                userResponse: recaptchaValue
+            })
+
+            if (!recaptchaResponse.data) {
+                toast({
+                    variant: 'destructive_border',
+                    description: 'reCAPTCHA verification failed!'
+                })
+                return
+            }
             const result = await axios.post('http://localhost:5062/api/CustomerAuth/register', {
                 email: data.email,
                 password: data.password
@@ -79,7 +99,7 @@ export const Signup = () => {
     }
 
     return (
-        <div className="flex flex-col  justify-center items-center min-h-screen bg-blue-50 p-6">
+        <div className="flex flex-col  justify-center items-center min-h-screen bg-slate-200 p-4">
             <div className="flex flex-row items-center space-x-2 -mb-8 mt-6">
                 <img src={blueicon} alt="Blue Icon" className="w-10 h-auto" />
 
@@ -179,6 +199,9 @@ export const Signup = () => {
                             </label>
                         </div>
                         <div>
+                            <ReCAPTCHA ref={recaptchaRef} sitekey="6Lc0awAqAAAAAMw6f3rhYosBHMyZCRLp3DMZyzct" />
+                        </div>
+                        <div>
                             <Button
                                 type="submit"
                                 className="w-full py-3 font-semibold text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
@@ -210,8 +233,8 @@ export const Signup = () => {
                                 />
                             </a>
                         </div>
-                        <div className="flex justify-center pt-4">
-                            <div className="text-indigo-600 cursor-pointer mr-3 mb-4">
+                        <div className="flex justify-center pt-2">
+                            <div className="text-indigo-600 cursor-pointer mr-3 ">
                                 <a href="login">Already member? Login?</a>
                             </div>
                         </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ggl from '../../assets/Icons/ggl.svg'
 import fb from '../../assets/Icons/fb.svg'
@@ -10,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useToast } from '../../components/ui/use-toast'
-
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -68,7 +67,11 @@ export const Login = () => {
             navigate('/')
         } catch (error) {
             // Handle login error
+
             console.error('Login failed:', error)
+            if (error.response) {
+                console.error('Response data:', error.response.data)
+            }
             toast({
                 variant: 'destructive_border',
                 description: 'Failed to Log in!'
@@ -77,7 +80,7 @@ export const Login = () => {
     }
     return (
         <div>
-            <div className=" flex flex-col min-h-screen bg-blue-50  justify-center items-center">
+            <div className=" flex flex-col min-h-screen bg-slate-200  justify-center items-center">
                 <div className="flex flex-row items-center space-x-2 -mb-8 mt-6">
                     <img src={blueicon} alt="Blue Icon" className="w-10 h-auto" />
 
