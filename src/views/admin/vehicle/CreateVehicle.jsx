@@ -5,7 +5,6 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
 import { Switch } from '../../../components/ui/switch'
-import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -22,6 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
 
 const formSchema = z.object({
     regNo: z
@@ -60,6 +60,7 @@ const formSchema = z.object({
 export default function CreateVehicle() {
     const navigate = useNavigate()
     const fileInputRef = useRef(null)
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -176,6 +177,11 @@ export default function CreateVehicle() {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field
             }
+            toast({
+                variant: 'success',
+                description: 'Vehicle created successfully'
+            })
+
             reset()
             navigate(`/admin/vehicle/view`)
         } catch (error) {
@@ -495,12 +501,9 @@ export default function CreateVehicle() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <AlertDialogDemo
-                        triggerText="Create"
-                        alertTitle="Create New Insurance"
-                        alertDescription="Are you sure you want to continue?"
-                        handleConfirm={handleSubmit(handleSave)}
-                    />
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
                 </div>
             </form>
         </Form>

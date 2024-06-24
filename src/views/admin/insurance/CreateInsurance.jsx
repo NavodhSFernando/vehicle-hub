@@ -21,7 +21,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../../../components/ui/
 import { Calendar as CalendarIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import cn from 'classnames'
-import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { useToast } from '../../../components/ui/use-toast'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -44,6 +44,7 @@ export default function CreateInsurance() {
     const navigate = useNavigate()
     const { vehicleId } = useParams()
     const numericVehicleId = parseInt(vehicleId, 10)
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -68,6 +69,11 @@ export default function CreateInsurance() {
                 VehicleId: data.vehicleId
             }
             const result = await axios.post(url, formData)
+            toast({
+                variant: 'success',
+                description: 'Insurance created successfully'
+            })
+
             console.log(result)
             reset()
             navigate(`/admin/insurance/view`)
@@ -156,12 +162,9 @@ export default function CreateInsurance() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <AlertDialogDemo
-                        triggerText="Create"
-                        alertTitle="Create New Insurance"
-                        alertDescription="Are you sure you want to continue?"
-                        handleConfirm={handleSubmit(handleSave)}
-                    />
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
                 </div>
             </form>
         </Form>

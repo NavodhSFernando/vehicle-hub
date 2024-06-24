@@ -8,9 +8,8 @@ import LogoIcon from '../../assets/logos/VH-Icon.png'
 import LogoType from '../../assets/logos/VH-Type.png'
 
 const linkClass =
-    'flex items-center gap-2 font-light px-3 py-2 hover:bg-neutral-700 hover:no-underline rounded-sm text-base'
+    'flex items-center gap-2 font-light px-3 py-2 hover:bg-[#2c3e91] hover:no-underline rounded-sm text-base'
 
-// Update Sidebar component to pass sublinks and handle toggle functionality
 export default function Sidebar() {
     const [showSublinks, setShowSublinks] = useState({})
 
@@ -22,7 +21,7 @@ export default function Sidebar() {
     }
 
     return (
-        <div className="bg-slate-900 flex flex-col w-72 p-3 text-white overflow-y-auto fixed h-screen">
+        <div className="bg-[#1a2255] flex flex-col w-72 p-3 text-white overflow-y-auto fixed h-screen ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
             <div className="flex items-center gap-2 px-1 py-3">
                 <img src={LogoIcon} alt="logo-icon" className="w-10" />
                 <span>
@@ -39,7 +38,7 @@ export default function Sidebar() {
                     />
                 ))}
             </div>
-            <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-700">
+            <div className="flex flex-col gap-0.5 pt-2 border-t border-neutral-600">
                 {DASHBOARD_SIDEBAR_BOTTOM_LINKS.map((link) => (
                     <SidebarLink
                         key={link.key}
@@ -66,20 +65,21 @@ function SidebarLink({ link, toggleSublinks, showSublinks }) {
     const { pathname } = useLocation()
 
     const handleClick = (e) => {
-        // Prevent NavLink default behavior if there are subLinks
         if (link.subLinks) {
             e.preventDefault()
             toggleSublinks(link.key)
         }
     }
 
+    const isActive = pathname === link.path || link.subLinks?.some((subLink) => pathname === subLink.path)
+    const linkClassNames = classNames(
+        isActive ? 'text-[#FBDAC6] bg-[#2c3e91] font-normal' : 'text-[#D3D3D3] font-light',
+        linkClass
+    )
+
     return (
         <div>
-            <NavLink
-                to={link.path || '#'} // If there's no path, default to '#' to prevent navigation
-                className={classNames(pathname.startsWith(link.path) ? 'text-white' : 'text-neutral-400', linkClass)}
-                onClick={handleClick} // Attach the click handler
-            >
+            <NavLink to={link.path || '#'} className={linkClassNames} onClick={handleClick}>
                 <span className="text-xl">{link.icon}</span>
                 {link.label}
                 {link.subLinks && <span className="ml-auto">{showSublinks ? <HiChevronUp /> : <HiChevronDown />}</span>}
@@ -95,19 +95,17 @@ function SidebarLink({ link, toggleSublinks, showSublinks }) {
     )
 }
 
-// Separate component for a single sublink
 function SidebarSubLink({ subLink }) {
     const { pathname } = useLocation()
 
+    const isActive = pathname === subLink.path
+    const subLinkClassNames = classNames(
+        'flex items-center gap-2 font-light px-3 py-0.5 hover:bg-[#2c3e91] hover:no-underline rounded-sm text-sm',
+        { 'text-[#FBDAC6] font-normal': isActive, 'text-[#D3D3D3] font-light': !isActive }
+    )
+
     return (
-        <NavLink
-            to={subLink.path}
-            className={classNames(
-                'flex items-center gap-2 font-light px-3 py-0.5 hover:bg-neutral-700 hover:no-underline rounded-sm text-sm',
-                { 'text-white': pathname === subLink.path }
-            )}
-        >
-            {/* <span className="text-xl">{subLink.icon}</span> */}
+        <NavLink to={subLink.path} className={subLinkClassNames}>
             {subLink.label}
         </NavLink>
     )

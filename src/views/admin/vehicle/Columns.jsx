@@ -35,11 +35,11 @@ export const columns = [
     },
     {
         accessorKey: 'registrationNumber',
-        header: 'Registration Number'
+        header: 'Registration No'
     },
     {
         accessorKey: 'chassisNo',
-        header: 'Chassis Number'
+        header: 'Chassis No'
     },
     {
         accessorKey: 'costPerDay',
@@ -74,7 +74,11 @@ export const columns = [
         header: ({ column }) => {
             return (
                 <div className="flex items-center bg-yell">
-                    <div>Cost Per Extra Km</div>
+                    <div>
+                        Excess
+                        <br />
+                        Mileage
+                    </div>
                     <Button
                         variant="ghost"
                         className="p-0 flex"
@@ -143,13 +147,16 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'vehicleTypeId',
+        accessorKey: 'vehicleType',
         header: 'Vehicle Type',
         cell: ({ row }) => {
             // Extract the vehicleType.id correctly
-            const vehicleTypeId = row.original.vehicleType.name
+            const vehicleType = row.original.vehicleType.name
 
-            return <div className="">{vehicleTypeId}</div>
+            return <div className="">{vehicleType}</div>
+        },
+        filterFn: (row, columnId, filterValue) => {
+            return row.original.vehicleType.name.toString().toLowerCase().includes(filterValue.toLowerCase())
         }
     },
     {
@@ -166,12 +173,46 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: 'Status',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center">
+                    <div>Status</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => {
             const status = row.original.status
             const statusText = status ? 'Active' : 'Inactive'
 
-            return <div className="">{statusText}</div>
+            let color = ''
+            let text = ''
+            switch (statusText) {
+                case 'Active':
+                    color = 'bg-green-500'
+                    text = 'Active'
+                    break
+                case 'Inactive':
+                    color = 'bg-red-500'
+                    text = 'Inactive'
+                    break
+                default:
+                    color = 'bg-gray-500'
+                    text = 'Unknown'
+                    break
+            }
+
+            return (
+                <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
+                    {text}
+                </div>
+            )
         }
     },
     {

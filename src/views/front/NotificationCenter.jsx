@@ -23,8 +23,10 @@ export default function NotificationCenter() {
             const decryptedId = decryptResponse.data.decryptedUserId
 
             const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
+            console.log("============================")
             console.log(response.data)
             setNotifications(response.data)
+            console.log("============================")
         } catch (error) {
             console.error('Error fetching notifications:', error)
         }

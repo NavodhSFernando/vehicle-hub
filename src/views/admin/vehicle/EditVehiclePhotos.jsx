@@ -15,6 +15,8 @@ import {
 import { Input } from '../../../components/ui/input'
 import axios from 'axios'
 import { useRef } from 'react'
+import { useToast } from '../../../components/ui/use-toast'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
 export default function EditVehiclePhotos({ vehicleId }) {
     const fileInputRef = useRef('')
@@ -25,6 +27,8 @@ export default function EditVehiclePhotos({ vehicleId }) {
         setValue,
         formState: { errors }
     } = useForm()
+
+    const { toast } = useToast()
 
     const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
     const baseFrontImgUrl = 'https://vehiclehubimages.blob.core.windows.net/front/'
@@ -104,6 +108,10 @@ export default function EditVehiclePhotos({ vehicleId }) {
             }
             reset()
             fetchData()
+            toast({
+                variant: 'success',
+                description: 'Thumbnail updated successfully'
+            })
         } catch (error) {
             console.error('Error:', error)
         }
@@ -124,6 +132,10 @@ export default function EditVehiclePhotos({ vehicleId }) {
             }
             reset()
             fetchData()
+            toast({
+                variant: 'success',
+                description: 'Front Image updated successfully'
+            })
         } catch (error) {
             console.error('Error:', error)
         }
@@ -144,6 +156,10 @@ export default function EditVehiclePhotos({ vehicleId }) {
             }
             reset()
             fetchData()
+            toast({
+                variant: 'success',
+                description: 'Rear Image updated successfully'
+            })
         } catch (error) {
             console.error('Error:', error)
         }
@@ -164,6 +180,10 @@ export default function EditVehiclePhotos({ vehicleId }) {
             }
             reset()
             fetchData()
+            toast({
+                variant: 'success',
+                description: 'Dashboard Image updated successfully'
+            })
         } catch (error) {
             console.error('Error:', error)
         }
@@ -184,6 +204,10 @@ export default function EditVehiclePhotos({ vehicleId }) {
             }
             reset()
             fetchData()
+            toast({
+                variant: 'success',
+                description: 'Interior Image updated successfully'
+            })
         } catch (error) {
             console.error('Error:', error)
         }
@@ -208,7 +232,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                                     type="file"
                                     className="w-full"
                                     ref={fileInputRef}
-                                    onChange={handleThumbnailChange}
+                                    onChange={handleThumbnailSave}
                                 />
                             </FormControl>
                             <FormMessage>{errors.formFile && errors.formFile.message}</FormMessage>
@@ -216,11 +240,14 @@ export default function EditVehiclePhotos({ vehicleId }) {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Confirm Update"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleThumbnailSave)}
+                    />
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseThumbnailUrl}${thumbnail}`} alt="" />
+                <img className=" object-contain h-40 w-40" src={`${baseThumbnailUrl}${thumbnail}`} alt="" />
             </form>
 
             <form
@@ -246,11 +273,14 @@ export default function EditVehiclePhotos({ vehicleId }) {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Confirm Update"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleFrontImgSave)}
+                    />
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseFrontImgUrl}${frontImg}`} alt="" />
+                <img className=" object-contain h-40 w-40" src={`${baseFrontImgUrl}${frontImg}`} alt="" />
             </form>
 
             <form
@@ -276,11 +306,14 @@ export default function EditVehiclePhotos({ vehicleId }) {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Confirm Update"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleRearImgSave)}
+                    />
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseRearImgUrl}${rearImg}`} alt="" />
+                <img className=" object-contain h-40 w-40" src={`${baseRearImgUrl}${rearImg}`} alt="" />
             </form>
 
             <form
@@ -306,11 +339,14 @@ export default function EditVehiclePhotos({ vehicleId }) {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Confirm Update"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleDashboardImgSave)}
+                    />
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseDashboardUrl}${dashboard}`} alt="" />
+                <img className=" object-contain h-40 w-40" src={`${baseDashboardUrl}${dashboard}`} alt="" />
             </form>
 
             <form
@@ -336,11 +372,14 @@ export default function EditVehiclePhotos({ vehicleId }) {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Confirm Update"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleInteriorImgSave)}
+                    />
                 </div>
-                <img className=" object-contain h-60 w-60" src={`${baseInteriorUrl}${interior}`} alt="" />
+                <img className=" object-contain h-40 w-40" src={`${baseInteriorUrl}${interior}`} alt="" />
             </form>
         </Form>
     )
