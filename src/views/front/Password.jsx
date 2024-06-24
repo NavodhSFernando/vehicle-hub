@@ -62,7 +62,7 @@ export const Password = () => {
     }
     return (
         <div>
-            <div className="flex flex-col min-h-screen bg-blue-50  justify-center items-center">
+            <div className="flex flex-col min-h-screen bg-slate-200  justify-center items-center">
                 <div className="flex flex-row items-center space-x-2 -mb-8 mt-6">
                     <img src={blueicon} alt="Blue Icon" className="w-10 h-auto" />
 
