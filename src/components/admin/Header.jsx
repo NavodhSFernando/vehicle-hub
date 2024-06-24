@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Search from './Search'
 import { useLocation } from 'react-router-dom'
 import { DASHBOARD_SIDEBAR_LINKS } from './SideBarLinks'
 import AdminNotificationDropdown from './AdminNotificationDropDown'
@@ -29,7 +28,7 @@ export default function Header() {
             try {
                 const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
                 const currentDate = new Date().toISOString().split('T')[0]
-                const filteredNotifications = response.data.filter(notification => {
+                const filteredNotifications = response.data.filter((notification) => {
                     const notificationDate = new Date(notification.generated_DateTime).toISOString().split('T')[0]
                     return notification.customerReservationId === null && notificationDate === currentDate
                 })
@@ -42,23 +41,23 @@ export default function Header() {
     }, [])
 
     return (
-        <nav className="w-full flex flex-col mt-[20px]">
-            <div className="bg-white flex items-center justify-end gap-[20px]">
+        <nav className="w-full flex flex-col">
+            <div className="bg-white flex items-center justify-end gap-[20px] h-14">
                 <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
                     {notification ? (
                         <>
-                        <div className='flex'>
-                        <IoNotifications fontSize={28} style={{ color: '#283280' }} />
+                            <div className="flex">
+                                <IoNotifications fontSize={28} style={{ color: '#283280' }} />
 
-                            <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                                {notificationCount}
-                            </span>
-                        </div>
-                            
+                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                                    {notificationCount}
+                                </span>
+                            </div>
+
                             <AdminNotificationDropdown isOpen={isDropdownOpen} setIsOpen={() => {}} />
                         </>
                     ) : (
-                        <div className='flex'>
+                        <div className="flex">
                             <IoMdNotificationsOutline fontSize={28} style={{ color: '#283280' }} />
 
                             <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
@@ -67,7 +66,6 @@ export default function Header() {
                         </div>
                     )}
                 </div>
-                <Search />
             </div>
 
             <h1 className="flex flex-col items-start font-bold text-2xl text-gray-800 mb-10 mt-5 ml-5">
