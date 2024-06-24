@@ -43,7 +43,7 @@ export default function DataTable({ columns, data }) {
             <div className="flex flex-col space-y-1 mt-2 mb-8">
                 <Label>Vehicle</Label>
                 <Input
-                    placeholder="Filter Vehicle..."
+                    placeholder="Filter Registration Number..."
                     value={table.getColumn('registrationNumber')?.getFilterValue() ?? ''}
                     onChange={(event) => table.getColumn('registrationNumber')?.setFilterValue(event.target.value)}
                     className="max-w-sm"

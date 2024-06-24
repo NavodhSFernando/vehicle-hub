@@ -49,6 +49,12 @@ export const columns = [
                     </Button>
                 </div>
             )
+        },
+        cell: ({ row }) => {
+            const mileage = row.getValue('currentMileage')
+            const formattedMileage = `${mileage} KM`
+
+            return <div className="">{formattedMileage}</div>
         }
     },
     {
