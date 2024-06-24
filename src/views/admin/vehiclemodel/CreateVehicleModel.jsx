@@ -19,6 +19,7 @@ import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
+import { useToast } from '../../../components/ui/use-toast'
 
 const items = [
     { id: 'abs', label: 'ABS' },
@@ -85,6 +86,7 @@ const formSchema = z.object({
 
 export default function CreateVehicleModel() {
     const navigate = useNavigate()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -140,6 +142,10 @@ export default function CreateVehicleModel() {
 
             const result = await axios.post(url, formData)
             console.log('Vehicle model created', result)
+            toast({
+                variant: 'success',
+                description: 'Vehicle Model created successfully'
+            })
             reset()
             navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
