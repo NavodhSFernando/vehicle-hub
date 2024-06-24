@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
-import { Button } from '../../components/ui/button'
 import { FaStar } from 'react-icons/fa6'
+import { AlertDialogDemo } from '../../components/ui/alertDialog'
+import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../components/ui/use-toast'
 
 export default function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
     const [rating, setRating] = useState(0) // State for tracking the star rating
     const [status, setStatus] = useState('') // State for tracking the reservation status
-    const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted reservation ID
     const [rentalData, setRentalData] = useState({}) // State for tracking rental data
+    const [totalFeedbacks, setTotalFeedbacks] = useState(0)
+    const [averageRating, setAverageRating] = useState(0)
+    const navigate = useNavigate()
+    const { toast } = useToast()
 
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
 
@@ -20,7 +25,18 @@ export default function Ongoingrentalssingle() {
 
     const handleCancel = async () => {
         try {
-            const response = await axios.post()
+            const decrypt = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`)
+            const decryptedId = decrypt.data.decryptedUserId
+
+            const url = `http://localhost:5062/api/FrontReservationService/cancel-reservation/${decryptedId}`
+            const response = await axios.post(url)
+
+            toast({
+                variant: 'success',
+                description: 'Reservation Cancelled Successfully'
+            })
+            navigate('/account/viewrentalhistory')
+
             console.log('Reservation Cancelled:', response.data)
         } catch (error) {
             console.error('Failed to cancel reservation:', error)
@@ -28,35 +44,34 @@ export default function Ongoingrentalssingle() {
     }
 
     useEffect(() => {
-        const decryptId = async () => {
+        const fetchDataAndFeedback = async () => {
             try {
+                const decrypt = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`)
+                const decryptedId = decrypt.data.decryptedUserId
                 const response = await axios.get(
-                    `http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`
-                )
-                setDecrypt(response.data.decryptedUserId)
-            } catch (error) {
-                console.error('Failed to decrypt reservation ID:', error)
-            }
-        }
-        decryptId()
-    }, [customerReservationId])
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/ongoing-rental-single/${decrypt}`
+                    `http://localhost:5062/api/FrontReservationService/ongoing-rental-single/${decryptedId}`
                 )
                 setRentalData(response.data) // Assume the response data is the rental data
                 setStatus(response.data.status)
+
+                const response2 = await axios.get(
+                    `http://localhost:5062/api/Feedback/vehicle/${response.data.vehicleId}`
+                )
+                const feedbacks = response2.data
+                console.log('Fetched Feedbacks:', feedbacks)
+
+                const totalFeedbacks = feedbacks.length
+                const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
+                const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
+
+                setTotalFeedbacks(totalFeedbacks)
+                setAverageRating(averageRating)
             } catch (error) {
                 console.error('Failed to fetch Ongoing Rentals:', error)
             }
         }
-        if (decrypt) {
-            fetchData()
-        }
-    }, [decrypt])
+        fetchDataAndFeedback()
+    }, [])
 
     const getStatusColor = (status) => {
         switch (status) {
@@ -96,9 +111,12 @@ export default function Ongoingrentalssingle() {
                             </h1>
                             <div className="flex items-center">
                                 {[...Array(5)].map((_, starIndex) => (
-                                    <FaStar key={starIndex} color={starIndex < rating ? 'yellow' : 'grey'} />
+                                    <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                                 ))}
-                                <p className="text-gray-500 text-xs">10+ Reviewer</p>
+                                {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviews</p>}
+                                {totalFeedbacks <= 10 && (
+                                    <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -144,9 +162,13 @@ export default function Ongoingrentalssingle() {
                             non-refundable
                         </p>
                         <hr className="pb-3" />
-                        <Button variant="destructive" onclick={() => handleCancel()}>
-                            Cancel Reservation
-                        </Button>
+                        <AlertDialogDemo
+                            triggerText="Cancel Reservation"
+                            alertTitle="Cancel Reservation"
+                            alertDescription="Are you sure you want to cancel this reservation"
+                            handleConfirm={handleCancel}
+                            variant="destructive"
+                        />
                         <div className="flex items-start">
                             <div className="mt-6 text-s text-gray-500 flex items-start font-semibold mr-1">
                                 Feel free to contact

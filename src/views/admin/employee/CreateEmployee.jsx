@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Password from '../../front/Password'
 import { Checkbox } from '../../../components/ui/checkbox'
 import apiclient from '../../../axiosConfig'
+import { Switch } from '../../../components/ui/switch'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -59,7 +60,7 @@ export default function CreateEmployee() {
             nic: '',
             gender: '',
             department: '',
-            status: ''
+            status: true
         }
     })
 
@@ -84,6 +85,7 @@ export default function CreateEmployee() {
             const result = await apiclient.post(url, formData)
             console.log(result)
             console.log(formData)
+            alert('Employee created successfully!')
             reset()
         } catch (error) {
             if (error.response) {
@@ -271,8 +273,10 @@ export default function CreateEmployee() {
                     control={control}
                     name="department"
                     render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Department</FormLabel>
+                        <FormItem>
+                            <div className="flex flex-col space-y-1 pt-6">
+                                <FormLabel className="pb-3 w-full">Department</FormLabel>
+                            </div>
                             <Select
                                 onValueChange={(value) => {
                                     field.onChange(value)
@@ -281,8 +285,8 @@ export default function CreateEmployee() {
                                 defaultValue={field.value}
                             >
                                 <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Department" />
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -302,12 +306,10 @@ export default function CreateEmployee() {
                     name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
+                            <div className="flex flex-col space-y-1 pt-6"></div>
                             <FormLabel className="pb-3 w-full">Status </FormLabel>
                             <FormControl>
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={(checked) => field.onChange(checked)}
-                                />
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
                             </FormControl>
                             <FormMessage>{errors.status && errors.status.message}</FormMessage>
                         </FormItem>

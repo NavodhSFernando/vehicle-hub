@@ -17,16 +17,7 @@ import {
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-    DialogClose
-} from '../../../src/components/ui/dialog'
+import { AlertDialogDemo } from '../../../src/components/ui/alertDialog'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -93,7 +84,9 @@ function Viewprofile() {
                 console.error('Failed to fetch profile', error)
             }
         }
-        fetchData()
+        if (decrypt) {
+            fetchData()
+        }
     }, [decrypt, reset])
 
     const handleSave = async (data) => {
@@ -116,8 +109,10 @@ function Viewprofile() {
             const url = `http://localhost:5062/api/customer/${decrypt}`
             const result = await axios.put(url, formData)
             console.log(result.data)
+            alert('Updated successfully!')
         } catch (error) {
             console.error('Failed to update the profile', error)
+            alert('Failed to Update Profile!')
         }
     }
 
@@ -131,13 +126,6 @@ function Viewprofile() {
             console.error('Failed to delete the account', error)
         }
     }
-
-    // Dialog state management
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-    const openDialog = () => setIsDialogOpen(true)
-
-    const closeDialog = () => setIsDialogOpen(false)
 
     return (
         <Form {...control}>
@@ -236,18 +224,18 @@ function Viewprofile() {
                         name="address"
                         render={({ field }) => (
                             <FormItem>
-                                <div className="flex flex-col space-y-1 pt-6">
+                                <div className="flex flex-col space-y-1 pt-6 ">
                                     <FormLabel className=" pb-3">Address</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input className="pb-3" {...field} />
                                 </FormControl>
                                 <FormMessage>{errors.address?.message}</FormMessage>
                             </FormItem>
                         )}
                     />
 
-                    <div className="bg-white rounded-lg pt-4 pb-3">
+                    <div className="bg-white rounded-lg pt-5 pb-3">
                         <Button onClick={handleSave} type="submit" className="bg-indigo-800 ml-auto text-yellow-200">
                             Save Changes
                         </Button>
@@ -282,44 +270,14 @@ function Viewprofile() {
                         Delete any and all content you have, such as rental history, invoices and profile details.
                     </p>
                     <div className="bg-white rounded-lg pt-4 pb-3">
-                        <Button
-                            type="submit"
-                            className=" bg-red-600 hover:bg-red-800 text-white font-bold ml-auto "
-                            onClick={openDialog}
-                        >
-                            Delete Account
-                        </Button>
+                        <AlertDialogDemo
+                            triggerText="Delete"
+                            alertTitle="Delete your Account"
+                            alertDescription="Are you sure you want to delete your account?"
+                            handleConfirm={() => handleDeleteAccount(decrypt)}
+                        />
                     </div>
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-                    <DialogContent>
-                        <DialogClose
-                            as="button"
-                            onClick={closeDialog}
-                            className="absolute top-0 right-0 m-2 text-gray-400 hover:text-gray-600 focus:outline-none"
-                        />
-                        <DialogHeader>
-                            <DialogTitle className="text-gray-800 font-bold">Confirm to delete</DialogTitle>
-                        </DialogHeader>
-                        <DialogDescription className="text-gray-400">
-                            Are you sure you want to delete your account?
-                        </DialogDescription>
-                        <DialogFooter className="flex justify-end gap-4 mt-4">
-                            <Button
-                                onClick={handleDeleteAccount}
-                                className="bg-red-600 hover:bg-red-800 text-white font-bold px-6 py-2 rounded-lg"
-                            >
-                                Yes
-                            </Button>
-                            <Button
-                                onClick={closeDialog}
-                                className="bg-gray-400 hover:bg-gray-500 text-white font-bold px-6 py-2 rounded-lg"
-                            >
-                                No
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
             </form>
         </Form>
     )

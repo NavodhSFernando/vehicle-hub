@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { Button } from '../../components/ui/button';
 
 const FilterCard = ({ onFilterChange }) => {
     const [allVehicleTypes, setAllVehicleTypes] = useState([])
@@ -106,11 +107,30 @@ const FilterCard = ({ onFilterChange }) => {
         onFilterChange({ maxPrice: event.target.value })
     }
 
+    const handleClearFilters = () => {
+        setVehicleType('all')
+        setVehicleMake('all')
+        setVehicleCapacity('all')
+        setMaxPrice(0)
+        onFilterChange({
+            vehicleType: 'all',
+            vehicleMake: 'all',
+            vehicleCapacity: 'all',
+            maxPrice: 0
+        })
+    }
+
     return (
         <div
-            className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow"
-            style={{ width: '357px', height: '489px' }}
-        >
+            className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow h-auto w-[357px]">
+            <div className='w-full flex justify-center'>
+                <Button
+                    onClick={handleClearFilters}
+                    className="bg-blue-900 w-full hover:bg-blue-800 text-amber-100 font-semibold rounded px-10 transition-colors duration-300"
+                >
+                        Clear Filters
+                </Button>        
+            </div>
             <div className="mb-4 flex flex-col items-start gap-7">
                 <label className="block w-full">
                     <p
