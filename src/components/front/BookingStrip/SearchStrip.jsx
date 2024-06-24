@@ -14,7 +14,7 @@ const SearchStrip = ({ onSearch }) => {
                 <input
                     type="text"
                     className="w-full h-[43px] rounded-[64px] pl-[30px] outline-none"
-                    placeholder="Search something here"
+                    placeholder="Search vehicles by name, type and transmission"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
