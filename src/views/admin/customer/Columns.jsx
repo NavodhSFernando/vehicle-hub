@@ -4,19 +4,19 @@ import { GrEdit, GrTrash } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from '../../../components/ui/alert-dialog'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 
-export const columns = (handleDeleteCustomer) => [
+const handleDeleteCustomer = async ({ customerId, refetchCustomer }) => {
+    try {
+        const url = `http://localhost:5062/api/CustomerAuth/deactivate/${customerId}`
+        await axios.post(url)
+        refetchCustomer()
+    } catch (error) {
+        console.error('Failed to deactivate the customer', error)
+    }
+}
+
+export const columns = [
     {
         accessorKey: 'id',
         header: 'Customer ID',
@@ -96,31 +96,18 @@ export const columns = (handleDeleteCustomer) => [
             return <div className="text-end">Actions</div>
         },
 
-        cell: ({ row }) => {
+        cell: ({ row, column }) => {
             const customerId = row.getValue('id')
+            const refetchCustomer = column.columnDef.refetchCustomer
             return (
                 <div className="flex items-center justify-end gap-2">
-                    <AlertDialog>
-                        <AlertDialogTrigger>
-                            <Button variant="ghost" className="p-0">
-                                <GrTrash fontSize={24} className="mr-1" />
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Deactivate Customer</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Are you sure you want to deactivate this customer?
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction handleConfirm={() => handleDeleteCustomer(customerId)}>
-                                    Deactivate
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
+                    <AlertDialogDemo
+                        triggerText={<GrTrash fontSize={24} />}
+                        alertTitle="Deactivate Customer"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={() => handleDeleteCustomer({ customerId, refetchCustomer })}
+                        variant="ghost" // Set button variant to ghost
+                    />
                 </div>
             )
         }
