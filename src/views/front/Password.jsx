@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import { zodResolver } from '@hookform/resolvers/zod'
-
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -23,6 +22,7 @@ const formSchema = z.object({
 
 export const Password = () => {
     const navigate = useNavigate()
+
     const {
         control,
         handleSubmit,
@@ -42,11 +42,11 @@ export const Password = () => {
                 `http://localhost:5062/api/CustomerAuth/ForgotPassword?email=${data.email}`
             )
             console.log(response.data)
-            alert('OTP sent to your email.')
+            alert('otp sent')
             navigate('/VerifyOTP')
         } catch (error) {
-            alert('Failed to send OTP.')
             console.error(error.response ? error.response.data : error.message)
+            alert('failed to send otp')
         }
     }
     return (

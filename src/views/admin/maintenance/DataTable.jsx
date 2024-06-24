@@ -44,8 +44,8 @@ export default function DataTable({ columns, data }) {
                 <Label>Vehicle</Label>
                 <Input
                     placeholder="Filter Vehicle..."
-                    value={table.getColumn('vehicleId')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('vehicleId')?.setFilterValue(event.target.value)}
+                    value={table.getColumn('registrationNumber')?.getFilterValue() ?? ''}
+                    onChange={(event) => table.getColumn('registrationNumber')?.setFilterValue(event.target.value)}
                     className="max-w-sm"
                 />
             </div>

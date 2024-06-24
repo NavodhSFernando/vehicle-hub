@@ -2,16 +2,28 @@ import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrTrash } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from '../../../components/ui/alert-dialog'
 
-export const columns = [
+export const columns = (handleDeleteCustomer) => [
     {
         accessorKey: 'id',
         header: 'Customer ID',
         cell: ({ row }) => {
             const value = parseFloat(row.getValue('id'))
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -20,7 +32,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('name')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -29,7 +41,7 @@ export const columns = [
         cell: ({ row }) => {
             const value = row.getValue('address')
 
-            return <div className="font-medium">{value}</div>
+            return <div className="font-small">{value}</div>
         }
     },
     {
@@ -37,7 +49,7 @@ export const columns = [
         header: 'NIC'
     },
     {
-        accessorKey: 'dln',
+        accessorKey: 'drivingLicenseNo',
         header: 'Driving License No'
     },
     {
@@ -46,32 +58,20 @@ export const columns = [
     },
     {
         accessorKey: 'status',
-        header: ({ column }) => {
-            return (
-                <div className="flex items-center">
-                    <div>Status</div>
-                    <Button
-                        variant="ghost"
-                        className="p-0 flex"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-                    >
-                        <FaUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                </div>
-            )
-        },
-
+        header: 'Status',
         cell: ({ row }) => {
-            const status = row.getValue('status')
+            const status = row.original.status
+            const statusText = status ? 'Active' : 'Inactive'
+
             let color = ''
             let text = ''
 
-            switch (status) {
-                case 'active':
+            switch (statusText) {
+                case 'Active':
                     color = 'bg-green-500'
                     text = 'Active'
                     break
-                case 'inactive':
+                case 'Inactive':
                     color = 'bg-red-500'
                     text = 'Inactive'
                     break
@@ -96,15 +96,31 @@ export const columns = [
             return <div className="text-end">Actions</div>
         },
 
-        cell: () => {
+        cell: ({ row }) => {
+            const customerId = row.getValue('id')
             return (
                 <div className="flex items-center justify-end gap-2">
-                    <Button variant="ghost" className="p-0">
-                        <GrEdit fontSize={24} className="mr-1" />
-                    </Button>
-                    <Button variant="ghost" className="p-0">
-                        <GrTrash fontSize={24} className="mr-1" />
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger>
+                            <Button variant="ghost" className="p-0">
+                                <GrTrash fontSize={24} className="mr-1" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Deactivate Customer</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Are you sure you want to deactivate this customer?
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction handleConfirm={() => handleDeleteCustomer(customerId)}>
+                                    Deactivate
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             )
         }

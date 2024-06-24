@@ -146,19 +146,18 @@ function Ongoingrentalssingle() {
                             <p className="text-gray-500">Rental Charge</p>
                             <p className="font-semibold">{rentalData.rentalCost}</p>
                         </div>
+                        <hr className="pb-3 border-t-2 border-stone-200" />
+
+                        <div className="pt-3 flex justify-between">
+                            <p className="text-gray-950 font-bold text-xl">Total Amount</p>
+                            <p className="font-semibold text-3xl">{'Rs ' + rentalData.amount}</p>
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                            <p>Overall price including additions </p>
+                            <p>and deductions.</p>
+                        </div>
                     </>
                 )}
-
-                <hr className="pb-3 border-t-2 border-stone-200" />
-
-                <div className="pt-3 flex justify-between">
-                    <p className="text-gray-950 font-bold text-xl">Total Amount</p>
-                    <p className="font-semibold text-3xl">{'Rs ' + rentalData.amount}</p>
-                </div>
-                <div className="text-gray-500 text-xs">
-                    <p>Overall price including additions </p>
-                    <p>and deductions.</p>
-                </div>
             </div>
         </div>
     )

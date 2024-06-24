@@ -177,7 +177,7 @@ export const Signup = () => {
                                     <img
                                         src={ggl}
                                         alt="google"
-                                        className="w-7 h-7 md:w-10 md:h-8 rounded-full shadow-lg mr-10"
+                                        className="w-7 h-7 md:w-10 md:h-8 rounded-full shadow-lg mr-10 cursor-pointer"
                                     />
                                 </a>
                                 <a href="">

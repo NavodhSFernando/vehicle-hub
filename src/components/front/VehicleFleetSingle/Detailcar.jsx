@@ -18,7 +18,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const navigate = useNavigate()
 
     const customerId = Cookies.get('customerId')
- 
+
+    const handleClick = () => {
+        setClicked(!clicked)
+    }
 
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked)
@@ -89,7 +92,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             imageSrc: vehicleData.dashboardImg,
             transmission: vehicleData.transmission,
             price: vehicleData.costPerDay,
-            capacity: vehicleData.seatingCapacity,
+            capacity: vehicleData.seatingCapacity
         }
 
         const existingWishlistItems = getWishlist()
@@ -270,16 +273,17 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                             <p>Extra Mileage Charge (per km)</p>
                         </span>
                     </div>
-                    <div className="flex items-center space-x-2 p-3 bg-blue-100 rounded mb-8">
+                    <div className="flex items-center space-x-3 p-4 bg-blue-100 rounded-lg mb-8 shadow-sm">
                         <input
                             type="checkbox"
-                            className="rounded"
+                            className="rounded text-blue-500 focus:ring-blue-400 focus:ring-2 focus:ring-offset-0"
                             checked={isChecked}
                             onChange={handleCheckboxChange}
+                            id="termsCheckbox"
                         />
                         <label
-                            htmlFor={''}
-                            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                            htmlFor="termsCheckbox"
+                            className="text-sm leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
                         >
                             I agree to Terms and Conditions
                         </label>
