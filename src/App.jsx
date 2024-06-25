@@ -20,8 +20,6 @@ import ViewVehicle from './views/admin/vehicle/ViewVehicle'
 import CreateVehicle from './views/admin/vehicle/CreateVehicle'
 import ViewMaintenance from './views/admin/maintenance/ViewMaintenance'
 import CreateMaintenance from './views/admin/maintenance/CreateMaintenance'
-import ViewAvailability from './views/admin/availability/ViewAvailability'
-import CreateAvailability from './views/admin/availability/CreateAvailability'
 import ViewEmployee from './views/admin/employee/ViewEmployee'
 import CreateEmployee from './views/admin/employee/CreateEmployee'
 import ViewCustomer from './views/admin/customer/ViewCustomer'
@@ -63,6 +61,7 @@ import AdminPageNotFound from './components/admin/PageNotFound'
 import FrontPageNotFound from './components/front/PageNotFound'
 import ProtectedRoute from '../src/components/admin/ProtectedRoute'
 import ResetPassword from '../src/views/admin/ResetPassword'
+import ProtectedRouteCustomer from './components/front/ProtectedRouteCustomer'
 
 function App() {
     return (
@@ -88,7 +87,14 @@ function App() {
                             </TitleComponent>
                         }
                     />
-                    <Route path="/account" element={<Account />}>
+                    <Route
+                        path="/account"
+                        element={
+                            <ProtectedRouteCustomer allowedRoles={['customer']}>
+                                <Account />
+                            </ProtectedRouteCustomer>
+                        }
+                    >
                         <Route
                             path="/account/ongoingrental/:customerReservationId"
                             element={
@@ -157,10 +163,23 @@ function App() {
                 <Route path="/passwordreset/:otp" element={<PasswordReset />} />
                 <Route path="/verifyotp" element={<VerifyOTP />} />
                 <Route path="profileresetpassword" element={<ProfileResetPassword />} />
-                <Route path="/feedbackform" element={<Feedbackform />} />
-                <Route path="/feedbackform/:reservationId" element={<Feedbackform />} />
+                <Route
+                    path="/feedbackform/:reservationId"
+                    element={
+                        <ProtectedRouteCustomer allowedRoles={['customer']}>
+                            <Feedbackform />
+                        </ProtectedRouteCustomer>
+                    }
+                />
                 <Route path="/admin-login" element={<Adminlogin />} />
-                <Route path="/admin" element={<AdminLayout />}>
+                <Route
+                    path="/admin"
+                    element={
+                        <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                            <AdminLayout />
+                        </ProtectedRoute>
+                    }
+                >
                     <Route path="/admin/*" element={<AdminPageNotFound />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="notification" element={<Notification />} />
@@ -174,7 +193,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="View Reservation">
+                                <TitleComponent title="Reservation">
                                     <ViewReservation />
                                 </TitleComponent>
                             }
@@ -188,10 +207,6 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="availability">
-                        <Route path="view" element={<ViewAvailability />} />
-                        <Route path="create" element={<CreateAvailability />} />
-                    </Route>
                     <Route path="vehicletype">
                         <Route
                             path="/admin/vehicletype/edit/:vehicleTypeId"
@@ -204,7 +219,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="View Vehicle Types">
+                                <TitleComponent title="Vehicle Types">
                                     <ViewVehicleType />
                                 </TitleComponent>
                             }
@@ -230,7 +245,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="View Vehicle Make">
+                                <TitleComponent title="Vehicle Make">
                                     <ViewVehicleMake />
                                 </TitleComponent>
                             }
@@ -248,7 +263,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="View Vehicle Model">
+                                <TitleComponent title="Vehicle Model">
                                     <ViewVehicleModel />
                                 </TitleComponent>
                             }
@@ -273,7 +288,11 @@ function App() {
                     <Route path="vehicle">
                         <Route
                             path="/admin/vehicle/edit/:vehicleId"
-                            element={<TitleComponent title="Edit Vehicle">{<EditVehicle />}</TitleComponent>}
+                            element={
+                                <TitleComponent title="Edit Vehicle">
+                                    <EditVehicle />
+                                </TitleComponent>
+                            }
                         />
                         <Route
                             path="view"
@@ -304,7 +323,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="View Maintenances">
+                                <TitleComponent title="Maintenances">
                                     <ViewMaintenance />
                                 </TitleComponent>
                             }
@@ -321,7 +340,11 @@ function App() {
                     <Route path="employee">
                         <Route
                             path="/admin/employee/edit/:employeeId"
-                            element={<TitleComponent title="Edit Employee">{<EditEmployee />}</TitleComponent>}
+                            element={
+                                <TitleComponent title="Edit Employee">
+                                    <EditEmployee />
+                                </TitleComponent>
+                            }
                         />
                         <Route path="view" element={<ViewEmployee />} />
                         <Route
@@ -335,14 +358,13 @@ function App() {
                             }
                         />
                     </Route>
-
                     <Route path="customer">
                         <Route
                             path="view"
                             element={
-                                <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                                <TitleComponent title="Customer">
                                     <ViewCustomer />
-                                </ProtectedRoute>
+                                </TitleComponent>
                             }
                         />
                     </Route>
