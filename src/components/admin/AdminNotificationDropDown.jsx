@@ -1,44 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 const AdminNotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
     const [notifications, setNotifications] = useState([])
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
-            console.log(response.data)
-            const filteredNotifications = response.data.filter(notification => notification.customerReservationId === null)
+            const response = await axios.get(`http://localhost:5062/api/AdminNotification/AllAdminNotifications`)
+            const filteredNotifications = response.data.filter((notification) => {
+                return notification.isRead === false
+            })
             setNotifications(filteredNotifications)
         } catch (error) {
             console.error('Error fetching notifications:', error)
         }
     }
 
-    const deleteNotification = async (id) => {
-        try {
-            const response = await axios.delete(`http://localhost:5062/api/Notification/Notifications/${id}`);
-            if (response.status === 200) {
-                console.log('Notification deleted successfully.');
-            } else {
-                console.log('Failed to delete the notification.');
-            }
-        } catch (error) {
-            if (error.response) {
-                console.error('Error deleting notification:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error setting up request:', error.message);
-            }
-        }
-    };
-
     useEffect(() => {
         fetchNotifications()
-    }, [deleteNotification])
+    }, [])
 
     return (
         isOpen && (
@@ -61,15 +42,6 @@ const AdminNotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                                         <p className="text-sm text-gray-600">{notification.description}</p>
                                         <p className="text-xs text-gray-400">{notification.generated_DateTime}</p>
                                     </div>
-    
-                                    <button
-                                        className="text-gray-400 hover:text-gray-500"
-                                        onClick={() => {
-                                            deleteNotification(notification.id)
-                                        }}
-                                    >
-                                        ×
-                                    </button>
                                 </div>
                             ))
                         )}
