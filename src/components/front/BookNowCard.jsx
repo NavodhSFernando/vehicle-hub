@@ -34,30 +34,19 @@ export default function BookNowCard({
         return JSON.parse(localStorage.getItem('wishlistItems')) || []
     }
 
-    const customerId = Cookies.get('customerId')
-    const navigate = useNavigate()
+    const areVehiclesEqual = (vehicle1, vehicle2) => {
+        return vehicle1.id === vehicle2.id
+    }
 
-    useEffect(() => {
-        const existingWishlistItems = getWishlist()
-        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
-        setClicked(isInWishlist)
-
-        const handleWishlistUpdate = (event) => {
-            const updatedWishlist = event.detail
-            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
-            setClicked(isInUpdatedWishlist)
-        }
-
-        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
-
-        return () => {
-            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
-        }
-    }, [id])
+    const handleWishlistUpdate = (event) => {
+        const updatedWishlist = event.detail;
+        const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id);
+        setClicked(isInUpdatedWishlist);
+    };
 
     const handleClick = () => {
         const vehicleDetails = {
-            id,
+            id : parseInt(id),
             name,
             type,
             year,
@@ -68,13 +57,10 @@ export default function BookNowCard({
         }
 
         const existingWishlistItems = getWishlist()
-        const areVehiclesEqual = (vehicle1, vehicle2) => {
-            return vehicle1.id === vehicle2.id
-        }
-
+        
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
 
-        if (index === -1) {
+        if (index == -1) {
             const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
             updateWishlist(updatedWishlistItems)
             setClicked(true)
@@ -84,6 +70,21 @@ export default function BookNowCard({
             setClicked(false)
         }
     }
+
+    const customerId = Cookies.get('customerId')
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const existingWishlistItems = getWishlist()
+        const isInWishlist = existingWishlistItems.some((item) => item.id === id);
+        setClicked(isInWishlist);
+
+        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
+
+        return () => {
+            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
+        }
+    }, [id])
 
     return (
         <div className="w-[317px] flex flex-col p-5 shadow-xl rounded-xl bg-white">
