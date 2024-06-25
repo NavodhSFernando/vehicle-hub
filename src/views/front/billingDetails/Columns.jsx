@@ -32,8 +32,8 @@ export const columns = [
         header: 'Status',
         cell: ({ row }) => {
             const status = row.getValue('reservationStatus')
-            const text = status === 'Ended' ? 'Due' : 'Ongoing'
-            const color = text === 'Due' ? 'bg-yellow-500' : 'bg-green-500'
+            const text = status === 'Ended' ? 'Not Paid' : 'Paid'
+            const color = text === 'Not Paid' ? 'bg-red-500' : 'bg-green-500'
             return (
                 <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
                     {text}
