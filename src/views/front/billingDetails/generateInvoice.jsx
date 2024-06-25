@@ -60,6 +60,9 @@ export const generateInvoice = (invoice) => {
     const footerHeight = splitFooterText.length * 10 + 10;
     doc.text(splitFooterText, 14, doc.internal.pageSize.height - footerHeight);
 
-    // Save or open the PDF
-    doc.save(`invoice-${invoice.id}.pdf`);
+    // Create Blob URL for the PDF
+    const pdfBlob = doc.output('blob');
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+
+    return pdfUrl;
 };

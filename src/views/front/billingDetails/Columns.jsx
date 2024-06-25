@@ -50,7 +50,17 @@ export const columns = [
             const status = invoice.reservationStatus
 
             const handleDownloadPdf = () => {
-                generateInvoice(invoice)
+                const pdfUrl = generateInvoice(invoice);
+                const a = document.createElement('a');
+                a.href = pdfUrl;
+                a.download = `invoice-${invoice.id}.pdf`;
+                a.click();
+                URL.revokeObjectURL(pdfUrl);
+            }
+
+            const handleViewPdf = () => {
+                const pdfUrl = generateInvoice(invoice);
+                window.open(pdfUrl, '_blank');
             }
 
             return (
@@ -66,8 +76,8 @@ export const columns = [
                         </>
                     ) : (
                         <>
-                            <Button variant="ghost" className="border border-gray-500">
-                                View
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
+                                View PDF
                             </Button>
                             <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
                                 Download PDF
