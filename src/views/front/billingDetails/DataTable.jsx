@@ -1,5 +1,4 @@
 import React from 'react'
-
 import {
     ColumnDef,
     flexRender,
@@ -32,11 +31,11 @@ export default function DataTable({ columns, data }) {
         <div>
             <div className="flex flex-row items-center my-8">
                 <div className="flex flex-col space-y-1 pt-2 w-full pb-4">
-                    <Label></Label>
+                    <Label>Search Invoice</Label>
                     <Input
                         placeholder="Search"
-                        value={table.getColumn('invoice')?.getFilterValue() ?? ''}
-                        onChange={(event) => table.getColumn('invoice')?.setFilterValue(event.target.value)}
+                        value={table.getColumn('id')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('id')?.setFilterValue(event.target.value)}
                         className="max-w-lg"
                     />
                 </div>
@@ -46,15 +45,13 @@ export default function DataTable({ columns, data }) {
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow className="bg-slate-200" key={headerGroup.id}>
-                                {headerGroup.headers.map((header) => {
-                                    return (
-                                        <TableHead className="" key={header.id}>
-                                            {header.isPlaceholder
-                                                ? null
-                                                : flexRender(header.column.columnDef.header, header.getContext())}
-                                        </TableHead>
-                                    )
-                                })}
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
+                                    </TableHead>
+                                ))}
                             </TableRow>
                         ))}
                     </TableHeader>
@@ -63,7 +60,7 @@ export default function DataTable({ columns, data }) {
                             table.getRowModel().rows.map((row) => (
                                 <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell className="" key={cell.id}>
+                                        <TableCell key={cell.id}>
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

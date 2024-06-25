@@ -1,54 +1,39 @@
-import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import { GrEdit, GrTrash } from 'react-icons/gr'
 
 export const columns = [
     {
-        accessorKey: 'date',
+        accessorKey: 'dateCreated',
         header: 'Date',
         cell: ({ row }) => {
-            const value = row.getValue('date') // Change 'pickUpDate' to 'date'
-            // Format the date as needed, assuming it's in ISO format for simplicity
-            const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(value))
+            const value = row.getValue('dateCreated')
+            const date = new Date(value)
+            const formattedDate = value === '0001-01-01' ? 'N/A' : new Intl.DateTimeFormat('en-US').format(date)
             return <div>{formattedDate}</div>
         }
     },
-
     {
         accessorKey: 'amount',
-        header: 'Amount'
+        header: 'Amount',
+        cell: ({ row }) => {
+            const value = row.getValue('amount')
+            return <div>Rs {value.toLocaleString()}</div>
+        }
     },
     {
-        accessorKey: 'invoice',
-        header: 'Invoice'
+        accessorKey: 'id',
+        header: 'Invoice',
+        cell: ({ row }) => {
+            const value = row.getValue('id')
+            return <div>INV-{value}</div>
+        }
     },
     {
-        accessorKey: 'status',
+        accessorKey: 'reservationStatus',
         header: 'Status',
         cell: ({ row }) => {
-            const status = row.getValue('status')
-            let color = ''
-            let text = ''
-
-            switch (status) {
-                case 'due':
-                    color = 'bg-yellow-500'
-                    text = 'Due'
-                    break
-                case 'paid':
-                    color = 'bg-green-500'
-                    text = 'Paid'
-                    break
-                case 'not paid':
-                    color = 'bg-red-500'
-                    text = 'Not Paid'
-                    break
-                default:
-                    color = 'bg-gray-500'
-                    text = 'Unknown'
-                    break
-            }
-
+            const status = row.getValue('reservationStatus')
+            const text = status === 'Ended' ? 'Due' : 'Ongoing'
+            const color = text === 'Due' ? 'bg-yellow-500' : 'bg-green-500'
             return (
                 <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
                     {text}
@@ -60,34 +45,22 @@ export const columns = [
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
         cell: ({ row }) => {
-            const status = row.getValue('status')
-
+            const status = row.getValue('reservationStatus')
             return (
                 <div className="flex items-center justify-end gap-2">
-                    {status === 'due' && (
-                        <>
-                            <Button variant="ghost" className="border border-gray-500">
-                                View
-                            </Button>
-                            <Button variant="ghost" className="border border-gray-500">
-                                Download PDF
-                            </Button>
-                        </>
-                    )}
-                    {status === 'paid' && (
-                        <>
-                            <Button variant="ghost" className="border border-gray-500">
-                                View
-                            </Button>
-                            <Button variant="ghost" className="border border-gray-500">
-                                Download PDF
-                            </Button>
-                        </>
-                    )}
-                    {status === 'not paid' && (
+                    {status === 'Ended' ? (
                         <>
                             <Button variant="ghost" className="border border-gray-500">
                                 Pay Now
+                            </Button>
+                            <Button variant="ghost" className="border border-gray-500">
+                                Download PDF
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="ghost" className="border border-gray-500">
+                                View
                             </Button>
                             <Button variant="ghost" className="border border-gray-500">
                                 Download PDF
