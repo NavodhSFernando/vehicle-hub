@@ -292,7 +292,7 @@ function Viewprofile() {
                             alertTitle="Delete your Account"
                             alertDescription="Are you sure you want to delete your account?"
                             handleConfirm={() => handleDeleteAccount(decrypt)}
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            variant="destructive"
                         />
                     </div>
                 </div>

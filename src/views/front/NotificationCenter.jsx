@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import { useOutletContext } from 'react-router-dom'
+import { MdDeleteOutline } from 'react-icons/md'
+import { MdOutlineMarkEmailRead } from 'react-icons/md'
 
 const NOTIFICATIONS_PER_PAGE = 6
 
@@ -23,12 +24,49 @@ export default function NotificationCenter() {
             const decryptedId = decryptResponse.data.decryptedUserId
 
             const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
-            console.log("============================")
-            console.log(response.data)
             setNotifications(response.data)
-            console.log("============================")
         } catch (error) {
             console.error('Error fetching notifications:', error)
+        }
+    }
+
+    const markAsRead = async (notificationId) => {
+        try {
+            const response = await axios.put(
+                `http://localhost:5062/api/Notification/MarkAsRead?notificationid=${notificationId}`
+            )
+            if (response.status === 200) {
+                setNotifications((prevNotifications) =>
+                    prevNotifications.map((notification) =>
+                        notification.id === notificationId ? { ...notification, isRead: true } : notification
+                    )
+                )
+            }
+        } catch (error) {
+            console.error('Error marking notification as read:', error)
+        }
+    }
+
+    const deleteNotification = async (notificationId) => {
+        try {
+            const response = await axios.delete(
+                `http://localhost:5062/api/Notification/DeleteNotification?notificationId=${notificationId}`
+            )
+            if (response.status === 200) {
+                setNotifications((prevNotifications) =>
+                    prevNotifications.filter((notification) => notification.id !== notificationId)
+                )
+            } else {
+                console.log('Failed to delete the notification.')
+            }
+        } catch (error) {
+            if (error.response) {
+                console.error('Error deleting notification:', error.response.data)
+            } else if (error.request) {
+                console.error('No response received:', error.request)
+            } else {
+                console.error('Error setting up request:', error.message)
+            }
         }
     }
 
@@ -44,9 +82,9 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.title}
-                            description={notification.description}
-                            time={notification.generated_DateTime}
+                            notification={notification}
+                            onMarkAsRead={markAsRead}
+                            OnDelete={deleteNotification}
                         />
                     ))
                 ) : (
@@ -113,12 +151,26 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
     )
 }
 
-function NotificationCard({ title, description, time }) {
+function NotificationCard({ notification, onMarkAsRead, OnDelete }) {
+    const { id, title, description, generated_DateTime, isRead } = notification
+
     return (
-        <div className=" p-4 shadow rounded-lg mb-4 mx-20">
-            <div className="font-bold text-lg">{title}</div>
-            <div className="text-gray-700">{description}</div>
-            <div className="text-gray-500 text-sm">{time}</div>
+        <div className="p-4 shadow rounded-lg mb-4 mx-20 flex justify-between items-center gap-[10px]">
+            <div className="flex flex-col">
+                <div className="font-bold text-lg">{title}</div>
+                <div className="text-gray-700">{description}</div>
+                <div className="text-gray-500 text-sm">{generated_DateTime}</div>
+            </div>
+            <div className="flex-3 flex flex-col justify-center items-center gap-[10px]">
+                {!isRead && (
+                    <button onClick={() => onMarkAsRead(id)}>
+                        <MdOutlineMarkEmailRead fontSize={28} style={{ color: '#283280' }} />
+                    </button>
+                )}
+                <button onClick={() => OnDelete(id)}>
+                    <MdDeleteOutline fontSize={28} style={{ color: '#283280' }} />
+                </button>
+            </div>
         </div>
     )
 }

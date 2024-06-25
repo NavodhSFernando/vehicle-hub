@@ -37,9 +37,6 @@ export default function FeedBack({ id }) {
                                 <div className="flex justify-between">
                                     <div>
                                         <div className="text-[20px] font-bold">{reviewData.customerName}</div>
-                                        <div className="text-[14px] text-[#C7C7C7] font-[400]">
-                                            {reviewData.feedback.designation}
-                                        </div>
                                     </div>
                                     <div>
                                         <div>{reviewData.feedback.feedback_Date}</div>
@@ -55,7 +52,7 @@ export default function FeedBack({ id }) {
                                     </div>
                                 </div>
                                 <div className="w-[395px] text-[14px] text-[#596780] font-[400]">
-                                    {reviewData.feedback.content}
+                                    {reviewData.feedback.vehicle_Review}
                                 </div>
                             </div>
                         ))}

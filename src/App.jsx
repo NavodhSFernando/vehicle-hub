@@ -36,9 +36,9 @@ import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -115,7 +115,9 @@ function App() {
                             path="viewnotificationcenter"
                             element={
                                 <TitleComponent title="Notification Center">
-                                    <NotificationCenter />
+                                    <ProtectedRoute allowedRoles={['customer']}>
+                                        <NotificationCenter />
+                                    </ProtectedRoute>
                                 </TitleComponent>
                             }
                         />
@@ -164,7 +166,7 @@ function App() {
                 <Route path="/verifyotp" element={<VerifyOTP />} />
                 <Route path="profileresetpassword" element={<ProfileResetPassword />} />
                 <Route
-                    path="/feedbackform/:reservationId"
+                    path="/feedbackform/:customerReservationId"
                     element={
                         <ProtectedRouteCustomer allowedRoles={['customer']}>
                             <Feedbackform />
@@ -182,7 +184,14 @@ function App() {
                 >
                     <Route path="/admin/*" element={<AdminPageNotFound />} />
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="notification" element={<Notification />} />
+                    <Route
+                        path="notification"
+                        element={
+                            <ProtectedRoute allowedRoles={['admin']}>
+                                <Notification />
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route path="report">
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<ViewRevenueReport />} />
