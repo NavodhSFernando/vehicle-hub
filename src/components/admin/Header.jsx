@@ -26,11 +26,9 @@ export default function Header() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
-                const currentDate = new Date().toISOString().split('T')[0]
+                const response = await axios.get(`http://localhost:5062/api/AdminNotification/AllAdminNotifications`)
                 const filteredNotifications = response.data.filter((notification) => {
-                    const notificationDate = new Date(notification.generated_DateTime).toISOString().split('T')[0]
-                    return notification.customerReservationId === null && notificationDate === currentDate
+                    return notification.isRead === false
                 })
                 setnotificationCount(filteredNotifications.length)
             } catch (error) {
@@ -49,20 +47,25 @@ export default function Header() {
                             <div className="flex">
                                 <IoNotifications fontSize={28} style={{ color: '#283280' }} />
 
-                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                                    {notificationCount}
-                                </span>
+                                {notificationCount > 0 && 
+                                    <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-900 rounded-full">
+                                        {notificationCount}
+                                    </span>
+                                }
+                                <AdminNotificationDropdown isOpen={isDropdownOpen} setIsOpen={() => {}} />
                             </div>
 
-                            <AdminNotificationDropdown isOpen={isDropdownOpen} setIsOpen={() => {}} />
+                            
                         </>
                     ) : (
                         <div className="flex">
                             <IoMdNotificationsOutline fontSize={28} style={{ color: '#283280' }} />
-
-                            <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                                {notificationCount}
-                            </span>
+                            {notificationCount > 0 && 
+                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-900 rounded-full">
+                                    {notificationCount}
+                                </span>
+                            }
+                            
                         </div>
                     )}
                 </div>

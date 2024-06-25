@@ -9,36 +9,22 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${customerId}`)
-            console.log(response.data)
-            setNotifications(response.data)
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+            
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
+            const filteredNotifications = response.data.filter((notification) => {
+                return notification.isRead === false
+            })
+            setNotifications(filteredNotifications)
         } catch (error) {
             console.error('Error fetching notifications:', error)
         }
     }
 
-    const deleteNotification = async (id) => {
-        try {
-            const response = await axios.delete(`http://localhost:5062/api/Notification/Notifications/${id}`);
-            if (response.status === 200) {
-                console.log('Notification deleted successfully.');
-            } else {
-                console.log('Failed to delete the notification.');
-            }
-        } catch (error) {
-            if (error.response) {
-                console.error('Error deleting notification:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error setting up request:', error.message);
-            }
-        }
-    };
-
     useEffect(() => {
         fetchNotifications()
-    }, [deleteNotification, customerId])
+    }, [customerId])
 
     return (
         isOpen && (
@@ -61,15 +47,6 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                                         <p className="text-sm text-gray-600">{notification.description}</p>
                                         <p className="text-xs text-gray-400">{notification.generated_DateTime}</p>
                                     </div>
-    
-                                    <button
-                                        className="text-gray-400 hover:text-gray-500"
-                                        onClick={() => {
-                                            deleteNotification(notification.id)
-                                        }}
-                                    >
-                                        ×
-                                    </button>
                                 </div>
                             ))
                         )}

@@ -53,12 +53,14 @@ const Navbar = () => {
 
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${customerId}`)
-                const currentDate = new Date().toISOString().split('T')[0]
+                const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+                const decryptedId = decryptResponse.data.decryptedUserId
+                
+                const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
                 const filteredNotifications = response.data.filter((notification) => {
-                    const notificationDate = new Date(notification.generated_DateTime).toISOString().split('T')[0]
-                    return notification.customerReservationId === null && notificationDate === currentDate
+                    return notification.isRead === false
                 })
+
                 setnotificationCount(filteredNotifications.length)
             } catch (error) {
                 console.error('Error fetching notifications:', error)
@@ -140,9 +142,11 @@ const Navbar = () => {
                                         <div className="flex">
                                             <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
 
-                                            <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                                                {notificationCount}
-                                            </span>
+                                            {notificationCount > 0 &&
+                                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
+                                                    {notificationCount}
+                                                </span>
+                                            }
                                         </div>
                                         {/* <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} /> */}
                                         <NotificationDropdown
@@ -154,10 +158,11 @@ const Navbar = () => {
                                 ) : (
                                     <div className="flex">
                                         <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
-
-                                        <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-red-600 rounded-full">
-                                            {notificationCount}
-                                        </span>
+                                        {notificationCount > 0 &&
+                                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
+                                                    {notificationCount}
+                                                </span>
+                                        }
                                     </div>
                                 )}
                             </div>
