@@ -172,23 +172,24 @@ const VehicleHoverCard = ({ regNo }) => {
             <HoverCardTrigger className="font-medium hover:text-slate-700">{regNo}</HoverCardTrigger>
             <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
                 {vehicle ? (
-                    <div>
-                        <h3 className="text-lg font-semibold">{regNo}</h3>
+                    <div className="text-center">
                         <img
-                            className=" object-contain h-40 w-40"
+                            className="object-contain h-32 mx-auto"
                             src={`${baseThumbnailUrl}${vehicle.thumbnail}`}
                             alt=""
                         />
-                        <p className="text-gray-700">
-                            <strong>Type:</strong> {vehicle.id}
+                        <h3 className="text-lg font-semibold">{regNo}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-sm">
+                            <strong>Vehicle ID:</strong> {vehicle.id}
                         </p>
-                        <p className="text-gray-700">
+                        <p className="text-gray-700 text-sm">
                             <strong>Model:</strong> {vehicle.model}
                         </p>
-                        <p className="text-gray-700">
-                            <strong>Year:</strong> {vehicle.type}
+                        <p className="text-gray-700 text-sm">
+                            <strong>Type:</strong> {vehicle.type}
                         </p>
-                        <p className="text-gray-700">
+                        <p className="text-gray-700 text-sm">
                             <strong>Year:</strong> {vehicle.year}
                         </p>
                     </div>
@@ -218,15 +219,18 @@ const CustomerHoverCard = ({ reservationId, name }) => {
             <HoverCardContent className="bg-white p-4 shadow-lg rounded-md w-fit">
                 {customer ? (
                     <div>
-                        <h3 className="text-lg font-semibold">{customer.name}</h3>
-                        <p className="text-gray-700">
-                            <strong>ID:</strong> {customer.id}
-                        </p>
+                        <h3 className="text-lg font-semibold text-center">{customer.name}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <div className="text-gray-700 flex space-x-4">
+                            <p>
+                                <strong>ID:</strong> {customer.id}
+                            </p>
+                            <p>
+                                <strong>Phone:</strong> {customer.phone}
+                            </p>
+                        </div>
                         <p className="text-gray-700">
                             <strong>Email:</strong> {customer.email}
-                        </p>
-                        <p className="text-gray-700">
-                            <strong>Phone:</strong> {customer.phone}
                         </p>
                     </div>
                 ) : (

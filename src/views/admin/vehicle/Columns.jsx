@@ -3,6 +3,10 @@ import { FaUpDown } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
 import { GrEdit, GrServices, GrShield } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../components/ui/hover-card'
+import { useState } from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
 
 // Define a component to encapsulate the action buttons
 const ActionButtons = ({ vehicleId }) => {
@@ -20,6 +24,48 @@ const ActionButtons = ({ vehicleId }) => {
                 <GrShield fontSize={24} className="mr-1" />
             </Button>
         </div>
+    )
+}
+
+const VehicleModelHoverCard = ({ vehicleId, model }) => {
+    const [vehicle, setVehicle] = useState(null)
+    const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/logos/'
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            const response = await axios.get(`http://localhost:5062/api/AdminVehicle/hover/${vehicleId}`)
+            setVehicle(response.data)
+            console.log('Vehicle Details:', response.data)
+        }
+        fetchVehicleDetails()
+    }, [vehicleId])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700">{model}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {vehicle ? (
+                    <div className="text-center">
+                        <img className="object-contain h-10 mx-auto mb-2" src={`${baseUrl}${vehicle.make}`} alt="" />
+                        <h3 className="text-lg font-semibold ">{model}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-sm">
+                            <strong>Model ID:</strong> {vehicle.vehicleModelId}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Year:</strong> {vehicle.year}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Seating Capacity:</strong> {vehicle.seatingCapacity}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Fuel:</strong> {vehicle.fuel}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
     )
 }
 
@@ -163,9 +209,8 @@ export const columns = [
         accessorKey: 'vehicleModelId',
         header: 'Vehicle Model',
         cell: ({ row }) => {
-            const vehicleModelId = row.original.vehicleModel.name
-
-            return <div className="">{vehicleModelId}</div>
+            const vehicleModel = row.original.vehicleModel.name
+            return <VehicleModelHoverCard vehicleId={row.getValue('id')} model={vehicleModel} />
         },
         filterFn: (row, columnId, filterValue) => {
             return row.original.vehicleModel.name.toString().toLowerCase().includes(filterValue.toLowerCase())
