@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { FaStar } from 'react-icons/fa6'
+import apiclient from '../../axiosConfig'
 
 function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
@@ -38,9 +39,7 @@ function Ongoingrentalssingle() {
         const fetchDataAndFeedback = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching rentals
-                const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/rental-history-single/${decrypt}`
-                )
+                const response = await apiclient.get(`/FrontReservationService/rental-history-single/${decrypt}`)
                 setRentalData(response.data) // Assume the response data is the array of rentals
                 setStatus(response.data.status)
                 console.log('Fetched Rental History:', response.data)
@@ -160,7 +159,9 @@ function Ongoingrentalssingle() {
                         </div>
                         <div className="pt-3 flex justify-between pb-8">
                             <p className="text-gray-500">Rental Charge</p>
-                            <p className="font-semibold">{rentalData.rentalCost}</p>
+                            <p className="font-semibold">
+                                {rentalData.rentalCost ? 'Rs ' + rentalData.rentalCost : '-'}
+                            </p>
                         </div>
                         <hr className="pb-3 border-t-2 border-stone-200" />
 

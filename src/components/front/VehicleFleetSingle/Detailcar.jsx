@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { useToast } from '../../ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [clicked, setClicked] = useState(false)
@@ -35,11 +36,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             navigate('/login')
         }
 
-        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
-        const decryptedId = decryptResponse.data.decryptedUserId
-
-        const url = `http://localhost:5062/api/FrontReservationService/request-reservation`
         try {
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+
+            const url = `/FrontReservationService/request-reservation`
             const formData = {
                 VehicleId: id,
                 CustomerId: decryptedId,
@@ -50,7 +51,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     EndTime: etime
                 }
             }
-            const response = await axios.post(url, formData)
+            const response = await apiclient.post(url, formData)
 
             toast({
                 variant: 'success',

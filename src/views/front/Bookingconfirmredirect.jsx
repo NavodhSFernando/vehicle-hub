@@ -6,6 +6,7 @@ import RentalSummary from '../../components/front/RentalSummary'
 import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm'
 import PaymentMethod from './PaymentMethod'
 import PageNotFound from '../../components/front/PageNotFound'
+import apiclient from '../../axiosConfig'
 
 export default function Bookingconfirmredirect() {
     const { invoiceId } = useParams()
@@ -18,8 +19,8 @@ export default function Bookingconfirmredirect() {
                 const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${invoiceId}`)
                 const decryptedId = decryptResponse.data.decryptedUserId
 
-                const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${decryptedId}`
+                const response = await apiclient.get(
+                    `/FrontReservationService/view-booking-confirmation/${decryptedId}`
                 )
                 setDecryptedId(decryptedId)
                 setRentalData(response.data)

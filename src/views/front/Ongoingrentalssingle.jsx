@@ -5,6 +5,7 @@ import { FaStar } from 'react-icons/fa6'
 import { AlertDialogDemo } from '../../components/ui/alertDialog'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../components/ui/use-toast'
+import apiclient from '../../axiosConfig'
 
 export default function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
@@ -28,8 +29,8 @@ export default function Ongoingrentalssingle() {
             const decrypt = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`)
             const decryptedId = decrypt.data.decryptedUserId
 
-            const url = `http://localhost:5062/api/FrontReservationService/cancel-reservation/${decryptedId}`
-            const response = await axios.post(url)
+            const url = `/FrontReservationService/cancel-reservation/${decryptedId}`
+            const response = await apiclient.post(url)
 
             toast({
                 variant: 'success',
@@ -48,9 +49,7 @@ export default function Ongoingrentalssingle() {
             try {
                 const decrypt = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`)
                 const decryptedId = decrypt.data.decryptedUserId
-                const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/ongoing-rental-single/${decryptedId}`
-                )
+                const response = await apiclient.get(`/FrontReservationService/ongoing-rental-single/${decryptedId}`)
                 setRentalData(response.data) // Assume the response data is the rental data
                 setStatus(response.data.status)
 
