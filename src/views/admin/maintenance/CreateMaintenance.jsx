@@ -24,6 +24,7 @@ import cn from 'classnames'
 import { Calendar } from '../../../components/ui/calendar'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -63,7 +64,7 @@ export default function CreateMaintenance() {
 
     //Submit handler
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleMaintenance'
+        const url = '/VehicleMaintenance'
         try {
             const formData = {
                 Date: data.date,
@@ -73,7 +74,7 @@ export default function CreateMaintenance() {
                 CurrentMileage: data.currentMileage
             }
 
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             toast({
                 variant: 'success',
                 description: 'Maintenance created successfully'

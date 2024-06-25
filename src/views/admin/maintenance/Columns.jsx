@@ -7,6 +7,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../componen
 import { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
+import apiclient from '../../../axiosConfig'
 
 const ActionButtons = ({ maintenanceId }) => {
     const navigate = useNavigate()
@@ -29,7 +30,7 @@ const VehicleHoverCard = ({ regNo }) => {
     const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
     useEffect(() => {
         const fetchVehicleDetails = async () => {
-            const response = await axios.get(`http://localhost:5062/api/AdminVehicle/regNo?regNo=${regNo}`)
+            const response = await apiclient.get(`/AdminVehicle/regNo?regNo=${regNo}`)
             setVehicle(response.data)
             console.log('Vehicle Details:', response.data)
         }

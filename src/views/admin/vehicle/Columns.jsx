@@ -7,6 +7,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../componen
 import { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
+import apiclient from '../../../axiosConfig'
 
 // Define a component to encapsulate the action buttons
 const ActionButtons = ({ vehicleId }) => {
@@ -32,7 +33,7 @@ const VehicleModelHoverCard = ({ vehicleId, model }) => {
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/logos/'
     useEffect(() => {
         const fetchVehicleDetails = async () => {
-            const response = await axios.get(`http://localhost:5062/api/AdminVehicle/hover/${vehicleId}`)
+            const response = await apiclient.get(`/AdminVehicle/hover/${vehicleId}`)
             setVehicle(response.data)
             console.log('Vehicle Details:', response.data)
         }

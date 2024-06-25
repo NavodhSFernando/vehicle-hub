@@ -22,6 +22,7 @@ import Cookies from 'js-cookie'
 import { navigate, useNavigate } from 'react-router-dom'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     regNo: z
@@ -82,9 +83,9 @@ export default function EditVehicleDetails({ vehicleId }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+            const url = `/Vehicle/${vehicleId}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 reset({
                     regNo: data.registrationNumber,
                     chassisNo: data.chassisNo,
@@ -106,7 +107,7 @@ export default function EditVehicleDetails({ vehicleId }) {
         const fetchVehicleModels = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
-                const response = await axios.get('http://localhost:5062/api/VehicleModel')
+                const response = await apiclient.get('/VehicleModel')
                 setVehicleModels(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle models:', error)
@@ -116,7 +117,7 @@ export default function EditVehicleDetails({ vehicleId }) {
 
         const fetchVehicleTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                const response = await apiclient.get('/VehicleType')
                 setVehicleTypes(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle Types:', error)
@@ -129,7 +130,7 @@ export default function EditVehicleDetails({ vehicleId }) {
     const handleSave = async (data) => {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
-        const url = `http://localhost:5062/api/Vehicle/Details/${vehicleId}`
+        const url = `/Vehicle/Details/${vehicleId}`
         try {
             const formData = {
                 RegistrationNumber: data.regNo,
@@ -144,7 +145,7 @@ export default function EditVehicleDetails({ vehicleId }) {
                 VehicleModelId: data.vehicleModelId,
                 EmployeeId: decryptedId
             }
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             console.log('Vehicle updated', result)
             toast({
                 variant: 'success',

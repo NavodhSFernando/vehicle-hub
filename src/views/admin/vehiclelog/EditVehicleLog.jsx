@@ -22,6 +22,7 @@ import Cookie from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     customerReservationId: z.number({
@@ -54,7 +55,7 @@ export default function EditVehicleLog() {
     // Fetch vehicle Log data
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
+            const url = `/VehicleLog/${vehicleLogId}`
             try {
                 const { data } = await axios.get(url)
                 setCustomerReservationId(data.customerReservationId)
@@ -82,7 +83,7 @@ export default function EditVehicleLog() {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
 
-        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
+        const url = `/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
         try {
             const formData = {
                 CustomerReservationId: data.customerReservationId,
@@ -92,7 +93,7 @@ export default function EditVehicleLog() {
             }
 
             // POST request to the server with form data
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             console.log(result)
 
             toast({

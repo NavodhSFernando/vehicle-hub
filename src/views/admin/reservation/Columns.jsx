@@ -8,6 +8,7 @@ import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../components/ui/hover-card'
 import { useState } from 'react'
+import apiclient from '../../../axiosConfig'
 
 const employeeId = Cookies.get('employeeId')
 console.log('employeeId', employeeId)
@@ -19,10 +20,10 @@ const BeginReservation = async ({ customerReservationId, refetchReservation, toa
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Begin-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
         // POST request to the server with form data
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -38,9 +39,9 @@ const AcceptReservation = async ({ customerReservationId, refetchReservation, to
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Accept-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -56,9 +57,9 @@ const DeclineReservation = async ({ customerReservationId, refetchReservation, t
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Decline-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -74,9 +75,9 @@ const CancelReservation = async ({ customerReservationId, refetchReservation, to
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Cancel-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Cancel-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -160,7 +161,7 @@ const VehicleHoverCard = ({ regNo }) => {
     const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
     useEffect(() => {
         const fetchVehicleDetails = async () => {
-            const response = await axios.get(`http://localhost:5062/api/AdminVehicle/regNo?regNo=${regNo}`)
+            const response = await apiclient.get(`/AdminVehicle/regNo?regNo=${regNo}`)
             setVehicle(response.data)
             console.log('Vehicle Details:', response.data)
         }
@@ -205,9 +206,7 @@ const CustomerHoverCard = ({ reservationId, name }) => {
     const [customer, setCustomer] = useState(null)
     useEffect(() => {
         const fetchCustomerDetails = async () => {
-            const response = await axios.get(
-                `http://localhost:5062/api/AdminReservation/Customer-Details/${reservationId}`
-            )
+            const response = await apiclient.get(`/AdminReservation/Customer-Details/${reservationId}`)
             setCustomer(response.data)
         }
         fetchCustomerDetails()
