@@ -1,4 +1,5 @@
 import { Button } from '../../../components/ui/button'
+import { generateInvoice } from './generateInvoice'
 
 export const columns = [
     {
@@ -45,7 +46,13 @@ export const columns = [
         accessorKey: 'actions',
         header: () => <div className="text-end">Actions</div>,
         cell: ({ row }) => {
-            const status = row.getValue('reservationStatus')
+            const invoice = row.original
+            const status = invoice.reservationStatus
+
+            const handleDownloadPdf = () => {
+                generateInvoice(invoice)
+            }
+
             return (
                 <div className="flex items-center justify-end gap-2">
                     {status === 'Ended' ? (
@@ -53,7 +60,7 @@ export const columns = [
                             <Button variant="ghost" className="border border-gray-500">
                                 Pay Now
                             </Button>
-                            <Button variant="ghost" className="border border-gray-500">
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
                                 Download PDF
                             </Button>
                         </>
@@ -62,7 +69,7 @@ export const columns = [
                             <Button variant="ghost" className="border border-gray-500">
                                 View
                             </Button>
-                            <Button variant="ghost" className="border border-gray-500">
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
                                 Download PDF
                             </Button>
                         </>
