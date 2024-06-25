@@ -22,6 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { useNavigate } from 'react-router-dom'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const items = [
     { id: 'abs', label: 'ABS' },
@@ -102,9 +103,9 @@ export default function EditVehicleModel() {
     })
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        const url = `/AdminVehicle/${vehicleModelId}`
         try {
-            const { data } = await axios.get(url)
+            const { data } = await apiclient.get(url)
             reset({
                 name: data.vehicleModel.name,
                 year: data.vehicleModel.year,
@@ -124,7 +125,7 @@ export default function EditVehicleModel() {
     useEffect(() => {
         const fetchVehicleMakes = async () => {
             try {
-                const response = await axios.get('http://localhost:5062/api/VehicleMake')
+                const response = await apiclient.get('/VehicleMake')
                 setVehicleMakes(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
@@ -135,7 +136,7 @@ export default function EditVehicleModel() {
     }, [vehicleModelId, reset])
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        const url = `/AdminVehicle/${vehicleModelId}`
         try {
             // Convert the items array into an object with key-value pairs
             const additionalFeatures = items.reduce((acc, item) => {
@@ -154,7 +155,7 @@ export default function EditVehicleModel() {
                 },
                 AdditionalFeatures: additionalFeatures
             }
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             toast({
                 variant: 'success',
                 description: 'VehicleMake Updated successfully'

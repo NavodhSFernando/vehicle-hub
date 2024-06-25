@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import Cookie from 'js-cookie'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 // Define the schema for form validation using zod
 const formSchema = z.object({
@@ -62,7 +63,7 @@ export default function CreateVehicleLog() {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
 
-        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
+        const url = `/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
         try {
             const formData = {
                 CustomerReservationId: data.customerReservationId,
@@ -72,7 +73,7 @@ export default function CreateVehicleLog() {
             }
 
             // POST request to the server with form data
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             console.log(result)
 
             toast({

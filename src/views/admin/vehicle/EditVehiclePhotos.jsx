@@ -17,6 +17,7 @@ import axios from 'axios'
 import { useRef } from 'react'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 export default function EditVehiclePhotos({ vehicleId }) {
     const fileInputRef = useRef('')
@@ -43,9 +44,9 @@ export default function EditVehiclePhotos({ vehicleId }) {
     const [interior, setInterior] = useState(null)
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+        const url = `/Vehicle/${vehicleId}`
         try {
-            const { data } = await axios.get(url)
+            const { data } = await apiclient.get(url)
             setThumbnail(data.thumbnail)
             setFrontImg(data.frontImg)
             setRearImg(data.rearImg)
@@ -94,11 +95,11 @@ export default function EditVehiclePhotos({ vehicleId }) {
     }
 
     const handleThumbnailSave = async (data) => {
-        const url = `http://localhost:5062/api/Vehicle/Thumbnail/${vehicleId}`
+        const url = `/Vehicle/Thumbnail/${vehicleId}`
         try {
             const formData = new FormData()
             formData.append('formFile', data.thumbnail ? data.thumbnail[0] : null)
-            const response = await axios.put(url, formData, {
+            const response = await apiclient.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -118,11 +119,11 @@ export default function EditVehiclePhotos({ vehicleId }) {
     }
 
     const handleFrontImgSave = async (data) => {
-        const url = `http://localhost:5062/api/Vehicle/FrontImg/${vehicleId}`
+        const url = `/Vehicle/FrontImg/${vehicleId}`
         try {
             const formData = new FormData()
             formData.append('front', data.frontImg[0])
-            const response = await axios.put(url, formData, {
+            const response = await apiclient.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -142,11 +143,11 @@ export default function EditVehiclePhotos({ vehicleId }) {
     }
 
     const handleRearImgSave = async (data) => {
-        const url = `http://localhost:5062/api/Vehicle/RearImg/${vehicleId}`
+        const url = `/Vehicle/RearImg/${vehicleId}`
         try {
             const formData = new FormData()
             formData.append('rear', data.rearImg[0])
-            const response = await axios.put(url, formData, {
+            const response = await apiclient.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -166,11 +167,11 @@ export default function EditVehiclePhotos({ vehicleId }) {
     }
 
     const handleDashboardImgSave = async (data) => {
-        const url = `http://localhost:5062/api/Vehicle/DashboardImg/${vehicleId}`
+        const url = `/api/Vehicle/DashboardImg/${vehicleId}`
         try {
             const formData = new FormData()
             formData.append('dashboard', data.dashboard[0])
-            const response = await axios.put(url, formData, {
+            const response = await apiclient.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -190,11 +191,11 @@ export default function EditVehiclePhotos({ vehicleId }) {
     }
 
     const handleInteriorImgSave = async (data) => {
-        const url = `http://localhost:5062/api/Vehicle/InteriorImg/${vehicleId}`
+        const url = `/Vehicle/InteriorImg/${vehicleId}`
         try {
             const formData = new FormData()
             formData.append('interior', data.interior[0])
-            const response = await axios.put(url, formData, {
+            const response = await apiclient.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

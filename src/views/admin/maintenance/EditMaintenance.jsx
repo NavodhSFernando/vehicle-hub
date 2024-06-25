@@ -26,6 +26,7 @@ import cn from 'classnames'
 import { Calendar } from '../../../components/ui/calendar'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -65,9 +66,9 @@ export default function EditMaintenance() {
     })
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
+        const url = `/VehicleMaintenance/${maintenanceId}`
         try {
-            const { data } = await axios.get(url)
+            const { data } = await apiclient.get(url)
             console.log(data)
             reset({
                 date: data.date,
@@ -86,7 +87,7 @@ export default function EditMaintenance() {
     }, [maintenanceId, reset])
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
+        const url = `/VehicleMaintenance/${maintenanceId}`
         try {
             const formData = {
                 Date: data.date,
@@ -96,7 +97,7 @@ export default function EditMaintenance() {
                 CurrentMileage: data.currentMileage
             }
 
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             toast({
                 variant: 'success',
                 description: 'Maintenance updated successfully'

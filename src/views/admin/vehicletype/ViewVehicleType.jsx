@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import DataTable from './DataTable'
 import { columns } from './Columns'
+import apiclient from '../../../axiosConfig'
 
 export default function ViewVehicleType() {
     const [vehicleTypes, setVehicleTypes] = useState([])
@@ -10,7 +11,7 @@ export default function ViewVehicleType() {
         const fetchVehicleTypes = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
-                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                const response = await apiclient.get('/VehicleType')
                 setVehicleTypes(response.data) // Assume the response data is the array of vehicles
             } catch (error) {
                 console.error('Failed to fetch vehicle Types:', error)
