@@ -33,8 +33,17 @@ export const columns = [
         header: 'Status',
         cell: ({ row }) => {
             const status = row.getValue('reservationStatus')
-            const text = status === 'Ended' ? 'Not Paid' : 'Paid'
-            const color = text === 'Not Paid' ? 'bg-red-500' : 'bg-green-500'
+            let text;
+            let color;
+
+            if (status === 'Pending' || status === 'Ended') {
+                text = 'Not Paid';
+                color = 'bg-red-500';
+            } else if (status === 'Confirmed' || status === 'Completed') {
+                text = 'Paid';
+                color = 'bg-green-500';
+            }
+
             return (
                 <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
                     {text}
@@ -65,13 +74,13 @@ export const columns = [
 
             return (
                 <div className="flex items-center justify-end gap-2">
-                    {status === 'Ended' ? (
+                    {status === 'Pending' || status === 'Ended' ? (
                         <>
                             <Button variant="ghost" className="border border-gray-500">
                                 Pay Now
                             </Button>
-                            <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
-                                Download PDF
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
+                                View PDF
                             </Button>
                         </>
                     ) : (
