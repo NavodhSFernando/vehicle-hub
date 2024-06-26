@@ -57,7 +57,7 @@ export default function EditVehicleLog() {
         const fetchData = async () => {
             const url = `/VehicleLog/${vehicleLogId}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 setCustomerReservationId(data.customerReservationId)
                 // Reset form with fetched data
                 reset({
