@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 import { useToast } from '../../ui/use-toast'
 import apiclient from '../../../axiosConfig'
 
-export default function Detailcar({ id, sdate, stime, edate, etime }) {
+export default function Detailcar({ id, sdate, stime, edate, etime, thumbnail }) {
     const [clicked, setClicked] = useState(false)
     const [wishlistclick, setwishlistclick] = useState(false)
     const [totalFeedbacks, setTotalFeedbacks] = useState(0)
