@@ -7,6 +7,7 @@ import axios from 'axios'
 export default function ViewBillingDetails() {
     const customerId = useOutletContext()
     const [data, setData] = useState([])
+    const [paymentStatuses, setPaymentStatuses] = useState({})
 
     useEffect(() => {
         const fetchDecryptedIdAndBillingDetails = async () => {
@@ -17,7 +18,27 @@ export default function ViewBillingDetails() {
                 const billingDetailsResponse = await axios.get(
                     `http://localhost:5062/BillingDetails/ByCustomer/${decryptedId}`
                 )
-                setData(billingDetailsResponse.data)
+                const invoices = billingDetailsResponse.data
+                setData(invoices)
+
+                // Fetch payment status for each invoice
+                const paymentStatusPromises = invoices.map(async (invoice) => {
+                    try {
+                        const response = await axios.get(`http://localhost:5062/CheckPayment/CheckPayment/${invoice.id}`)
+                        if (response.data.paymentExists) {
+                            return { [invoice.id]: response.data.paymentStatus }
+                        } else {
+                            return { [invoice.id]: 'Not Paid' }
+                        }
+                    } catch (error) {
+                        console.error(`Error fetching payment status for invoice ${invoice.id}:`, error)
+                        return { [invoice.id]: 'Not Paid' }
+                    }
+                })
+
+                const paymentStatusesArray = await Promise.all(paymentStatusPromises)
+                const paymentStatusesObject = paymentStatusesArray.reduce((acc, status) => ({ ...acc, ...status }), {})
+                setPaymentStatuses(paymentStatusesObject)
             } catch (error) {
                 console.error('Error fetching data:', error)
             }
@@ -30,7 +51,7 @@ export default function ViewBillingDetails() {
 
     return (
         <div className="flex flex-col p-6 bg-white rounded-lg">
-            <DataTable columns={columns} data={data} />
+            <DataTable columns={columns(paymentStatuses)} data={data} />
         </div>
     )
 }

@@ -1,7 +1,8 @@
+import React, { useEffect, useState } from 'react'
 import { Button } from '../../../components/ui/button'
 import { generateInvoice } from './generateInvoice'
 
-export const columns = [
+export const columns = (paymentStatuses) => [
     {
         accessorKey: 'dateCreated',
         header: 'Date',
@@ -32,16 +33,15 @@ export const columns = [
         accessorKey: 'reservationStatus',
         header: 'Status',
         cell: ({ row }) => {
-            const status = row.getValue('reservationStatus')
-            let text;
-            let color;
+            const invoiceId = row.getValue('id')
+            const paymentStatus = paymentStatuses[invoiceId]
 
-            if (status === 'Pending' || status === 'Ended') {
-                text = 'Not Paid';
-                color = 'bg-red-500';
-            } else if (status === 'Confirmed' || status === 'Completed') {
-                text = 'Paid';
-                color = 'bg-green-500';
+            let text = 'Not Paid'
+            let color = 'bg-red-500'
+
+            if (paymentStatus === 'Final') {
+                text = 'Paid'
+                color = 'bg-green-500'
             }
 
             return (
@@ -56,40 +56,41 @@ export const columns = [
         header: () => <div className="text-end">Actions</div>,
         cell: ({ row }) => {
             const invoice = row.original
-            const status = invoice.reservationStatus
+            const invoiceId = invoice.id
+            const paymentStatus = paymentStatuses[invoiceId]
 
             const handleDownloadPdf = () => {
-                const pdfUrl = generateInvoice(invoice);
-                const a = document.createElement('a');
-                a.href = pdfUrl;
-                a.download = `invoice-${invoice.id}.pdf`;
-                a.click();
-                URL.revokeObjectURL(pdfUrl);
+                const pdfUrl = generateInvoice(invoice)
+                const a = document.createElement('a')
+                a.href = pdfUrl
+                a.download = `invoice-${invoice.id}.pdf`
+                a.click()
+                URL.revokeObjectURL(pdfUrl)
             }
 
             const handleViewPdf = () => {
-                const pdfUrl = generateInvoice(invoice);
-                window.open(pdfUrl, '_blank');
+                const pdfUrl = generateInvoice(invoice)
+                window.open(pdfUrl, '_blank')
             }
 
             return (
                 <div className="flex items-center justify-end gap-2">
-                    {status === 'Pending' || status === 'Ended' ? (
-                        <>
-                            <Button variant="ghost" className="border border-gray-500">
-                                Pay Now
-                            </Button>
-                            <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
-                                View PDF
-                            </Button>
-                        </>
-                    ) : (
+                    {paymentStatus === 'Final' ? (
                         <>
                             <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
                                 View PDF
                             </Button>
                             <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
                                 Download PDF
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="ghost" className="border border-gray-500">
+                                Pay Now
+                            </Button>
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
+                                View PDF
                             </Button>
                         </>
                     )}
