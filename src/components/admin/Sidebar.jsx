@@ -1,23 +1,34 @@
 import React, { useState } from 'react'
 import classNames from 'classnames'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { DASHBOARD_SIDEBAR_LINKS, DASHBOARD_SIDEBAR_BOTTOM_LINKS } from './SideBarLinks'
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 import LogoIcon from '../../assets/logos/VH-Icon.png'
 import LogoType from '../../assets/logos/VH-Type.png'
+import axios from 'axios'
 
 const linkClass =
     'flex items-center gap-2 font-light px-3 py-2 hover:bg-[#2c3e91] hover:no-underline rounded-sm text-base'
 
 export default function Sidebar() {
     const [showSublinks, setShowSublinks] = useState({})
+    const navigate = useNavigate() // Move useNavigate here
 
     const toggleSublinks = (key) => {
         setShowSublinks((prevState) => ({
             ...prevState,
             [key]: !prevState[key]
         }))
+    }
+
+    const logout = async () => {
+        try {
+            await axios.post(`http://localhost:5062/api/EmployeeAuth/logout`)
+            navigate('/admin-login')
+        } catch (error) {
+            console.error('Failed to logout!')
+        }
     }
 
     return (
@@ -47,10 +58,7 @@ export default function Sidebar() {
                         showSublinks={showSublinks[link.key]}
                     />
                 ))}
-                <div
-                    className={classNames(linkClass, 'cursor-pointer text-red-500')}
-                    onClick={() => toggleSublinks('logout')}
-                >
+                <div className={classNames(linkClass, 'cursor-pointer text-red-500')} onClick={logout}>
                     <span className="text-xl">
                         <HiOutlineLogout />
                     </span>
