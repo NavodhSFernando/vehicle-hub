@@ -13,7 +13,11 @@ export default function Layout() {
             <div className="absolute top-0 left-0 w-full h-96 bg-blue-to-transparent z-0"></div>
             <NavBar className="relative z-10" />
             <div
-                className={`${!isHomePage ? 'relative z-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-28 lg:min-h-[700px]' : ''}`}
+                className={`${
+                    !isHomePage
+                        ? 'relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:min-h-[700px]'
+                        : 'relative z-10 w-full'
+                }`}
             >
                 <Outlet />
             </div>
