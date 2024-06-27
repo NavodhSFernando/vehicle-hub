@@ -24,6 +24,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const currentDate = new Date().toISOString().split('T')[0]
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
@@ -60,9 +61,9 @@ export default function EditInsurance() {
     })
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
+        const url = `/VehicleInsurance/${insuranceId}`
         try {
-            const { data } = await axios.get(url)
+            const { data } = await apiclient.get(url)
 
             reset({
                 insuranceNo: data.insuranceNo,
@@ -79,14 +80,14 @@ export default function EditInsurance() {
     }, [insuranceId, reset])
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleInsurance/${insuranceId}`
+        const url = `/VehicleInsurance/${insuranceId}`
         try {
             const formData = {
                 InsuranceNo: data.insuranceNo,
                 ExpiryDate: data.expiryDate,
                 VehicleId: data.vehicleId
             }
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             console.log(result)
             toast({
                 variaant: 'success',

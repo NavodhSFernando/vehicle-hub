@@ -22,6 +22,7 @@ import { Calendar as CalendarIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import cn from 'classnames'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -61,14 +62,14 @@ export default function CreateInsurance() {
 
     //Submit handler
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleInsurance'
+        const url = '/VehicleInsurance'
         try {
             const formData = {
                 InsuranceNo: data.insuranceNo,
                 ExpiryDate: data.expiryDate,
                 VehicleId: data.vehicleId
             }
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             toast({
                 variant: 'success',
                 description: 'Insurance created successfully'

@@ -6,8 +6,9 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { useToast } from '../../ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
-export default function Detailcar({ id, sdate, stime, edate, etime }) {
+export default function Detailcar({ id, sdate, stime, edate, etime, thumbnail }) {
     const [clicked, setClicked] = useState(false)
     const [wishlistclick, setwishlistclick] = useState(false)
     const [totalFeedbacks, setTotalFeedbacks] = useState(0)
@@ -35,11 +36,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             navigate('/login')
         }
 
-        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
-        const decryptedId = decryptResponse.data.decryptedUserId
-
-        const url = `http://localhost:5062/api/FrontReservationService/request-reservation`
         try {
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+
+            const url = `/FrontReservationService/request-reservation`
             const formData = {
                 VehicleId: id,
                 CustomerId: decryptedId,
@@ -50,7 +51,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     EndTime: etime
                 }
             }
-            const response = await axios.post(url, formData)
+            const response = await apiclient.post(url, formData)
 
             toast({
                 variant: 'success',
@@ -75,9 +76,16 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         return JSON.parse(localStorage.getItem('wishlistItems')) || []
     }
 
+    const areVehiclesEqual = (vehicle1, vehicle2) => {
+        console.log('=============detail car start======================')
+        console.log(vehicle1.id + '==' + vehicle2.id)
+        console.log('=============detail car end======================')
+        return vehicle1.id == vehicle2.id
+    }
+
     const handleClick = () => {
         const vehicleDetails = {
-            id: id,
+            id: parseInt(id),
             name: vehicleData.model,
             type: vehicleData.fuelType,
             year: vehicleData.year,
@@ -88,13 +96,10 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         }
 
         const existingWishlistItems = getWishlist()
-        const areVehiclesEqual = (vehicle1, vehicle2) => {
-            return vehicle1.id === vehicle2.id
-        }
 
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
-
-        if (index === -1) {
+        console.log('index->' + index)
+        if (index == -1) {
             const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
             updateWishlist(updatedWishlistItems)
             setClicked(true)
@@ -103,6 +108,12 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             updateWishlist(updatedWishlistItems)
             setClicked(false)
         }
+    }
+
+    const handleWishlistUpdate = (event) => {
+        const updatedWishlist = event.detail
+        const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
+        setClicked(isInUpdatedWishlist)
     }
 
     useEffect(() => {
@@ -136,14 +147,8 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
 
         //wishlist
         const existingWishlistItems = getWishlist()
-        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
+        const isInWishlist = existingWishlistItems.some((item) => item.id == id)
         setClicked(isInWishlist)
-
-        const handleWishlistUpdate = (event) => {
-            const updatedWishlist = event.detail
-            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
-            setClicked(isInUpdatedWishlist)
-        }
 
         window.addEventListener('wishlistUpdated', handleWishlistUpdate)
 

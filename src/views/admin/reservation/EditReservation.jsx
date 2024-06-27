@@ -18,6 +18,7 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
+import apiclient from '../../../axiosConfig'
 
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/
 const timeRegex = /^\d{2}:\d{2}:\d{2}$/
@@ -81,9 +82,9 @@ export default function EditReservation() {
     // Fetch vehicle Log data
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleLog/${customerReservationId}` // fix this URL
+            const url = `/VehicleLog/${customerReservationId}` // fix this URL
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 console.log(data.vehicle.id)
                 console.log(data.customerId)
                 console.log(data.reservation.id)
@@ -110,7 +111,7 @@ export default function EditReservation() {
 
     // Function to handle form submission
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleLog/${customerReservationId}`
+        const url = `/VehicleLog/${customerReservationId}`
         try {
             const formData = {
                 Id: customerReservationId,
@@ -124,7 +125,7 @@ export default function EditReservation() {
             }
 
             // PUT request to the server with form data
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             console.log(result)
             reset()
         } catch (error) {
