@@ -19,8 +19,8 @@ export default function Bookingconfirmredirect() {
                 const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${invoiceId}`)
                 const decryptedId = decryptResponse.data.decryptedUserId
 
-                const response = await apiclient.get(
-                    `/FrontReservationService/view-booking-confirmation/${decryptedId}`
+                const response = await axios.get(
+                    `http://localhost:5062/api/FrontReservationService/view-booking-confirmation/${decryptedId}`
                 )
                 setDecryptedId(decryptedId)
                 setRentalData(response.data)
