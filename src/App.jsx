@@ -9,7 +9,6 @@ import Login from './views/front/Login'
 import Signup from './views/front/Signup'
 import Password from './views/front/Password'
 import ViewReservation from './views/admin/reservation/ViewReservation'
-import CreateReservation from './views/admin/reservation/EditReservation'
 import ViewVehicleType from './views/admin/vehicletype/ViewVehicleType'
 import CreateVehicleType from './views/admin/vehicletype/CreateVehicleType'
 import ViewVehicleMake from './views/admin/vehiclemake/ViewVehicleMake'
@@ -115,9 +114,7 @@ function App() {
                             path="viewnotificationcenter"
                             element={
                                 <TitleComponent title="Notification Center">
-                                    <ProtectedRoute allowedRoles={['customer']}>
-                                        <NotificationCenter />
-                                    </ProtectedRoute>
+                                    <NotificationCenter />
                                 </TitleComponent>
                             }
                         />
@@ -184,34 +181,17 @@ function App() {
                 >
                     <Route path="/admin/*" element={<AdminPageNotFound />} />
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route
-                        path="notification"
-                        element={
-                            <ProtectedRoute allowedRoles={['admin']}>
-                                <Notification />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route path="report">
+                    <Route path="report" element={<ProtectedRoute allowedRoles={['admin']} />}>
                         <Route path="feedbackreport" element={<ViewFeedbackReport />} />
                         <Route path="revenuereport" element={<ViewRevenueReport />} />
                         <Route path="vehicleutilizationreport" element={<ViewVehicleUtilizationReport />} />
                     </Route>
-
                     <Route path="reservation">
                         <Route
                             path="view"
                             element={
                                 <TitleComponent title="Reservation">
                                     <ViewReservation />
-                                </TitleComponent>
-                            }
-                        />
-                        <Route
-                            path="create"
-                            element={
-                                <TitleComponent title="Create Reservation">
-                                    <CreateReservation />
                                 </TitleComponent>
                             }
                         />
@@ -346,7 +326,7 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="employee">
+                    <Route path="employee" element={<ProtectedRoute allowedRoles={['admin']} />}>
                         <Route
                             path="/admin/employee/edit/:employeeId"
                             element={
@@ -355,14 +335,19 @@ function App() {
                                 </TitleComponent>
                             }
                         />
-                        <Route path="view" element={<ViewEmployee />} />
+                        <Route
+                            path="view"
+                            element={
+                                <TitleComponent title="Employee">
+                                    <ViewEmployee />
+                                </TitleComponent>
+                            }
+                        />
                         <Route
                             path="create"
                             element={
                                 <TitleComponent title="Create Employee">
-                                    <ProtectedRoute allowedRoles={['admin']}>
-                                        <CreateEmployee />
-                                    </ProtectedRoute>
+                                    <CreateEmployee />
                                 </TitleComponent>
                             }
                         />
@@ -382,7 +367,9 @@ function App() {
                             path="/admin/vehiclelog/edit/:vehicleLogId"
                             element={
                                 <TitleComponent title="Edit Vehicle Log">
-                                    <EditVehicleLog />
+                                    <ProtectedRoute allowedRoles={['admin']}>
+                                        <EditVehicleLog />
+                                    </ProtectedRoute>
                                 </TitleComponent>
                             }
                         />
@@ -429,6 +416,14 @@ function App() {
                             }
                         />
                     </Route>
+                    <Route
+                        path="notification"
+                        element={
+                            <ProtectedRoute allowedRoles={['admin']}>
+                                <Notification />
+                            </ProtectedRoute>
+                        }
+                    />
                     <Route
                         path="/admin/settings"
                         element={

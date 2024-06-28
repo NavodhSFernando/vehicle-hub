@@ -15,6 +15,7 @@ import VehicleCard from './VehicleCard'
 import { useState, useEffect } from 'react'
 import { get } from 'react-hook-form'
 import axios from 'axios'
+import apiclient from '../../../axiosConfig'
 
 // const data = [
 //     {
@@ -90,9 +91,9 @@ export function EditVehicleDialog({ customerReservationId, refetchReservation, t
     const [open, setOpen] = useState(false)
 
     const getAvailableVehicles = async () => {
-        const url = `http://localhost:5062/api/AdminReservation/Available-Vehicles/${customerReservationId}`
+        const url = `/AdminReservation/Available-Vehicles/${customerReservationId}`
         try {
-            const response = await axios.get(url)
+            const response = await apiclient.get(url)
             console.log(response.data)
             setData(response.data)
         } catch (error) {
@@ -105,9 +106,9 @@ export function EditVehicleDialog({ customerReservationId, refetchReservation, t
     }, [customerReservationId])
 
     const handleSelect = async (id) => {
-        const url = `http://localhost:5062/api/AdminReservation/Change-Vehicle/${customerReservationId}?vid=${id}`
+        const url = `/AdminReservation/Change-Vehicle/${customerReservationId}?vid=${id}`
         try {
-            const response = await axios.post(url)
+            const response = await apiclient.post(url)
             console.log(response.data)
             console.log('Vehicle selected')
             setOpen(false) // Close the dialog

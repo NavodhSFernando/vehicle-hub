@@ -6,6 +6,7 @@ import RentalSummary from '../../components/front/RentalSummary'
 import BookingForm from '../../components/front/VehicleFleetSingle/BookingForm'
 import PaymentMethod from './PaymentMethod'
 import PageNotFound from '../../components/front/PageNotFound'
+import apiclient from '../../axiosConfig'
 
 export default function Bookingconfirmredirect() {
     const { invoiceId } = useParams()

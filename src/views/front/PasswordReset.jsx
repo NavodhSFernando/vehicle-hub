@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-
+import { useToast } from '../../components/ui/use-toast'
 import { Button } from '../../components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
@@ -25,7 +25,7 @@ const PasswordReset = () => {
     const form = useForm({
         resolver: zodResolver(passwordSchema)
     })
-
+    const { toast } = useToast()
     const otp = useParams()
     console.log(otp.otp)
 
@@ -33,15 +33,21 @@ const PasswordReset = () => {
         const URL = `http://localhost:5062/api/CustomerAuth/ResetPassword?otp=${otp.otp}&password=${data.password}`
         try {
             const response = await axios.post(URL)
-            alert('Password reset successfully')
+            toast({
+                variant: 'success',
+                description: 'Password reset successfully!'
+            })
             navigate('/login')
         } catch (error) {
-            alert('Failed to reset password')
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to reset the Password!'
+            })
         }
     }
 
     return (
-        <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
+        <div className="relative w-screen h-screen bg-slate-200 flex justify-center items-center">
             <div className="bg-gray-200 "></div>
 
             <div className="w-full max-w-sm p-8 space-y-6 bg-white rounded-lg shadow-md">
