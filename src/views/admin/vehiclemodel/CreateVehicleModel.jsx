@@ -20,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const items = [
     { id: 'abs', label: 'ABS' },
@@ -110,7 +111,7 @@ export default function CreateVehicleModel() {
         const fetchVehicleMakes = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
-                const response = await axios.get('http://localhost:5062/api/VehicleMake')
+                const response = await apiclient.get('/VehicleMake')
                 setVehicleMakes(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
@@ -120,7 +121,7 @@ export default function CreateVehicleModel() {
     }, [])
 
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/AdminVehicle'
+        const url = '/AdminVehicle'
         try {
             // Convert the items array into an object with key-value pairs
             const additionalFeatures = items.reduce((acc, item) => {
@@ -140,7 +141,7 @@ export default function CreateVehicleModel() {
                 AdditionalFeatures: additionalFeatures
             }
 
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             console.log('Vehicle model created', result)
             toast({
                 variant: 'success',

@@ -19,6 +19,7 @@ import {
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertDialogDemo } from '../../../src/components/ui/alertDialog'
+import apiclient from '../../../src/axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -70,9 +71,9 @@ function Viewprofile() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/customer/${decrypt}`
+            const url = `/customer/${decrypt}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 console.log(data)
 
                 reset({
@@ -109,8 +110,8 @@ function Viewprofile() {
             }
             // Handle file data appropriately for your backend
 
-            const url = `http://localhost:5062/api/customer/${decrypt}`
-            const result = await axios.put(url, formData)
+            const url = `/customer/${decrypt}`
+            const result = await apiclient.put(url, formData)
             console.log(result.data)
             toast({
                 variant: 'success',
@@ -127,8 +128,8 @@ function Viewprofile() {
 
     const handleDeleteAccount = async () => {
         try {
-            const url = `http://localhost:5062/api/CustomerAuth/deactivate/${decrypt}`
-            const result = await axios.post(url)
+            const url = `/CustomerAuth/deactivate/${decrypt}`
+            const result = await apiclient.post(url)
             console.log(result.data)
             toast({
                 variant: 'success',
@@ -292,7 +293,7 @@ function Viewprofile() {
                             alertTitle="Delete your Account"
                             alertDescription="Are you sure you want to delete your account?"
                             handleConfirm={() => handleDeleteAccount(decrypt)}
-                            className="bg-red-600 text-white hover:bg-red-700"
+                            variant="destructive"
                         />
                     </div>
                 </div>

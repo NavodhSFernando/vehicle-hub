@@ -16,6 +16,7 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -48,7 +49,7 @@ export default function CreateVehicleMake() {
 
     // Submit handler
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleMake'
+        const url = '/VehicleMake'
         try {
             // Create FormData object and append the name and formFile
             const formData = new FormData()
@@ -56,7 +57,7 @@ export default function CreateVehicleMake() {
             formData.append('formFile', data.formFile[0]) // Ensure the key matches the backend expectation
 
             // Send the form data as multipart/form-data
-            const response = await axios.post(url, formData, {
+            const response = await apiclient.post(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

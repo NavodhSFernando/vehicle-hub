@@ -79,6 +79,7 @@ export default function VehicleFleetSingle() {
             <div className="flex flex-col w-1/2">
                 <Detailcar
                     id={id}
+                    thumbnail={vehicleData.thumbnail}
                     sdate={reservation.sdate ? formatDate(reservation.sdate) : 'N/A'}
                     stime={reservation.stime ? formatTime(reservation.stime) : 'N/A'}
                     edate={reservation.edate ? formatDate(reservation.edate) : 'N/A'}

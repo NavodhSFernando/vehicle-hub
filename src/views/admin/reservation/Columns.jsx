@@ -1,5 +1,4 @@
-import React from 'react'
-import { Button } from '../../../components/ui/button'
+import React, { useEffect } from 'react'
 import { GrTrash, GrStop, GrPlay } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -7,6 +6,9 @@ import { EditVehicleDialog } from '../../../components/admin/reservation/EditVeh
 import Cookies from 'js-cookie'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../components/ui/hover-card'
+import { useState } from 'react'
+import apiclient from '../../../axiosConfig'
 
 const employeeId = Cookies.get('employeeId')
 console.log('employeeId', employeeId)
@@ -18,10 +20,10 @@ const BeginReservation = async ({ customerReservationId, refetchReservation, toa
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Begin-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Begin-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
         // POST request to the server with form data
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -37,9 +39,9 @@ const AcceptReservation = async ({ customerReservationId, refetchReservation, to
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Accept-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Accept-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -55,9 +57,9 @@ const DeclineReservation = async ({ customerReservationId, refetchReservation, t
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Decline-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Decline-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -73,9 +75,9 @@ const CancelReservation = async ({ customerReservationId, refetchReservation, to
     const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
     const decryptedId = decryptResponse.data.decryptedUserId
 
-    const url = `http://localhost:5062/api/AdminReservation/Cancel-Reservation/${customerReservationId}?eid=${decryptedId}`
+    const url = `/AdminReservation/Cancel-Reservation/${customerReservationId}?eid=${decryptedId}`
     try {
-        const result = await axios.post(url)
+        const result = await apiclient.post(url)
         console.log(result)
         toast({
             variant: 'success',
@@ -154,6 +156,90 @@ const ActionButtons = ({ customerReservationId, status, refetchReservation }) =>
     )
 }
 
+const VehicleHoverCard = ({ regNo }) => {
+    const [vehicle, setVehicle] = useState(null)
+    const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            const response = await apiclient.get(`/AdminVehicle/regNo?regNo=${regNo}`)
+            setVehicle(response.data)
+            console.log('Vehicle Details:', response.data)
+        }
+        fetchVehicleDetails()
+    }, [regNo])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700">{regNo}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {vehicle ? (
+                    <div className="text-center">
+                        <img
+                            className="object-contain h-32 mx-auto"
+                            src={`${baseThumbnailUrl}${vehicle.thumbnail}`}
+                            alt=""
+                        />
+                        <h3 className="text-lg font-semibold">{regNo}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-sm">
+                            <strong>Vehicle ID:</strong> {vehicle.id}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Model:</strong> {vehicle.model}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Type:</strong> {vehicle.type}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Year:</strong> {vehicle.year}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
+const CustomerHoverCard = ({ reservationId, name }) => {
+    const [customer, setCustomer] = useState(null)
+    useEffect(() => {
+        const fetchCustomerDetails = async () => {
+            const response = await apiclient.get(`/AdminReservation/Customer-Details/${reservationId}`)
+            setCustomer(response.data)
+        }
+        fetchCustomerDetails()
+    }, [reservationId])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700">{name}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md w-fit">
+                {customer ? (
+                    <div>
+                        <h3 className="text-lg font-semibold text-center">{customer.name}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <div className="text-gray-700 flex space-x-4">
+                            <p>
+                                <strong>ID:</strong> {customer.id}
+                            </p>
+                            <p>
+                                <strong>Phone:</strong> {customer.phone}
+                            </p>
+                        </div>
+                        <p className="text-gray-700">
+                            <strong>Email:</strong> {customer.email}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
 export const columns = [
     {
         accessorKey: 'id',
@@ -168,11 +254,17 @@ export const columns = [
     },
     {
         accessorKey: 'name',
-        header: 'Customer Name'
+        header: 'Customer Name',
+        cell: ({ row }) => {
+            return <CustomerHoverCard reservationId={row.getValue('id')} name={row.getValue('name')} />
+        }
     },
     {
         accessorKey: 'regNo',
-        header: 'Registration No.'
+        header: 'Registration No.',
+        cell: ({ row }) => {
+            return <VehicleHoverCard regNo={row.getValue('regNo')} />
+        }
     },
     {
         accessorKey: 'startDate',

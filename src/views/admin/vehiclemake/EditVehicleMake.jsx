@@ -18,6 +18,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../../components/ui/use-toast'
 import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -48,9 +49,9 @@ export default function EditVehicleMake() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
+            const url = `/VehicleMake/${vehicleMakeId}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 setImage(data.logo)
                 reset({
                     name: data.name,
@@ -69,13 +70,13 @@ export default function EditVehicleMake() {
     }
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleMake/${vehicleMakeId}`
+        const url = `/VehicleMake/${vehicleMakeId}`
         try {
             const formData = new FormData()
             formData.append('Name', data.name)
             formData.append('file', data.formFile[0])
 
-            const response = await axios.put(url, formData, {
+            const response = await apiclient.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

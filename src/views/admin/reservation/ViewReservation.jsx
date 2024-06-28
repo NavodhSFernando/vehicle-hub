@@ -3,13 +3,14 @@ import axios from 'axios'
 import DataTable from './DataTable'
 import { columns as originalColumns } from './Columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs'
+import apiclient from '../../../axiosConfig'
 
 export default function ViewReservation() {
     const [Reservation, setReservation] = useState([])
 
     const fetchReservation = async () => {
         try {
-            const response = await axios.get('http://localhost:5062/api/AdminReservation/View-Reservations')
+            const response = await apiclient.get('/AdminReservation/View-Reservations')
             setReservation(response.data)
             console.log('Fetched Customer Reservations:', response.data)
         } catch (error) {
