@@ -155,7 +155,7 @@ function NotificationCard({ notification, onMarkAsRead, OnDelete }) {
     const { id, title, description, generated_DateTime, isRead } = notification
 
     return (
-        <div className="p-4 shadow rounded-lg mb-4 mx-20 flex justify-between items-center gap-[10px]">
+        <div className="p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]">
             <div className="flex flex-col">
                 <div className="font-bold text-lg">{title}</div>
                 <div className="text-gray-700">{description}</div>

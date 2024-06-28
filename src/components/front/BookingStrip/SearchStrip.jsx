@@ -10,17 +10,25 @@ const SearchStrip = ({ onSearch }) => {
 
     return (
         <div>
-            <div className="w-[900px] max-h-[43px] flex bg-white rounded-[64px]">
+            <div className="w-[300px] sm:w-[600px] md:w-[880px] max-h-[43px] flex bg-white rounded-[64px]">
                 <input
                     type="text"
-                    className="w-full h-[43px] rounded-[64px] pl-[30px] outline-none"
-                    placeholder="Search vehicles by name, type and transmission"
+                    className="w-full h-[43px] rounded-[64px] pl-[30px] outline-none block sm:hidden"
+                    placeholder="Search Vehicles"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+
+                <input
+                    type="text"
+                    className="w-full h-[43px] rounded-[64px] pl-[30px] outline-none hidden sm:block"
+                    placeholder="Search Vehicles by Name , Type and Transmission"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
 
                 <button
-                    className="flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
+                    className="flex justify-center items-center gap-[8px] w-[124px] px-5 h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
                     onClick={handleSearch}
                 >
                     <img src={Search} alt="Search icon" />
