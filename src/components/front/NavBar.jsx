@@ -49,7 +49,7 @@ const Navbar = () => {
 
     useEffect(() => {
         const isLoggedIn = Cookies.get('customerId')
-        isLoggedIn ? setLoggedIn(true) : setLoggedIn(true)
+        isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
 
         const fetchNotifications = async () => {
             try {

@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 import { useToast } from '../../ui/use-toast'
 import apiclient from '../../../axiosConfig'
 
-export default function Detailcar({ id, sdate, stime, edate, etime, thumbnail }) {
+export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) {
     const [clicked, setClicked] = useState(false)
     const [wishlistclick, setwishlistclick] = useState(false)
     const [totalFeedbacks, setTotalFeedbacks] = useState(0)
@@ -77,9 +77,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime, thumbnail })
     }
 
     const areVehiclesEqual = (vehicle1, vehicle2) => {
-        console.log('=============detail car start======================')
         console.log(vehicle1.id + '==' + vehicle2.id)
-        console.log('=============detail car end======================')
         return vehicle1.id == vehicle2.id
     }
 
@@ -89,7 +87,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime, thumbnail })
             name: vehicleData.model,
             type: vehicleData.fuelType,
             year: vehicleData.year,
-            imageSrc: vehicleData.dashboardImg,
+            imageSrc: imageSrc,
             transmission: vehicleData.transmission,
             price: vehicleData.costPerDay,
             capacity: vehicleData.seatingCapacity
