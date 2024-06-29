@@ -194,13 +194,13 @@ export const Signup = () => {
 
     return (
         <GoogleOAuthProvider clientId="305530326806-7b896dlp7b65fq8k9eoll4834c45i69c.apps.googleusercontent.com">
-            <div className="flex flex-col  justify-center items-center min-h-screen bg-slate-200 p-4">
+            <div className="flex flex-col  justify-center items-center min-h-screen bg-slate-200 p-4 sm:p-6 md:p-8">
                 <div className="flex flex-row items-center space-x-2 -mb-8 mt-6">
                     <img src={blueicon} alt="Blue Icon" className="w-10 h-auto" />
 
-                    <img src={bluetype} alt="Blue Type" className="w-40 h-auto" />
+                    <img src={bluetype} alt="Blue Type" className="w-40 h-auto sm:w-40" />
                 </div>
-                <div className="max-w-md bg-white rounded-xl shadow-lg  md:p-8">
+                <div className="max-w-md bg-white rounded-xl shadow-lg  md:p-8 sm:p-8">
                     <h1 className="text-2xl font-bold text-gray-700 mb-1 text-center"> Customer Sign up</h1>
                     <p className="text-xs text-gray-600 text-center mb-2">Please enter your user information.</p>
 
