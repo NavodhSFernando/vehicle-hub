@@ -3,7 +3,7 @@ import React from 'react'
 export default function ContactUs() {
     return (
         <>
-           <div className="container w-[900px]">
+           <div className="container  lg:w-[900px]">
            <div className="w-full flex flex-col justify-center items-center bg-white p-[50px] rounded-lg">
                     <h2 className="mb-6 text-[32px] font-bold uppercase text-black sm:text-[40px] lg:text-[36px] xl:text-[40px]">
                         GET IN TOUCH WITH US
@@ -29,7 +29,7 @@ export default function ContactUs() {
                             </svg>
                         </div>
                         <div className="w-full">
-                            <h4 className="mb-1 text-xl font-bold text-dark dark:text-white">Our Location</h4>
+                            <h4 className="mb-1 text-sm md:text-xl font-bold text-dark dark:text-white">Our Location</h4>
                             <p className="text-base text-body-color dark:text-dark-6">
                                 No 58 Pamankada Road, Colombo 06, Sri Lanka.
                             </p>
@@ -67,7 +67,7 @@ export default function ContactUs() {
                             </svg>
                         </div>
                         <div className="w-full">
-                            <h4 className="mb-1 text-xl font-bold text-dark dark:text-white">Phone Number</h4>
+                            <h4 className="mb-1 text-sm md:text-xl font-bold text-dark dark:text-white">Phone Number</h4>
                             <p className="text-base text-body-color dark:text-dark-6">+94 112 224 445</p>
                         </div>
                     </div>
@@ -88,7 +88,7 @@ export default function ContactUs() {
                             </svg>
                         </div>
                         <div className="w-full">
-                            <h4 className="mb-1 text-xl font-bold text-dark dark:text-white">Email Address</h4>
+                            <h4 className="mb-1 text-sm md:text-xl font-bold text-dark dark:text-white">Email Address</h4>
                             <p className="text-base text-body-color dark:text-dark-6">info@yourdomain.com</p>
                         </div>
                     </div>

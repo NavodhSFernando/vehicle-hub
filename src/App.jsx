@@ -69,7 +69,6 @@ function App() {
                 <Route path="/" element={<FrontLayout />}>
                     <Route path="/*" element={<FrontPageNotFound />} />
                     <Route index element={<Home />} />
-
                     <Route
                         path="/vehiclefleet"
                         element={
