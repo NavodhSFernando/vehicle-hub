@@ -23,6 +23,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
+import FacebookLogin from 'react-facebook-login'
 
 // File validation Schema
 const formSchema = z
@@ -133,7 +134,7 @@ export const Signup = () => {
                     description: 'Google Sign-In successful!'
                 })
                 // Optionally navigate to another page after successful sign-in
-                navigate('/')
+                navigate('/login')
             } else {
                 toast({
                     variant: 'destructive_border',
@@ -145,6 +146,48 @@ export const Signup = () => {
             toast({
                 variant: 'destructive_border',
                 description: 'Failed to sign in with Google!'
+            })
+        }
+    }
+
+    // Response from Facebook login
+    const responseFacebook = async (response) => {
+        try {
+            console.log('Facebook response:', response)
+            const accessToken = response?.accessToken
+            console.log('Access Token:', accessToken)
+
+            // Make a POST request to your backend endpoint for Facebook callback
+            const result = await axios.post(
+                'http://localhost:5062/api/FacebookAuth/facebook-callback',
+                { accessToken },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+
+            console.log('Facebook callback result:', result.data)
+
+            if (result.data.token) {
+                toast({
+                    variant: 'success',
+                    description: 'Facebook Sign-In successful!'
+                })
+                // Optionally navigate to another page after successful sign-in
+                navigate('/login')
+            } else {
+                toast({
+                    variant: 'destructive_border',
+                    description: 'Facebook Sign-In failed!'
+                })
+            }
+        } catch (error) {
+            console.error('Facebook Sign-In Error:', error)
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to sign in with Facebook!'
             })
         }
     }
@@ -272,7 +315,7 @@ export const Signup = () => {
                                 </div>
                                 <div className="w-16 h-0 border border-gray-400 order-1"></div>
                             </div>
-                            <div className="flex justify-center items-center">
+                            <div className="flex justify-center ">
                                 <GoogleLogin
                                     clientId="305530326806-7b896dlp7b65fq8k9eoll4834c45i69c.apps.googleusercontent.com"
                                     buttonText=""
@@ -290,13 +333,17 @@ export const Signup = () => {
                                         </button>
                                     )}
                                 />
-                                <a href="">
-                                    <img
-                                        src={fb}
-                                        alt="facebook"
-                                        className="w-7 h-7 md:w-10 md:h-8 rounded-full shadow-lg"
-                                    />
-                                </a>
+                            </div>
+                            <div className="flex justify-center">
+                                <FacebookLogin
+                                    appId="2447475068777035"
+                                    fields="email"
+                                    callback={responseFacebook}
+                                    cssClass="h-10 w-56 bg-indigo-800 text-white flex items-center justify-center"
+                                    icon={<i className="fab fa-facebook-f" />}
+                                    textButton="Facebook SignUp"
+                                    disableMobileRedirect={true}
+                                />
                             </div>
                             <div className="flex justify-center pt-2">
                                 <div className="text-indigo-600 cursor-pointer mr-3 ">

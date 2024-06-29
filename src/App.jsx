@@ -273,29 +273,35 @@ function App() {
                             </TitleComponent>
                         }
                     />
-                    <Route path="report" element={<ProtectedRoute allowedRoles={['admin']} />}>
+                    <Route path="report">
                         <Route
                             path="feedbackreport"
                             element={
+                                //<ProtectedRoute allowedRoles={['admin']}>
                                 <TitleComponent title="Feedback Report">
                                     <ViewFeedbackReport />
                                 </TitleComponent>
+                                //</ProtectedRoute>
                             }
                         />
                         <Route
                             path="revenuereport"
                             element={
+                                //<ProtectedRoute allowedRoles={['admin']}>
                                 <TitleComponent title="Revenue Report">
                                     <ViewRevenueReport />
                                 </TitleComponent>
+                                //</ProtectedRoute>
                             }
                         />
                         <Route
                             path="vehicleutilizationreport"
                             element={
+                                //<ProtectedRoute allowedRoles={['admin']}>
                                 <TitleComponent title="Vehicle Utilization Report">
                                     <ViewVehicleUtilizationReport />
                                 </TitleComponent>
+                                //</ProtectedRoute>
                             }
                         />
                     </Route>
@@ -439,29 +445,35 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="employee" element={<ProtectedRoute allowedRoles={['admin']} />}>
+                    <Route path="employee">
                         <Route
                             path="/admin/employee/edit/:employeeId"
                             element={
-                                <TitleComponent title="Edit Employee">
-                                    <EditEmployee />
-                                </TitleComponent>
+                                <ProtectedRoute allowedRoles={['admin']}>
+                                    <TitleComponent title="Edit Employee">
+                                        <EditEmployee />
+                                    </TitleComponent>
+                                </ProtectedRoute>
                             }
                         />
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="Employee">
-                                    <ViewEmployee />
-                                </TitleComponent>
+                                <ProtectedRoute allowedRoles={['admin']}>
+                                    <TitleComponent title="Employee">
+                                        <ViewEmployee />
+                                    </TitleComponent>
+                                </ProtectedRoute>
                             }
                         />
                         <Route
                             path="create"
                             element={
-                                <TitleComponent title="Create Employee">
-                                    <CreateEmployee />
-                                </TitleComponent>
+                                <ProtectedRoute allowedRoles={['admin']}>
+                                    <TitleComponent title="Create Employee">
+                                        <CreateEmployee />
+                                    </TitleComponent>
+                                </ProtectedRoute>
                             }
                         />
                     </Route>

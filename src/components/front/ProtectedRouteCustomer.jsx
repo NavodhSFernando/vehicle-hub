@@ -1,14 +1,20 @@
-import React, { Children } from 'react'
+import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { getToken } from '../../../src/getToken'
+import { getUserRoles } from '../../../src/getUserRoles'
+import { useToast } from '../../components/ui/use-toast'
 
-const ProtectedRouteCustomer = ({ children }) => {
-    const token = getToken()
+const ProtectedRoute = ({ children, allowedRoles }) => {
+    const userRole = getUserRoles()
+    const { toast } = useToast()
 
-    console.log('Token:', token)
+    console.log('User Role:', userRole)
+    console.log('Allowed Roles:', allowedRoles)
 
-    if (!token) {
-        alert('Access Denied')
+    if (!userRole || !allowedRoles.includes(userRole)) {
+        toast({
+            variant: 'destructive_border',
+            description: 'Access Denied!'
+        })
         console.log('Access denied. Redirecting...')
         return <Navigate to="/login" />
     }
@@ -16,4 +22,4 @@ const ProtectedRouteCustomer = ({ children }) => {
     return children
 }
 
-export default ProtectedRouteCustomer
+export default ProtectedRoute
