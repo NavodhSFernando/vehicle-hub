@@ -81,7 +81,7 @@ function ProfileResetPassword() {
     }
 
     return (
-        <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
+        <div className="relative w-screen h-screen bg-slate-200 flex justify-center items-center">
             <div className="w-full max-w-sm p-8 space-y-6 bg-white rounded-lg shadow-md">
                 <h1 className="text-xl font-bold text-center text-gray-800">Reset Password</h1>
                 <Form {...control}>
