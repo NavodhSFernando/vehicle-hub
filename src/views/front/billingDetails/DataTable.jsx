@@ -9,6 +9,7 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { DataTablePagination } from '../../../components/ui/DataTablePagination'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -23,6 +24,9 @@ export default function DataTable({ columns, data }) {
         getSortedRowModel: getSortedRowModel(),
         state: {
             sorting
+        },
+        initialState: {
+            pageSize: 5
         }
     })
 
@@ -64,6 +68,7 @@ export default function DataTable({ columns, data }) {
                     </TableBody>
                 </Table>
             </div>
+            <DataTablePagination table={table} />
         </div>
     )
 }
