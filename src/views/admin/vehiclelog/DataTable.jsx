@@ -41,7 +41,7 @@ export default function DataTable({ columns, data }) {
     return (
         <div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 mb-8">
-                <div className="flex flex-col space-y-1 mt-2 mb-8">
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
                     <Label>Reservation ID</Label>
                     <Input
                         placeholder="Filter Reservation Number..."
