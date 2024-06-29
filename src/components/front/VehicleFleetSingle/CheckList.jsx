@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 export default function CheckList() {
     const { id } = useParams()
     const [items, setItems] = useState([])
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth)
 
     const fetchData = async () => {
         try {
@@ -39,16 +40,23 @@ export default function CheckList() {
 
     useEffect(() => {
         fetchData()
+
+        const handleResize = () => setScreenWidth(window.innerWidth)
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
     }, [id])
 
-    // Styles for the list
     const listStyle = {
         display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateColumns: screenWidth > 768 ? 'repeat(3, 1fr)' : 'repeat(1, 1fr)',
         gap: '12px',
         alignItems: 'center',
-        listStyleType: 'none'
+        listStyleType: 'none',
+        padding: 0,
+        margin: 0
     }
+
     const titleStyle = {
         gridColumn: '1 / -1'
     }
