@@ -122,7 +122,7 @@ const FilterCard = ({ onFilterChange }) => {
 
     return (
         <div
-            className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow h-auto w-[357px]">
+            className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow h-auto w-[330px]">
             <div className='w-full flex justify-center'>
                 <Button
                     onClick={handleClearFilters}
@@ -141,7 +141,7 @@ const FilterCard = ({ onFilterChange }) => {
                     </p>
                     <div
                         className="flex flex-row items-start justify-between w-full px-3 py-3 border rounded-md border-gray-300 bg-white"
-                        style={{ width: '300px' }}
+                        style={{ width: '260px' }}
                     >
                         <select
                             value={vehicleType}
@@ -169,7 +169,7 @@ const FilterCard = ({ onFilterChange }) => {
                     </p>
                     <div
                         className="flex flex-row items-start justify-between w-full px-3 py-3 border rounded-md border-gray-300 bg-white"
-                        style={{ width: '300px' }}
+                        style={{ width: '260px' }}
                     >
                         <select
                             value={vehicleMake}
@@ -197,7 +197,7 @@ const FilterCard = ({ onFilterChange }) => {
                     </p>
                     <div
                         className="flex flex-row items-start justify-between w-full px-3 py-3 border rounded-md border-gray-300 bg-white"
-                        style={{ width: '300px' }}
+                        style={{ width: '260px' }}
                     >
                         <select
                             value={vehicleCapacity}
@@ -223,7 +223,7 @@ const FilterCard = ({ onFilterChange }) => {
                     >
                         Price
                     </p>
-                    <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '300px' }}>
+                    <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '260px' }}>
                         <input
                             type="range"
                             min="5000"

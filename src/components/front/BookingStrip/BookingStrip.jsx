@@ -21,8 +21,8 @@ export default function BookingStrip() {
 
     return (
         <div className="flex items-center justify-center">
-            <div className="min-[1300px]:overflow-x-auto px-[20px] shadow-lg bg-white rounded-lg min-[1300px]:rounded-full">
-                <ul className="flex items-center justify-center min-[1300px]:flex-row flex-col gap-1 py-[15px]">
+            <div className="min-[1300px]:overflow-x-auto sm:px-[20px] px-[20px] pr-[30px] py-[20px] md:py-0 shadow-lg bg-white rounded-lg md:rounded-full">
+                <ul className="flex items-center justify-center sm:flex-row flex-col gap-6 sm:gap-1 py-[15px]">
                     <li className="min-[1350px]:px-4">
                         <Datepicker 
                             minDate={today} 
@@ -31,14 +31,14 @@ export default function BookingStrip() {
                             onChange={setStartDate} 
                         />
                     </li>
-                    <li className="min-[1300px]:px-4 border-l-[1px] border-slate-400">
+                    <li className="min-[1300px]:px-4 sm:border-l-[1px] border-slate-400">
                         <TimePicker 
                             timepickertext="Pick-up Time" 
                             value={startTime} 
                             onChange={setStartTime} 
                         />
                     </li>
-                    <li className="min-[1300px]:px-4 border-l-[1px] border-slate-400">
+                    <li className="min-[1300px]:px-4 sm:border-l-[1px] border-slate-400">
                         <Datepicker 
                             minDate={minEndDate} 
                             datepicketrtext="Return Date" 
@@ -46,7 +46,7 @@ export default function BookingStrip() {
                             onChange={setEndDate} 
                         />
                     </li>
-                    <li className="min-[1300px]:px-4 border-l-[1px] border-slate-400">
+                    <li className="min-[1300px]:px-4 sm:border-l-[1px] border-slate-400">
                         <TimePicker 
                             timepickertext="Return Time" 
                             value={endTime} 

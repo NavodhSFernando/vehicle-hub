@@ -32,11 +32,9 @@ const VehicleHoverCard = ({ regNo }) => {
         const fetchVehicleDetails = async () => {
             const response = await apiclient.get(`/AdminVehicle/regNo?regNo=${regNo}`)
             setVehicle(response.data)
-            console.log('Vehicle Details:', response.data)
         }
         fetchVehicleDetails()
     }, [regNo])
-
     return (
         <HoverCard>
             <HoverCardTrigger className="font-medium hover:text-slate-700">{regNo}</HoverCardTrigger>
@@ -70,6 +68,41 @@ const VehicleHoverCard = ({ regNo }) => {
         </HoverCard>
     )
 }
+
+const truncateDescription = (description) => {
+    return description.split(' ').slice(0, 2).join(' ') + '...'
+}
+
+const DescriptionHover = ({ vehicleMaintenanceId, truncatedDes }) => {
+    const [description, setDescription] = useState(null)
+    useEffect(() => {
+        const fetchDescription = async () => {
+            const response = await apiclient.get(`/AdminVehicle/maintenance/${vehicleMaintenanceId}`)
+            setDescription(response.data)
+        }
+        fetchDescription()
+    }, [vehicleMaintenanceId])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700">{truncatedDes}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {description ? (
+                    <div className="text-center">
+                        <h3 className="text-lg font-semibold">{description.vehicleMaintenanceId}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-sm">
+                            <strong></strong> {description.description}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
 export const columns = [
     {
         accessorKey: 'id',
@@ -120,7 +153,19 @@ export const columns = [
     },
     {
         accessorKey: 'description',
-        header: 'Description'
+        header: 'Description',
+        cell: ({ row }) => {
+            const description = row.getValue('description')
+            const truncatedDescription = truncateDescription(description)
+
+            return (
+                <DescriptionHover
+                    vehicleMaintenanceId={row.getValue('id')}
+                    des={description}
+                    truncatedDes={truncatedDescription}
+                />
+            )
+        }
     },
     {
         accessorKey: 'actions',

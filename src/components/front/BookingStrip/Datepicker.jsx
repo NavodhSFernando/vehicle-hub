@@ -33,10 +33,10 @@ export default function Datepicker({ datepicketrtext, value, onChange, minDate, 
                         <div className="font-[500] ml-[53px] text-[15px] text-[#525252]">{datepicketrtext}</div>
                         <Button
                             variant={'outline'}
-                            className={cn('w-[180px] justify-start text-left flex gap-[5px]', 'custom-button')}
+                            className={cn('md:w-[180px] justify-start text-left flex gap-[5px]', 'custom-button')}
                             style={{ boxShadow: 'none', background: 'transparent' }}
                         >
-                            <CalendarIcon className="mr-2 h-6 w-6" style={{ color: '#283280' }} />
+                            <CalendarIcon className="lg:mr-2 h-6 md:w-6" style={{ color: '#283280' }} />
                             {isValid(date) ? format(date, 'PPP') : 'Select date'}
                         </Button>
                     </div>

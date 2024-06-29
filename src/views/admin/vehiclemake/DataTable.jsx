@@ -32,7 +32,7 @@ export default function DataTable({ columns, data }) {
             sorting,
             columnFilters
         },
-        initialState: { pagination: { pageSize: 5 } }
+        initialState: { pagination: { pageSize: 10 } }
     })
     const clearFilters = () => {
         table.resetColumnFilters()

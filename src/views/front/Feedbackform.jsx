@@ -65,11 +65,7 @@ export default function FeedbackForm() {
                 <div className="mb-4">
                     <h2 className="text-2xl font-bold text-gray-900">Please Provide your Feedback</h2>
                     <p className="text-sm text-gray-500">
-                        Your feedback is greatly valued as it gives us the opportunity to serve you better.
-                    </p>
-                    <p className="mt-4">
-                        Please note that your feedback, along with your name, will be displayed on the specific
-                        vehicle's details page.
+                        Your feedback is greatly valued as it gives us the opportunity to serve you better. (Please note that your feedback, along with your name, will be displayed on the specific vehicle's details page.)
                     </p>
                 </div>
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
