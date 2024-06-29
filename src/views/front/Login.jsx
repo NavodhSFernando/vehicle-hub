@@ -266,7 +266,7 @@ export const Login = () => {
                         <img src={bluetype} alt="Blue Type" className="w-40 h-auto" />
                     </div>
                     <div className="max-w-md bg-white rounded-xl shadow-lg md:p-8">
-                        <h2 className="text-2xl font-bold text-gray-600 mt-6 pb-1 text-center">Customer Signin</h2>
+                        <h2 className="text-2xl font-bold text-gray-600 mt-6 pb-1 text-center">Customer Login</h2>
                         <p className="text-sm font-inter text-gray-600 pb-4 text-center">
                             Please enter your user information.
                         </p>
@@ -321,7 +321,7 @@ export const Login = () => {
                                         type="submit"
                                         className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
                                     >
-                                        Sign in
+                                        Login
                                     </Button>
                                 </div>
                                 <div className="flex justify-center items-center">
