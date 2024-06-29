@@ -25,7 +25,7 @@ const ActionButtons = ({ vehicleLogId }) => {
 }
 
 const truncateDescription = (description) => {
-    return description.split(' ').slice(0, 2).join(' ') + '...'
+    return description.split(' ').slice(0, 5).join(' ') + '...'
 }
 
 const DescriptionHover = ({ vehicleLogId, truncatedDes }) => {
@@ -39,13 +39,15 @@ const DescriptionHover = ({ vehicleLogId, truncatedDes }) => {
     }, [vehicleLogId])
     return (
         <HoverCard>
-            <HoverCardTrigger className="font-medium hover:text-slate-700">{truncatedDes}</HoverCardTrigger>
+            <HoverCardTrigger className="font-medium hover:text-slate-700 cursor-pointer">
+                {truncatedDes}
+            </HoverCardTrigger>
             <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
                 {description ? (
                     <div className="text-center">
                         <h3 className="text-lg font-semibold">{description.vehicleLogId}</h3>
                         <hr className="py-2 mx-4 border-slate-300" />
-                        <p className="text-gray-700 text-sm">
+                        <p className="text-gray-700 text-left text-sm">
                             <strong></strong> {description.description}
                         </p>
                     </div>
