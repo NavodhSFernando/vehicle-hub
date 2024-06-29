@@ -273,29 +273,35 @@ function App() {
                             </TitleComponent>
                         }
                     />
-                    <Route path="report" element={<ProtectedRoute allowedRoles={['admin']} />}>
+                    <Route path="report">
                         <Route
                             path="feedbackreport"
                             element={
+                                //<ProtectedRoute allowedRoles={['admin']}>
                                 <TitleComponent title="Feedback Report">
                                     <ViewFeedbackReport />
                                 </TitleComponent>
+                                //</ProtectedRoute>
                             }
                         />
                         <Route
                             path="revenuereport"
                             element={
+                                //<ProtectedRoute allowedRoles={['admin']}>
                                 <TitleComponent title="Revenue Report">
                                     <ViewRevenueReport />
                                 </TitleComponent>
+                                //</ProtectedRoute>
                             }
                         />
                         <Route
                             path="vehicleutilizationreport"
                             element={
+                                //<ProtectedRoute allowedRoles={['admin']}>
                                 <TitleComponent title="Vehicle Utilization Report">
                                     <ViewVehicleUtilizationReport />
                                 </TitleComponent>
+                                //</ProtectedRoute>
                             }
                         />
                     </Route>
