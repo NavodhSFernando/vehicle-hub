@@ -326,29 +326,35 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="employee" element={<ProtectedRoute allowedRoles={['admin']} />}>
+                    <Route path="employee">
                         <Route
                             path="/admin/employee/edit/:employeeId"
                             element={
-                                <TitleComponent title="Edit Employee">
-                                    <EditEmployee />
-                                </TitleComponent>
+                                <ProtectedRoute allowedRoles={['admin']}>
+                                    <TitleComponent title="Edit Employee">
+                                        <EditEmployee />
+                                    </TitleComponent>
+                                </ProtectedRoute>
                             }
                         />
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="Employee">
-                                    <ViewEmployee />
-                                </TitleComponent>
+                                <ProtectedRoute allowedRoles={['admin']}>
+                                    <TitleComponent title="Employee">
+                                        <ViewEmployee />
+                                    </TitleComponent>
+                                </ProtectedRoute>
                             }
                         />
                         <Route
                             path="create"
                             element={
-                                <TitleComponent title="Create Employee">
-                                    <CreateEmployee />
-                                </TitleComponent>
+                                <ProtectedRoute allowedRoles={['admin']}>
+                                    <TitleComponent title="Create Employee">
+                                        <CreateEmployee />
+                                    </TitleComponent>
+                                </ProtectedRoute>
                             }
                         />
                     </Route>
