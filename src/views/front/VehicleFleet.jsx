@@ -109,10 +109,10 @@ const VehicleFleet = () => {
                     <FilterCard onFilterChange={handleFilterChange} />
                 </div>
                 <div className="flex-col">
-                    <div className="flex flex-row gap-[10px]">
+                    <div className="flex flex-col-reverse sm:flex-row gap-[10px]">
                         <SearchStrip onSearch={handleSearch} />
                         <button
-                            className="flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
+                            className="flex justify-center items-center gap-[8px] w-full sm:w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
                             onClick={resetFilters}
                         >
                             All Vehicles

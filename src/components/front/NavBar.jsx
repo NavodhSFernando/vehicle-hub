@@ -121,7 +121,7 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <div className="flex gap-16">
-                            <div className="text-yellowtheme cursor-pointer" onClick={handleClick}>
+                            <div className="text-yellowtheme cursor-pointer relative" onClick={handleClick}>
                                 {clicked ? (
                                     <>
                                         <BsBookmarkStarFill fontSize={28} style={{ color: '#FBDAC6' }} />
@@ -136,7 +136,7 @@ const Navbar = () => {
                                 )}
                             </div>
 
-                            <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
+                            <div className="text-yellowtheme cursor-pointer relative" onClick={handleNotification}>
                                 {notification ? (
                                     <>
                                         <div className="flex">

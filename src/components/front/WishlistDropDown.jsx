@@ -40,7 +40,7 @@ const WishlistDropdown = ({ isOpen }) => {
 
     return (
         isOpen && (
-            <div className="absolute top-5 right-[335px] mt-12 w-[384px] bg-white rounded-lg shadow-xl z-20">
+            <div className="absolute top-2 -right-60 sm:-right-28 lg:-right-0 mt-12 w-[384px] bg-white rounded-lg shadow-xl z-20">
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Wish List</h3>
                 </div>

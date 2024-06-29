@@ -28,7 +28,7 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
 
     return (
         isOpen && (
-            <div className="absolute top-5 right-[150px] mt-12 py-2 w-[384px] h-auto bg-white rounded-lg shadow-xl z-20">
+            <div className="absolute top-2 -right-[150px] sm:-right-28 lg:-right-0 mt-12 py-2 w-[384px] h-auto bg-white rounded-lg shadow-xl z-20">
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Notification</h3>
                 </div>
