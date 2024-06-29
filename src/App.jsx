@@ -67,7 +67,14 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<FrontLayout />}>
-                    <Route path="/*" element={<FrontPageNotFound />} />
+                    <Route
+                        path="/*"
+                        element={
+                            <TitleComponent title="404">
+                                <FrontPageNotFound />
+                            </TitleComponent>
+                        }
+                    />
                     <Route index element={<Home />} />
                     <Route
                         path="/vehiclefleet"
@@ -150,26 +157,98 @@ function App() {
                             }
                         />
                     </Route>
-                    <Route path="/bookingconfirmation/:invoiceId" element={<Bookingconfirmredirect />} />
-                    <Route path="/faq" element={<FaqPage />} />
-                    <Route path="/contact" element={<ContactUs />} />
+                    <Route
+                        path="/bookingconfirmation/:invoiceId"
+                        element={
+                            <TitleComponent title="Payment redirect">
+                                <Bookingconfirmredirect />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="/faq"
+                        element={
+                            <TitleComponent title="FAQ">
+                                <FaqPage />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="/contact"
+                        element={
+                            <TitleComponent title="Contact Us">
+                                <ContactUs />
+                            </TitleComponent>
+                        }
+                    />
                 </Route>
 
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/password" element={<Password />} />
-                <Route path="/passwordreset/:otp" element={<PasswordReset />} />
-                <Route path="/verifyotp" element={<VerifyOTP />} />
-                <Route path="profileresetpassword" element={<ProfileResetPassword />} />
+                <Route
+                    path="/login"
+                    element={
+                        <TitleComponent title="Login">
+                            <Login />
+                        </TitleComponent>
+                    }
+                />
+                <Route
+                    path="/signup"
+                    element={
+                        <TitleComponent title="Signup">
+                            <Signup />
+                        </TitleComponent>
+                    }
+                />
+                <Route
+                    path="/password"
+                    element={
+                        <TitleComponent title="Forgot Password">
+                            <Password />
+                        </TitleComponent>
+                    }
+                />
+                <Route
+                    path="/passwordreset/:otp"
+                    element={
+                        <TitleComponent title="Reset Password">
+                            <PasswordReset />
+                        </TitleComponent>
+                    }
+                />
+                <Route
+                    path="/verifyotp"
+                    element={
+                        <TitleComponent title="Verify OTP">
+                            <VerifyOTP />
+                        </TitleComponent>
+                    }
+                />
+                <Route
+                    path="profileresetpassword"
+                    element={
+                        <TitleComponent title="Reset Password">
+                            <ProfileResetPassword />
+                        </TitleComponent>
+                    }
+                />
                 <Route
                     path="/feedbackform/:customerReservationId"
                     element={
                         <ProtectedRouteCustomer allowedRoles={['customer']}>
-                            <Feedbackform />
+                            <TitleComponent title="Feedback Form">
+                                <Feedbackform />
+                            </TitleComponent>
                         </ProtectedRouteCustomer>
                     }
                 />
-                <Route path="/admin-login" element={<Adminlogin />} />
+                <Route
+                    path="/admin-login"
+                    element={
+                        <TitleComponent title="Admin Login">
+                            <Adminlogin />
+                        </TitleComponent>
+                    }
+                />
                 <Route
                     path="/admin"
                     element={
@@ -178,12 +257,47 @@ function App() {
                         </ProtectedRoute>
                     }
                 >
-                    <Route path="/admin/*" element={<AdminPageNotFound />} />
-                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route
+                        path="/admin/*"
+                        element={
+                            <TitleComponent title="404">
+                                <AdminPageNotFound />
+                            </TitleComponent>
+                        }
+                    />
+                    <Route
+                        path="dashboard"
+                        element={
+                            <TitleComponent title="Dashboard">
+                                <Dashboard />
+                            </TitleComponent>
+                        }
+                    />
                     <Route path="report" element={<ProtectedRoute allowedRoles={['admin']} />}>
-                        <Route path="feedbackreport" element={<ViewFeedbackReport />} />
-                        <Route path="revenuereport" element={<ViewRevenueReport />} />
-                        <Route path="vehicleutilizationreport" element={<ViewVehicleUtilizationReport />} />
+                        <Route
+                            path="feedbackreport"
+                            element={
+                                <TitleComponent title="Feedback Report">
+                                    <ViewFeedbackReport />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="revenuereport"
+                            element={
+                                <TitleComponent title="Revenue Report">
+                                    <ViewRevenueReport />
+                                </TitleComponent>
+                            }
+                        />
+                        <Route
+                            path="vehicleutilizationreport"
+                            element={
+                                <TitleComponent title="Vehicle Utilization Report">
+                                    <ViewVehicleUtilizationReport />
+                                </TitleComponent>
+                            }
+                        />
                     </Route>
                     <Route path="reservation">
                         <Route
@@ -285,7 +399,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="View Vehicle">
+                                <TitleComponent title="Vehicle">
                                     <ViewVehicle />
                                 </TitleComponent>
                             }
@@ -401,7 +515,7 @@ function App() {
                         <Route
                             path="view"
                             element={
-                                <TitleComponent title="Vehicle Insurance">
+                                <TitleComponent title="Insurance">
                                     <ViewInsurance />
                                 </TitleComponent>
                             }
@@ -419,7 +533,9 @@ function App() {
                         path="notification"
                         element={
                             <ProtectedRoute allowedRoles={['admin']}>
-                                <Notification />
+                                <TitleComponent title="Notification">
+                                    <Notification />
+                                </TitleComponent>
                             </ProtectedRoute>
                         }
                     />
