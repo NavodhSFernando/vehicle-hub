@@ -4,6 +4,7 @@ import { z } from 'zod'
 import axios from 'axios'
 import { Button } from '../../../components/ui/button'
 import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 import {
     Form,
@@ -19,7 +20,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import Password from '../../front/Password'
 import { Checkbox } from '../../../components/ui/checkbox'
-import apiclient from '../../../axiosConfig'
 import { useNavigate } from 'react-router-dom'
 import { Switch } from '../../../components/ui/switch'
 
