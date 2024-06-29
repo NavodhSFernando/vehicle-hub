@@ -14,6 +14,7 @@ import WishlistDropdown from './WishlistDropDown'
 import Cookies from 'js-cookie'
 import { Button } from '../ui/button'
 import axios from 'axios'
+import { getUserRoles } from '../../getUserRoles'
 
 const Navbar = () => {
     const location = useLocation()
@@ -46,27 +47,32 @@ const Navbar = () => {
     const [notificationCount, setnotificationCount] = useState(0)
 
     const customerId = Cookies.get('customerId')
+    const fetchNotifications = async () => {
+        try {
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
 
-    useEffect(() => {
-        const isLoggedIn = Cookies.get('customerId')
-        isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
+            const filteredNotifications = response.data.filter((notification) => {
+                return notification.isRead === false
+            })
 
-        const fetchNotifications = async () => {
-            try {
-                const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
-                const decryptedId = decryptResponse.data.decryptedUserId
-                
-                const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
-                const filteredNotifications = response.data.filter((notification) => {
-                    return notification.isRead === false
-                })
-
-                setnotificationCount(filteredNotifications.length)
-            } catch (error) {
-                console.error('Error fetching notifications:', error)
-            }
+            setnotificationCount(filteredNotifications.length)
+        } catch (error) {
+            console.error('Error fetching notifications:', error)
         }
-        fetchNotifications()
+    }
+
+    const role = getUserRoles()
+    useEffect(() => {
+        if (role === 'customer') {
+            setLoggedIn(true)
+        } else {
+            setLoggedIn(false)
+        }
+        if (customerId) {
+            fetchNotifications()
+        }
     }, [])
 
     const isHomePage = location.pathname === '/'
@@ -142,11 +148,11 @@ const Navbar = () => {
                                         <div className="flex">
                                             <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
 
-                                            {notificationCount > 0 &&
+                                            {notificationCount > 0 && (
                                                 <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
                                                     {notificationCount}
                                                 </span>
-                                            }
+                                            )}
                                         </div>
                                         {/* <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} /> */}
                                         <NotificationDropdown
@@ -158,11 +164,11 @@ const Navbar = () => {
                                 ) : (
                                     <div className="flex">
                                         <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
-                                        {notificationCount > 0 &&
-                                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
-                                                    {notificationCount}
-                                                </span>
-                                        }
+                                        {notificationCount > 0 && (
+                                            <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
+                                                {notificationCount}
+                                            </span>
+                                        )}
                                     </div>
                                 )}
                             </div>

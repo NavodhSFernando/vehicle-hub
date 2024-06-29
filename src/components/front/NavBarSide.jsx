@@ -68,7 +68,7 @@ export default function NavBarSide() {
             >
                 Notifications
             </NavLink>
-            <div className="flex flex-col pl-2 py-1 cursor-pointer" onClick={handleLogout}>
+            <div className="flex flex-col pl-2 py-1 cursor-pointer text-red-500 font-semibold" onClick={handleLogout}>
                 Log Out
             </div>
         </div>

@@ -7,6 +7,7 @@ import { FaTwitter } from 'react-icons/fa'
 
 export const Footer = () => {
     const [showFooter, setShowFooter] = useState(false)
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
     const { pathname } = useLocation()
 
     const toggleFooter = () => {
@@ -46,7 +47,7 @@ export const Footer = () => {
                     </div>
 
                     <div className="mt-16 flex flex-col md:flex-row w-full">
-                        <div className="justify-start">© 2023 SprintSphere. All Rights Reserved </div>
+                        <div className="justify-start">© {currentYear} SprintSphere. All Rights Reserved </div>
                         <div
                             className={`mt-4 md:mt-0 md:ml-auto flex justify-center space-x-4 ${isHomePage ? 'text-black' : ''}`}
                         >
