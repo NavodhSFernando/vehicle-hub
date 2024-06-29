@@ -46,7 +46,7 @@ export default function Sidebar() {
             <div
                 className={classNames(
                     'bg-[#1a2255] flex flex-col w-72 z-20 p-3 text-white overflow-y-auto fixed h-screen xl:fixed xl:h-screen ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                    { hidden: !isOpen, 'xl:block': true }
+                    { hidden: !isOpen, 'xl:flex': true }
                 )}
             >
                 {isOpen ? (
