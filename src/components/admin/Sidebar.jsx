@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classNames from 'classnames'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineLogout, HiOutlineMenu, HiOutlineX } from 'react-icons/hi' // Import the HiOutlineX icon for close
@@ -7,6 +7,7 @@ import { HiChevronDown, HiChevronUp } from 'react-icons/hi'
 import LogoIcon from '../../assets/logos/VH-Icon.png'
 import LogoType from '../../assets/logos/VH-Type.png'
 import axios from 'axios'
+import { getUserRoles } from '../../getUserRoles'
 
 const linkClass =
     'flex items-center gap-2 font-light px-3 py-2 hover:bg-[#2c3e91] hover:no-underline rounded-sm text-base'
@@ -14,7 +15,13 @@ const linkClass =
 export default function Sidebar() {
     const [showSublinks, setShowSublinks] = useState({})
     const [isOpen, setIsOpen] = useState(false)
+    const [userRoles, setUserRoles] = useState([])
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const roles = getUserRoles()
+        setUserRoles(roles)
+    }, [])
 
     const toggleSublinks = (key) => {
         setShowSublinks((prevState) => ({
@@ -31,6 +38,13 @@ export default function Sidebar() {
             console.error('Failed to logout!')
         }
     }
+
+    const filteredLinks = DASHBOARD_SIDEBAR_LINKS.filter((link) => {
+        if (link.role && !userRoles.includes(link.role)) {
+            return false
+        }
+        return true
+    })
 
     return (
         <div>
@@ -64,7 +78,7 @@ export default function Sidebar() {
                     </span>
                 </div>
                 <div className="py-8 flex flex-1 flex-col gap-0.5">
-                    {DASHBOARD_SIDEBAR_LINKS.map((link) => (
+                    {filteredLinks.map((link) => (
                         <SidebarLink
                             key={link.key}
                             link={link}
