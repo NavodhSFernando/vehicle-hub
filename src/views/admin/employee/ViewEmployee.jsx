@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import DataTable from './DataTable'
 import { columns } from './Columns'
+import apiclient from '../../../../src/axiosConfig'
 
 export default function ViewEmployee() {
     const [Employee, setEmployee] = useState([])
@@ -10,7 +11,7 @@ export default function ViewEmployee() {
         const fetchEmployee = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching Employees
-                const response = await axios.get('http://localhost:5062/api/Employee')
+                const response = await apiclient.get('/Employee')
                 setEmployee(response.data) // Assume the response data is the array of Employees
                 console.log(response.data)
             } catch (error) {

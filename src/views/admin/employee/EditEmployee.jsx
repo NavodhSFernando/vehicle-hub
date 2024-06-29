@@ -20,6 +20,7 @@ import {
 import { Input } from '../../../components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/ui/select'
 import { zodResolver } from '@hookform/resolvers/zod'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -101,7 +102,7 @@ export default function EditEmployee() {
     }, [employeeId, reset])
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/Employee/${employeeId}`
+        const url = `/Employee/${employeeId}`
         try {
             const formData = {
                 Name: data.name,
@@ -117,7 +118,7 @@ export default function EditEmployee() {
             }
             console.log(formData)
 
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             console.log(result)
             toast({
                 variant: 'success',
