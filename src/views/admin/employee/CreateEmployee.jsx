@@ -328,7 +328,10 @@ export default function CreateEmployee() {
                     )}
                 />
                 <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                    <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
+                    <Button
+                        type="submit"
+                        className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                    >
                         Create
                     </Button>
                 </div>

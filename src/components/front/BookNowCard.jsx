@@ -5,6 +5,7 @@ import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../ui/use-toast'
 
 export default function BookNowCard({
     id,
@@ -23,6 +24,7 @@ export default function BookNowCard({
     endTime
 }) {
     const [clicked, setClicked] = useState(false)
+    const { toast } = useToast()
 
     const updateWishlist = (wishlistItems) => {
         localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
@@ -39,14 +41,14 @@ export default function BookNowCard({
     }
 
     const handleWishlistUpdate = (event) => {
-        const updatedWishlist = event.detail;
-        const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id);
-        setClicked(isInUpdatedWishlist);
-    };
+        const updatedWishlist = event.detail
+        const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
+        setClicked(isInUpdatedWishlist)
+    }
 
     const handleClick = () => {
         const vehicleDetails = {
-            id : parseInt(id),
+            id: parseInt(id),
             name,
             type,
             year,
@@ -57,7 +59,7 @@ export default function BookNowCard({
         }
 
         const existingWishlistItems = getWishlist()
-        
+
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
 
         if (index == -1) {
@@ -74,10 +76,21 @@ export default function BookNowCard({
     const customerId = Cookies.get('customerId')
     const navigate = useNavigate()
 
+    const handleViewClick = () => {
+        if (!startDate || !startTime || !endDate || !endTime) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Please select both start and end date/time.'
+            })
+        } else {
+            navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime, imageSrc } })
+        }
+    }
+
     useEffect(() => {
         const existingWishlistItems = getWishlist()
-        const isInWishlist = existingWishlistItems.some((item) => item.id === id);
-        setClicked(isInWishlist);
+        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
+        setClicked(isInWishlist)
 
         window.addEventListener('wishlistUpdated', handleWishlistUpdate)
 
@@ -129,9 +142,7 @@ export default function BookNowCard({
                 </span>
                 <button
                     className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] w-fit focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
-                    onClick={() =>
-                        navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime, imageSrc } })
-                    }
+                    onClick={handleViewClick}
                 >
                     View
                 </button>

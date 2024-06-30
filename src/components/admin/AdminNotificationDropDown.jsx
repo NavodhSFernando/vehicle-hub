@@ -23,7 +23,7 @@ const AdminNotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
 
     return (
         isOpen && (
-            <div className="absolute top-5 right-[575px] mt-12 py-2 w-[384px] h-auto bg-white rounded-lg shadow-xl z-20">
+            <div className="absolute top-5 right-4 mt-12 py-2 w-[384px] h-auto bg-white rounded-lg shadow-xl z-20">
                 <div className="block px-4 py-2 text-sm text-gray-700">
                     <h3 className="font-bold">Notification</h3>
                 </div>
@@ -38,7 +38,7 @@ const AdminNotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                                 <div className="flex justify-between items-center px-[30px] ">
                                     {/* Individual notification item */}
                                     <div key={notification.id} className="px-4 py-3 border-t border-gray-100 w-[265px]">
-                                        <p className="text-bold text-gray-900">{notification.description}</p>
+                                        <p className="text-bold text-gray-900">{notification.title}</p>
                                         <p className="text-sm text-gray-600">{notification.description}</p>
                                         <p className="text-xs text-gray-400">{notification.generated_DateTime}</p>
                                     </div>

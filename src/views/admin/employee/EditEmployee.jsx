@@ -6,7 +6,7 @@ import { Button } from '../../../components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { Switch } from '../../../components/ui/switch'
 import { useToast } from '../../../components/ui/use-toast'
-
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
 import { useParams } from 'react-router-dom'
 import {
     Form,
@@ -363,10 +363,15 @@ export default function EditEmployee() {
                         </FormItem>
                     )}
                 />
-                <div className="flex  flex-col items-start p-6 bg-white rounded-lg pt-4 pb-3">
-                    <Button type="submit" className="flex flex-col bg-indigo-600 ml-auto ">
-                        Update
-                    </Button>
+                <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Employee Details"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
+                    />
                 </div>
             </form>
         </Form>

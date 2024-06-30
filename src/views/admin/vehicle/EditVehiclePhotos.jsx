@@ -246,6 +246,8 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         alertTitle="Confirm Update"
                         alertDescription="Are you sure you want to continue?"
                         handleConfirm={handleSubmit(handleThumbnailSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
                     />
                 </div>
                 <img className=" object-contain h-40 w-40" src={`${baseThumbnailUrl}${thumbnail}`} alt="" />
@@ -279,6 +281,8 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         alertTitle="Confirm Update"
                         alertDescription="Are you sure you want to continue?"
                         handleConfirm={handleSubmit(handleFrontImgSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
                     />
                 </div>
                 <img className=" object-contain h-40 w-40" src={`${baseFrontImgUrl}${frontImg}`} alt="" />
@@ -312,6 +316,8 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         alertTitle="Confirm Update"
                         alertDescription="Are you sure you want to continue?"
                         handleConfirm={handleSubmit(handleRearImgSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
                     />
                 </div>
                 <img className=" object-contain h-40 w-40" src={`${baseRearImgUrl}${rearImg}`} alt="" />
@@ -345,6 +351,8 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         alertTitle="Confirm Update"
                         alertDescription="Are you sure you want to continue?"
                         handleConfirm={handleSubmit(handleDashboardImgSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
                     />
                 </div>
                 <img className=" object-contain h-40 w-40" src={`${baseDashboardUrl}${dashboard}`} alt="" />
@@ -378,6 +386,8 @@ export default function EditVehiclePhotos({ vehicleId }) {
                         alertTitle="Confirm Update"
                         alertDescription="Are you sure you want to continue?"
                         handleConfirm={handleSubmit(handleInteriorImgSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
                     />
                 </div>
                 <img className=" object-contain h-40 w-40" src={`${baseInteriorUrl}${interior}`} alt="" />

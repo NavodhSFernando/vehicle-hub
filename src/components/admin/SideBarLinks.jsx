@@ -13,7 +13,6 @@ import { RiAdminLine, RiStackLine } from 'react-icons/ri'
 import { LuDot } from 'react-icons/lu'
 import { AiOutlineHome } from 'react-icons/ai'
 import { PiBookBookmarkThin } from 'react-icons/pi'
-import { ImStop } from 'react-icons/im'
 import { BsStopCircle } from 'react-icons/bs'
 import { IoCarSportOutline, IoNotifications } from 'react-icons/io5'
 import { GrServices, GrShield } from 'react-icons/gr'
@@ -52,7 +51,8 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 path: '/admin/report/vehicleutilizationreport',
                 icon: <LuDot />
             }
-        ]
+        ],
+        role: 'admin'
     },
     {
         key: 'reservation',
@@ -208,7 +208,8 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 path: '/admin/employee/create',
                 icon: <LuDot />
             }
-        ]
+        ],
+        role: 'admin'
     },
     {
         key: 'customer',
@@ -229,7 +230,8 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         label: 'Notifications',
         path: '/admin/notification',
         icon: <IoMdNotificationsOutline />,
-        heading: 'Notifications'
+        heading: 'Notifications',
+        role: 'admin'
     }
 ]
 

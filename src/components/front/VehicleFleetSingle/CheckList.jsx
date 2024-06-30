@@ -49,7 +49,7 @@ export default function CheckList() {
 
     const listStyle = {
         display: 'grid',
-        gridTemplateColumns: screenWidth > 768 ? 'repeat(3, 1fr)' : 'repeat(1, 1fr)',
+        gridTemplateColumns: screenWidth > 1024 ? 'repeat(3, 1fr)' : 'repeat(1, 1fr)',
         gap: '12px',
         alignItems: 'center',
         listStyleType: 'none',

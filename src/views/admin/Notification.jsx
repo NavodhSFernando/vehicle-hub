@@ -39,27 +39,6 @@ export default function NotificationCenter() {
         }
     };
 
-    const deleteNotification = async (notificationId) => {
-        try {
-            const response = await axios.delete(`http://localhost:5062/api/AdminNotification/DeleteAdminNotification?notificationId=${notificationId}`);
-            if (response.status === 200) {
-                setNotifications((prevNotifications) =>
-                    prevNotifications.filter((notification) => notification.id !== notificationId)
-                );
-            } else {
-                console.log('Failed to delete the notification.');
-            }
-        } catch (error) {
-            if (error.response) {
-                console.error('Error deleting notification:', error.response.data);
-            } else if (error.request) {
-                console.error('No response received:', error.request);
-            } else {
-                console.error('Error setting up request:', error.message);
-            }
-        }
-    };
-
     useEffect(() => {
             fetchNotifications()
     }, [])
@@ -74,7 +53,6 @@ export default function NotificationCenter() {
                             key={notification.id}
                             notification={notification}
                             onMarkAsRead={markAsRead}
-                            OnDelete={deleteNotification}
                         />
                     ))
                 ) : (
@@ -141,7 +119,7 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
     )
 }
 
-function NotificationCard({ notification, onMarkAsRead, OnDelete }) {
+function NotificationCard({ notification, onMarkAsRead }) {
     const { id, title, description, generated_DateTime, isRead } = notification;
 
     return (
@@ -157,9 +135,6 @@ function NotificationCard({ notification, onMarkAsRead, OnDelete }) {
                         <MdOutlineMarkEmailRead fontSize={28} style={{ color: '#283280' }} />
                     </button>
                 )}
-                <button onClick={() => OnDelete(id)} >
-                    <MdDeleteOutline fontSize={28} style={{ color: '#283280' }} />
-                </button>
             </div>
         </div>
     );
