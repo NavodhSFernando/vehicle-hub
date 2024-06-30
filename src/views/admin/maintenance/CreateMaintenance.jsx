@@ -223,7 +223,10 @@ export default function CreateMaintenance() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
+                    <Button
+                        type="submit"
+                        className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                    >
                         Create
                     </Button>
                 </div>

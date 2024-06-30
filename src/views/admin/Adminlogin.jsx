@@ -9,6 +9,7 @@ import admin from '../../../src/assets/logos/admin.png'
 import { Button } from '../../components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
+import { useToast } from '../../components/ui/use-toast'
 
 const formSchema = z.object({
     email: z.string().email('Invalid email format').min(1, 'Email is required'),
@@ -28,6 +29,7 @@ function Adminlogin() {
         }
     })
     const navigate = useNavigate()
+    const { toast } = useToast()
 
     const onSubmit = async (data) => {
         try {
@@ -42,8 +44,27 @@ function Adminlogin() {
             console.log(`Employee ID saved in cookies: ${Cookies.get('employeeId')}`)
             navigate('/admin/dashboard')
         } catch (error) {
-            console.error('Login failed', error.response ? error.response.data : error.message)
-            alert('Login failed: ' + (error.response && error.response.data ? error.response.data : error.message))
+            console.error('Login failed:', error)
+            if (error.response) {
+                console.error('Response data:', error.response.data)
+
+                if (error.response.data === 'Invalid email') {
+                    toast({
+                        variant: 'destructive_border',
+                        description: 'Invalid email.'
+                    })
+                } else if (error.response.data === 'Invalid password') {
+                    toast({
+                        variant: 'destructive_border',
+                        description: 'Invalid password.'
+                    })
+                } else {
+                    toast({
+                        variant: 'destructive_border',
+                        description: 'Failed to Log in!'
+                    })
+                }
+            }
         }
     }
 
