@@ -331,7 +331,7 @@ const FeedbackReport = () => {
             <div className="mt-4 mb-8">
                 {filterError && <p className="text-red-500 text-sm">{filterError}</p>}
                 <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
                     onClick={handleFilter}
                 >
                     Filter
@@ -371,14 +371,14 @@ const FeedbackReport = () => {
             <div className="flex">
                 <button
                     id="preview-button"
-                    className="bg-blue-500 text-white px-4 py-2 mr-4 rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm mr-2"
                     onClick={handlePreviewPDF}
                 >
                     Preview
                 </button>
                 <button
                     id="export-pdf-button"
-                    className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    className="text-[#283280] font-medium bg-transparent border-2 border-[#283280] hover:bg-[#283280] hover:text-[#FBDAC6] py-2.5 px-5 w-fit rounded-lg text-sm"
                     onClick={handleExportPDF}
                 >
                     Export PDF
