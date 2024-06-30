@@ -23,6 +23,7 @@ import {
 import { Input } from '../../components/ui/input'
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
+import FacebookLogin from 'react-facebook-login'
 
 const formSchema = z.object({
     email: z.string().email(),
@@ -197,6 +198,64 @@ export const Login = () => {
         }
     }
 
+    const responseFacebook = async (response) => {
+        try {
+            console.log('Facebook response:', response)
+            const accessToken = response?.accessToken
+            console.log('Access Token:', accessToken)
+
+            // Make a POST request to your backend endpoint for Facebook callback
+            const result = await axios.post(
+                'http://localhost:5062/api/FacebookAuth/facebook-callback',
+                { accessToken },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            )
+
+            console.log('Facebook callback result:', result.data)
+
+            const { token, id, status } = result.data
+            console.log('Extracted token:', token)
+            console.log('Extracted id:', id)
+            console.log('Extracted status:', status)
+
+            if (token && id) {
+                // Store JWT token in session storage
+                sessionStorage.setItem('jwtToken', token)
+
+                // Set customer ID in cookies
+                Cookies.set('customerId', id, { expires: 30 })
+                console.log(`Customer ID saved in cookies: ${Cookies.get('customerId')}`)
+
+                // Set account status if needed
+                setAccountStatus(status)
+
+                // Display success message
+                toast({
+                    variant: 'success',
+                    description: 'Facebook Sign-In successful!'
+                })
+
+                // Optionally navigate to another page after successful sign-in
+                navigate('/')
+            } else {
+                toast({
+                    variant: 'destructive_border',
+                    description: 'Facebook Sign-In failed!'
+                })
+            }
+        } catch (error) {
+            console.error('Facebook Sign-In Error:', error)
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to sign in with Facebook!'
+            })
+        }
+    }
+
     return (
         <GoogleOAuthProvider clientId="305530326806-7b896dlp7b65fq8k9eoll4834c45i69c.apps.googleusercontent.com">
             <div>
@@ -262,7 +321,7 @@ export const Login = () => {
                                         type="submit"
                                         className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
                                     >
-                                        Sign in
+                                        Login
                                     </Button>
                                 </div>
                                 <div className="flex justify-center items-center">
@@ -290,10 +349,19 @@ export const Login = () => {
                                             </button>
                                         )}
                                     />
-                                    <a href="">
-                                        <img src={fb} alt="My Image" className="w-7 h-10 rounded-full shadow-lg" />
-                                    </a>
                                 </div>
+                                <div className="flex justify-center">
+                                    <FacebookLogin
+                                        appId="2447475068777035"
+                                        fields="email"
+                                        callback={responseFacebook}
+                                        cssClass="h-10 w-56 bg-indigo-800 text-white flex items-center justify-center"
+                                        icon={<i className="fab fa-facebook-f" />}
+                                        textButton="Facebook Login"
+                                        disableMobileRedirect={true}
+                                    />
+                                </div>
+
                                 <div className="flex pt-4">
                                     <div className="text-indigo-600 font-bold text-left text-1xl mr-4">
                                         <a href="signup">Create An Account</a>

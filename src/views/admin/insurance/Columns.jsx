@@ -36,7 +36,7 @@ const VehicleHoverCard = ({ regNo }) => {
 
     return (
         <HoverCard>
-            <HoverCardTrigger className="font-medium hover:text-slate-700">{regNo}</HoverCardTrigger>
+            <HoverCardTrigger className="font-medium hover:text-slate-700 cursor-pointer">{regNo}</HoverCardTrigger>
             <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
                 {vehicle ? (
                     <div className="text-center">

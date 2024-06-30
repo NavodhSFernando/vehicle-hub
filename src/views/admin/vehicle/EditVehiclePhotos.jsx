@@ -233,7 +233,7 @@ export default function EditVehiclePhotos({ vehicleId }) {
                                     type="file"
                                     className="w-full"
                                     ref={fileInputRef}
-                                    onChange={handleThumbnailSave}
+                                    onChange={handleThumbnailChange}
                                 />
                             </FormControl>
                             <FormMessage>{errors.formFile && errors.formFile.message}</FormMessage>

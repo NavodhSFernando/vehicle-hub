@@ -43,7 +43,7 @@ export default function ImageShowCase() {
             ) : (
                 <>
                     <img className="justify-self-center w-3/4 self-center rounded-lg" src={currentImage} alt="" />
-                    <div className="w-3/4 mx-auto px-6 pt-2 pb-4">
+                    <div className="w-full md:w-3/4 mx-auto px-6 pt-2 pb-4">
                         <Slide
                             slidesToScroll={1}
                             slidesToShow={4}

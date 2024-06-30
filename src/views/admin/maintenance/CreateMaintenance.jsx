@@ -177,6 +177,7 @@ export default function CreateMaintenance() {
                                     <SelectItem value="AirConditioningChecks">Air Conditioning Checks</SelectItem>
                                     <SelectItem value="EngineTuneUp">Engine Tune Up</SelectItem>
                                     <SelectItem value="Replacements">Replacements</SelectItem>
+                                    <SelectItem value="Other">Other</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.maintenanceType && errors.maintenanceType.message}</FormMessage>

@@ -93,6 +93,14 @@ export default function Ongoingrentalssingle() {
         }
     }
 
+    const convertTo12HourFormat = (time) => {
+        let [hours, minutes] = time.split(':')
+        hours = parseInt(hours, 10)
+        const ampm = hours >= 12 ? 'PM' : 'AM'
+        hours = hours % 12 || 12
+        return `${hours}:${minutes} ${ampm}`
+    }
+
     return (
         <>
             <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1">
@@ -130,7 +138,7 @@ export default function Ongoingrentalssingle() {
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Pick-Up Time</p>
-                        <p className="font-semibold">{rentalData.startTime}</p>
+                        <p className="font-semibold">{convertTo12HourFormat(rentalData.startTime)}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Drop-Off Date</p>
@@ -138,7 +146,7 @@ export default function Ongoingrentalssingle() {
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Drop-Off Time</p>
-                        <p className="font-semibold">{rentalData.endTime}</p>
+                        <p className="font-semibold">{convertTo12HourFormat(rentalData.endTime)}</p>
                     </div>
                     <div className="pt-3 flex justify-between">
                         <p className="text-gray-500">Reservation Status</p>

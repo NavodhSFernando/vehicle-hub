@@ -29,13 +29,13 @@ export function AlertDialogDemo({ triggerText, alertTitle, alertDescription, han
                     <AlertDialogDescription>{alertDescription}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                         className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
                         onClick={handleConfirm}
                     >
                         Continue
                     </AlertDialogAction>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
