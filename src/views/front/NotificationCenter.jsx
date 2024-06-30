@@ -30,46 +30,6 @@ export default function NotificationCenter() {
         }
     }
 
-    const markAsRead = async (notificationId) => {
-        try {
-            const response = await axios.put(
-                `http://localhost:5062/api/Notification/MarkAsRead?notificationid=${notificationId}`
-            )
-            if (response.status === 200) {
-                setNotifications((prevNotifications) =>
-                    prevNotifications.map((notification) =>
-                        notification.id === notificationId ? { ...notification, isRead: true } : notification
-                    )
-                )
-            }
-        } catch (error) {
-            console.error('Error marking notification as read:', error)
-        }
-    }
-
-    const deleteNotification = async (notificationId) => {
-        try {
-            const response = await axios.delete(
-                `http://localhost:5062/api/Notification/DeleteNotification?notificationId=${notificationId}`
-            )
-            if (response.status === 200) {
-                setNotifications((prevNotifications) =>
-                    prevNotifications.filter((notification) => notification.id !== notificationId)
-                )
-            } else {
-                console.log('Failed to delete the notification.')
-            }
-        } catch (error) {
-            if (error.response) {
-                console.error('Error deleting notification:', error.response.data)
-            } else if (error.request) {
-                console.error('No response received:', error.request)
-            } else {
-                console.error('Error setting up request:', error.message)
-            }
-        }
-    }
-
     useEffect(() => {
         fetchNotifications()
     }, [customerId])
@@ -83,8 +43,6 @@ export default function NotificationCenter() {
                         <NotificationCard
                             key={notification.id}
                             notification={notification}
-                            onMarkAsRead={markAsRead}
-                            OnDelete={deleteNotification}
                         />
                     ))
                 ) : (
@@ -151,7 +109,7 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
     )
 }
 
-function NotificationCard({ notification, onMarkAsRead, OnDelete }) {
+function NotificationCard({ notification }) {
     const { id, title, description, generated_DateTime, isRead } = notification
 
     return (
@@ -160,16 +118,6 @@ function NotificationCard({ notification, onMarkAsRead, OnDelete }) {
                 <div className="font-bold text-lg">{title}</div>
                 <div className="text-gray-700">{description}</div>
                 <div className="text-gray-500 text-sm">{generated_DateTime}</div>
-            </div>
-            <div className="flex-3 flex flex-col justify-center items-center gap-[10px]">
-                {!isRead && (
-                    <button onClick={() => onMarkAsRead(id)}>
-                        <MdOutlineMarkEmailRead fontSize={28} style={{ color: '#283280' }} />
-                    </button>
-                )}
-                <button onClick={() => OnDelete(id)}>
-                    <MdDeleteOutline fontSize={28} style={{ color: '#283280' }} />
-                </button>
             </div>
         </div>
     )
