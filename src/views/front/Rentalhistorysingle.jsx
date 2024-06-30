@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { FaStar } from 'react-icons/fa6'
+import apiclient from '../../axiosConfig'
 
 function Ongoingrentalssingle() {
     const { customerReservationId } = useParams()
@@ -10,6 +11,8 @@ function Ongoingrentalssingle() {
     const [status, setStatus] = useState('') // State for tracking the reservation status
     const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted reservation ID
     const [rentalData, setRentalData] = useState({})
+    const [totalFeedbacks, setTotalFeedbacks] = useState(0)
+    const [averageRating, setAverageRating] = useState(0)
 
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
 
@@ -33,21 +36,32 @@ function Ongoingrentalssingle() {
     }, [customerReservationId])
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchDataAndFeedback = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching rentals
-                const response = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/rental-history-single/${decrypt}`
-                )
+                const response = await apiclient.get(`/FrontReservationService/rental-history-single/${decrypt}`)
                 setRentalData(response.data) // Assume the response data is the array of rentals
                 setStatus(response.data.status)
                 console.log('Fetched Rental History:', response.data)
+
+                const response2 = await axios.get(
+                    `http://localhost:5062/api/Feedback/vehicle/${response.data.vehicleId}`
+                )
+                const feedbacks = response2.data
+                console.log('Fetched Feedbacks:', feedbacks)
+
+                const totalFeedbacks = feedbacks.length
+                const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
+                const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
+
+                setTotalFeedbacks(totalFeedbacks)
+                setAverageRating(averageRating)
             } catch (error) {
                 console.error('Failed to fetch Rental History:', error)
             }
         }
         if (decrypt) {
-            fetchData()
+            fetchDataAndFeedback()
         }
     }, [decrypt])
 
@@ -72,6 +86,14 @@ function Ongoingrentalssingle() {
         }
     }
 
+    const convertTo12HourFormat = (time) => {
+        let [hours, minutes] = time.split(':')
+        hours = parseInt(hours, 10)
+        const ampm = hours >= 12 ? 'PM' : 'AM'
+        hours = hours % 12 || 12
+        return `${hours}:${minutes} ${ampm}`
+    }
+
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
             <div className="my-16 lg:mx-36">
@@ -88,9 +110,10 @@ function Ongoingrentalssingle() {
                         </h1>
                         <div className="flex items-center">
                             {[...Array(5)].map((_, starIndex) => (
-                                <FaStar key={starIndex} color={starIndex < rating ? 'yellow' : 'grey'} />
+                                <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                             ))}
-                            <p className="text-gray-500 text-xs">10+ Reviewer</p>
+                            {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviews</p>}
+                            {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>}
                         </div>
                     </div>
                 </div>
@@ -106,7 +129,7 @@ function Ongoingrentalssingle() {
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Pick-Up Time</p>
-                    <p className="font-semibold">{rentalData.startTime}</p>
+                    <p className="font-semibold">{convertTo12HourFormat(rentalData.startTime)}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Drop-Off Date</p>
@@ -114,7 +137,7 @@ function Ongoingrentalssingle() {
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Drop-Off Time</p>
-                    <p className="font-semibold">{rentalData.endTime}</p>
+                    <p className="font-semibold">{convertTo12HourFormat(rentalData.endTime)}</p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Reservation Status </p>
@@ -144,21 +167,22 @@ function Ongoingrentalssingle() {
                         </div>
                         <div className="pt-3 flex justify-between pb-8">
                             <p className="text-gray-500">Rental Charge</p>
-                            <p className="font-semibold">{rentalData.rentalCost}</p>
+                            <p className="font-semibold">
+                                {rentalData.rentalCost ? 'Rs ' + rentalData.rentalCost : '-'}
+                            </p>
+                        </div>
+                        <hr className="pb-3 border-t-2 border-stone-200" />
+
+                        <div className="pt-3 flex justify-between">
+                            <p className="text-gray-950 font-bold text-xl">Total Amount</p>
+                            <p className="font-semibold text-3xl">{'Rs ' + rentalData.amount}</p>
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                            <p>Overall price including additions </p>
+                            <p>and deductions.</p>
                         </div>
                     </>
                 )}
-
-                <hr className="pb-3 border-t-2 border-stone-200" />
-
-                <div className="pt-3 flex justify-between">
-                    <p className="text-gray-950 font-bold text-xl">Total Amount</p>
-                    <p className="font-semibold text-3xl">{'Rs ' + rentalData.amount}</p>
-                </div>
-                <div className="text-gray-500 text-xs">
-                    <p>Overall price including additions </p>
-                    <p>and deductions.</p>
-                </div>
             </div>
         </div>
     )

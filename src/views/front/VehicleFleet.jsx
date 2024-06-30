@@ -20,7 +20,6 @@ const VehicleFleet = () => {
         maxPrice: 0
     })
 
-
     const [dateFilter, setDateFilter] = useState({
         startDate: startDate || '',
         startTime: startTime || '',
@@ -45,13 +44,14 @@ const VehicleFleet = () => {
     }
 
     const handleSearch = async (searchQuery) => {
-        const updatedFilteredData = allVehicle.filter((vehicle) =>
-            (vehicle.name && vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
-            (vehicle.type && vehicle.type.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (vehicle.transmission && vehicle.transmission.toLowerCase().includes(searchQuery.toLowerCase()))
+        const updatedFilteredData = allVehicle.filter(
+            (vehicle) =>
+                (vehicle.name && vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (vehicle.type && vehicle.type.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (vehicle.transmission && vehicle.transmission.toLowerCase().includes(searchQuery.toLowerCase()))
         )
         setFilteredData(updatedFilteredData)
-    }    
+    }
 
     const handleDateFilter = async ({ startDate, startTime, endDate, endTime }) => {
         setDateFilter({ startDate, startTime, endDate, endTime })
@@ -89,6 +89,16 @@ const VehicleFleet = () => {
         setFilteredData(updatedFilteredData)
     }, [filters, vehicleData])
 
+    const resetFilters = () => {
+        setFilters({
+            vehicleType: 'all',
+            vehicleMake: 'all',
+            vehicleCapacity: 'all',
+            maxPrice: 0
+        })
+        setFilteredData(allVehicle)
+    }
+
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
     const baseUrlLogo = 'https://vehiclehubimages.blob.core.windows.net/logos/'
 
@@ -99,51 +109,49 @@ const VehicleFleet = () => {
                     <FilterCard onFilterChange={handleFilterChange} />
                 </div>
                 <div className="flex-col">
-                    <div className='flex flex-row gap-[10px]'>
+                    <div className="flex flex-col-reverse sm:flex-row gap-[10px]">
                         <SearchStrip onSearch={handleSearch} />
-                        <button 
-                            className='flex justify-center items-center gap-[8px] w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]'
-                            onClick={() => {setFilteredData(allVehicle)}}>
+                        <button
+                            className="flex justify-center items-center gap-[8px] w-full sm:w-[124px] h-[43px] bg-[#283280] text-[#FBDAC6] rounded-[64px]"
+                            onClick={resetFilters}
+                        >
                             All Vehicles
                         </button>
                     </div>
                     <div className="mt-[20px]">
-                    <BookingStrip2 
+                        <BookingStrip2
                             onDateFilter={handleDateFilter}
                             initialStartDate={dateFilter.startDate}
                             initialStartTime={dateFilter.startTime}
                             initialEndDate={dateFilter.endDate}
-                            initialEndTime={dateFilter.endTime} />
+                            initialEndTime={dateFilter.endTime}
+                        />
                     </div>
-                    <div className="flex flex-row flex-wrap mt-10 gap-7">
-                    {
-                            filteredData.length === 0 ? (
-                                <div className='w-full text-center text-black text-[25px]'>
-                                    No vehicles found.
-                                </div>
-                            ):(
-                                filteredData.map((vehicle) => (
-                                    <BookNowCard
-                                        key={vehicle.vehicleId}
-                                        id={vehicle.vehicleId}
-                                        name={vehicle.name}
-                                        make={vehicle.logo}
-                                        type={vehicle.type}
-                                        imageSrc={`${baseUrl}${vehicle.thumbnail}`}
-                                        //imageAlt={vehicle.imageAlt}
-                                        year={vehicle.year}
-                                        transmission={vehicle.transmission}
-                                        capacity={vehicle.seatingCapacity}
-                                        price={vehicle.costPerDay}
-                                        logo={`${baseUrlLogo}${vehicle.logo}`}
-                                        startDate={new Date(dateFilter.startDate)}
-                                        startTime={dateFilter.startTime}
-                                        endDate={new Date(dateFilter.endDate)}
-                                        endTime={dateFilter.endTime}
-                                    />
-                                ))
-                            )
-                        }
+                    <div className="grid grid-cols-1 sm:grid-cols-1 xl:grid-cols-3  gap-7 mt-10">
+                        {filteredData.length === 0 ? (
+                            <div className="w-full text-center text-black text-[25px]">No vehicles found.</div>
+                        ) : (
+                            filteredData.map((vehicle) => (
+                                <BookNowCard
+                                    key={vehicle.vehicleId}
+                                    id={vehicle.vehicleId}
+                                    name={vehicle.name}
+                                    make={vehicle.logo}
+                                    type={vehicle.type}
+                                    imageSrc={`${baseUrl}${vehicle.thumbnail}`}
+                                    //imageAlt={vehicle.imageAlt}
+                                    year={vehicle.year}
+                                    transmission={vehicle.transmission}
+                                    capacity={vehicle.seatingCapacity}
+                                    price={vehicle.costPerDay}
+                                    logo={`${baseUrlLogo}${vehicle.logo}`}
+                                    startDate={new Date(dateFilter.startDate)}
+                                    startTime={dateFilter.startTime}
+                                    endDate={new Date(dateFilter.endDate)}
+                                    endTime={dateFilter.endTime}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

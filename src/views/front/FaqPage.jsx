@@ -58,7 +58,7 @@ export default function Faq() {
         <>
             <div className="flex flex-col justify-center items-center p-[30px] bg-white to-white rounded-lg">
                 <div className="text-[40px] font-[700]">Frequently Asked Questions</div>
-                <div className="w-[1000px] text-center mt-[30px] text-black">
+                <div className="lg:w-[1000px] text-center mt-[30px] text-black">
                     Welcome to our FAQ page, where we've compiled answers to commonly asked questions to provide you
                     with quick and helpful information. Whether you're curious about our reservation process, payment
                     methods, or rental policies, you'll find all the answers you need right here. If you can't find what
@@ -69,7 +69,7 @@ export default function Faq() {
                     {accordions.map((faq, index) => (
                         <div key={index} className="mb-1 border-b border-black">
                             <button
-                                className="w-[800px] p-4 text-left transition duration-800 font-[500]"
+                                className="lg:w-[800px] p-4 text-left transition duration-800 font-[500]"
                                 onClick={() => toggleAccordion(faq.key)}
                             >
                                 {faq.title}

@@ -15,6 +15,8 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(3, {
@@ -27,6 +29,7 @@ const formSchema = z.object({
 
 export default function CreateVehicleType() {
     const navigate = useNavigate()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -42,15 +45,19 @@ export default function CreateVehicleType() {
 
     //Submit handler
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleType'
+        const url = '/VehicleType'
         try {
             const formData = {
                 Name: data.name,
                 DepositAmount: data.depositAmount
             }
 
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             console.log(result.data)
+            toast({
+                variant: 'success',
+                description: 'Vehicle Type created successfully'
+            })
             reset()
             navigate(`/admin/vehicletype/view`)
         } catch (error) {

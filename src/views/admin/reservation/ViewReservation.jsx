@@ -3,13 +3,14 @@ import axios from 'axios'
 import DataTable from './DataTable'
 import { columns as originalColumns } from './Columns'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs'
+import apiclient from '../../../axiosConfig'
 
 export default function ViewReservation() {
     const [Reservation, setReservation] = useState([])
 
     const fetchReservation = async () => {
         try {
-            const response = await axios.get('http://localhost:5062/api/AdminReservation/View-Reservations')
+            const response = await apiclient.get('/AdminReservation/View-Reservations')
             setReservation(response.data)
             console.log('Fetched Customer Reservations:', response.data)
         } catch (error) {
@@ -35,8 +36,11 @@ export default function ViewReservation() {
 
     return (
         <>
-            <Tabs defaultValue="all" className="w-full p-6">
-                <TabsList className="grid w-2/3 grid-cols-8">
+            <div className="flex flex-col p-6 bg-white rounded-lg sm:hidden">
+                <DataTable columns={columns} data={Reservation} />
+            </div>
+            <Tabs defaultValue="all" className="w-full p-6 hidden sm:block">
+                <TabsList className="grid w-5/6 grid-cols-8">
                     <TabsTrigger value="all">All</TabsTrigger>
                     <TabsTrigger value="waiting">Waiting</TabsTrigger>
                     <TabsTrigger value="pending">Pending</TabsTrigger>

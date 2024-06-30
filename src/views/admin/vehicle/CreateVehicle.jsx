@@ -5,7 +5,6 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
 import { Switch } from '../../../components/ui/switch'
-
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -22,6 +21,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     regNo: z
@@ -60,6 +61,7 @@ const formSchema = z.object({
 export default function CreateVehicle() {
     const navigate = useNavigate()
     const fileInputRef = useRef(null)
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -125,7 +127,7 @@ export default function CreateVehicle() {
         const fetchVehicleModels = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
-                const response = await axios.get('http://localhost:5062/api/VehicleModel')
+                const response = await apiclient.get('/VehicleModel')
                 setVehicleModels(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle models:', error)
@@ -135,7 +137,7 @@ export default function CreateVehicle() {
 
         const fetchVehicleTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                const response = await apiclient.get('/VehicleType')
                 setVehicleTypes(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle Types:', error)
@@ -147,7 +149,7 @@ export default function CreateVehicle() {
     const handleSave = async (data) => {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
-        const url = 'http://localhost:5062/api/Vehicle'
+        const url = '/Vehicle'
         try {
             const formData = new FormData()
             formData.append('RegistrationNumber', data.regNo)
@@ -167,7 +169,7 @@ export default function CreateVehicle() {
             formData.append('EmployeeId', decryptedId)
             formData.append('Status', data.status)
 
-            const response = await axios.post(url, formData, {
+            const response = await apiclient.post(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -176,6 +178,11 @@ export default function CreateVehicle() {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field
             }
+            toast({
+                variant: 'success',
+                description: 'Vehicle created successfully'
+            })
+
             reset()
             navigate(`/admin/vehicle/view`)
         } catch (error) {

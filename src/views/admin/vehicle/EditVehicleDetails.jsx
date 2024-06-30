@@ -20,6 +20,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { navigate, useNavigate } from 'react-router-dom'
+import { useToast } from '../../../components/ui/use-toast'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     regNo: z
@@ -48,6 +51,7 @@ const formSchema = z.object({
 
 export default function EditVehicleDetails({ vehicleId }) {
     const navigate = useNavigate()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -79,9 +83,9 @@ export default function EditVehicleDetails({ vehicleId }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/Vehicle/${vehicleId}`
+            const url = `/Vehicle/${vehicleId}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 reset({
                     regNo: data.registrationNumber,
                     chassisNo: data.chassisNo,
@@ -103,7 +107,7 @@ export default function EditVehicleDetails({ vehicleId }) {
         const fetchVehicleModels = async () => {
             try {
                 // Update the URL to your specific API endpoint for fetching vehicles
-                const response = await axios.get('http://localhost:5062/api/VehicleModel')
+                const response = await apiclient.get('/VehicleModel')
                 setVehicleModels(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle models:', error)
@@ -113,7 +117,7 @@ export default function EditVehicleDetails({ vehicleId }) {
 
         const fetchVehicleTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:5062/api/VehicleType')
+                const response = await apiclient.get('/VehicleType')
                 setVehicleTypes(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle Types:', error)
@@ -126,7 +130,7 @@ export default function EditVehicleDetails({ vehicleId }) {
     const handleSave = async (data) => {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
-        const url = `http://localhost:5062/api/Vehicle/Details/${vehicleId}`
+        const url = `/Vehicle/Details/${vehicleId}`
         try {
             const formData = {
                 RegistrationNumber: data.regNo,
@@ -141,9 +145,12 @@ export default function EditVehicleDetails({ vehicleId }) {
                 VehicleModelId: data.vehicleModelId,
                 EmployeeId: decryptedId
             }
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
             console.log('Vehicle updated', result)
-            reset()
+            toast({
+                variant: 'success',
+                description: 'Vehicle updated successfully'
+            })
             navigate(`/admin/vehicle/view`)
         } catch (error) {
             console.error('Error:', error)
@@ -377,9 +384,12 @@ export default function EditVehicleDetails({ vehicleId }) {
                 />
 
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Vehicle Details"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

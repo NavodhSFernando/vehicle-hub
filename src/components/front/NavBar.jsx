@@ -12,6 +12,9 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import NotificationDropdown from './NotificationDropDown'
 import WishlistDropdown from './WishlistDropDown'
 import Cookies from 'js-cookie'
+import { Button } from '../ui/button'
+import axios from 'axios'
+import { getUserRoles } from '../../getUserRoles'
 
 const Navbar = () => {
     const location = useLocation()
@@ -41,18 +44,41 @@ const Navbar = () => {
     const toggleNav = () => {
         setShowNav(!showNav)
     }
+    const [notificationCount, setnotificationCount] = useState(0)
 
+    const customerId = Cookies.get('customerId')
+    const fetchNotifications = async () => {
+        try {
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
+            const filteredNotifications = response.data.filter((notification) => {
+                return notification.isRead === false
+            })
+
+            setnotificationCount(filteredNotifications.length)
+        } catch (error) {
+            console.error('Error fetching notifications:', error)
+        }
+    }
+
+    const role = getUserRoles()
     useEffect(() => {
-        const isLoggedIn = Cookies.get('customerId')
-        isLoggedIn ? setLoggedIn(true) : setLoggedIn(false)
+        if (role === 'customer') {
+            setLoggedIn(true)
+        } else {
+            setLoggedIn(false)
+        }
+        if (customerId) {
+            fetchNotifications()
+        }
     }, [])
 
     const isHomePage = location.pathname === '/'
 
     return (
-        <nav
-            className={`absolute top-0 inset-x-0 z-10 ${isHomePage ? 'bg-transparent' : 'bg-gradient-to-b from-[#283280]'}`}
-        >
+        <nav className={`absolute top-0 inset-x-0 z-20 ${isHomePage ? 'bg-gradient-to-b from-primary' : ''}`}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -92,20 +118,16 @@ const Navbar = () => {
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <NavLink to="/login">
-                                <button className="border-[#FBDAC6] text-[#FBDAC6] border-2 text-secondary px-3 py-2 rounded-md text-sm font-medium">
-                                    Sign In
-                                </button>
-                            </NavLink>
-                            <NavLink to="/signup">
-                                <button className="ml-4 bg-[#FBDAC6] border-none text-[#283280] px-3 py-2 rounded-md text-sm font-medium">
-                                    Sign Up
-                                </button>
-                            </NavLink>
+                            <button className="bg-transparent border-[#FBDAC6] text-[#FBDAC6] border-2 px-5 py-2 rounded-md text-sm font-medium">
+                                <NavLink to="/login">Sign In</NavLink>
+                            </button>
+                            <button className="ml-4 bg-[#FBDAC6] border-2 border-[#FBDAC6] decoration-transparent px-5 py-2 rounded-md text-sm font-medium">
+                                <NavLink to="/signup">Sign Up</NavLink>
+                            </button>
                         </div>
                     ) : (
                         <div className="flex gap-16">
-                            <div className="text-yellowtheme cursor-pointer" onClick={handleClick}>
+                            <div className="text-yellowtheme cursor-pointer relative" onClick={handleClick}>
                                 {clicked ? (
                                     <>
                                         <BsBookmarkStarFill fontSize={28} style={{ color: '#FBDAC6' }} />
@@ -120,10 +142,19 @@ const Navbar = () => {
                                 )}
                             </div>
 
-                            <div className="text-yellowtheme cursor-pointer" onClick={handleNotification}>
+                            <div className="text-yellowtheme cursor-pointer relative" onClick={handleNotification}>
                                 {notification ? (
                                     <>
-                                        <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
+                                        <div className="flex">
+                                            <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} />
+
+                                            {notificationCount > 0 && (
+                                                <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
+                                                    {notificationCount}
+                                                </span>
+                                            )}
+                                        </div>
+                                        {/* <IoNotifications fontSize={28} style={{ color: '#FBDAC6' }} /> */}
                                         <NotificationDropdown
                                             isOpen={isDropdownOpen}
                                             setIsOpen={() => {}}
@@ -131,7 +162,14 @@ const Navbar = () => {
                                         />
                                     </>
                                 ) : (
-                                    <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
+                                    <div className="flex">
+                                        <IoMdNotificationsOutline fontSize={28} style={{ color: '#FBDAC6' }} />
+                                        {notificationCount > 0 && (
+                                            <span className="relative right-[15px] bottom-[8px] inline-flex items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-600 rounded-full">
+                                                {notificationCount}
+                                            </span>
+                                        )}
+                                    </div>
                                 )}
                             </div>
                             <NavLink to="/account/viewprofile">

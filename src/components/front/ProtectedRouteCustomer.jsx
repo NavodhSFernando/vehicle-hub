@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
             description: 'Access Denied!'
         })
         console.log('Access denied. Redirecting...')
-        return <Navigate to="/admin-login" />
+        return <Navigate to="/login" />
     }
 
     return children

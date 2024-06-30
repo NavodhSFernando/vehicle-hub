@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
-import { zodResolver } from '@hookform/resolvers/zod'
+import blueicon from '../../assets/logos/blueicon.png'
+import bluetype from '../../assets/logos/Blue-type.png'
+import { useToast } from '../../components/ui/use-toast'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -23,6 +26,8 @@ const formSchema = z.object({
 
 export const Password = () => {
     const navigate = useNavigate()
+    const { toast } = useToast()
+
     const {
         control,
         handleSubmit,
@@ -42,19 +47,28 @@ export const Password = () => {
                 `http://localhost:5062/api/CustomerAuth/ForgotPassword?email=${data.email}`
             )
             console.log(response.data)
-            alert('OTP sent to your email.')
+            toast({
+                variant: 'success',
+                description: 'OTP sent successfully!'
+            })
             navigate('/VerifyOTP')
         } catch (error) {
-            alert('Failed to send OTP.')
             console.error(error.response ? error.response.data : error.message)
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to send OTP!'
+            })
         }
     }
     return (
         <div>
-            <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
-                <div className="bg-gray-200 "></div>
+            <div className="flex flex-col min-h-screen bg-slate-200  justify-center items-center">
+                <div className="flex flex-row items-center space-x-2 -mb-8 mt-6">
+                    <img src={blueicon} alt="Blue Icon" className="w-10 h-auto" />
 
-                <div className="flex justify flex-col  items-center w-full md:w-96 bg-white rounded-xl shadow-lg absolute left-[calc(50% - 373px/2 - 0.5px)] top-[calc(50% - 605.97px/2 + 36.5px)] md:left-auto md:right-auto p-8">
+                    <img src={bluetype} alt="Blue Type" className="w-40 h-auto" />
+                </div>
+                <div className="flex justify flex-col  items-center md:w-96 bg-white rounded-xl shadow-lg  md:left-auto md:right-auto p-8">
                     <h2 className="text-2xl w-300 h-30 left-36.5 top-25 font-inter font-bold text-gray-600 text-center text-20 mt-6 mb-2">
                         Password Recovery
                     </h2>
@@ -73,7 +87,7 @@ export const Password = () => {
                                     <FormItem>
                                         <div className="flex flex-col space-y-3">
                                             <FormLabel htmlFor="email" className="text-gray-800 font-semibold">
-                                                Email
+                                                E-mail
                                             </FormLabel>
                                             <FormControl>
                                                 <input

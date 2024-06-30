@@ -1,7 +1,5 @@
 import React from 'react'
-
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
@@ -11,8 +9,9 @@ import {
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { DataTablePagination } from '../../../components/ui/DataTablePagination'
-
+import { Label } from '../../../components/ui/label'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../../components/ui/table'
+import { Button } from '../../../components/ui/button'
 
 export default function DataTable({ columns, data }) {
     const [columnFilters, setColumnFilters] = React.useState([])
@@ -34,15 +33,30 @@ export default function DataTable({ columns, data }) {
         initialState: { pagination: { pageSize: 5 } }
     })
 
+    const clearFilters = () => {
+        table.resetColumnFilters()
+    }
+
     return (
         <div>
-            <div className="flex items-center py-4">
-                <Input
-                    placeholder="Filter emails..."
-                    value={table.getColumn('email')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 mb-8">
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
+                    <Label>Email</Label>
+                    <Input
+                        placeholder="Filter emails..."
+                        value={table.getColumn('email')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+                        className="w-3/4"
+                    />
+                </div>
+            </div>
+            <div className="flex flex-col space-y-1 pt-2 pb-4 lg:items-end lg:justify-end">
+                <Button
+                    onClick={clearFilters}
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                >
+                    Clear Filter
+                </Button>
             </div>
             <div className="rounded-md border">
                 <Table>

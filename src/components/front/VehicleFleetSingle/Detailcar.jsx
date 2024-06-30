@@ -6,8 +6,9 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import { useToast } from '../../ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
-export default function Detailcar({ id, sdate, stime, edate, etime }) {
+export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) {
     const [clicked, setClicked] = useState(false)
     const [wishlistclick, setwishlistclick] = useState(false)
     const [totalFeedbacks, setTotalFeedbacks] = useState(0)
@@ -16,13 +17,8 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
     const [vehicleData, setVehicleData] = useState({})
     const { toast } = useToast()
     const navigate = useNavigate()
-    const reservationId = id
 
     const customerId = Cookies.get('customerId')
- 
-    const handleClick = () => {
-        setClicked(!clicked)
-    }
 
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked)
@@ -40,11 +36,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
             navigate('/login')
         }
 
-        const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
-        const decryptedId = decryptResponse.data.decryptedUserId
-
-        const url = `http://localhost:5062/api/FrontReservationService/request-reservation`
         try {
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
+            const decryptedId = decryptResponse.data.decryptedUserId
+
+            const url = `/FrontReservationService/request-reservation`
             const formData = {
                 VehicleId: id,
                 CustomerId: decryptedId,
@@ -55,40 +51,19 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     EndTime: etime
                 }
             }
-            const response = await axios.post(url, formData)
-            if (response.status === 200) {
-                toast({
-                    variant: 'success',
-                    description: 'Vehicle requested successfully'
-                })
-            }
+            const response = await apiclient.post(url, formData)
+
+            toast({
+                variant: 'success',
+                description: 'Vehicle requested successfully'
+            })
+
             console.log('Request vehicle response:', response.data)
             navigate(`/account/viewongoingrentals`)
         } catch (error) {
-            if (error.response && error.response.status === 403) {
-                navigate('/login')
-            } else {
-                console.error('Error requesting vehicle:', error)
-            }
+            navigate('/login')
         }
     }
-
-    const fetchFeedbacks = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${reservationId}`)
-            const feedbacks = response.data
-
-            const totalFeedbacks = feedbacks.length
-            const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
-            const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
-
-            setTotalFeedbacks(totalFeedbacks)
-            setAverageRating(averageRating)
-        } catch (error) {
-            console.error('Error fetching feedbacks:', error)
-        }
-    }
-
 
     //wishlist
     const updateWishlist = (wishlistItems) => {
@@ -101,26 +76,28 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         return JSON.parse(localStorage.getItem('wishlistItems')) || []
     }
 
-    const handleWishlist = () => {
+    const areVehiclesEqual = (vehicle1, vehicle2) => {
+        console.log(vehicle1.id + '==' + vehicle2.id)
+        return vehicle1.id == vehicle2.id
+    }
+
+    const handleClick = () => {
         const vehicleDetails = {
-            id: vehicleData.VehicleId,
-            name: vehicleData.name,
-            type: vehicleData.type,
+            id: parseInt(id),
+            name: vehicleData.model,
+            type: vehicleData.fuelType,
             year: vehicleData.year,
-            imageSrc: vehicleData.dashboardImg,
+            imageSrc: imageSrc,
             transmission: vehicleData.transmission,
             price: vehicleData.costPerDay,
-            capacity: vehicleData.seatingCapacity,
+            capacity: vehicleData.seatingCapacity
         }
 
         const existingWishlistItems = getWishlist()
-        const areVehiclesEqual = (vehicle1, vehicle2) => {
-            return vehicle1.id === vehicle2.id
-        }
 
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
-
-        if (index === -1) {
+        console.log('index->' + index)
+        if (index == -1) {
             const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
             updateWishlist(updatedWishlistItems)
             setClicked(true)
@@ -131,37 +108,52 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
         }
     }
 
+    const handleWishlistUpdate = (event) => {
+        const updatedWishlist = event.detail
+        const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
+        setClicked(isInUpdatedWishlist)
+    }
+
     useEffect(() => {
         const fetchVehicleData = async () => {
             try {
                 const response = await axios.get(`http://localhost:5062/api/FrontReservationService/DetailCar/${id}`)
                 setVehicleData(response.data)
-                console.log(vehicleData)
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching vehicle data:', error)
+            }
+        }
+
+        const fetchFeedbacks = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${id}`)
+                const feedbacks = response.data
+
+                const totalFeedbacks = feedbacks.length
+                const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
+                const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
+
+                setTotalFeedbacks(totalFeedbacks)
+                setAverageRating(averageRating)
+            } catch (error) {
+                console.error('Error fetching feedbacks:', error)
             }
         }
         fetchVehicleData()
         fetchFeedbacks()
 
-
         //wishlist
         const existingWishlistItems = getWishlist()
-        const isInWishlist = existingWishlistItems.some((item) => item.id === vehicleData.VehicleId)
-        setwishlistclick(isInWishlist)
-
-        const handleWishlistUpdate = (event) => {
-            const updatedWishlist = event.detail
-            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === vehicleData.VehicleId)
-            setwishlistclick(isInUpdatedWishlist)
-        }
+        const isInWishlist = existingWishlistItems.some((item) => item.id == id)
+        setClicked(isInWishlist)
 
         window.addEventListener('wishlistUpdated', handleWishlistUpdate)
 
         return () => {
             window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
         }
-    }, [])
+    }, [id])
 
     return (
         <div className="w-full bg-white p-6 rounded-lg">
@@ -180,11 +172,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                     </div>
                 </div>
                 <div className="mt-1">
-                    {wishlistclick ? (
-                        <BsBookmarkStarFill fontSize={24} onClick={handleWishlist} />
-                    ) : (
-                        <BsBookmarkStar fontSize={24} onClick={handleWishlist} />
-                    )}
+                    {
+                        <button onClick={handleClick}>
+                            {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
+                        </button>
+                    }
                 </div>
             </article>
             {/* Specification */}
@@ -274,16 +266,17 @@ export default function Detailcar({ id, sdate, stime, edate, etime }) {
                             <p>Extra Mileage Charge (per km)</p>
                         </span>
                     </div>
-                    <div className="flex items-center space-x-2 p-3 bg-blue-100 rounded mb-8">
+                    <div className="flex items-center space-x-3 p-4 bg-blue-100 rounded-lg mb-8 shadow-sm">
                         <input
                             type="checkbox"
-                            className="rounded"
+                            className="rounded text-blue-500 focus:ring-blue-400 focus:ring-2 focus:ring-offset-0"
                             checked={isChecked}
                             onChange={handleCheckboxChange}
+                            id="termsCheckbox"
                         />
                         <label
-                            htmlFor={''}
-                            className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                            htmlFor="termsCheckbox"
+                            className="text-sm leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
                         >
                             I agree to Terms and Conditions
                         </label>

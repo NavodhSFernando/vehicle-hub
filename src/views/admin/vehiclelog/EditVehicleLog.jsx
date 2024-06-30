@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from '../../../components/ui/button'
 import {
@@ -19,12 +19,14 @@ import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Textarea } from '../../../components/ui/textarea'
 import Cookie from 'js-cookie'
-
-const validReservationIds = [4]
+import { useNavigate } from 'react-router-dom'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
-    customerReservationId: z.number().refine((reservationId) => validReservationIds.includes(reservationId), {
-        message: 'Invalid Vehicle ID'
+    customerReservationId: z.number({
+        required_error: 'Customer reservation ID is required'
     }),
     endMileage: z.number().int().positive(),
     penalty: z.number().min(0).optional(),
@@ -33,6 +35,9 @@ const formSchema = z.object({
 
 export default function EditVehicleLog() {
     const { vehicleLogId } = useParams() // Access route parameter
+    const navigate = useNavigate()
+    const [customerReservationId, setCustomerReservationId] = useState(0)
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -50,9 +55,10 @@ export default function EditVehicleLog() {
     // Fetch vehicle Log data
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/VehicleLog/${vehicleLogId}`
+            const url = `/VehicleLog/${vehicleLogId}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
+                setCustomerReservationId(data.customerReservationId)
                 // Reset form with fetched data
                 reset({
                     customerReservationId: data.customerReservationId,
@@ -65,7 +71,7 @@ export default function EditVehicleLog() {
             }
         }
         fetchData()
-    }, [vehicleLogId, reset])
+    }, [])
 
     const employeeId = Cookie.get('employeeId')
     if (!employeeId) {
@@ -77,21 +83,29 @@ export default function EditVehicleLog() {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
 
-        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${data.customerReservationId}?eid=${decryptedId}`
+        const url = `/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
         try {
             const formData = {
-                customerReservationId: data.customerReservationId,
+                CustomerReservationId: data.customerReservationId,
                 EndMileage: data.endMileage,
                 Penalty: data.penalty,
                 Description: data.description
             }
 
-            // PUT request to the server with form data
-            const result = await axios.put(url, formData)
+            // POST request to the server with form data
+            const result = await apiclient.post(url, formData)
             console.log(result)
+
+            toast({
+                variant: 'success',
+                description: 'Vehicle Log updated successfully'
+            })
+
+            // Reset form fields after submission
             reset()
+            navigate(`/admin/vehiclelog/view`)
         } catch (error) {
-            console.log('Failed to update vehicle Log', error)
+            console.log(error)
         }
     }
 
@@ -176,28 +190,15 @@ export default function EditVehicleLog() {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={control}
-                    name="extraDays"
-                    render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Extra Days</FormLabel>
-                            <FormControl>
-                                <Input
-                                    type="number"
-                                    className="w-full"
-                                    {...field}
-                                    onChange={(e) => field.onChange(Number(e.target.value))}
-                                />
-                            </FormControl>
-                            <FormMessage>{errors.extraDays && errors.extraDays.message}</FormMessage>
-                        </FormItem>
-                    )}
-                />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Create
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Vehicle Log"
+                        alertDescription="Are you sure you want to update this vehicle log?"
+                        handleConfirm={handleSubmit(handleSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
+                    />
                 </div>
             </form>
         </Form>

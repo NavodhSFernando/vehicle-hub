@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { MdDeleteOutline } from "react-icons/md";
+import { MdOutlineMarkEmailRead } from "react-icons/md";
 
-const NOTIFICATIONS_PER_PAGE = 3
+const NOTIFICATIONS_PER_PAGE = 6
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
@@ -15,14 +17,27 @@ export default function NotificationCenter() {
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get(`http://localhost:5062/api/Notification/allnotifications`)
-            console.log(response.data)
-            const filteredNotifications = response.data.filter(notification => notification.customerReservationId === null)
-            setNotifications(filteredNotifications)
+            const response = await axios.get(`http://localhost:5062/api/AdminNotification/AllAdminNotifications`)
+            setNotifications(response.data)
         } catch (error) {
             console.error('Error fetching notifications:', error)
         }
     }
+
+    const markAsRead = async (notificationId) => {
+        try {
+            const response = await axios.put(`http://localhost:5062/api/AdminNotification/MarkAsRead?notificationid=${notificationId}`);
+            if (response.status === 200) {
+                setNotifications((prevNotifications) =>
+                    prevNotifications.map((notification) =>
+                        notification.id === notificationId ? { ...notification, isRead: true } : notification
+                    )
+                );
+            }
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+        }
+    };
 
     useEffect(() => {
             fetchNotifications()
@@ -36,9 +51,8 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.title}
-                            description={notification.description}
-                            time={notification.generated_DateTime}
+                            notification={notification}
+                            onMarkAsRead={markAsRead}
                         />
                     ))
                 ) : (
@@ -105,12 +119,23 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
     )
 }
 
-function NotificationCard({ title, description, time }) {
+function NotificationCard({ notification, onMarkAsRead }) {
+    const { id, title, description, generated_DateTime, isRead } = notification;
+
     return (
-         <div className=" p-4 shadow rounded-lg mb-4 mx-20">
-            <div className="font-bold text-lg">{title}</div>
-            <div className="text-gray-700">{description}</div>
-            <div className="text-gray-500 text-sm">{time}</div>
+        <div className="p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]">
+            <div className='flex flex-col'>
+                <div className="font-bold text-lg">{title}</div>
+                <div className="text-gray-700">{description}</div>
+                <div className="text-gray-500 text-sm">{generated_DateTime}</div>
+            </div>           
+            <div className='flex-3 flex flex-col justify-center items-center gap-[10px]'>
+                {!isRead && (
+                    <button onClick={() => onMarkAsRead(id)}>
+                        <MdOutlineMarkEmailRead fontSize={28} style={{ color: '#283280' }} />
+                    </button>
+                )}
+            </div>
         </div>
-    )
+    );
 }

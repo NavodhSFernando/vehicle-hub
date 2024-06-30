@@ -19,6 +19,9 @@ import { Textarea } from '../../../components/ui/textarea'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import Cookie from 'js-cookie'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 // Define the schema for form validation using zod
 const formSchema = z.object({
@@ -33,6 +36,7 @@ const formSchema = z.object({
 export default function CreateVehicleLog() {
     const navigate = useNavigate()
     const { customerReservationId } = useParams() // Access route parameter
+    const { toast } = useToast()
     // Initialize useForm with zodResolver for schema validation
     const {
         control,
@@ -59,7 +63,7 @@ export default function CreateVehicleLog() {
         const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${employeeId}`)
         const decryptedId = decryptResponse.data.decryptedUserId
 
-        const url = `http://localhost:5062/api/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
+        const url = `/AdminReservation/End-Reservation/${customerReservationId}?eid=${decryptedId}`
         try {
             const formData = {
                 CustomerReservationId: data.customerReservationId,
@@ -69,8 +73,13 @@ export default function CreateVehicleLog() {
             }
 
             // POST request to the server with form data
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
             console.log(result)
+
+            toast({
+                variant: 'success',
+                description: 'Vehicle Log created successfully'
+            })
             // Reset form fields after submission
             reset()
             navigate(`/admin/reservation/view`)
@@ -161,9 +170,14 @@ export default function CreateVehicleLog() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Create
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Create"
+                        alertTitle="Create Vehicle Log"
+                        alertDescription="Are you sure you want to create this vehicle log?"
+                        handleConfirm={handleSubmit(handleSave)}
+                        buttonClass="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                        variant="outline"
+                    />
                 </div>
             </form>
         </Form>

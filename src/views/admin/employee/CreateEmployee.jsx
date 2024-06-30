@@ -3,6 +3,9 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import { Button } from '../../../components/ui/button'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
+
 import {
     Form,
     FormControl,
@@ -17,7 +20,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import Password from '../../front/Password'
 import { Checkbox } from '../../../components/ui/checkbox'
-import apiclient from '../../../axiosConfig'
+import { useNavigate } from 'react-router-dom'
+import { Switch } from '../../../components/ui/switch'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -41,6 +45,8 @@ const formSchema = z.object({
 })
 
 export default function CreateEmployee() {
+    const { toast } = useToast()
+
     // 1. Define your form.
     const {
         control,
@@ -59,7 +65,7 @@ export default function CreateEmployee() {
             nic: '',
             gender: '',
             department: '',
-            status: ''
+            status: true
         }
     })
 
@@ -84,8 +90,16 @@ export default function CreateEmployee() {
             const result = await apiclient.post(url, formData)
             console.log(result)
             console.log(formData)
+            toast({
+                variant: 'success',
+                description: 'Employee created successfully!'
+            })
             reset()
         } catch (error) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to create Employee!'
+            })
             if (error.response) {
                 // The request was made and the server responded with a status code
                 console.error('Server responded with error data:', error.response.data)
@@ -271,8 +285,10 @@ export default function CreateEmployee() {
                     control={control}
                     name="department"
                     render={({ field }) => (
-                        <FormItem className="w-1/2">
-                            <FormLabel className="pb-3 w-full">Department</FormLabel>
+                        <FormItem>
+                            <div className="flex flex-col space-y-1 pt-6">
+                                <FormLabel className="pb-3 w-full">Department</FormLabel>
+                            </div>
                             <Select
                                 onValueChange={(value) => {
                                     field.onChange(value)
@@ -281,8 +297,8 @@ export default function CreateEmployee() {
                                 defaultValue={field.value}
                             >
                                 <FormControl>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select Department" />
+                                    <SelectTrigger className="w-2/3">
+                                        <SelectValue />
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
@@ -302,12 +318,10 @@ export default function CreateEmployee() {
                     name="status"
                     render={({ field }) => (
                         <FormItem className="w-1/2">
+                            <div className="flex flex-col space-y-1 pt-6"></div>
                             <FormLabel className="pb-3 w-full">Status </FormLabel>
                             <FormControl>
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={(checked) => field.onChange(checked)}
-                                />
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
                             </FormControl>
                             <FormMessage>{errors.status && errors.status.message}</FormMessage>
                         </FormItem>

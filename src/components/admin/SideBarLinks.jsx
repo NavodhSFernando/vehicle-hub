@@ -9,9 +9,15 @@ import {
     HiOutlineCog
 } from 'react-icons/hi'
 
-import { RiStackLine } from 'react-icons/ri'
+import { RiAdminLine, RiStackLine } from 'react-icons/ri'
 import { LuDot } from 'react-icons/lu'
 import { AiOutlineHome } from 'react-icons/ai'
+import { PiBookBookmarkThin } from 'react-icons/pi'
+import { BsStopCircle } from 'react-icons/bs'
+import { IoCarSportOutline, IoNotifications } from 'react-icons/io5'
+import { GrServices, GrShield } from 'react-icons/gr'
+import { GoPeople } from 'react-icons/go'
+import { IoMdNotificationsOutline } from 'react-icons/io'
 
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
@@ -45,13 +51,14 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 path: '/admin/report/vehicleutilizationreport',
                 icon: <LuDot />
             }
-        ]
+        ],
+        role: 'admin'
     },
     {
         key: 'reservation',
         label: 'Reservation',
         path: '/admin/reservation',
-        icon: <RiStackLine />,
+        icon: <PiBookBookmarkThin />,
         subLinks: [
             {
                 key: 'view all reservations',
@@ -65,7 +72,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         key: 'vehicle log',
         label: 'Vehicle Log',
         path: '/admin/vehiclelog',
-        icon: <RiStackLine />,
+        icon: <BsStopCircle />,
         subLinks: [
             {
                 key: 'view all vehicle log',
@@ -139,7 +146,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         key: 'vehicle',
         label: 'Vehicle',
         path: '/admin/vehicle',
-        icon: <RiStackLine />,
+        icon: <IoCarSportOutline />,
         subLinks: [
             {
                 key: 'view all vehicle',
@@ -159,7 +166,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         key: 'maintenance',
         label: 'Maintenance',
         path: '/admin/maintenance',
-        icon: <RiStackLine />,
+        icon: <GrServices />,
         subLinks: [
             {
                 key: 'view all maintenance',
@@ -173,7 +180,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         key: 'insurance',
         label: 'Insurance',
         path: '/admin/insurance',
-        icon: <RiStackLine />,
+        icon: <GrShield />,
         subLinks: [
             {
                 key: 'view all insurance',
@@ -187,7 +194,7 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         key: 'employee',
         label: 'Employee',
         path: '/admin/employee',
-        icon: <RiStackLine />,
+        icon: <RiAdminLine />,
         subLinks: [
             {
                 key: 'view all employee',
@@ -201,13 +208,14 @@ export const DASHBOARD_SIDEBAR_LINKS = [
                 path: '/admin/employee/create',
                 icon: <LuDot />
             }
-        ]
+        ],
+        role: 'admin'
     },
     {
         key: 'customer',
         label: 'Customer',
         path: '/admin/customer',
-        icon: <RiStackLine />,
+        icon: <GoPeople />,
         subLinks: [
             {
                 key: 'view all customer',
@@ -221,8 +229,9 @@ export const DASHBOARD_SIDEBAR_LINKS = [
         key: 'notifications',
         label: 'Notifications',
         path: '/admin/notification',
-        icon: <RiStackLine />,
-        heading: 'Notifications'
+        icon: <IoMdNotificationsOutline />,
+        heading: 'Notifications',
+        role: 'admin'
     }
 ]
 

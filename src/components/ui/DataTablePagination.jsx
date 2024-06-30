@@ -11,7 +11,7 @@ export function DataTablePagination({ table }) {
                 {table.getFilteredRowModel().rows.length} item(s) available.
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8">
-                <div className="flex items-center space-x-2">
+                <div className="sm:flex items-center space-x-2 hidden">
                     <p className="text-sm font-medium">Rows per page</p>
                     <Select
                         value={`${table.getState().pagination.pageSize}`}
@@ -19,7 +19,7 @@ export function DataTablePagination({ table }) {
                             table.setPageSize(Number(value))
                         }}
                     >
-                        <SelectTrigger className="h-8 w-[70px]">
+                        <SelectTrigger className="h-8 w-16">
                             <SelectValue placeholder={table.getState().pagination.pageSize} />
                         </SelectTrigger>
                         <SelectContent side="top">
@@ -31,7 +31,7 @@ export function DataTablePagination({ table }) {
                         </SelectContent>
                     </Select>
                 </div>
-                <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                <div className="sm:flex w-24 items-center justify-center text-sm font-medium hidden">
                     Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
                 </div>
                 <div className="flex items-center space-x-2">

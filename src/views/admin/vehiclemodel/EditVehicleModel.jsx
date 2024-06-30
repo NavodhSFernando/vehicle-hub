@@ -5,7 +5,7 @@ import axios from 'axios'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
-
+import { useToast } from '../../../components/ui/use-toast'
 import { Button } from '../../../components/ui/button'
 import {
     Form,
@@ -21,6 +21,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Checkbox } from '../../../components/ui/checkbox'
 import { useNavigate } from 'react-router-dom'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const items = [
     { id: 'abs', label: 'ABS' },
@@ -82,6 +84,7 @@ const formSchema = z.object({
 export default function EditVehicleModel() {
     const navigate = useNavigate()
     const { vehicleModelId } = useParams()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -100,9 +103,9 @@ export default function EditVehicleModel() {
     })
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        const url = `/AdminVehicle/${vehicleModelId}`
         try {
-            const { data } = await axios.get(url)
+            const { data } = await apiclient.get(url)
             reset({
                 name: data.vehicleModel.name,
                 year: data.vehicleModel.year,
@@ -122,7 +125,7 @@ export default function EditVehicleModel() {
     useEffect(() => {
         const fetchVehicleMakes = async () => {
             try {
-                const response = await axios.get('http://localhost:5062/api/VehicleMake')
+                const response = await apiclient.get('/VehicleMake')
                 setVehicleMakes(response.data)
             } catch (error) {
                 console.error('Failed to fetch vehicle makes:', error)
@@ -133,7 +136,7 @@ export default function EditVehicleModel() {
     }, [vehicleModelId, reset])
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/AdminVehicle/${vehicleModelId}`
+        const url = `/AdminVehicle/${vehicleModelId}`
         try {
             // Convert the items array into an object with key-value pairs
             const additionalFeatures = items.reduce((acc, item) => {
@@ -152,7 +155,11 @@ export default function EditVehicleModel() {
                 },
                 AdditionalFeatures: additionalFeatures
             }
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
+            toast({
+                variant: 'success',
+                description: 'VehicleMake Updated successfully'
+            })
             console.log('Vehicle model updated', result)
             navigate(`/admin/vehiclemodel/view`)
         } catch (error) {
@@ -332,9 +339,12 @@ export default function EditVehicleModel() {
                     </div>
                 </FormItem>
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Vehicle Model"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

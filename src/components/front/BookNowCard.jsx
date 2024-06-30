@@ -5,6 +5,7 @@ import { HiUsers } from 'react-icons/hi2'
 import { RiSteering2Fill } from 'react-icons/ri'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../ui/use-toast'
 
 export default function BookNowCard({
     id,
@@ -23,6 +24,7 @@ export default function BookNowCard({
     endTime
 }) {
     const [clicked, setClicked] = useState(false)
+    const { toast } = useToast()
 
     const updateWishlist = (wishlistItems) => {
         localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
@@ -34,30 +36,19 @@ export default function BookNowCard({
         return JSON.parse(localStorage.getItem('wishlistItems')) || []
     }
 
-    const customerId = Cookies.get('customerId')
-    const navigate = useNavigate()
+    const areVehiclesEqual = (vehicle1, vehicle2) => {
+        return vehicle1.id === vehicle2.id
+    }
 
-    useEffect(() => {
-        const existingWishlistItems = getWishlist()
-        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
-        setClicked(isInWishlist)
-
-        const handleWishlistUpdate = (event) => {
-            const updatedWishlist = event.detail
-            const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
-            setClicked(isInUpdatedWishlist)
-        }
-
-        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
-
-        return () => {
-            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
-        }
-    }, [id])
+    const handleWishlistUpdate = (event) => {
+        const updatedWishlist = event.detail
+        const isInUpdatedWishlist = updatedWishlist.some((item) => item.id === id)
+        setClicked(isInUpdatedWishlist)
+    }
 
     const handleClick = () => {
         const vehicleDetails = {
-            id,
+            id: parseInt(id),
             name,
             type,
             year,
@@ -68,13 +59,10 @@ export default function BookNowCard({
         }
 
         const existingWishlistItems = getWishlist()
-        const areVehiclesEqual = (vehicle1, vehicle2) => {
-            return vehicle1.id === vehicle2.id
-        }
 
         const index = existingWishlistItems.findIndex((item) => areVehiclesEqual(item, vehicleDetails))
 
-        if (index === -1) {
+        if (index == -1) {
             const updatedWishlistItems = [...existingWishlistItems, vehicleDetails]
             updateWishlist(updatedWishlistItems)
             setClicked(true)
@@ -84,6 +72,32 @@ export default function BookNowCard({
             setClicked(false)
         }
     }
+
+    const customerId = Cookies.get('customerId')
+    const navigate = useNavigate()
+
+    const handleViewClick = () => {
+        if (!startDate || !startTime || !endDate || !endTime) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Please select both start and end date/time.'
+            })
+        } else {
+            navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime, imageSrc } })
+        }
+    }
+
+    useEffect(() => {
+        const existingWishlistItems = getWishlist()
+        const isInWishlist = existingWishlistItems.some((item) => item.id === id)
+        setClicked(isInWishlist)
+
+        window.addEventListener('wishlistUpdated', handleWishlistUpdate)
+
+        return () => {
+            window.removeEventListener('wishlistUpdated', handleWishlistUpdate)
+        }
+    }, [id])
 
     return (
         <div className="w-[317px] flex flex-col p-5 shadow-xl rounded-xl bg-white">
@@ -113,7 +127,7 @@ export default function BookNowCard({
                 </span>
                 <span className="flex gap-1 items-center">
                     <HiUsers fontSize={20} style={{ color: '#90A3BF' }} />
-                    <p className="text-sm opacity-50">{capacity}</p>
+                    <p className="text-sm opacity-50">{capacity} Persons</p>
                 </span>
             </div>
             <article className="flex justify-between items-center">
@@ -128,9 +142,7 @@ export default function BookNowCard({
                 </span>
                 <button
                     className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] w-fit focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700"
-                    onClick={() =>
-                        navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime } })
-                    }
+                    onClick={handleViewClick}
                 >
                     View
                 </button>

@@ -23,7 +23,8 @@ import { format, parseISO } from 'date-fns'
 import cn from 'classnames'
 import { Calendar } from '../../../components/ui/calendar'
 import { useNavigate } from 'react-router-dom'
-import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -45,6 +46,7 @@ export default function CreateMaintenance() {
     const navigate = useNavigate()
     const { vehicleId } = useParams()
     const numericVehicleId = parseInt(vehicleId, 10)
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -62,7 +64,7 @@ export default function CreateMaintenance() {
 
     //Submit handler
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleMaintenance'
+        const url = '/VehicleMaintenance'
         try {
             const formData = {
                 Date: data.date,
@@ -72,7 +74,11 @@ export default function CreateMaintenance() {
                 CurrentMileage: data.currentMileage
             }
 
-            const result = await axios.post(url, formData)
+            const result = await apiclient.post(url, formData)
+            toast({
+                variant: 'success',
+                description: 'Maintenance created successfully'
+            })
             console.log(result)
             reset()
             navigate(`/admin/maintenance/view`)
@@ -163,14 +169,15 @@ export default function CreateMaintenance() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="service">Vehicle Service</SelectItem>
-                                    <SelectItem value="brakePadReplacement">Brake Pad Replacement</SelectItem>
-                                    <SelectItem value="gearOil">Gear Oil Replacements</SelectItem>
-                                    <SelectItem value="tyreRotation">Tyre Rotation</SelectItem>
-                                    <SelectItem value="batteryMaintenance">Battery Maintenance</SelectItem>
-                                    <SelectItem value="airConditioningChecks">Air Conditioning Checks</SelectItem>
-                                    <SelectItem value="engineTuneUp">Engine Tune Up</SelectItem>
-                                    <SelectItem value="replacements">Replacements</SelectItem>
+                                    <SelectItem value="Service">Vehicle Service</SelectItem>
+                                    <SelectItem value="BrakePadReplacement">Brake Pad Replacement</SelectItem>
+                                    <SelectItem value="GearOil">Gear Oil Replacements</SelectItem>
+                                    <SelectItem value="TyreRotation">Tyre Rotation</SelectItem>
+                                    <SelectItem value="BatteryMaintenance">Battery Maintenance</SelectItem>
+                                    <SelectItem value="AirConditioningChecks">Air Conditioning Checks</SelectItem>
+                                    <SelectItem value="EngineTuneUp">Engine Tune Up</SelectItem>
+                                    <SelectItem value="Replacements">Replacements</SelectItem>
+                                    <SelectItem value="Other">Other</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.maintenanceType && errors.maintenanceType.message}</FormMessage>
@@ -216,12 +223,9 @@ export default function CreateMaintenance() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <AlertDialogDemo
-                        triggerText="Create"
-                        alertTitle="Create New Maintenance"
-                        alertDescription="Are you sure you want to continue?"
-                        handleConfirm={handleSubmit(handleSave)}
-                    />
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
                 </div>
             </form>
         </Form>

@@ -13,6 +13,8 @@ import {
     FormLabel,
     FormMessage
 } from '../../components/ui/form'
+import { useToast } from '../../components/ui/use-toast'
+
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
@@ -29,6 +31,8 @@ const passwordSchema = z
     })
 
 function ProfileResetPassword() {
+    const { toast } = useToast()
+
     const navigate = useNavigate()
     const {
         control,
@@ -62,16 +66,22 @@ function ProfileResetPassword() {
             const url = `http://localhost:5062/api/CustomerAuth/ResetPasswordProfile`
             const result = await axios.post(url, formData)
             console.log(result.data)
-            alert('Password has been reset successfully')
+            toast({
+                variant: 'success',
+                description: 'Password has been reset successfully!'
+            })
             navigate('/login')
         } catch (error) {
             console.error('Failed to reset the password', error)
-            alert('Failed to reset the password!')
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to reset the Password!'
+            })
         }
     }
 
     return (
-        <div className="relative w-screen h-screen bg-gray-300 flex justify-center items-center">
+        <div className="relative w-screen h-screen bg-slate-200 flex justify-center items-center">
             <div className="w-full max-w-sm p-8 space-y-6 bg-white rounded-lg shadow-md">
                 <h1 className="text-xl font-bold text-center text-gray-800">Reset Password</h1>
                 <Form {...control}>

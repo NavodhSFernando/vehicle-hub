@@ -24,6 +24,9 @@ import { Calendar as CalendarIcon } from 'lucide-react'
 import { format, parseISO } from 'date-fns'
 import cn from 'classnames'
 import { Calendar } from '../../../components/ui/calendar'
+import { useToast } from '../../../components/ui/use-toast'
+import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import apiclient from '../../../axiosConfig'
 
 const currentDate = new Date().toISOString().split('T')[0]
 
@@ -40,12 +43,13 @@ const formSchema = z.object({
     description: z.string({
         message: 'Maintenance Type is required'
     }),
-    mileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required')
+    currentMileage: z.number().int('Mileage must be an integer').min(1, 'Mileage is required')
 })
 
 export default function EditMaintenance() {
     const navigate = useNavigate()
     const { maintenanceId } = useParams()
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -62,15 +66,15 @@ export default function EditMaintenance() {
     })
 
     const fetchData = async () => {
-        const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
+        const url = `/VehicleMaintenance/${maintenanceId}`
         try {
-            const { data } = await axios.get(url)
-
+            const { data } = await apiclient.get(url)
+            console.log(data)
             reset({
                 date: data.date,
                 description: data.description,
                 type: data.type,
-                vehicleId: data.vehicle.id,
+                vehicleId: data.vehicleId,
                 currentMileage: data.currentMileage
             })
         } catch (error) {
@@ -83,7 +87,7 @@ export default function EditMaintenance() {
     }, [maintenanceId, reset])
 
     const handleSave = async (data) => {
-        const url = `http://localhost:5062/api/VehicleMaintenance/${maintenanceId}`
+        const url = `/VehicleMaintenance/${maintenanceId}`
         try {
             const formData = {
                 Date: data.date,
@@ -93,9 +97,12 @@ export default function EditMaintenance() {
                 CurrentMileage: data.currentMileage
             }
 
-            const result = await axios.put(url, formData)
+            const result = await apiclient.put(url, formData)
+            toast({
+                variant: 'success',
+                description: 'Maintenance updated successfully'
+            })
             console.log(result)
-            reset()
             navigate(`/admin/maintenance/view`)
         } catch (error) {
             console.error('Failed to update vehicle maintenance', error)
@@ -157,12 +164,12 @@ export default function EditMaintenance() {
                             <FormControl>
                                 <Input
                                     {...field}
-                                    type="number" // Ensure input type is number for direct numeric input
+                                    type="number"
                                     className="w-full"
                                     onChange={(e) => field.onChange(Number(e.target.value))}
                                 />
                             </FormControl>
-                            <FormMessage>{errors.mileage && errors.mileage.message}</FormMessage>
+                            <FormMessage>{errors.currentMileage && errors.currentMileage.message}</FormMessage>
                         </FormItem>
                     )}
                 />
@@ -186,14 +193,15 @@ export default function EditMaintenance() {
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="service">Vehicle Service</SelectItem>
-                                    <SelectItem value="brakePadReplacement">Brake Pad Replacement</SelectItem>
-                                    <SelectItem value="gearOil">Gear Oil Replacements</SelectItem>
-                                    <SelectItem value="tyreRotation">Tyre Rotation</SelectItem>
-                                    <SelectItem value="batteryMaintenance">Battery Maintenance</SelectItem>
-                                    <SelectItem value="airConditioningChecks">Air Conditioning Checks</SelectItem>
-                                    <SelectItem value="engineTuneUp">Engine Tune Up</SelectItem>
-                                    <SelectItem value="replacements">Replacements</SelectItem>
+                                    <SelectItem value="Service">Vehicle Service</SelectItem>
+                                    <SelectItem value="BrakePadReplacement">Brake Pad Replacement</SelectItem>
+                                    <SelectItem value="GearOil">Gear Oil Replacements</SelectItem>
+                                    <SelectItem value="TyreRotation">Tyre Rotation</SelectItem>
+                                    <SelectItem value="BatteryMaintenance">Battery Maintenance</SelectItem>
+                                    <SelectItem value="AirConditioningChecks">Air Conditioning Checks</SelectItem>
+                                    <SelectItem value="EngineTuneUp">Engine Tune Up</SelectItem>
+                                    <SelectItem value="Replacements">Replacements</SelectItem>
+                                    <SelectItem value="Other">Other</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage>{errors.type && errors.type.message}</FormMessage>
@@ -234,9 +242,12 @@ export default function EditMaintenance() {
                     )}
                 />
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <Button type="submit" className="bg-indigo-600">
-                        Update
-                    </Button>
+                    <AlertDialogDemo
+                        triggerText="Update"
+                        alertTitle="Update Maintenance"
+                        alertDescription="Are you sure you want to continue?"
+                        handleConfirm={handleSubmit(handleSave)}
+                    />
                 </div>
             </form>
         </Form>

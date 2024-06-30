@@ -1,7 +1,14 @@
+import React from 'react'
 import { Button } from '../../../components/ui/button'
 import { GrEdit } from 'react-icons/gr'
 import { format, parseISO } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
+import { FaUpDown } from 'react-icons/fa6'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../components/ui/hover-card'
+import { useState } from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
+import apiclient from '../../../axiosConfig'
 
 const ActionButtons = ({ insuranceId }) => {
     const navigate = useNavigate()
@@ -12,6 +19,52 @@ const ActionButtons = ({ insuranceId }) => {
                 <GrEdit fontSize={24} className="mr-1" />
             </Button>
         </div>
+    )
+}
+
+const VehicleHoverCard = ({ regNo }) => {
+    const [vehicle, setVehicle] = useState(null)
+    const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            const response = await apiclient.get(`/AdminVehicle/regNo?regNo=${regNo}`)
+            setVehicle(response.data)
+            console.log('Vehicle Details:', response.data)
+        }
+        fetchVehicleDetails()
+    }, [regNo])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700 cursor-pointer">{regNo}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {vehicle ? (
+                    <div className="text-center">
+                        <img
+                            className="object-contain h-32 mx-auto"
+                            src={`${baseThumbnailUrl}${vehicle.thumbnail}`}
+                            alt=""
+                        />
+                        <h3 className="text-lg font-semibold">{regNo}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-sm">
+                            <strong>Vehicle ID:</strong> {vehicle.id}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Model:</strong> {vehicle.model}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Type:</strong> {vehicle.type}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Year:</strong> {vehicle.year}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
     )
 }
 
@@ -40,25 +93,55 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'vehicleId',
+        accessorKey: 'registrationNo',
         header: 'Registration Number',
         cell: ({ row }) => {
-            const vehicleId = row.original.vehicle.registrationNumber
-
-            return <div className="">{vehicleId}</div>
-        },
-        filterFn: (row, columnId, filterValue) => {
-            return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())
+            const regNo = row.getValue('registrationNo')
+            return <VehicleHoverCard regNo={regNo} />
         }
     },
     {
         accessorKey: 'status',
-        header: 'Status',
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center">
+                    <div>Status</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => {
             const status = row.original.status
             const statusText = status ? 'Active' : 'Inactive'
 
-            return <div className="">{statusText}</div>
+            let color = ''
+            let text = ''
+            switch (statusText) {
+                case 'Active':
+                    color = 'bg-green-500'
+                    text = 'Active'
+                    break
+                case 'Inactive':
+                    color = 'bg-red-500'
+                    text = 'Inactive'
+                    break
+                default:
+                    color = 'bg-gray-500'
+                    text = 'Unknown'
+                    break
+            }
+
+            return (
+                <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
+                    {text}
+                </div>
+            )
         }
     },
     {

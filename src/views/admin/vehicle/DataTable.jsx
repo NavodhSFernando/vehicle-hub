@@ -30,7 +30,7 @@ export default function DataTable({ columns, data }) {
             sorting,
             columnFilters
         },
-        initialState: { pagination: { pageSize: 5 } }
+        initialState: { pagination: { pageSize: 10 } }
     })
 
     const clearFilters = () => {
@@ -39,23 +39,43 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="flex flex-col space-y-1 mt-2 mb-8">
-                <Label>Registration Number</Label>
-                <Input
-                    placeholder="Filter Registration Number..."
-                    value={table.getColumn('registrationNumber')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('registrationNumber')?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
-            </div>
-            <div className="flex flex-col space-y-1 mt-2 mb-8">
-                <Label>Model</Label>
-                <Input
-                    placeholder="Filter Model Name..."
-                    value={table.getColumn('vehicleModelId')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('vehicleModelId')?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 mb-8">
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
+                    <Label>Registration Number</Label>
+                    <Input
+                        placeholder="Filter Registration Number..."
+                        value={table.getColumn('registrationNumber')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('registrationNumber')?.setFilterValue(event.target.value)}
+                        className="w-3/4"
+                    />
+                </div>
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
+                    <Label>Model</Label>
+                    <Input
+                        placeholder="Filter Model Name..."
+                        value={table.getColumn('vehicleModelId')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('vehicleModelId')?.setFilterValue(event.target.value)}
+                        className="w-3/4"
+                    />
+                </div>
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
+                    <Label>Colour</Label>
+                    <Input
+                        placeholder="Filter Colour..."
+                        value={table.getColumn('colour')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('colour')?.setFilterValue(event.target.value)}
+                        className="w-3/4"
+                    />
+                </div>
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
+                    <Label>Type</Label>
+                    <Input
+                        placeholder="Filter Type..."
+                        value={table.getColumn('vehicleType')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('vehicleType')?.setFilterValue(event.target.value)}
+                        className="w-3/4"
+                    />
+                </div>
             </div>
             <div className="flex flex-col space-y-1 pt-2 pb-4 lg:items-end lg:justify-end">
                 <Button

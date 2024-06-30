@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Cookies from 'js-cookie'
 import { useOutletContext } from 'react-router-dom'
+import { MdDeleteOutline } from 'react-icons/md'
+import { MdOutlineMarkEmailRead } from 'react-icons/md'
 
 const NOTIFICATIONS_PER_PAGE = 6
 
@@ -23,7 +24,6 @@ export default function NotificationCenter() {
             const decryptedId = decryptResponse.data.decryptedUserId
 
             const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
-            console.log(response.data)
             setNotifications(response.data)
         } catch (error) {
             console.error('Error fetching notifications:', error)
@@ -42,9 +42,7 @@ export default function NotificationCenter() {
                     currentNotifications.map((notification) => (
                         <NotificationCard
                             key={notification.id}
-                            title={notification.title}
-                            description={notification.description}
-                            time={notification.generated_DateTime}
+                            notification={notification}
                         />
                     ))
                 ) : (
@@ -111,12 +109,16 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
     )
 }
 
-function NotificationCard({ title, description, time }) {
+function NotificationCard({ notification }) {
+    const { id, title, description, generated_DateTime, isRead } = notification
+
     return (
-        <div className=" p-4 shadow rounded-lg mb-4 mx-20">
-            <div className="font-bold text-lg">{title}</div>
-            <div className="text-gray-700">{description}</div>
-            <div className="text-gray-500 text-sm">{time}</div>
+        <div className="p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]">
+            <div className="flex flex-col">
+                <div className="font-bold text-lg">{title}</div>
+                <div className="text-gray-700">{description}</div>
+                <div className="text-gray-500 text-sm">{generated_DateTime}</div>
+            </div>
         </div>
     )
 }

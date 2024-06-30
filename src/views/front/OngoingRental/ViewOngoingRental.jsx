@@ -3,6 +3,7 @@ import axios from 'axios'
 import DataTable from './DataTable'
 import { columns } from './Columns'
 import { useOutletContext } from 'react-router-dom'
+import apiclient from '../../../axiosConfig'
 
 export default function ViewOngoingRental() {
     const customerId = useOutletContext()
@@ -14,9 +15,7 @@ export default function ViewOngoingRental() {
                 const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
                 const decryptedId = decryptResponse.data.decryptedUserId
 
-                const rentalsResponse = await axios.get(
-                    `http://localhost:5062/api/FrontReservationService/ongoing-rentals/${decryptedId}`
-                )
+                const rentalsResponse = await apiclient.get(`/FrontReservationService/ongoing-rentals/${decryptedId}`)
                 setData(rentalsResponse.data)
             } catch (error) {
                 console.error('Error fetching data:', error)

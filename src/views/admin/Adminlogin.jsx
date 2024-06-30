@@ -48,10 +48,15 @@ function Adminlogin() {
     }
 
     return (
-        <div className="relative min-h-screen flex">
-            <div className="w-1/2 h-full overflow-hidden">
-                <div className="bg-blue-800 h-full flex items-center justify-center">
-                    <img src={admin} alt="background" className="object-cover" />
+        <div className="relative min-h-screen flex flex-row">
+            <div className="flex flex-col w-1/2 h-screen bg-[#283280]">
+                <div className="flex justify-start h-full">
+                    <img src={admin} alt="background" className="h-64" />
+                </div>
+                <div className="text-[#FBDAC6] text-2xl font-normal m-10 mr-16">
+                    "An innovative vehicle rental management system aimed to streamline reservation management."
+                    <br />
+                    <div className="justify-end text-base font-medium mt-3">VehicleHub</div>
                 </div>
             </div>
             <div className="w-1/2 flex justify-center items-center bg-gray-100">
@@ -66,7 +71,7 @@ function Adminlogin() {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel htmlFor="email" className="text-gray-800 font-semibold">
-                                            Username
+                                            E-mail
                                         </FormLabel>
                                         <FormControl>
                                             <Input
@@ -99,17 +104,10 @@ function Adminlogin() {
                                     </FormItem>
                                 )}
                             />
-                            <div className="flex items-center">
-                                <FormControl>
-                                    <input type="checkbox" id="remember" className="h-4 w-4" />
-                                </FormControl>
-                                <FormLabel htmlFor="remember" className="ml-2 text-gray-800">
-                                    Remember me
-                                </FormLabel>
-                            </div>
+
                             <Button
                                 type="submit"
-                                className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
+                                className="w-full py-3 text-sm text-center tracking-wide bg-[#283280] text-[#FBDAC6] rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
                             >
                                 Log in
                             </Button>

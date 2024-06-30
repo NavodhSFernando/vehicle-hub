@@ -4,8 +4,6 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 export default function NavBarSide() {
-    const navigate = useNavigate()
-
     const handleLogout = async () => {
         try {
             const token = sessionStorage.getItem('jwtToken')
@@ -20,7 +18,7 @@ export default function NavBarSide() {
             Cookies.remove('customerId')
 
             // Redirect to the login page
-            navigate('/login')
+            window.location.href = '/'
         } catch (error) {
             console.error('Logout failed:', error)
             alert(`Logout failed: ${error.message}`)
@@ -29,24 +27,50 @@ export default function NavBarSide() {
 
     return (
         <div className="bg-white flex flex-col w-1/4 p-5 h-fit m-4 rounded-xl text-lg">
-            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewprofile`}>
+            <NavLink
+                className={({ isActive }) =>
+                    isActive ? 'flex flex-col pl-2 py-1 font-semibold' : 'flex flex-col pl-2 py-1'
+                }
+                to={`/account/viewprofile`}
+                end
+            >
                 View Profile
             </NavLink>
-            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewongoingrentals`}>
+            <NavLink
+                className={({ isActive }) =>
+                    isActive ? 'flex flex-col pl-2 py-1 font-semibold' : 'flex flex-col pl-2 py-1'
+                }
+                to={`/account/viewongoingrentals`}
+            >
                 Ongoing Rentals
             </NavLink>
-            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewrentalhistory`}>
+            <NavLink
+                className={({ isActive }) =>
+                    isActive ? 'flex flex-col pl-2 py-1 font-semibold' : 'flex flex-col pl-2 py-1'
+                }
+                to={`/account/viewrentalhistory`}
+            >
                 Rental History
             </NavLink>
-            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewbillingdetails`}>
+            <NavLink
+                className={({ isActive }) =>
+                    isActive ? 'flex flex-col pl-2 py-1 font-semibold' : 'flex flex-col pl-2 py-1'
+                }
+                to={`/account/viewbillingdetails`}
+            >
                 Billing Details
             </NavLink>
-            <NavLink className="flex flex-col pl-2 py-1" to={`/account/viewnotificationcenter`}>
+            <NavLink
+                className={({ isActive }) =>
+                    isActive ? 'flex flex-col pl-2 py-1 font-semibold' : 'flex flex-col pl-2 py-1'
+                }
+                to={`/account/viewnotificationcenter`}
+            >
                 Notifications
             </NavLink>
-            <NavLink className="flex flex-col pl-2 py-1" onClick={handleLogout}>
+            <div className="flex flex-col pl-2 py-1 cursor-pointer text-red-500 font-semibold" onClick={handleLogout}>
                 Log Out
-            </NavLink>
+            </div>
         </div>
     )
 }

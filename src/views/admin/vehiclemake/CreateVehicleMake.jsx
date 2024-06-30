@@ -15,7 +15,8 @@ import { useNavigate } from 'react-router-dom'
 import { Input } from '../../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import axios from 'axios'
-import { AlertDialogDemo } from '../../../components/ui/alertDialog'
+import { useToast } from '../../../components/ui/use-toast'
+import apiclient from '../../../axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
@@ -25,6 +26,7 @@ const formSchema = z.object({
 export default function CreateVehicleMake() {
     const navigate = useNavigate()
     const fileInputRef = useRef(null)
+    const { toast } = useToast()
     const {
         control,
         handleSubmit,
@@ -47,7 +49,7 @@ export default function CreateVehicleMake() {
 
     // Submit handler
     const handleSave = async (data) => {
-        const url = 'http://localhost:5062/api/VehicleMake'
+        const url = '/VehicleMake'
         try {
             // Create FormData object and append the name and formFile
             const formData = new FormData()
@@ -55,7 +57,7 @@ export default function CreateVehicleMake() {
             formData.append('formFile', data.formFile[0]) // Ensure the key matches the backend expectation
 
             // Send the form data as multipart/form-data
-            const response = await axios.post(url, formData, {
+            const response = await apiclient.post(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -64,6 +66,10 @@ export default function CreateVehicleMake() {
             if (fileInputRef.current) {
                 fileInputRef.current.value = '' // This clears the file input field
             }
+            toast({
+                variant: 'success',
+                description: 'Vehicle Make created successfully'
+            })
             navigate(`/admin/vehiclemake/view`)
         } catch (error) {
             console.log(error)
@@ -105,12 +111,9 @@ export default function CreateVehicleMake() {
                 />
 
                 <div className="p-6 bg-white rounded-lg pt-4 pb-3 ml-auto">
-                    <AlertDialogDemo
-                        triggerText="Create"
-                        alertTitle="Create New Vehicle Make"
-                        alertDescription="Are you sure you want to continue?"
-                        handleConfirm={handleSubmit(handleSave)}
-                    />
+                    <Button type="submit" className="bg-indigo-600">
+                        Create
+                    </Button>
                 </div>
             </form>
         </Form>

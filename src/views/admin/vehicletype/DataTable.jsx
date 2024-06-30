@@ -1,7 +1,5 @@
 import React from 'react'
-
 import {
-    ColumnDef,
     flexRender,
     getCoreRowModel,
     useReactTable,
@@ -40,14 +38,16 @@ export default function DataTable({ columns, data }) {
 
     return (
         <div>
-            <div className="flex flex-col space-y-1 mt-2 mb-8">
-                <Label>Type</Label>
-                <Input
-                    placeholder="Filter Type..."
-                    value={table.getColumn('name')?.getFilterValue() ?? ''}
-                    onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
-                    className="max-w-sm"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-2 mb-8">
+                <div className="flex flex-col space-y-1 pt-2 pb-4">
+                    <Label>Type</Label>
+                    <Input
+                        placeholder="Filter Type..."
+                        value={table.getColumn('name')?.getFilterValue() ?? ''}
+                        onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+                        className="w-3/4"
+                    />
+                </div>
             </div>
             <div className="flex flex-col space-y-1 pt-2 pb-4 lg:items-end lg:justify-end">
                 <Button

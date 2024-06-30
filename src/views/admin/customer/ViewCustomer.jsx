@@ -1,29 +1,40 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import DataTable from './DataTable'
-import { columns } from './Columns'
+
+import { columns as originalColumns } from './Columns'
+
+import { Button } from '../../../components/ui/button'
 
 export default function ViewCustomer() {
-    const [Customer, setCustomer] = useState([])
+    const [customers, setCustomers] = useState([])
+    const fetchCustomer = async () => {
+        try {
+            const response = await axios.get('http://localhost:5062/api/Customer')
+            setCustomers(response.data)
+        } catch (error) {
+            console.error('Failed to fetch Customers:', error)
+        }
+    }
 
     useEffect(() => {
-        const fetchCustomer = async () => {
-            try {
-                // Update the URL to your specific API endpoint for fetching Customers
-                const response = await axios.get('http://localhost:5062/api/Customer')
-                setCustomer(response.data) // Assume the response data is the array of Employees
-                console.log(response.data)
-            } catch (error) {
-                console.error('Failed to fetch Customers:', error)
-            }
-        }
         fetchCustomer()
     }, [])
+
+    const columns = originalColumns.map((column) => {
+        if (column.accessorKey === 'actions') {
+            return {
+                ...column,
+                refetchCustomer: fetchCustomer
+            }
+        }
+        return column
+    })
 
     return (
         <>
             <div className="flex flex-col p-6 bg-white rounded-lg">
-                <DataTable columns={columns} data={Customer} />
+                <DataTable columns={columns} data={customers} />
             </div>
         </>
     )

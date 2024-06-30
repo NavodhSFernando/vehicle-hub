@@ -4,7 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { confirmAlert } from 'react-confirm-alert'
+import { useToast } from '../../components/ui/use-toast'
+
 import { Button } from '../../components/ui/button'
 import {
     Form,
@@ -17,16 +18,8 @@ import {
 } from '../../components/ui/form'
 import { Input } from '../../components/ui/input'
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-    Dialog,
-    DialogContent,
-    DialogOverlay,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-    DialogClose
-} from '../../../src/components/ui/dialog'
+import { AlertDialogDemo } from '../../../src/components/ui/alertDialog'
+import apiclient from '../../../src/axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
@@ -44,6 +37,8 @@ const formSchema = z.object({
 function Viewprofile() {
     const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted Customer ID
     const navigate = useNavigate()
+    const { toast } = useToast()
+
     const customerId = useOutletContext()
     const {
         control,
@@ -76,9 +71,9 @@ function Viewprofile() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = `http://localhost:5062/api/customer/${decrypt}`
+            const url = `/customer/${decrypt}`
             try {
-                const { data } = await axios.get(url)
+                const { data } = await apiclient.get(url)
                 console.log(data)
 
                 reset({
@@ -93,7 +88,9 @@ function Viewprofile() {
                 console.error('Failed to fetch profile', error)
             }
         }
-        fetchData()
+        if (decrypt) {
+            fetchData()
+        }
     }, [decrypt, reset])
 
     const handleSave = async (data) => {
@@ -113,31 +110,40 @@ function Viewprofile() {
             }
             // Handle file data appropriately for your backend
 
-            const url = `http://localhost:5062/api/customer/${decrypt}`
-            const result = await axios.put(url, formData)
+            const url = `/customer/${decrypt}`
+            const result = await apiclient.put(url, formData)
             console.log(result.data)
+            toast({
+                variant: 'success',
+                description: 'Updated the Profile successfully!'
+            })
         } catch (error) {
             console.error('Failed to update the profile', error)
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to update the Profile!'
+            })
         }
     }
 
     const handleDeleteAccount = async () => {
         try {
-            const url = `http://localhost:5062/api/CustomerAuth/deactivate/${decrypt}`
-            const result = await axios.put(url)
+            const url = `/CustomerAuth/deactivate/${decrypt}`
+            const result = await apiclient.post(url)
             console.log(result.data)
+            toast({
+                variant: 'success',
+                description: 'Deleted the Profile successfully!'
+            })
             navigate('/signup')
         } catch (error) {
+            toast({
+                variant: 'destructive_border',
+                description: 'Failed to delete the account!'
+            })
             console.error('Failed to delete the account', error)
         }
     }
-
-    // Dialog state management
-    const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-    const openDialog = () => setIsDialogOpen(true)
-
-    const closeDialog = () => setIsDialogOpen(false)
 
     return (
         <Form {...control}>
@@ -236,18 +242,18 @@ function Viewprofile() {
                         name="address"
                         render={({ field }) => (
                             <FormItem>
-                                <div className="flex flex-col space-y-1 pt-6">
+                                <div className="flex flex-col space-y-1 pt-6 ">
                                     <FormLabel className=" pb-3">Address</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input className="pb-3" {...field} />
                                 </FormControl>
                                 <FormMessage>{errors.address?.message}</FormMessage>
                             </FormItem>
                         )}
                     />
 
-                    <div className="bg-white rounded-lg pt-4 pb-3">
+                    <div className="bg-white rounded-lg pt-5 pb-3">
                         <Button onClick={handleSave} type="submit" className="bg-indigo-800 ml-auto text-yellow-200">
                             Save Changes
                         </Button>
@@ -273,7 +279,7 @@ function Viewprofile() {
                 </div>
 
                 <div className="flex flex-col items-start p-6 bg-white rounded-lg pb-6">
-                    <FormDescription>Delete Customer</FormDescription>
+                    <FormDescription>Delete Account</FormDescription>
                     <p className="text-xs text-gray-600 text-left mb-2 font-semibold">
                         Delete your profile, along with your authentication associations.
                     </p>
@@ -282,44 +288,15 @@ function Viewprofile() {
                         Delete any and all content you have, such as rental history, invoices and profile details.
                     </p>
                     <div className="bg-white rounded-lg pt-4 pb-3">
-                        <Button
-                            type="submit"
-                            className=" bg-red-600 hover:bg-red-800 text-white font-bold ml-auto "
-                            onClick={openDialog}
-                        >
-                            Delete Account
-                        </Button>
+                        <AlertDialogDemo
+                            triggerText="Delete"
+                            alertTitle="Delete your Account"
+                            alertDescription="Are you sure you want to delete your account?"
+                            handleConfirm={() => handleDeleteAccount(decrypt)}
+                            variant="destructive"
+                        />
                     </div>
                 </div>
-                <Dialog open={isDialogOpen} onOpenChange={closeDialog}>
-                    <DialogContent>
-                        <DialogClose
-                            as="button"
-                            onClick={closeDialog}
-                            className="absolute top-0 right-0 m-2 text-gray-400 hover:text-gray-600 focus:outline-none"
-                        />
-                        <DialogHeader>
-                            <DialogTitle className="text-gray-800 font-bold">Confirm to delete</DialogTitle>
-                        </DialogHeader>
-                        <DialogDescription className="text-gray-400">
-                            Are you sure you want to delete your account?
-                        </DialogDescription>
-                        <DialogFooter className="flex justify-end gap-4 mt-4">
-                            <Button
-                                onClick={handleDeleteAccount}
-                                className="bg-red-600 hover:bg-red-800 text-white font-bold px-6 py-2 rounded-lg"
-                            >
-                                Yes
-                            </Button>
-                            <Button
-                                onClick={closeDialog}
-                                className="bg-gray-400 hover:bg-gray-500 text-white font-bold px-6 py-2 rounded-lg"
-                            >
-                                No
-                            </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
             </form>
         </Form>
     )

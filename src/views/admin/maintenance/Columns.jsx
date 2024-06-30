@@ -3,6 +3,11 @@ import { Button } from '../../../components/ui/button'
 import { GrEdit } from 'react-icons/gr'
 import { useNavigate } from 'react-router-dom'
 import { FaUpDown } from 'react-icons/fa6'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../components/ui/hover-card'
+import { useState } from 'react'
+import axios from 'axios'
+import { useEffect } from 'react'
+import apiclient from '../../../axiosConfig'
 
 const ActionButtons = ({ maintenanceId }) => {
     const navigate = useNavigate()
@@ -17,6 +22,86 @@ const ActionButtons = ({ maintenanceId }) => {
                 <GrEdit fontSize={24} className="mr-1" />
             </Button>
         </div>
+    )
+}
+
+const VehicleHoverCard = ({ regNo }) => {
+    const [vehicle, setVehicle] = useState(null)
+    const baseThumbnailUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
+    useEffect(() => {
+        const fetchVehicleDetails = async () => {
+            const response = await apiclient.get(`/AdminVehicle/regNo?regNo=${regNo}`)
+            setVehicle(response.data)
+        }
+        fetchVehicleDetails()
+    }, [regNo])
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700 cursor-pointer">{regNo}</HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {vehicle ? (
+                    <div className="text-center">
+                        <img
+                            className="object-contain h-32 mx-auto"
+                            src={`${baseThumbnailUrl}${vehicle.thumbnail}`}
+                            alt=""
+                        />
+                        <h3 className="text-lg font-semibold">{regNo}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-sm">
+                            <strong>Vehicle ID:</strong> {vehicle.id}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Model:</strong> {vehicle.model}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Type:</strong> {vehicle.type}
+                        </p>
+                        <p className="text-gray-700 text-sm">
+                            <strong>Year:</strong> {vehicle.year}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
+    )
+}
+
+const truncateDescription = (description) => {
+    return description.split(' ').slice(0, 5).join(' ') + '...'
+}
+
+const DescriptionHover = ({ vehicleMaintenanceId, truncatedDes }) => {
+    const [description, setDescription] = useState(null)
+    useEffect(() => {
+        const fetchDescription = async () => {
+            const response = await apiclient.get(`/AdminVehicle/maintenance/${vehicleMaintenanceId}`)
+            setDescription(response.data)
+        }
+        fetchDescription()
+    }, [vehicleMaintenanceId])
+
+    return (
+        <HoverCard>
+            <HoverCardTrigger className="font-medium hover:text-slate-700 cursor-pointer">
+                {truncatedDes}
+            </HoverCardTrigger>
+            <HoverCardContent className="bg-white p-4 shadow-lg rounded-md">
+                {description ? (
+                    <div className="text-center">
+                        <h3 className="text-lg font-semibold">{description.vehicleMaintenanceId}</h3>
+                        <hr className="py-2 mx-4 border-slate-300" />
+                        <p className="text-gray-700 text-left text-sm">
+                            <strong></strong> {description.description}
+                        </p>
+                    </div>
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </HoverCardContent>
+        </HoverCard>
     )
 }
 
@@ -49,18 +134,19 @@ export const columns = [
                     </Button>
                 </div>
             )
+        },
+        cell: ({ row }) => {
+            const mileage = row.getValue('currentMileage')
+            const formattedMileage = `${mileage} KM`
+
+            return <div className="">{formattedMileage}</div>
         }
     },
     {
-        accessorKey: 'vehicleId',
+        accessorKey: 'registrationNumber',
         header: 'Registration Number',
         cell: ({ row }) => {
-            const vehicleId = row.original.vehicle.registrationNumber
-
-            return <div className="">{vehicleId}</div>
-        },
-        filterFn: (row, columnId, filterValue) => {
-            return row.original.vehicle.registrationNumber.toString().toLowerCase().includes(filterValue.toLowerCase())
+            return <VehicleHoverCard regNo={row.getValue('registrationNumber')} />
         }
     },
     {
@@ -69,7 +155,19 @@ export const columns = [
     },
     {
         accessorKey: 'description',
-        header: 'Description'
+        header: 'Description',
+        cell: ({ row }) => {
+            const description = row.getValue('description')
+            const truncatedDescription = truncateDescription(description)
+
+            return (
+                <DescriptionHover
+                    vehicleMaintenanceId={row.getValue('id')}
+                    des={description}
+                    truncatedDes={truncatedDescription}
+                />
+            )
+        }
     },
     {
         accessorKey: 'actions',

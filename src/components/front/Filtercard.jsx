@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
+import axios from 'axios'
+import { Button } from '../../components/ui/button'
 
 const FilterCard = ({ onFilterChange }) => {
     const [allVehicleTypes, setAllVehicleTypes] = useState([])
@@ -16,18 +17,18 @@ const FilterCard = ({ onFilterChange }) => {
             const response = await axios.get('http://localhost:5062/api/VehicleType')
             const typesSet = new Set()
             const vehicleTypes = response.data
-            .map((type) => ({
-                id: `${type.name}`,
-                name: `${type.name}`
-            }))
-            .filter((type) => {
-                if(typesSet.has(type.id)){
-                    return false
-                }else {
-                    typesSet.add(type.id)
-                    return true
-                }
-            })
+                .map((type) => ({
+                    id: `${type.name}`,
+                    name: `${type.name}`
+                }))
+                .filter((type) => {
+                    if (typesSet.has(type.id)) {
+                        return false
+                    } else {
+                        typesSet.add(type.id)
+                        return true
+                    }
+                })
             setAllVehicleTypes([{ id: 'all', name: 'All Vehicle Types' }, ...vehicleTypes])
         } catch (error) {
             console.error('Error fetching vehicle types:', error)
@@ -106,11 +107,21 @@ const FilterCard = ({ onFilterChange }) => {
         onFilterChange({ maxPrice: event.target.value })
     }
 
+    const handleClearFilters = () => {
+        setVehicleType('all')
+        setVehicleMake('all')
+        setVehicleCapacity('all')
+        setMaxPrice(0)
+        onFilterChange({
+            vehicleType: 'all',
+            vehicleMake: 'all',
+            vehicleCapacity: 'all',
+            maxPrice: 0
+        })
+    }
+
     return (
-        <div
-            className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow"
-            style={{ width: '357px', height: '489px' }}
-        >
+        <div className="flex flex-col items-start p-8 gap-10 bg-white border-r border-gray-300 rounded-lg shadow h-auto w-[330px]">
             <div className="mb-4 flex flex-col items-start gap-7">
                 <label className="block w-full">
                     <p
@@ -121,7 +132,7 @@ const FilterCard = ({ onFilterChange }) => {
                     </p>
                     <div
                         className="flex flex-row items-start justify-between w-full px-3 py-3 border rounded-md border-gray-300 bg-white"
-                        style={{ width: '300px' }}
+                        style={{ width: '260px' }}
                     >
                         <select
                             value={vehicleType}
@@ -149,7 +160,7 @@ const FilterCard = ({ onFilterChange }) => {
                     </p>
                     <div
                         className="flex flex-row items-start justify-between w-full px-3 py-3 border rounded-md border-gray-300 bg-white"
-                        style={{ width: '300px' }}
+                        style={{ width: '260px' }}
                     >
                         <select
                             value={vehicleMake}
@@ -177,7 +188,7 @@ const FilterCard = ({ onFilterChange }) => {
                     </p>
                     <div
                         className="flex flex-row items-start justify-between w-full px-3 py-3 border rounded-md border-gray-300 bg-white"
-                        style={{ width: '300px' }}
+                        style={{ width: '260px' }}
                     >
                         <select
                             value={vehicleCapacity}
@@ -203,7 +214,7 @@ const FilterCard = ({ onFilterChange }) => {
                     >
                         Price
                     </p>
-                    <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '300px' }}>
+                    <div className="relative w-full h-3 bg-[#FBDAC6] rounded-full" style={{ width: '260px' }}>
                         <input
                             type="range"
                             min="5000"
@@ -215,16 +226,24 @@ const FilterCard = ({ onFilterChange }) => {
                         />
                         <div
                             className="absolute h-3 bg-[#283280] rounded-full"
-                            style={{ width: `${((maxPrice-5000) / 15000) * 100}%` }}
+                            style={{ width: `${((maxPrice - 5000) / 15000) * 100}%` }}
                         ></div>
                     </div>
                     <p
                         className="text-lg font-semibold text-right text-gray-500"
                         style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
                     >
-                        Max. Rs {(maxPrice)}.00/day
+                        Max. Rs {maxPrice}.00/day
                     </p>
                 </label>
+            </div>
+            <div className="w-full flex justify-center">
+                <Button
+                    onClick={handleClearFilters}
+                    className="bg-blue-900 w-full hover:bg-blue-800 text-amber-100 font-semibold rounded px-10 transition-colors duration-300"
+                >
+                    Clear Filters
+                </Button>
             </div>
         </div>
     )

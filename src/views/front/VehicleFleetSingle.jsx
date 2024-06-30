@@ -11,7 +11,7 @@ import PageNotFound from '../../components/front/PageNotFound'
 export default function VehicleFleetSingle() {
     const { id } = useParams()
     const location = useLocation()
-    const { startDate, startTime, endDate, endTime } = location.state || {}
+    const { startDate, startTime, endDate, endTime, imageSrc } = location.state || {}
     const [vehicleData, setVehicleData] = useState({})
 
     console.log('vehicleId', id)
@@ -20,7 +20,8 @@ export default function VehicleFleetSingle() {
         sdate: startDate,
         stime: startTime,
         edate: endDate,
-        etime: endTime
+        etime: endTime,
+        imageSrc: imageSrc
     }
 
     useEffect(() => {
@@ -79,6 +80,7 @@ export default function VehicleFleetSingle() {
             <div className="flex flex-col w-1/2">
                 <Detailcar
                     id={id}
+                    imageSrc={reservation.imageSrc}
                     sdate={reservation.sdate ? formatDate(reservation.sdate) : 'N/A'}
                     stime={reservation.stime ? formatTime(reservation.stime) : 'N/A'}
                     edate={reservation.edate ? formatDate(reservation.edate) : 'N/A'}

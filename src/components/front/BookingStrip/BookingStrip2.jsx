@@ -31,9 +31,9 @@ export default function BookingStrip2({ onDateFilter, initialStartDate, initialS
 
     return (
         <div className="flex items-center justify-center">
-            <div className="flex items-center justify-center w-[1013px] shadow-lg bg-white rounded-lg">
-                <ul className="flex justify-center items-center min-[1300px]:flex-row flex-col gap-5 py-5 min-[1300px]:mr-5">
-                    <li className="min-[1350px]:px-4">
+            <div className="flex items-center justify-center md:w-full lg:w-[1013px] md:pr-4 shadow-lg bg-white rounded-lg">
+                <ul className="flex justify-center items-center px-8 md:flex-row flex-col gap-4 lg:gap-5 py-5 lg:mr-5">
+                    <li className="lg:px-4 sm:py-0">
                         <Datepicker 
                             datepicketrtext="Pick-up Date" 
                             value={startDate} 
@@ -41,14 +41,14 @@ export default function BookingStrip2({ onDateFilter, initialStartDate, initialS
                             minDate={today} 
                         />
                     </li>
-                    <li className="min-[1300px]:px-4 border-l-[1px] border-slate-400">
+                    <li className="lg:px-4 md:border-l-[1px] py-4 sm:py-0 border-t-[1px] sm:border-t-0 border-slate-400">
                         <TimePicker 
                             timepickertext="Pick-up Time" 
                             value={startTime} 
                             onChange={setStartTime} 
                         />
                     </li>
-                    <li className="min-[1300px]:px-4 border-l-[1px] border-slate-400">
+                    <li className="lg:px-4 md:border-l-[1px] py-4 sm:py-0 border-t-[1px] sm:border-t-0 border-slate-400">
                         <Datepicker 
                             datepicketrtext="Return Date" 
                             value={endDate} 
@@ -56,17 +56,17 @@ export default function BookingStrip2({ onDateFilter, initialStartDate, initialS
                             minDate={minEndDate} 
                         />
                     </li>
-                    <li className="min-[1300px]:px-4 border-l-[1px] border-slate-400">
+                    <li className="lg:px-4 md:border-l-[1px] py-4 sm:py-0 border-t-[1px] sm:border-t-0 border-slate-400">
                         <TimePicker 
                             timepickertext="Return Time" 
                             value={endTime} 
                             onChange={setEndTime} 
                         />
                     </li>
-                    <li className="min-[1300px]:pl-5">
+                    <li className="md:pl-5">
                         <button
                             onClick={handleDateFilter}
-                            className="text-white bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-full text-sm flex gap-2 items-center font-semibold"
+                            className="text-white bg-[#283280] hover:bg-[#283299] py-2.5 px-14 sm:px-5 w-fit rounded-full text-sm flex gap-2 items-center font-semibold"
                         >
                             <IoSearchSharp fontSize={24} />
                         </button>

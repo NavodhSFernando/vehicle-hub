@@ -71,9 +71,15 @@ const FeedbackReport = () => {
         // Reset previous error
         setFilterError('')
 
-        // Validate start date or end date
+        // Validate if both dates are provided
         if (startDate === '' && endDate === '') {
             setFilterError('Please select a start date or an end date.')
+            return
+        }
+
+        // Validate if start date is later than end date
+        if (startDate !== '' && endDate !== '' && new Date(startDate) > new Date(endDate)) {
+            setFilterError('Invalid date range: Start date cannot be after end date.')
             return
         }
 
@@ -372,7 +378,7 @@ const FeedbackReport = () => {
                 </button>
                 <button
                     id="export-pdf-button"
-                    className="bg-red-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    className="bg-green-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
                     onClick={handleExportPDF}
                 >
                     Export PDF
