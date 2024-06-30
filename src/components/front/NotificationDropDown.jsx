@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { RxCross2 } from "react-icons/rx";
 const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
     const [notifications, setNotifications] = useState([])
     const customerId = Cookies.get('customerId')
@@ -19,6 +19,23 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
             setNotifications(filteredNotifications)
         } catch (error) {
             console.error('Error fetching notifications:', error)
+        }
+    }
+
+    const markAsRead = async (notificationId) => {
+        try {
+            const response = await axios.put(
+                `http://localhost:5062/api/Notification/MarkAsRead?notificationid=${notificationId}`
+            )
+            if (response.status === 200) {
+                setNotifications((prevNotifications) =>
+                    prevNotifications.map((notification) =>
+                        notification.id === notificationId ? { ...notification, isRead: true } : notification
+                    )
+                )
+            }
+        } catch (error) {
+            console.error('Error marking notification as read:', error)
         }
     }
 
@@ -43,10 +60,11 @@ const NotificationDropdown = ({ isOpen, setIsOpen, onNavigate }) => {
                                 <div className="flex justify-between items-center px-[30px] ">
                                     {/* Individual notification item */}
                                     <div key={notification.id} className="px-4 py-3 border-t border-gray-100 w-[265px]">
-                                        <p className="text-bold text-gray-900">{notification.description}</p>
+                                        <p className="text-bold text-gray-900">{notification.title}</p>
                                         <p className="text-sm text-gray-600">{notification.description}</p>
                                         <p className="text-xs text-gray-400">{notification.generated_DateTime}</p>
                                     </div>
+                                    <button onClick={() => {markAsRead(notification.id)}}><RxCross2 /></button>
                                 </div>
                             ))
                         )}
