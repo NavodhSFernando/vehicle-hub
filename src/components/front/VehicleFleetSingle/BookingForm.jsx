@@ -2,6 +2,16 @@ import React from 'react'
 import { format } from 'date-fns'
 import { CiCalendar, CiClock2 } from 'react-icons/ci'
 
+const convertTo12HourFormat = (time) => {
+    if (!time) return 'N/A' // Return 'N/A' or any appropriate default value if time is undefined or null
+
+    let [hours, minutes] = time.split(':')
+    hours = parseInt(hours, 10)
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12 || 12
+    return `${hours}:${minutes} ${ampm}`
+}
+
 export default function BookingForm({ startDate = '', startTime = '', endDate = '', endTime = '' }) {
     return (
         <div className="w-full max-w-[850px] p-6 flex flex-col bg-white rounded-lg">
@@ -33,9 +43,8 @@ export default function BookingForm({ startDate = '', startTime = '', endDate = 
                             <div className="flex items-center p-2 border border-black border-opacity-10 rounded-md">
                                 <CiClock2 className="mr-2 h-4 w-4" />
                                 <input
-                                    type="time"
                                     className="w-full border-0 p-0 outline-none"
-                                    value={startTime}
+                                    value={startTime ? convertTo12HourFormat(startTime) : 'N/A'}
                                     readOnly
                                 />
                             </div>
@@ -63,9 +72,8 @@ export default function BookingForm({ startDate = '', startTime = '', endDate = 
                             <div className="flex items-center p-2 border border-black border-opacity-10 rounded-md">
                                 <CiClock2 className="mr-2 h-4 w-4" />
                                 <input
-                                    type="time"
                                     className="w-full border-0 p-0 outline-none"
-                                    value={endTime}
+                                    value={endTime ? convertTo12HourFormat(endTime) : 'N/A'}
                                     readOnly
                                 />
                             </div>
