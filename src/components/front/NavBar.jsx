@@ -118,10 +118,10 @@ const Navbar = () => {
                     {/* Sign In and Sign Up buttons */}
                     {!loggedIn ? (
                         <div className="flex items-center">
-                            <button className="bg-transparent border-[#FBDAC6] text-[#FBDAC6] border-2 px-5 py-2 rounded-md text-sm font-medium">
-                                <NavLink to="/login">Sign In</NavLink>
+                            <button className="bg-transparent border-[#FBDAC6] text-[#FBDAC6] border-2 px-5 py-2 rounded-md text-sm font-medium hover:border-[#caaa97] hover:text-[#caaa97]">
+                                <NavLink to="/login">Login</NavLink>
                             </button>
-                            <button className="ml-4 bg-[#FBDAC6] border-2 border-[#FBDAC6] decoration-transparent px-5 py-2 rounded-md text-sm font-medium">
+                            <button className="ml-4 bg-[#FBDAC6] border-2 border-[#FBDAC6] decoration-transparent px-5 py-2 rounded-md text-sm font-medium hover:bg-[#caaa97] hover:border-[#caaa97]">
                                 <NavLink to="/signup">Sign Up</NavLink>
                             </button>
                         </div>

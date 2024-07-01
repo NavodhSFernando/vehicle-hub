@@ -4,7 +4,8 @@ import {
     getCoreRowModel,
     useReactTable,
     getFilteredRowModel,
-    getSortedRowModel
+    getSortedRowModel,
+    getPaginationRowModel
 } from '@tanstack/react-table'
 import { Input } from '../../../components/ui/input'
 import { Label } from '../../../components/ui/label'
@@ -20,6 +21,7 @@ export default function DataTable({ columns, data }) {
         columns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
         state: {

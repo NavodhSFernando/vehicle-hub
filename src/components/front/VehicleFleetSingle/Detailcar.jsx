@@ -25,20 +25,20 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
     }
 
     const handleRequestVehicle = async () => {
-        if (!isChecked) {
+        if (!customerId) {
+            console.error('Customer ID not found in cookies')
+            navigate('/login')
+        } else if (!isChecked) {
             return toast({
                 variant: 'destructive_border',
                 description: 'Please agree to the Terms and Conditions to proceed'
             })
         }
-        if (!customerId) {
-            console.error('Customer ID not found in cookies')
-            navigate('/login')
-        }
-
         try {
             const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
             const decryptedId = decryptResponse.data.decryptedUserId
+
+            await axios.get(`http://localhost:5062/api/Customer/details/${decryptedId}`)
 
             const url = `/FrontReservationService/request-reservation`
             const formData = {
@@ -61,7 +61,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
             console.log('Request vehicle response:', response.data)
             navigate(`/account/viewongoingrentals`)
         } catch (error) {
-            navigate('/login')
+            toast({
+                variant: 'destructive_border',
+                description: 'Please fill in the details to make a request'
+            })
+            navigate('/account/viewprofile')
         }
     }
 
@@ -168,7 +172,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                             <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                         ))}
                         {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviewers</p>}
-                        {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviewers</p>}
+                        {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>}
                     </div>
                 </div>
                 <div className="mt-1">
