@@ -1,13 +1,11 @@
-import axios from 'axios';
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
-
 export default function TotalSalesChart() {
+    //
 
-    // 
-
-    const [ data1, setData1] = useState([]);
+    const [data1, setData1] = useState([])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,7 +20,7 @@ export default function TotalSalesChart() {
         fetchData()
     }, [])
 
-    // 
+    //
 
     return (
         <div className="h-[28rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
@@ -45,7 +43,7 @@ export default function TotalSalesChart() {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="totalSales" fill="#0ea5e9" />
+                        <Bar dataKey="totalSales" fill="#3b82f6 " />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
