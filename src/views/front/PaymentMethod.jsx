@@ -4,6 +4,7 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { FaCcVisa, FaCcMastercard } from 'react-icons/fa'
 import axios from 'axios'
 import { useToast } from '../../components/ui/use-toast'
+import { useNavigate } from 'react-router-dom'
 
 // Load Stripe
 const stripePromise = loadStripe(
@@ -11,22 +12,30 @@ const stripePromise = loadStripe(
 )
 
 // Combined Payment Method component
-const PaymentMethod = ({ invoiceId, amount, invoiceType }) => {
+const PaymentMethod = ({ invoiceId, amount, invoiceType, customerReservationId }) => {
     return (
         <Elements stripe={stripePromise}>
-            <PaymentForm invoiceId={invoiceId} amount={amount} invoiceType={invoiceType} />
+            <PaymentForm
+                invoiceId={invoiceId}
+                amount={amount}
+                invoiceType={invoiceType}
+                customerReservationId={customerReservationId}
+            />
         </Elements>
     )
 }
 
 // Payment Form component
-const PaymentForm = ({ invoiceId, amount, invoiceType }) => {
+const PaymentForm = ({ invoiceId, amount, invoiceType, customerReservationId }) => {
     const stripe = useStripe()
     const elements = useElements()
+    const navigate = useNavigate()
     const [cardholderName, setCardholderName] = useState('')
     const [message, setMessage] = useState('')
     const [isSuccess, setIsSuccess] = useState(false)
     const { toast } = useToast()
+
+    console.log('ID:', customerReservationId)
 
     const handleInputChange = (e) => {
         setCardholderName(e.target.value)
@@ -63,6 +72,19 @@ const PaymentForm = ({ invoiceId, amount, invoiceType }) => {
                     variant: 'success',
                     description: 'Payment was successful!'
                 })
+                if (invoiceType === 'Deposit') {
+                    navigate('/')
+                } else if (invoiceType === 'Final') {
+                    try {
+                        const response = await axios.get(
+                            `http://localhost:5062/api/Encryption/encrypt/${customerReservationId}`
+                        )
+                        navigate(`/feedbackform/${response.data.encryptedText}`)
+                    } catch (error) {
+                        console.error('Failed to decrypt reservation ID:', error)
+                    }
+                }
+
                 setIsSuccess(true)
 
                 // Prepare payment data excluding id
@@ -153,7 +175,7 @@ const PaymentForm = ({ invoiceId, amount, invoiceType }) => {
 
             <button
                 onClick={handlePayment}
-                className="mt-6 w-full bg-indigo-600 text-white py-2 rounded-md text-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-lg font-medium mt-10"
             >
                 Pay
             </button>
