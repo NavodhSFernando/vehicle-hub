@@ -255,7 +255,11 @@ function Viewprofile() {
                     />
 
                     <div className="bg-white rounded-lg pt-5 pb-3">
-                        <Button onClick={handleSave} type="submit" className="bg-indigo-800 ml-auto text-yellow-200">
+                        <Button
+                            onClick={handleSave}
+                            type="submit"
+                            className="bg-[#283280] hover:bg-[#283299]  text-[#FBDAC6] ml-auto "
+                        >
                             Save Changes
                         </Button>
                     </div>
@@ -272,7 +276,7 @@ function Viewprofile() {
                     <div className="bg-white rounded-lg pt-4 pb-3">
                         <Button
                             onClick={() => navigate('/profileresetpassword')}
-                            className="bg-indigo-800 ml-auto text-yellow-200"
+                            className="bg-[#283280] hover:bg-[#283299]  text-[#FBDAC6] ml-auto "
                         >
                             Reset Password
                         </Button>
