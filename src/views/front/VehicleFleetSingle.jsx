@@ -11,7 +11,12 @@ import PageNotFound from '../../components/front/PageNotFound'
 export default function VehicleFleetSingle() {
     const { id } = useParams()
     const location = useLocation()
-    const { startDate, startTime, endDate, endTime, imageSrc } = location.state || {}
+    const searchParams = new URLSearchParams(location.search)
+    const startDate = searchParams.get('startDate')
+    const startTime = searchParams.get('startTime')
+    const endDate = searchParams.get('endDate')
+    const endTime = searchParams.get('endTime')
+    const imageSrc = searchParams.get('imageSrc')
     const [vehicleData, setVehicleData] = useState({})
 
     console.log('vehicleId', id)
@@ -39,14 +44,19 @@ export default function VehicleFleetSingle() {
     }, [id])
 
     function formatDate(date) {
-        if (!(date instanceof Date) || isNaN(date.getTime())) {
+        if (!date) {
+            return 'N/A'
+        }
+
+        const parsedDate = new Date(date)
+        if (isNaN(parsedDate.getTime())) {
             console.error('Invalid date:', date)
             return 'Invalid date'
         }
 
-        const year = date.getFullYear()
-        const month = String(date.getMonth() + 1).padStart(2, '0')
-        const day = String(date.getDate()).padStart(2, '0')
+        const year = parsedDate.getFullYear()
+        const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+        const day = String(parsedDate.getDate()).padStart(2, '0')
 
         return `${year}/${month}/${day}`
     }

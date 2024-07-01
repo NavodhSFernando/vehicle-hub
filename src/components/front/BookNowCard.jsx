@@ -83,7 +83,16 @@ export default function BookNowCard({
                 description: 'Please select both start and end date/time.'
             })
         } else {
-            navigate(`/vehiclefleet/${id}`, { state: { startDate, startTime, endDate, endTime, imageSrc } })
+            const queryParams = new URLSearchParams({
+                startDate,
+                startTime,
+                endDate,
+                endTime,
+                imageSrc
+            }).toString()
+
+            const url = `/vehiclefleet/${id}?${queryParams}`
+            window.open(url, '_blank')
         }
     }
 
