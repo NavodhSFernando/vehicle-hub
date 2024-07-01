@@ -57,6 +57,9 @@ const VehicleHoverCard = ({ regNo }) => {
                             <strong>Type:</strong> {vehicle.type}
                         </p>
                         <p className="text-gray-700 text-sm">
+                            <strong>Mileage:</strong> {vehicle.mileage}
+                        </p>
+                        <p className="text-gray-700 text-sm">
                             <strong>Year:</strong> {vehicle.year}
                         </p>
                     </div>
