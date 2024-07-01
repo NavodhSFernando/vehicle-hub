@@ -40,21 +40,21 @@ function RentalSummary({
 
                 <div className="pt-8 pb-3 flex justify-between">
                     <p className="text-gray-500">Deposit Amount</p>
-                    <p className="font-semibold">{deposit}</p>
+                    <p className="font-semibold">{'Rs ' + deposit}</p>
                 </div>
                 {type === 'Final' && (
                     <>
                         <div className="flex justify-between">
                             <p className="text-gray-500">Extra Mileage Charge(per km)</p>
-                            <p className="font-semibold">{extraKMCost}</p>
+                            <p className="font-semibold">{'Rs ' + extraKMCost}</p>
                         </div>
                         <div className="pt-3 flex justify-between">
                             <p className="text-gray-500">Penalty</p>
-                            <p className="font-semibold">{penalty}</p>
+                            <p className="font-semibold">{'Rs ' + penalty}</p>
                         </div>
                         <div className="pt-3 flex justify-between pb-8">
                             <p className="text-gray-500">Rental Charge</p>
-                            <p className="font-semibold">{rentalCost}</p>
+                            <p className="font-semibold">{'Rs ' + rentalCost}</p>
                         </div>
                     </>
                 )}
@@ -62,7 +62,7 @@ function RentalSummary({
 
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-950 font-bold text-xl">Total Amount</p>
-                    <p className="font-semibold text-3xl">{amount}</p>
+                    <p className="font-semibold text-3xl">{'Rs ' + amount}</p>
                 </div>
                 <div className="text-gray-500 text-xs">
                     <p>Overall price including additions </p>

@@ -240,7 +240,7 @@ const FilterCard = ({ onFilterChange }) => {
             <div className="w-full flex justify-center">
                 <Button
                     onClick={handleClearFilters}
-                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm"
+                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-sm"
                 >
                     Clear Filters
                 </Button>
