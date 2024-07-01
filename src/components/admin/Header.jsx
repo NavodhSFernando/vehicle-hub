@@ -6,10 +6,11 @@ import { IoNotifications } from 'react-icons/io5'
 import { IoMdNotificationsOutline } from 'react-icons/io'
 import axios from 'axios'
 import logo from '../../assets/logos/full_logo.png'
+import { getUserRoles } from '../../getUserRoles'
 
 export default function Header() {
     const { pathname } = useLocation()
-
+    const role = getUserRoles()
     const [isDropdownOpen] = useState(true)
     const [notification, setNotification] = useState(false)
     const handleNotification = () => {
@@ -45,31 +46,33 @@ export default function Header() {
                 <div className="xl:hidden mr-auto w-32 ml-5">
                     <img src={logo} alt="" />
                 </div>
-                <div className="cursor-pointer overflow-x-clip" onClick={handleNotification}>
-                    {notification ? (
-                        <>
-                            <div className="flex">
-                                <IoNotifications fontSize={28} style={{ color: '#283280' }} />
+                {role === 'admin' && (
+                    <div className="cursor-pointer overflow-x-clip" onClick={handleNotification}>
+                        {notification ? (
+                            <>
+                                <div className="flex">
+                                    <IoNotifications fontSize={28} style={{ color: '#283280' }} />
 
+                                    {notificationCount > 0 && (
+                                        <span className="relative right-[15px] bottom-[8px] items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-900 rounded-full">
+                                            {notificationCount}
+                                        </span>
+                                    )}
+                                    <AdminNotificationDropdown isOpen={isDropdownOpen} setIsOpen={() => {}} />
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex">
+                                <IoMdNotificationsOutline fontSize={28} style={{ color: '#283280' }} />
                                 {notificationCount > 0 && (
                                     <span className="relative right-[15px] bottom-[8px] items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-900 rounded-full">
                                         {notificationCount}
                                     </span>
                                 )}
-                                <AdminNotificationDropdown isOpen={isDropdownOpen} setIsOpen={() => {}} />
                             </div>
-                        </>
-                    ) : (
-                        <div className="flex">
-                            <IoMdNotificationsOutline fontSize={28} style={{ color: '#283280' }} />
-                            {notificationCount > 0 && (
-                                <span className="relative right-[15px] bottom-[8px] items-center justify-center px-2 py-1 text-[10px] font-bold leading-none text-red-100 bg-blue-900 rounded-full">
-                                    {notificationCount}
-                                </span>
-                            )}
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <h1 className="flex flex-col items-start font-bold text-2xl text-gray-800 mb-10 mt-5 ml-12">

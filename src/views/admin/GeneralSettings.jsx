@@ -53,7 +53,7 @@ const GeneralSettings = () => {
                 <div className="flex items-center justify-between">
                     <Button
                         type="submit"
-                        className="w-full hover:bg-indigo-700 bg-indigo-600 text-white py-2 rounded-md"
+                        className="w-full bg-[#283280] hover:bg-[#283299]  text-[#FBDAC6] py-2 rounded-md"
                     >
                         Save Settings
                     </Button>

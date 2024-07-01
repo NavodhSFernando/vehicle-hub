@@ -1,8 +1,10 @@
 import React from 'react'
-import { Button } from '../ui/button'
 import { FaStar } from 'react-icons/fa6'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
 function RentalSummary({
+    id,
     make,
     modelName,
     deposit,
@@ -14,6 +16,29 @@ function RentalSummary({
     rating,
     type
 }) {
+    const [totalFeedbacks, setTotalFeedbacks] = useState(0)
+    const [averageRating, setAverageRating] = useState(0)
+
+    useEffect(() => {
+        const fetchDataAndFeedback = async () => {
+            try {
+                const response2 = await axios.get(`http://localhost:5062/api/Feedback/vehicle/${id}`)
+                const feedbacks = response2.data
+                console.log('Fetched Feedbacks:', feedbacks)
+
+                const totalFeedbacks = feedbacks.length
+                const sumOfRatings = feedbacks.reduce((sum, feedback) => sum + feedback.feedback.ratingNo, 0)
+                const averageRating = totalFeedbacks > 0 ? parseInt(sumOfRatings / totalFeedbacks) : 0
+
+                setTotalFeedbacks(totalFeedbacks)
+                setAverageRating(averageRating)
+            } catch (error) {
+                console.error('Failed to fetch Ongoing Rentals:', error)
+            }
+        }
+        fetchDataAndFeedback()
+    }, [])
+
     const baseUrl = 'https://vehiclehubimages.blob.core.windows.net/thumbnails/'
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
@@ -30,9 +55,10 @@ function RentalSummary({
                         </h1>
                         <div className="flex items-center">
                             {[...Array(5)].map((_, starIndex) => (
-                                <FaStar key={starIndex} color={starIndex < rating ? 'yellow' : 'grey'} />
+                                <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                             ))}
-                            <p className="text-gray-500 text-xs">10+ Reviewer</p>
+                            {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviews</p>}
+                            {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>}
                         </div>
                     </div>
                 </div>
@@ -68,9 +94,6 @@ function RentalSummary({
                     <p>Overall price including additions </p>
                     <p>and deductions.</p>
                 </div>
-                {/* <Button className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-sm mt-20">
-                    Make Payment
-                </Button> */}
             </div>
         </div>
     )

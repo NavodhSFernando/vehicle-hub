@@ -234,11 +234,11 @@ function App() {
                 <Route
                     path="/feedbackform/:customerReservationId"
                     element={
-                        <ProtectedRouteCustomer allowedRoles={['customer']}>
-                            <TitleComponent title="Feedback Form">
-                                <Feedbackform />
-                            </TitleComponent>
-                        </ProtectedRouteCustomer>
+                        //<ProtectedRouteCustomer allowedRoles={['customer']}>
+                        <TitleComponent title="Feedback Form">
+                            <Feedbackform />
+                        </TitleComponent>
+                        //</ProtectedRouteCustomer>
                     }
                 />
                 <Route
@@ -492,9 +492,9 @@ function App() {
                             path="/admin/vehiclelog/edit/:vehicleLogId"
                             element={
                                 <TitleComponent title="Edit Vehicle Log">
-                                    <ProtectedRoute allowedRoles={['admin']}>
-                                        <EditVehicleLog />
-                                    </ProtectedRoute>
+                                    {/* <ProtectedRoute allowedRoles={['admin']}> */}
+                                    <EditVehicleLog />
+                                    {/* </ProtectedRoute> */}
                                 </TitleComponent>
                             }
                         />

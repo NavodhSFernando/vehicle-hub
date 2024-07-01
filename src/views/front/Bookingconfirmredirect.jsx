@@ -48,6 +48,7 @@ export default function Bookingconfirmredirect() {
                 />
                 <div className="mt-5">
                     <PaymentMethod
+                        customerReservationId={rentalData.customerReservationId}
                         invoiceId={decryptedId}
                         amount={rentalData.amount}
                         invoiceType={rentalData.invoiceType}
@@ -56,6 +57,7 @@ export default function Bookingconfirmredirect() {
             </div>
             <div className="flex flex-col w-2/5">
                 <RentalSummary
+                    id={rentalData.vehicleId}
                     make={rentalData.make}
                     modelName={rentalData.modelName}
                     thumbnail={rentalData.thumbnail}
