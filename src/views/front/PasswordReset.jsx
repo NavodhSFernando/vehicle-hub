@@ -94,7 +94,7 @@ const PasswordReset = () => {
                         />
                         <Button
                             type="submit"
-                            className="w-full py-3 text-sm font-semibold tracking-wide text-center text-yellow-200 bg-indigo-800 rounded-md hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
+                            className="w-full py-3 text-sm font-semibold tracking-wide text-center bg-[#283280] hover:bg-[#283299]  text-[#FBDAC6] rounded-md "
                         >
                             Reset Password
                         </Button>
