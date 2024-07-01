@@ -6,6 +6,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '../../../componen
 import { useState } from 'react'
 import { useEffect } from 'react'
 import apiclient from '../../../axiosConfig'
+import { FaUpDown } from 'react-icons/fa6'
 
 // Define a component to encapsulate the action buttons
 const ActionButtons = ({ vehicleLogId }) => {
@@ -76,11 +77,54 @@ export const columns = [
     },
     {
         accessorKey: 'endMileage',
-        header: 'End Milage'
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>End Mileage</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
+        cell: ({ row }) => {
+            const mileage = row.getValue('endMileage')
+            const formattedMileage = `${mileage} KM`
+
+            return <div className="">{formattedMileage}</div>
+        }
     },
     {
         accessorKey: 'penalty',
-        header: 'Penalty'
+        header: ({ column }) => {
+            return (
+                <div className="flex items-center bg-yell">
+                    <div>Penalty</div>
+                    <Button
+                        variant="ghost"
+                        className="p-0 flex"
+                        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+                    >
+                        <FaUpDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
+            )
+        },
+        cell: ({ row }) => {
+            const penalty = parseFloat(row.getValue('penalty'))
+
+            // Format the amount as a dollar amount
+            const formatted = new Intl.NumberFormat('lkr', {
+                style: 'currency',
+                currency: 'LKR'
+            }).format(penalty)
+
+            return <div className="">{formatted}</div>
+        }
     },
     {
         accessorKey: 'description',
