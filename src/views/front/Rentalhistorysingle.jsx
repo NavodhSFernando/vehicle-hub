@@ -87,13 +87,14 @@ function Ongoingrentalssingle() {
     }
 
     const convertTo12HourFormat = (time) => {
+        if (!time) return 'N/A' // Return 'N/A' or any appropriate default value if time is undefined or null
+
         let [hours, minutes] = time.split(':')
         hours = parseInt(hours, 10)
         const ampm = hours >= 12 ? 'PM' : 'AM'
         hours = hours % 12 || 12
         return `${hours}:${minutes} ${ampm}`
     }
-
     return (
         <div className="flex flex-col w-full bg-white rounded-xl shadow-lg mb-1 ">
             <div className="my-16 lg:mx-36">
@@ -129,7 +130,9 @@ function Ongoingrentalssingle() {
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Pick-Up Time</p>
-                    <p className="font-semibold">{convertTo12HourFormat(rentalData.startTime)}</p>
+                    <p className="font-semibold">
+                        {rentalData.startTime ? convertTo12HourFormat(rentalData.startTime) : 'N/A'}
+                    </p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Drop-Off Date</p>
@@ -137,7 +140,9 @@ function Ongoingrentalssingle() {
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Drop-Off Time</p>
-                    <p className="font-semibold">{convertTo12HourFormat(rentalData.endTime)}</p>
+                    <p className="font-semibold">
+                        {rentalData.endTime ? convertTo12HourFormat(rentalData.endTime) : 'N/A'}
+                    </p>
                 </div>
                 <div className="pt-3 flex justify-between">
                     <p className="text-gray-500">Reservation Status </p>
