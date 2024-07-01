@@ -168,7 +168,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                             <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                         ))}
                         {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviewers</p>}
-                        {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviewers</p>}
+                        {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>}
                     </div>
                 </div>
                 <div className="mt-1">

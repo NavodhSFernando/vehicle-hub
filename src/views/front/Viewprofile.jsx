@@ -23,7 +23,7 @@ import apiclient from '../../../src/axiosConfig'
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
-    email: z.string().email(),
+    //email: z.string().email(),
     nic: z.string().length(12),
     contactNumber: z.number(),
     address: z.string({
@@ -36,6 +36,7 @@ const formSchema = z.object({
 
 function Viewprofile() {
     const [decrypt, setDecrypt] = useState('') // State for tracking the decrypted Customer ID
+    const [email, setEmail] = useState('') // State for tracking email
     const navigate = useNavigate()
     const { toast } = useToast()
 
@@ -49,7 +50,7 @@ function Viewprofile() {
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
-            email: '',
+            //email: '',
             nic: '',
             licenseno: '',
             contactNumber: 0,
@@ -102,7 +103,7 @@ function Viewprofile() {
 
             const formData = {
                 Name: data.name,
-                Email: data.email,
+                //Email: data.email,
                 NIC: data.nic,
                 DrivingLicenseNo: data.licenseno,
                 ContactNo: data.contactNumber,
@@ -178,7 +179,7 @@ function Viewprofile() {
                                     <FormLabel className=" pb-3">Email</FormLabel>
                                 </div>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <Input {...field} readOnly />
                                 </FormControl>
                                 <FormMessage>{errors.email?.message}</FormMessage>
                             </FormItem>
