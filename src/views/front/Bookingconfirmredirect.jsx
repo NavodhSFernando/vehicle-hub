@@ -38,36 +38,40 @@ export default function Bookingconfirmredirect() {
         return <PageNotFound />
     }
     return (
-        <div className="flex gap-5">
-            <div className="flex flex-col w-3/5">
-                <BookingForm
-                    startDate={rentalData.startDate}
-                    startTime={rentalData.startTime}
-                    endDate={rentalData.endDate}
-                    endTime={rentalData.endTime}
-                />
-                <div className="mt-5">
-                    <PaymentMethod
-                        customerReservationId={rentalData.customerReservationId}
-                        invoiceId={decryptedId}
-                        amount={rentalData.amount}
-                        invoiceType={rentalData.invoiceType}
-                    />
+        <div className="bg-slate-200">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:min-h-[700px]">
+                <div className="flex gap-5">
+                    <div className="flex flex-col w-3/5">
+                        <BookingForm
+                            startDate={rentalData.startDate}
+                            startTime={rentalData.startTime}
+                            endDate={rentalData.endDate}
+                            endTime={rentalData.endTime}
+                        />
+                        <div className="mt-5">
+                            <PaymentMethod
+                                customerReservationId={rentalData.customerReservationId}
+                                invoiceId={decryptedId}
+                                amount={rentalData.amount}
+                                invoiceType={rentalData.invoiceType}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col w-2/5">
+                        <RentalSummary
+                            id={rentalData.vehicleId}
+                            make={rentalData.make}
+                            modelName={rentalData.modelName}
+                            thumbnail={rentalData.thumbnail}
+                            deposit={rentalData.deposit}
+                            extraKMCost={rentalData.extraKMCost}
+                            penalty={rentalData.penalty}
+                            rentalCost={rentalData.rentalCost}
+                            amount={rentalData.amount}
+                            type={rentalData.invoiceType}
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="flex flex-col w-2/5">
-                <RentalSummary
-                    id={rentalData.vehicleId}
-                    make={rentalData.make}
-                    modelName={rentalData.modelName}
-                    thumbnail={rentalData.thumbnail}
-                    deposit={rentalData.deposit}
-                    extraKMCost={rentalData.extraKMCost}
-                    penalty={rentalData.penalty}
-                    rentalCost={rentalData.rentalCost}
-                    amount={rentalData.amount}
-                    type={rentalData.invoiceType}
-                />
             </div>
         </div>
     )
