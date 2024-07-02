@@ -19,7 +19,11 @@ export default function ViewBillingDetails() {
                 const billingDetailsResponse = await axios.get(
                     `http://localhost:5062/BillingDetails/ByCustomer/${decryptedId}`
                 );
-                const invoices = billingDetailsResponse.data;
+                let invoices = billingDetailsResponse.data;
+
+                // Filter out invoices with "Cancelled" reservation status
+                invoices = invoices.filter(invoice => invoice.reservationStatus !== "Cancelled");
+
                 setData(invoices);
 
                 // Fetch payment status for each invoice
@@ -52,10 +56,8 @@ export default function ViewBillingDetails() {
 
     const handlePayNow = async (invoiceId) => {
         try {
-            // console.log(`Encrypting invoice ID: ${invoiceId}`); // Debug log
             const encryptResponse = await axios.get(`http://localhost:5062/api/Encryption/encrypt/${invoiceId}`);
             const encryptedInvoiceId = encryptResponse.data.encryptedText;
-            // console.log(`Encrypted invoice ID: ${encryptedInvoiceId}`); // Debug log
             navigate(`/bookingconfirmation/${encryptedInvoiceId}`);
         } catch (error) {
             console.error('Error encrypting invoice ID:', error);
@@ -64,7 +66,11 @@ export default function ViewBillingDetails() {
 
     return (
         <div className="flex flex-col p-6 bg-white rounded-lg">
-            <DataTable columns={columns(paymentStatuses, handlePayNow)} data={data} />
+            <DataTable 
+                columns={columns(paymentStatuses, handlePayNow)} 
+                data={data} 
+                initialSortBy={[{ id: 'dateCreated', desc: true }]} 
+            />
         </div>
     );
 }

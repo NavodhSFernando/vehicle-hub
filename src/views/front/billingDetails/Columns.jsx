@@ -35,15 +35,15 @@ export const columns = (paymentStatuses, handlePayNow) => [
         cell: ({ row }) => {
             const invoiceId = row.getValue('id');
             const paymentStatus = paymentStatuses[invoiceId];
-
+    
             let text = 'Not Paid';
             let color = 'bg-red-500';
-
-            if (paymentStatus?.paymentExists ) {
+    
+            if (paymentStatus?.paymentExists) {
                 text = 'Paid';
                 color = 'bg-green-500';
             }
-
+    
             return (
                 <div className={`capitalize ${color} text-white rounded-full px-2 py-1 text-xs font-medium w-fit`}>
                     {text}

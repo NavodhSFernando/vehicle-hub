@@ -158,14 +158,6 @@ function App() {
                         />
                     </Route>
                     <Route
-                        path="/bookingconfirmation/:invoiceId"
-                        element={
-                            <TitleComponent title="Payment redirect">
-                                <Bookingconfirmredirect />
-                            </TitleComponent>
-                        }
-                    />
-                    <Route
                         path="/faq"
                         element={
                             <TitleComponent title="FAQ">
@@ -182,7 +174,14 @@ function App() {
                         }
                     />
                 </Route>
-
+                <Route
+                    path="/bookingconfirmation/:invoiceId"
+                    element={
+                        <TitleComponent title="Payment redirect">
+                            <Bookingconfirmredirect />
+                        </TitleComponent>
+                    }
+                />
                 <Route
                     path="/login"
                     element={

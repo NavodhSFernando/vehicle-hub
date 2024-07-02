@@ -176,11 +176,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                     </div>
                 </div>
                 <div className="mt-1">
-                    {
+                    {customerId && (
                         <button onClick={handleClick}>
                             {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
                         </button>
-                    }
+                    )}
                 </div>
             </article>
             {/* Specification */}
@@ -226,33 +226,33 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
             </div>
 
             {/* Rental Info */}
-            {/* {(sdate != null && stime != null && edate != null && etime != null) && ( */}
-            <div className="w-full pb-14">
-                <p className="text-sm text-slate-500 uppercase">Rental Info</p>
-                <div className="p-2 flex gap-10">
-                    <div className="flex flex-col gap-1 w-1/2">
-                        <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-3/5">Start Date</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{sdate}</p>
+            {(sdate || stime || edate || etime) != 'N/A' && (
+                <div className="w-full pb-14">
+                    <p className="text-sm text-slate-500 uppercase">Rental Info</p>
+                    <div className="p-2 flex gap-10">
+                        <div className="flex flex-col gap-1 w-1/2">
+                            <div className="flex w-full">
+                                <p className="text-lg text-slate-500 w-3/5">Start Date</p>
+                                <p className="text-lg text-slate-500 font-bold w-2/5">{sdate}</p>
+                            </div>
+                            <div className="flex w-full">
+                                <p className="text-lg text-slate-500 w-3/5">Start Time</p>
+                                <p className="text-lg text-slate-500 font-bold w-2/5">{stime}</p>
+                            </div>
                         </div>
-                        <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-3/5">Start Time</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{stime}</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col gap-1 w-1/2">
-                        <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-2/5">End Date</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{edate}</p>
-                        </div>
-                        <div className="flex w-full">
-                            <p className="text-lg text-slate-500 w-2/5">End Time</p>
-                            <p className="text-lg text-slate-500 font-bold w-2/5">{etime}</p>
+                        <div className="flex flex-col gap-1 w-1/2">
+                            <div className="flex w-full">
+                                <p className="text-lg text-slate-500 w-2/5">End Date</p>
+                                <p className="text-lg text-slate-500 font-bold w-2/5">{edate}</p>
+                            </div>
+                            <div className="flex w-full">
+                                <p className="text-lg text-slate-500 w-2/5">End Time</p>
+                                <p className="text-lg text-slate-500 font-bold w-2/5">{etime}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            {/* )} */}
+            )}
 
             {/* Rates */}
             <div className="w-full max-w-[480px]">
@@ -275,32 +275,32 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                             <p>Extra Mileage Charge (per km)</p>
                         </span>
                     </div>
-                    {/* {sdate == null && stime == null && edate == null && etime == null && ( */}
-                    <>
-                        <div className="flex items-center space-x-3 p-4 bg-blue-100 rounded-lg mb-8 shadow-sm">
-                            <input
-                                type="checkbox"
-                                className="rounded text-blue-500 focus:ring-blue-400 focus:ring-2 focus:ring-offset-0"
-                                checked={isChecked}
-                                onChange={handleCheckboxChange}
-                                id="termsCheckbox"
-                            />
-                            <label
-                                htmlFor="termsCheckbox"
-                                className="text-sm leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
-                            >
-                                I agree to Terms and Conditions
-                            </label>
-                        </div>
+                    {(sdate || stime || edate || etime) != 'N/A' && (
+                        <>
+                            <div className="flex items-center space-x-3 p-4 bg-blue-100 rounded-lg mb-8 shadow-sm">
+                                <input
+                                    type="checkbox"
+                                    className="rounded text-blue-500 focus:ring-blue-400 focus:ring-2 focus:ring-offset-0"
+                                    checked={isChecked}
+                                    onChange={handleCheckboxChange}
+                                    id="termsCheckbox"
+                                />
+                                <label
+                                    htmlFor="termsCheckbox"
+                                    className="text-sm leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                                >
+                                    I agree to Terms and Conditions
+                                </label>
+                            </div>
 
-                        <Button
-                            className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-sm"
-                            onClick={handleRequestVehicle}
-                        >
-                            Request Vehicle
-                        </Button>
-                    </>
-                    {/* )} */}
+                            <Button
+                                className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-sm"
+                                onClick={handleRequestVehicle}
+                            >
+                                Request Vehicle
+                            </Button>
+                        </>
+                    )}
                 </div>
             </div>
         </div>

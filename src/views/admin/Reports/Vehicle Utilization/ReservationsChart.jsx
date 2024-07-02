@@ -102,10 +102,12 @@ export default function ReservationsChart() {
                                 left: -10,
                                 bottom: 0
                             }}
+                            layout="vertical" // This prop is important for horizontal bars
                         >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="vehicleNo" />
-                            <YAxis />
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis type="number" /> // XAxis now represents the numerical values
+                            <YAxis dataKey="vehicleNo" type="category" width={80} /> // YAxis now represents the
+                            categories
                             <Tooltip />
                             <Legend />
                             <Bar dataKey="reservations" fill="#8884d8" name="Reservations" />
@@ -116,7 +118,7 @@ export default function ReservationsChart() {
             <div className="flex justify-between mt-3">
                 <button
                     onClick={() => setView(view === 'pie' ? 'bar' : 'pie')}
-                    className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-fit rounded-lg text-sm mr-2"
+                    className="bg-[#283280] hover:bg-[#283299] text-white font-bold py-2 px-4 rounded"
                 >
                     Toggle {view === 'pie' ? 'Bar Chart' : 'Pie Chart'}
                 </button>
