@@ -25,20 +25,20 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
     }
 
     const handleRequestVehicle = async () => {
-        if (!isChecked) {
+        if (!customerId) {
+            console.error('Customer ID not found in cookies')
+            navigate('/login')
+        } else if (!isChecked) {
             return toast({
                 variant: 'destructive_border',
                 description: 'Please agree to the Terms and Conditions to proceed'
             })
         }
-        if (!customerId) {
-            console.error('Customer ID not found in cookies')
-            navigate('/login')
-        }
-
         try {
             const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
             const decryptedId = decryptResponse.data.decryptedUserId
+
+            await axios.get(`http://localhost:5062/api/Customer/details/${decryptedId}`)
 
             const url = `/FrontReservationService/request-reservation`
             const formData = {
@@ -61,7 +61,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
             console.log('Request vehicle response:', response.data)
             navigate(`/account/viewongoingrentals`)
         } catch (error) {
-            navigate('/login')
+            toast({
+                variant: 'destructive_border',
+                description: 'Please fill in the details to make a request'
+            })
+            navigate('/account/viewprofile')
         }
     }
 
@@ -168,7 +172,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                             <FaStar key={starIndex} color={starIndex < averageRating ? 'yellow' : 'grey'} />
                         ))}
                         {totalFeedbacks > 10 && <p className="text-gray-500 text-xs">10+ Reviewers</p>}
-                        {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviewers</p>}
+                        {totalFeedbacks <= 10 && <p className="text-gray-500 text-xs">{totalFeedbacks} Reviews</p>}
                     </div>
                 </div>
                 <div className="mt-1">
@@ -180,6 +184,7 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                 </div>
             </article>
             {/* Specification */}
+
             <div className="w-full pb-14">
                 <p className="text-sm text-slate-500 uppercase">Specification</p>
                 <div className="p-2 flex gap-10">
@@ -219,7 +224,9 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                     </div>
                 </div>
             </div>
+
             {/* Rental Info */}
+            {/* {(sdate != null && stime != null && edate != null && etime != null) && ( */}
             <div className="w-full pb-14">
                 <p className="text-sm text-slate-500 uppercase">Rental Info</p>
                 <div className="p-2 flex gap-10">
@@ -245,6 +252,8 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                     </div>
                 </div>
             </div>
+            {/* )} */}
+
             {/* Rates */}
             <div className="w-full max-w-[480px]">
                 <p className="text-sm text-slate-500 uppercase">Rates</p>
@@ -266,28 +275,32 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                             <p>Extra Mileage Charge (per km)</p>
                         </span>
                     </div>
-                    <div className="flex items-center space-x-3 p-4 bg-blue-100 rounded-lg mb-8 shadow-sm">
-                        <input
-                            type="checkbox"
-                            className="rounded text-blue-500 focus:ring-blue-400 focus:ring-2 focus:ring-offset-0"
-                            checked={isChecked}
-                            onChange={handleCheckboxChange}
-                            id="termsCheckbox"
-                        />
-                        <label
-                            htmlFor="termsCheckbox"
-                            className="text-sm leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
-                        >
-                            I agree to Terms and Conditions
-                        </label>
-                    </div>
+                    {/* {sdate == null && stime == null && edate == null && etime == null && ( */}
+                    <>
+                        <div className="flex items-center space-x-3 p-4 bg-blue-100 rounded-lg mb-8 shadow-sm">
+                            <input
+                                type="checkbox"
+                                className="rounded text-blue-500 focus:ring-blue-400 focus:ring-2 focus:ring-offset-0"
+                                checked={isChecked}
+                                onChange={handleCheckboxChange}
+                                id="termsCheckbox"
+                            />
+                            <label
+                                htmlFor="termsCheckbox"
+                                className="text-sm leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-bold"
+                            >
+                                I agree to Terms and Conditions
+                            </label>
+                        </div>
 
-                    <Button
-                        className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-sm"
-                        onClick={handleRequestVehicle}
-                    >
-                        Request Vehicle
-                    </Button>
+                        <Button
+                            className="text-[#FBDAC6] bg-[#283280] hover:bg-[#283299] py-2.5 px-5 w-full rounded-lg text-sm"
+                            onClick={handleRequestVehicle}
+                        >
+                            Request Vehicle
+                        </Button>
+                    </>
+                    {/* )} */}
                 </div>
             </div>
         </div>

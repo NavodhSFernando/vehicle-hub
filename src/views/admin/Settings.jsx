@@ -17,7 +17,7 @@ const Settings = () => {
                     <div className="flex justify-between items-center bg-gray-100 p-4 rounded-md">
                         <span className="text-gray-700">Reset Password</span>
                         <button
-                            className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                            className="bg-[#283280] hover:bg-[#283299]  text-[#FBDAC6] px-4 py-2 rounded-md "
                             onClick={handleResetPassword}
                         >
                             Reset

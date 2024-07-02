@@ -319,7 +319,7 @@ export const Login = () => {
                                 <div>
                                     <Button
                                         type="submit"
-                                        className="w-full py-3 text-sm text-center tracking-wide bg-indigo-800 text-yellow-200 rounded-md font-semibold hover:bg-indigo-900 focus:outline-none focus:ring focus:ring-indigo-500"
+                                        className="w-full py-3 text-sm text-center tracking-wide bg-[#283280] hover:bg-[#283299]  text-[#FBDAC6] rounded-md font-semibold "
                                     >
                                         Login
                                     </Button>

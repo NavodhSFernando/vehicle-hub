@@ -35,9 +35,9 @@ import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -234,11 +234,11 @@ function App() {
                 <Route
                     path="/feedbackform/:customerReservationId"
                     element={
-                        <ProtectedRouteCustomer allowedRoles={['customer']}>
-                            <TitleComponent title="Feedback Form">
-                                <Feedbackform />
-                            </TitleComponent>
-                        </ProtectedRouteCustomer>
+                        //<ProtectedRouteCustomer allowedRoles={['customer']}>
+                        <TitleComponent title="Feedback Form">
+                            <Feedbackform />
+                        </TitleComponent>
+                        //</ProtectedRouteCustomer>
                     }
                 />
                 <Route
@@ -492,9 +492,9 @@ function App() {
                             path="/admin/vehiclelog/edit/:vehicleLogId"
                             element={
                                 <TitleComponent title="Edit Vehicle Log">
-                                    <ProtectedRoute allowedRoles={['admin']}>
-                                        <EditVehicleLog />
-                                    </ProtectedRoute>
+                                    {/* <ProtectedRoute allowedRoles={['admin']}> */}
+                                    <EditVehicleLog />
+                                    {/* </ProtectedRoute> */}
                                 </TitleComponent>
                             }
                         />
@@ -544,9 +544,9 @@ function App() {
                     <Route
                         path="notification"
                         element={
-                                <TitleComponent title="Notification">
-                                    <Notification />
-                                </TitleComponent>
+                            <TitleComponent title="Notification">
+                                <Notification />
+                            </TitleComponent>
                         }
                     />
                     <Route
