@@ -24,7 +24,7 @@ export default function TotalSalesChart() {
 
     return (
         <div className="h-[28rem] bg-white p-4 rounded-sm border border-gray-200 flex flex-col flex-1">
-            <strong className="text-gray-700 font-medium">Total Sales</strong>
+            <strong className="text-gray-700 font-medium">Total Completed Reservations</strong>
             <div className="mt-3 w-full flex-1 text-xs">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart
