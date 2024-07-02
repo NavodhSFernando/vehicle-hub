@@ -19,7 +19,11 @@ export default function ViewBillingDetails() {
                 const billingDetailsResponse = await axios.get(
                     `http://localhost:5062/BillingDetails/ByCustomer/${decryptedId}`
                 );
-                const invoices = billingDetailsResponse.data;
+                let invoices = billingDetailsResponse.data;
+
+                // Filter out invoices with "Cancelled" reservation status
+                invoices = invoices.filter(invoice => invoice.reservationStatus !== "Cancelled");
+
                 setData(invoices);
 
                 // Fetch payment status for each invoice
