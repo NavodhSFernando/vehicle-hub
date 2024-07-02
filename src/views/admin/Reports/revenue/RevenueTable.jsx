@@ -294,7 +294,7 @@ const RevenueTable = () => {
                 </button>
                 <button
                     id="export-pdf-button"
-                    className="text-[#FBDAC6] bg-green-800 hover:bg-green-700 py-2.5 px-5 w-fit rounded-lg text-sm"
+                    className="text-[#283280] font-medium bg-transparent border-2 border-[#283280]  hover:bg-slate-100   py-2.5 px-5 w-fit rounded-lg text-sm"
                     onClick={handleExportPDF}
                 >
                     Export PDF

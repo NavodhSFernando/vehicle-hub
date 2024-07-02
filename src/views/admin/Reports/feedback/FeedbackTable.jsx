@@ -378,7 +378,7 @@ const FeedbackReport = () => {
                 </button>
                 <button
                     id="export-pdf-button"
-                    className="text-[#283280] font-medium bg-transparent border-2 border-[#283280] hover:bg-[#283280] hover:text-[#FBDAC6] py-2.5 px-5 w-fit rounded-lg text-sm"
+                    className="text-[#283280] font-medium bg-transparent border-2 border-[#283280] hover:bg-slate-100  py-2.5 px-5 w-fit rounded-lg text-sm"
                     onClick={handleExportPDF}
                 >
                     Export PDF
