@@ -4,11 +4,10 @@ import { Button } from '../../components/ui/button'
 import axios from 'axios'
 import { FaStar } from 'react-icons/fa6'
 import { useNavigate, useParams } from 'react-router-dom'
-
+import { RxCross2 } from "react-icons/rx";
 export default function FeedbackForm() {
     const [iconSize, setIconSize] = useState(window.innerWidth <= 768 ? 15 : 30)
     const [value, setValue] = useState(0)
-    const [notification, setNotification] = useState(null)
     const { customerReservationId } = useParams()
     const navigate = useNavigate()
 
@@ -25,12 +24,10 @@ export default function FeedbackForm() {
 
     const onSubmit = async (data) => {
         try {
-            if (data.rating == null || data.serviceReview == null || data.vehicleReview == null) {
-                setNotification({ message: 'Please fill all fields.', type: 'error' })
-            } else {
+            if (!(data.rating == null || data.serviceReview == null || data.vehicleReview == null)) {
                 const decrypt = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerReservationId}`)
                 const decryptedId = decrypt.data.decryptedUserId
-
+                
                 const FeedbackRequest = {
                     RatingNo: parseInt(data.rating),
                     Service_Review: data.serviceReview,
@@ -39,11 +36,11 @@ export default function FeedbackForm() {
                 }
 
                 const response = await axios.post('http://localhost:5062/api/Feedback', FeedbackRequest)
-                setNotification({ message: response.data.message, type: 'success' })
+                console.log(response)
+                navigate('/')
             }
         } catch (error) {
             console.error('Error submitting feedback:', error)
-            setNotification({ message: 'Error submitting feedback', type: 'error' })
         }
     }
 
@@ -63,14 +60,15 @@ export default function FeedbackForm() {
         <div className="bg-slate-200">
             <div className="flex items-center justify-center w-full min-h-screen pb-4">
                 <div className="bg-white rounded-xl shadow-lg w-full max-w-2xl mx-auto pt-10 pb-10 pl-20 pr-20">
-                    <div className="mb-4">
-                        <h2 className="text-2xl font-bold text-gray-900">Please Provide your Feedback</h2>
-                        <p className="text-sm text-gray-500">
-                            Your feedback is greatly valued as it gives us the opportunity to serve you better. (Please
-                            note that your feedback, along with your name, will be displayed on the specific
-                            vehicle's details page.)
-                        </p>
+                    <div className='flex justify-end'>
+                        <button onClick={() => {navigate('/')}} className="mb-2 text-[30px]"> <RxCross2 /> </button>
                     </div>
+                    <h2 className="text-2xl font-bold text-gray-900">Please Provide your Feedback</h2>
+                    <p className="text-sm text-gray-500">
+                        Your feedback is greatly valued as it gives us the opportunity to serve you better. (Please
+                        note that your feedback, along with your name, will be displayed on the specific
+                        vehicle's details page.)
+                    </p>
                     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
                         <div className="mb-4">
                             <label htmlFor="vehicleRating" className="block text-gray-700 font-semibold mb-2">
@@ -150,53 +148,11 @@ export default function FeedbackForm() {
                             >
                                 Submit
                             </Button>
-                            <Button
-                                onClick={() => {
-                                    navigate('/')
-                                }}
-                                className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300 mt-4"
-                            >
-                                Home
-                            </Button>
                         </div>
                     </form>
-                    {notification && (
-                        <Notification
-                            message={notification.message}
-                            type={notification.type}
-                            onClose={() => setNotification(null)}
-                        />
-                    )}
                 </div>
             </div>
         </div>
     )
 }
 
-const Notification = ({ message, type, onClose }) => {
-    const navigate = useNavigate()
-
-    const handleOkClick = () => {
-        if (type === 'success') {
-            navigate('/')
-        } else {
-            onClose()
-        }
-    }
-
-    return (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div
-                className={`p-6 rounded shadow-lg ${type === 'success' ? 'text-green-500' : 'text-red-500'} bg-white w-1/3 text-center relative`}
-            >
-                <p className="text-[25px]">{message}</p>
-                <button
-                    onClick={handleOkClick}
-                    className="bg-blue-900 hover:bg-blue-800 text-amber-100 font-semibold rounded py-2 px-10 transition-colors duration-300 mt-6"
-                >
-                    Ok
-                </button>
-            </div>
-        </div>
-    )
-}

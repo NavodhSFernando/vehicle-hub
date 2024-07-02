@@ -43,7 +43,7 @@ export default function TotalSalesChart() {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="totalSales" fill="#3b82f6" />
+                        <Bar dataKey="total_Completed_Reservations" fill="#3b82f6" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

@@ -1,84 +1,82 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
-import { BsBookmarkStar } from 'react-icons/bs'
-import { IoMdNotificationsOutline } from 'react-icons/io'
-import { FaRegUserCircle } from 'react-icons/fa'
-import { BsBookmarkStarFill } from 'react-icons/bs'
-import { IoNotifications } from 'react-icons/io5'
-import { FaUserCircle } from 'react-icons/fa'
-import logo from '../../assets/logos/VH-Icon.png'
-import { RxHamburgerMenu } from 'react-icons/rx'
-import NotificationDropdown from './NotificationDropDown'
-import WishlistDropdown from './WishlistDropDown'
-import Cookies from 'js-cookie'
-import { Button } from '../ui/button'
-import axios from 'axios'
-import { getUserRoles } from '../../getUserRoles'
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { BsBookmarkStar } from 'react-icons/bs';
+import { IoMdNotificationsOutline } from 'react-icons/io';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { BsBookmarkStarFill } from 'react-icons/bs';
+import { IoNotifications } from 'react-icons/io5';
+import { FaUserCircle } from 'react-icons/fa';
+import logo from '../../assets/logos/VH-Icon.png';
+import { RxHamburgerMenu } from 'react-icons/rx';
+import NotificationDropdown from './NotificationDropDown';
+import WishlistDropdown from './WishlistDropDown';
+import Cookies from 'js-cookie';
+import { Button } from '../ui/button';
+import axios from 'axios';
+import { getUserRoles } from '../../getUserRoles';
 
 const Navbar = () => {
-    const location = useLocation()
-    const [loggedIn, setLoggedIn] = useState(true)
+    const location = useLocation();
+    const [loggedIn, setLoggedIn] = useState(true);
 
-    const [isDropdownOpen] = useState(true)
+    const [isDropdownOpen] = useState(true);
     const handleNavigate = () => {
-        console.log('Navigating to all notifications view')
-    }
+        console.log('Navigating to all notifications view');
+    };
 
-    const [clicked, setClicked] = useState(false)
+    const [clicked, setClicked] = useState(false);
     const handleClick = () => {
-        setClicked(!clicked)
-    }
+        setClicked(!clicked);
+    };
 
-    const [logged, setLogged] = useState(false)
+    const [logged, setLogged] = useState(false);
     const handleLogged = () => {
-        setLogged(!logged)
-    }
+        setLogged(!logged);
+    };
 
-    const [notification, setNotification] = useState(false)
+    const [notification, setNotification] = useState(false);
     const handleNotification = () => {
-        setNotification(!notification)
-    }
+        setNotification(!notification);
+    };
 
-    const [showNav, setShowNav] = useState(false)
+    const [showNav, setShowNav] = useState(false);
     const toggleNav = () => {
-        setShowNav(!showNav)
-    }
-    const [notificationCount, setnotificationCount] = useState(0)
+        setShowNav(!showNav);
+    };
+    const [notificationCount, setnotificationCount] = useState(0);
 
-    const customerId = Cookies.get('customerId')
+    const customerId = Cookies.get('customerId');
     const fetchNotifications = async () => {
         try {
-            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`)
-            const decryptedId = decryptResponse.data.decryptedUserId
+            const decryptResponse = await axios.get(`http://localhost:5062/api/Encryption/decrypt/${customerId}`);
+            const decryptedId = decryptResponse.data.decryptedUserId;
 
-            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`)
+            const response = await axios.get(`http://localhost:5062/api/Notification/Notifications/${decryptedId}`);
             const filteredNotifications = response.data.filter((notification) => {
-                return notification.isRead === false
-            })
+                return notification.isRead === false;
+            });
 
-            setnotificationCount(filteredNotifications.length)
+            setnotificationCount(filteredNotifications.length);
         } catch (error) {
-            console.error('Error fetching notifications:', error)
+            console.error('Error fetching notifications:', error);
         }
-    }
+    };
 
-    const role = getUserRoles()
+    const role = getUserRoles();
     useEffect(() => {
         if (role === 'customer') {
-            setLoggedIn(true)
+            setLoggedIn(true);
         } else {
-            setLoggedIn(false)
+            setLoggedIn(false);
         }
         if (customerId) {
-            fetchNotifications()
+            fetchNotifications();
         }
-    }, [])
-
-    const isHomePage = location.pathname === '/'
+    }, []);
 
     return (
-        <nav className={`absolute top-0 inset-x-0 z-20 ${isHomePage ? 'bg-gradient-to-b from-primary' : ''}`}>
+        <nav className={`absolute top-0 inset-x-0 z-20 bg-gradient-to-b ${location.pathname === '/' ? 'from-primary' : ''}`}>
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 my-3">
                 <div className="flex flex-row gap-5 lg:gap-0 md:items-center items-start justify-between">
                     <div className="flex w-52">
@@ -89,26 +87,27 @@ const Navbar = () => {
                     <div className={`lg:flex lg:flex-1 ${showNav ? 'block' : 'hidden'} justify-center`}>
                         <div className="flex sm:space-x-4">
                             <NavLink
+                                exact
                                 to="/"
-                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className={`text-[#FBDAC6] px-3 py-2 text-sm font-medium ${location.pathname === '/' ? 'border-b-2 border-[#FBDAC6]' : 'border-b-2 border-transparent'} hover:border-[#FBDAC6]`}
                             >
                                 Home
                             </NavLink>
                             <NavLink
                                 to="/vehiclefleet"
-                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className={`text-[#FBDAC6] px-3 py-2 text-sm font-medium ${location.pathname === '/vehiclefleet' ? 'border-b-2 border-[#FBDAC6]' : 'border-b-2 border-transparent'} hover:border-[#FBDAC6]`}
                             >
                                 Vehicle Fleet
                             </NavLink>
                             <NavLink
                                 to="/faq"
-                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className={`text-[#FBDAC6] px-3 py-2 text-sm font-medium ${location.pathname === '/faq' ? 'border-b-2 border-[#FBDAC6]' : 'border-b-2 border-transparent'} hover:border-[#FBDAC6]`}
                             >
                                 FAQ
                             </NavLink>
                             <NavLink
                                 to="/contact"
-                                className="text-[#FBDAC6] px-3 py-2 text-sm font-medium hover:border-b-[1px] hover:border-[#FBDAC6]"
+                                className={`text-[#FBDAC6] px-3 py-2 text-sm font-medium ${location.pathname === '/contact' ? 'border-b-2 border-[#FBDAC6]' : 'border-b-2 border-transparent'} hover:border-[#FBDAC6]`}
                             >
                                 Contact
                             </NavLink>
@@ -206,7 +205,7 @@ const Navbar = () => {
                 </div>
             </div>
         </nav>
-    )
-}
+    );
+};
 
-export default Navbar
+export default Navbar;

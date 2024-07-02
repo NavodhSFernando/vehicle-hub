@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useOutletContext } from 'react-router-dom'
-import { MdDeleteOutline } from 'react-icons/md'
-import { MdOutlineMarkEmailRead } from 'react-icons/md'
 
-const NOTIFICATIONS_PER_PAGE = 6
+const NOTIFICATIONS_PER_PAGE = 4
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
@@ -36,7 +34,7 @@ export default function NotificationCenter() {
 
     return (
         <div className="flex justify-center items-start pb-10">
-            <div className="w-full max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
+            <div className="w-full max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white hide-scrollbar">
                 <h2 className="text-xl pt-10 pl-20 font-semibold mb-4">Notifications</h2>
                 {currentNotifications.length > 0 ? (
                     currentNotifications.map((notification) => (
@@ -74,7 +72,7 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
                 className={`px-4 py-2 border rounded shadow ${
                     currentPage === 1
                         ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                        : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
+                        : 'bg-white text-gray-700 hover:bg-blue-500 hover:text-white'
                 }`}
                 disabled={currentPage === 1}
                 onClick={() => paginate(currentPage - 1)}
@@ -86,8 +84,8 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
                     key={number}
                     className={`px-4 py-2 border rounded shadow ${
                         currentPage === number
-                            ? 'bg-Paginationbluecolor text-white'
-                            : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
+                            ? 'bg-blue-500 text-white'
+                            : 'bg-white text-gray-700 hover:bg-blue-500 hover:text-white'
                     }`}
                     onClick={() => paginate(number)}
                 >
@@ -98,7 +96,7 @@ function Pagination({ totalNotifications, notificationsPerPage, paginate, curren
                 className={`px-4 py-2 border rounded shadow ${
                     currentPage === pageNumbers.length
                         ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                        : 'bg-white text-gray-700 hover:bg-Paginationbluecolor hover:text-white'
+                        : 'bg-white text-gray-700 hover:bg-blue-500 hover:text-white'
                 }`}
                 disabled={currentPage === pageNumbers.length}
                 onClick={() => paginate(currentPage + 1)}
@@ -113,7 +111,7 @@ function NotificationCard({ notification }) {
     const { id, title, description, generated_DateTime, isRead } = notification
 
     return (
-        <div className="p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]">
+        <div className={`${isRead ? 'bg-gray-200' : 'bg-white'} p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]`}>
             <div className="flex flex-col">
                 <div className="font-bold text-lg">{title}</div>
                 <div className="text-gray-700">{description}</div>
