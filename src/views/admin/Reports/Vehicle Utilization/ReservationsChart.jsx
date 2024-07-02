@@ -105,7 +105,7 @@ export default function ReservationsChart() {
       <div className="flex justify-between mt-3">
         <button
           onClick={() => setView(view === 'pie' ? 'bar' : 'pie')}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-[#283280] hover:bg-[#283299] text-white font-bold py-2 px-4 rounded"
         >
           Toggle {view === 'pie' ? 'Bar Chart' : 'Pie Chart'}
         </button>
