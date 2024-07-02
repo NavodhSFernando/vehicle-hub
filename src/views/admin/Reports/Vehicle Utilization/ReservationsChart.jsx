@@ -80,24 +80,25 @@ export default function ReservationsChart() {
               <Tooltip />
             </PieChart>
           ) : (
-            <BarChart
-              width={500}
-              height={300}
-              data={data}
-              margin={{
-                top: 20,
-                right: 10,
-                left: -10,
-                bottom: 0
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis dataKey="vehicleNo" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="reservations" fill="#8884d8" name="Reservations" />
-            </BarChart>
+<BarChart
+  width={500}
+  height={300}
+  data={data}
+  margin={{
+    top: 20,
+    right: 10,
+    left: -10,
+    bottom: 0,
+  }}
+  layout="vertical" // This prop is important for horizontal bars
+>
+  <CartesianGrid strokeDasharray="3 3" />
+  <XAxis type="number" /> // XAxis now represents the numerical values
+  <YAxis dataKey="vehicleNo" type="category" width={80} /> // YAxis now represents the categories
+  <Tooltip />
+  <Legend />
+  <Bar dataKey="reservations" fill="#8884d8" name="Reservations" />
+</BarChart>
           )}
         </ResponsiveContainer>
       </div>
