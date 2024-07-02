@@ -194,7 +194,7 @@ export const columns = [
         }
     },
     {
-        accessorKey: 'vehicleType',
+        accessorKey: 'vehicleTypeId',
         header: 'Vehicle Type',
         cell: ({ row }) => {
             // Extract the vehicleType.id correctly

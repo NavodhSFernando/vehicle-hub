@@ -78,8 +78,6 @@ export default function CreateVehicle() {
             costPerDay: 0,
             mileage: 0,
             costPerExtraKm: 0,
-            vehicleTypeId: '',
-            vehicleModelId: '',
             thumbnail: null,
             frontImg: null,
             rearImg: null,
