@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from './DataTable';
 import { columns } from './Columns';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function ViewBillingDetails() {
     const customerId = useOutletContext();
     const [data, setData] = useState([]);
     const [paymentStatuses, setPaymentStatuses] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDecryptedIdAndBillingDetails = async () => {
@@ -49,9 +50,21 @@ export default function ViewBillingDetails() {
         }
     }, [customerId]);
 
+    const handlePayNow = async (invoiceId) => {
+        try {
+            // console.log(`Encrypting invoice ID: ${invoiceId}`); // Debug log
+            const encryptResponse = await axios.get(`http://localhost:5062/api/Encryption/encrypt/${invoiceId}`);
+            const encryptedInvoiceId = encryptResponse.data.encryptedText;
+            // console.log(`Encrypted invoice ID: ${encryptedInvoiceId}`); // Debug log
+            navigate(`/bookingconfirmation/${encryptedInvoiceId}`);
+        } catch (error) {
+            console.error('Error encrypting invoice ID:', error);
+        }
+    };
+
     return (
         <div className="flex flex-col p-6 bg-white rounded-lg">
-            <DataTable columns={columns(paymentStatuses)} data={data} />
+            <DataTable columns={columns(paymentStatuses, handlePayNow)} data={data} />
         </div>
     );
 }
