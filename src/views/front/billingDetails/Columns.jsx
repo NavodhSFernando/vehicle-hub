@@ -92,6 +92,9 @@ export const columns = (paymentStatuses, handlePayNow) => [
                             <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
                                 View PDF
                             </Button>
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
+                                Download PDF
+                            </Button>
                         </>
                     )}
                 </div>
