@@ -100,7 +100,6 @@ export default function CreateVehicleModel() {
             year: 0,
             engineCapacity: 0,
             seatingCapacity: 0,
-            vehicleMakeId: '',
             items: []
         }
     })

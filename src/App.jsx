@@ -35,9 +35,9 @@ import VehicleFleet from './views/front/VehicleFleet'
 import ViewOngoingRental from './views/front/OngoingRental/ViewOngoingRental'
 import ViewBillingDetails from './views/front/billingDetails/ViewBillingDetails'
 import ViewRentalHistory from './views/front/RentalHistory/ViewRentalHistory'
-import ViewFeedbackReport from './views/admin/reports/feedback/ViewFeedbackReport'
-import ViewRevenueReport from './views/admin/reports/revenue/ViewRevenueReport'
-import ViewVehicleUtilizationReport from './views/admin/reports/Vehicle Utilization/ViewVehicleUtilizationReport'
+import ViewFeedbackReport from './views/admin/Reports/feedback/ViewFeedbackReport'
+import ViewRevenueReport from './views/admin/Reports/revenue/ViewRevenueReport'
+import ViewVehicleUtilizationReport from './views/admin/Reports/Vehicle Utilization/ViewVehicleUtilizationReport'
 import Viewprofile from './views/front/Viewprofile'
 import Bookingconfirmredirect from './views/front/Bookingconfirmredirect'
 import FaqPage from './views/front/FaqPage'
@@ -158,14 +158,6 @@ function App() {
                         />
                     </Route>
                     <Route
-                        path="/bookingconfirmation/:invoiceId"
-                        element={
-                            <TitleComponent title="Payment redirect">
-                                <Bookingconfirmredirect />
-                            </TitleComponent>
-                        }
-                    />
-                    <Route
                         path="/faq"
                         element={
                             <TitleComponent title="FAQ">
@@ -182,7 +174,14 @@ function App() {
                         }
                     />
                 </Route>
-
+                <Route
+                    path="/bookingconfirmation/:invoiceId"
+                    element={
+                        <TitleComponent title="Payment redirect">
+                            <Bookingconfirmredirect />
+                        </TitleComponent>
+                    }
+                />
                 <Route
                     path="/login"
                     element={

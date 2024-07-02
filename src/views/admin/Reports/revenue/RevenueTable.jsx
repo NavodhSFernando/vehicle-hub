@@ -268,7 +268,7 @@ const RevenueTable = () => {
                             <tr key={revenue.id}>
                                 <td className="px-4 py-2 border-b border-gray-300">{revenue.id}</td>
                                 <td className="px-4 py-2 border-b border-gray-300">{revenue.type}</td>
-                                <td className="px-4 py-2 border-b border-gray-300">{revenue.amount}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">Rs {revenue.amount}</td>
                                 <td className="px-4 py-2 border-b border-gray-300">
                                     {new Date(revenue.date).toLocaleDateString()}
                                 </td>
@@ -277,7 +277,7 @@ const RevenueTable = () => {
                         <tr>
                             <td className="px-4 py-2 font-bold border-t border-gray-300">Total</td>
                             <td className="px-4 py-2 font-bold border-t border-gray-300"></td>
-                            <td className="px-4 py-2 font-bold border-t border-gray-300">{getTotalAmount()}</td>
+                            <td className="px-4 py-2 font-bold border-t border-gray-300">Rs {getTotalAmount()}</td>
                             <td className="px-4 py-2 border-t border-gray-300"></td>
                         </tr>
                     </tbody>

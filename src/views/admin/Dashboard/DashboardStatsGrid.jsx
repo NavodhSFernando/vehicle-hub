@@ -29,10 +29,10 @@ function DashboardStatsGrid() {
                     <IoBagHandle className="text-2xl text-white" />
                 </div>
                 <div className="pl-4">
-                    <span className="text-sm text-gray-500 font-light">Total Sales</span>
+                    <span className="text-sm text-gray-500 font-light">Total Completed Reservations</span>
                     <div className="flex items-center">
                         <strong className="text-xl text-gray-700 font-semibold">{data.salesTot}</strong>
-                        <span className="text-sm text-green-500 pl-2">+{data.salesLastMonth}</span>
+                        {/* <span className="text-sm text-green-500 pl-2">+{data.salesLastMonth}</span> */}
                     </div>
                 </div>
             </BoxWrapper>
@@ -44,7 +44,7 @@ function DashboardStatsGrid() {
                     <span className="text-sm text-gray-500 font-light">Total Feedbacks</span>
                     <div className="flex items-center">
                         <strong className="text-xl text-gray-700 font-semibold">{data.feedbackTot}</strong>
-                        <span className="text-sm text-green-500 pl-2">+{data.feedbackLastMonth}</span>
+                        {/* <span className="text-sm text-green-500 pl-2">+{data.feedbackLastMonth}</span> */}
                     </div>
                 </div>
             </BoxWrapper>
@@ -68,7 +68,7 @@ function DashboardStatsGrid() {
                     <span className="text-sm text-gray-500 font-light">Total Reservations</span>
                     <div className="flex items-center">
                         <strong className="text-xl text-gray-700 font-semibold">{data.reservationsTot}</strong>
-                        <span className="text-sm text-green-500 pl-2">+{data.reservationsLastMonth}</span>
+                        {/* <span className="text-sm text-green-500 pl-2">+{data.reservationsLastMonth}</span> */}
                     </div>
                 </div>
             </BoxWrapper>

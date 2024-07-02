@@ -295,7 +295,7 @@ const VehicleUtilizationReport = () => {
                                 <td className="px-4 py-2 border-b border-gray-300">
                                     {new Date(reservation.endDate).toLocaleDateString()}
                                 </td>
-                                <td className="px-4 py-2 border-b border-gray-300">{reservation.mileage}</td>
+                                <td className="px-4 py-2 border-b border-gray-300">{reservation.mileage} Km</td>
                                 <td className="px-4 py-2 border-b border-gray-300">{reservation.reservationId}</td>
                             </tr>
                         ))}
