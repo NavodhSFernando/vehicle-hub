@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { date, z } from 'zod'
 import axios from 'axios'
 import { Button } from '../../../components/ui/button'
 import { useToast } from '../../../components/ui/use-toast'
@@ -211,6 +211,7 @@ export default function CreateEmployee() {
                             </div>
                             <FormControl>
                                 <Input
+                                    type="date"
                                     onChange={(e) => {
                                         field.onChange(e.target.value)
                                     }}

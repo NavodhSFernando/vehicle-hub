@@ -28,9 +28,15 @@ import FacebookLogin from 'react-facebook-login'
 // File validation Schema
 const formSchema = z
     .object({
-        email: z.string().email(),
-        password: z.string().min(8),
-        confirmpassword: z.string()
+        email: z.string().email({ message: 'Invalid email address' }).nonempty({ message: 'Email is required' }),
+        password: z
+            .string()
+            .min(8, { message: 'Password must be at least 8 characters long' })
+            .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+                message: 'Enter a strong password containing special characters'
+            })
+            .nonempty({ message: 'Password is required' }),
+        confirmpassword: z.string().nonempty({ message: 'Confirm Password is required' })
     })
 
     .refine((data) => data.password === data.confirmpassword, {
@@ -221,6 +227,7 @@ export const Signup = () => {
                                                     type="email"
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                     {...register('email')}
+                                                    placeholder="Enter your email"
                                                 />
                                             </FormControl>
                                         </div>
@@ -245,6 +252,7 @@ export const Signup = () => {
                                                     required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                     {...register('password')}
+                                                    placeholder="Enter a strong Password"
                                                 />
                                             </FormControl>
                                         </div>
@@ -271,6 +279,7 @@ export const Signup = () => {
                                                     required
                                                     className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-indigo-600"
                                                     {...register('confirmpassword')}
+                                                    placeholder="Re-enter your Password"
                                                 />
                                             </FormControl>
                                         </div>
