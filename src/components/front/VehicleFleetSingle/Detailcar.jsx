@@ -176,11 +176,11 @@ export default function Detailcar({ id, sdate, stime, edate, etime, imageSrc }) 
                     </div>
                 </div>
                 <div className="mt-1">
-                    {
+                    {customerId && (
                         <button onClick={handleClick}>
                             {clicked ? <BsBookmarkStarFill fontSize={24} /> : <BsBookmarkStar fontSize={24} />}
                         </button>
-                    }
+                    )}
                 </div>
             </article>
             {/* Specification */}

@@ -3,7 +3,7 @@ import axios from 'axios'
 import { MdDeleteOutline } from "react-icons/md";
 import { MdOutlineMarkEmailRead } from "react-icons/md";
 
-const NOTIFICATIONS_PER_PAGE = 6
+const NOTIFICATIONS_PER_PAGE = 4
 
 export default function NotificationCenter() {
     const [notifications, setNotifications] = useState([])
@@ -45,7 +45,7 @@ export default function NotificationCenter() {
 
     return (
         <div className="flex justify-center items-start pb-10">
-            <div className="w-full max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white">
+            <div className="w-full max-h-[800px] overflow-y-auto p-4 border shadow-lg rounded-lg bg-white hide-scrollbar">
                 <h2 className="text-xl pt-10 pl-20 font-semibold mb-4">Notifications</h2>
                 {currentNotifications.length > 0 ? (
                     currentNotifications.map((notification) => (
@@ -123,7 +123,7 @@ function NotificationCard({ notification, onMarkAsRead }) {
     const { id, title, description, generated_DateTime, isRead } = notification;
 
     return (
-        <div className="p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]">
+        <div className={`${isRead ? 'bg-gray-200' : 'bg-white'} p-4 shadow rounded-lg mb-4 sm:mx-20 flex justify-between items-start gap-[10px]`}>
             <div className='flex flex-col'>
                 <div className="font-bold text-lg">{title}</div>
                 <div className="text-gray-700">{description}</div>
