@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '../../../components/ui/button';
 import { generateInvoice } from './generateInvoice';
 
-export const columns = (paymentStatuses) => [
+export const columns = (paymentStatuses, handlePayNow) => [
     {
         accessorKey: 'dateCreated',
         header: 'Date',
@@ -86,11 +86,14 @@ export const columns = (paymentStatuses) => [
                         </>
                     ) : (
                         <>
-                            <Button variant="ghost" className="border border-gray-500">
+                            <Button variant="ghost" className="border border-gray-500" onClick={() => handlePayNow(invoiceId)}>
                                 Pay Now
                             </Button>
                             <Button variant="ghost" className="border border-gray-500" onClick={handleViewPdf}>
                                 View PDF
+                            </Button>
+                            <Button variant="ghost" className="border border-gray-500" onClick={handleDownloadPdf}>
+                                Download PDF
                             </Button>
                         </>
                     )}
